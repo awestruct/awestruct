@@ -7,4 +7,9 @@ require 'hekyll'
 
 engine = Hekyll::Engine.new( Dir.pwd ) 
 
-engine.generate
+begin
+  engine.generate
+rescue =>e
+  puts e
+  puts e.backtrace
+end

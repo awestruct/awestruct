@@ -1,6 +1,7 @@
 require 'find'
 require 'haml'
 require 'sass'
+require 'ostruct'
 
 module Hekyll
 
@@ -22,14 +23,20 @@ module Hekyll
 
   class Site
     attr_reader :layouts
+    attr_reader :config
+
     def initialize(dir)
       @pages = {}
       @dir = dir
       @output_dir = File.join( dir, '_site' )
-      @yaml_data = {}
+      @config = {}
       @layouts = {}
-      load_yaml
+      load_config
       load_layouts
+    end
+
+    def pages
+      @pages.values
     end
 
     def scan()
@@ -41,11 +48,11 @@ module Hekyll
         end
         if ( @pages[path].nil? )
           if ( path =~ /\.haml$/ )
-            @pages[path] = HamlPage.new( path, output_path( path, '.haml' ) )
+            @pages[path] = HamlPage.new( path, output_path( path, '.haml' ), url_path( path, '.haml' ) )
           elsif ( path =~ /\.sass$/ )
-            @pages[path] = SassPage.new( path, output_path( path, '.sass' ) + '.css' )
+            @pages[path] = SassPage.new( path, output_path( path, '.sass' ) + '.css', url_path( path, '.sass' ) + '.css' )
           elsif ( File.file?( path ) )
-            @pages[path] = CopyFile.new( path, output_path( path ) )
+            @pages[path] = CopyFile.new( path, output_path( path ), url_path( path ) )
           end
         end
       end
@@ -59,9 +66,33 @@ module Hekyll
       path 
     end
 
-    def load_yaml
-      if ( File.exist?( File.join( @dir, '_config.yml' ) ) )
-        @yaml_data = YAML.load( File.read( File.join( @dir, '_config.yml' ) ) )
+    def url_path(path, ext=nil)
+      url_path = output_path( path, ext )[ @output_dir.size .. -1 ]
+    end
+
+    def load_config
+      load_yamls
+    end
+
+    def load_yamls
+      Dir[ File.join( @dir, '_config', '*.yml' ) ].each do |yaml_path|
+        data = YAML.load( File.read( yaml_path ) )
+        name = File.basename( yaml_path, '.yml' )
+        @config[name] = OpenStruct.new( data )
+      end
+    end
+
+    def apply_plugins
+      Dir[ File.join( @dir, '_plugins', '*.rb' ) ].each do |rb_path|
+        site_root = @dir
+        begin
+          data = eval File.read( rb_path )
+          name = File.basename( rb_path, '.rb' )
+          @config[name] = data
+        rescue => e
+          puts e
+          puts e.backtrace
+        end
       end
     end
 
@@ -69,25 +100,26 @@ module Hekyll
       Dir[ File.join( @dir, '_layouts', '*.haml' ) ].each do |layout_path|
         name = File.basename( layout_path, '.haml' )
         name = File.basename( name, '.html' )
-        @layouts[ name ] = HamlPage.new( layout_path, nil )
+        @layouts[ name ] = HamlPage.new( layout_path, nil, nil )
       end
     end
 
     def method_missing(sym, *args)
-      return super unless @yaml_data[sym.to_s]
-      @yaml_data[sym.to_s]
+      return super unless @config[sym.to_s]
+      @config[sym.to_s]
     end
 
     def generate()
       scan()
+      apply_plugins()
       @pages.values.each do |page|
         if ( page.modified?( self ) )
           $stderr.puts "generating #{page.output_path}"
-          rendered = page.render( self )
+          rendered = page.render( self.config )
           cur = page
           while ( ! cur.nil? && ! cur.layout.nil? )
-            cur = @layouts[ page.layout.to_s ]
-            rendered = cur.render( self, page, rendered )
+            cur = @layouts[ cur.layout.to_s ]
+            rendered = cur.render( self.config, page, rendered )
           end
           File.open( page.output_path, 'w' ) do |file|
             file << rendered
@@ -101,10 +133,12 @@ module Hekyll
 
     attr_reader :path
     attr_reader :output_path
+    attr_reader :url
 
-    def initialize(path, output_path)
+    def initialize(path, output_path, url)
       @path = path
       @output_path = output_path
+      @url = url
     end
 
     def prepare()
@@ -112,13 +146,13 @@ module Hekyll
       FileUtils.mkdir_p( File.dirname( output_path ) )
     end
 
-    def render(site, page=nil, content='')
+    def render(config, page=nil, content='')
       prepare
-      do_render(site, page, content)
+      do_render(config, page, content)
     end
 
-    def do_render(site, page=nil, content='')
-      puts "render(site) not implemented"
+    def do_render(config, page=nil, content='')
+      puts "render(config) not implemented"
     end
 
     def modified?(site, compare_path=nil)
@@ -135,11 +169,11 @@ module Hekyll
   end
 
   class CopyFile < Renderable
-    def initialize(path, output_path)
-      super( path, output_path )
+    def initialize(path, output_path, url)
+      super( path, output_path, url )
     end
 
-    def do_render(site, page=nil, content='')
+    def do_render(config, page=nil, content='')
       File.read( path )
     end
 
@@ -149,11 +183,11 @@ module Hekyll
   end
 
   class SassPage < Renderable
-    def initialize(path, output_path)
-      super( path, output_path )
+    def initialize(path, output_path, url)
+      super( path, output_path, url )
     end
 
-    def do_render(site, page=nil, content=nil)
+    def do_render(config, page=nil, content=nil)
       sass_engine = Sass::Engine.new( File.read( path ) )
       sass_engine.render
     end
@@ -164,8 +198,8 @@ module Hekyll
   end
 
   class HamlPage < Renderable
-    def initialize(path, output_path)
-      super( path, output_path )
+    def initialize(path, output_path, url)
+      super( path, output_path, url )
       read()
     end
 
@@ -199,19 +233,19 @@ module Hekyll
       @front_matter = YAML.load( @yaml_content ) || {}
     end
 
-    def do_render(site, page=nil, content='')
+    def do_render(config, page=nil, content='')
       read
       page ||= self
       haml_engine = Haml::Engine.new( @haml_content ) 
       context = {
-        :site=>site,
         :page=>page,
         :content=>content,
-      }
+      }.merge(config)
       begin
         rendered = haml_engine.render( nil, context )
       rescue =>e
         puts e
+        puts e.backtrace
       end
     end
 
