@@ -78,8 +78,26 @@ module Hekyll
       Dir[ File.join( @dir, '_config', '*.yml' ) ].each do |yaml_path|
         data = YAML.load( File.read( yaml_path ) )
         name = File.basename( yaml_path, '.yml' )
-        @config[name] = OpenStruct.new( data )
+        @config[name] = massage_yaml( data )
       end
+    end
+
+    def massage_yaml(obj)
+      result = obj
+      case ( obj )
+        when Hash
+          result = {}
+          obj.each do |k,v| 
+            result[k] = massage_yaml(v)
+          end
+          result = OpenStruct.new( result )
+        when Array
+          result = [] 
+          obj.each do |v|
+            result << massage_yaml(v)
+          end
+      end
+      result
     end
 
     def apply_plugins
