@@ -1,0 +1,10 @@
+#!/usr/bin/env jruby
+
+$: << File.dirname(__FILE__) + '/../lib'
+
+require 'rubygems'
+require 'hekyll'
+
+engine = Hekyll::Engine.new( Dir.pwd ) 
+
+engine.generate
