@@ -3,12 +3,17 @@ require 'haml'
 require 'sass'
 require 'ostruct'
 require 'hpricot'
+require 'rss'
 
 require 'haml/helpers'
 
 module Haml::Helpers
   def html_to_text(str)
     str.gsub( /<[^>]+>/, '' )
+  end
+
+  def summarize(text, numwords=20)
+    text.split()[0, numwords].join(' ')
   end
 
   def fully_qualify_urls(base_url, text)
@@ -155,8 +160,13 @@ module Hekyll
     end
 
     def method_missing(sym, *args)
-      return super unless @config[sym.to_s]
-      @config[sym.to_s]
+      if ( sym.to_s =~ /^(.*)=$/ )
+        puts "site[#{$1}]=#{args[0]}"
+        @config[$1] = args[0]
+      else
+        return super unless @config[sym.to_s]
+        @config[sym.to_s]
+      end
     end
 
     def generate()
@@ -307,7 +317,12 @@ module Hekyll
     end
 
     def method_missing(sym, *args)
-      @front_matter[sym.to_s] || @extra_options[sym.to_s]
+      if ( sym.to_s =~ /^(.*)=$/ )
+        puts "page[#{$1}]=#{args[0]}"
+        @extra_options[$1] = args[0]
+      else
+        @front_matter[sym.to_s] || @extra_options[sym.to_s]
+      end
     end
 
 
