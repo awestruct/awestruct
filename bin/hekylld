@@ -24,6 +24,8 @@ Thread.new(engine) do |engine|
 end
 
 handler = Mongrel::DirHandler.new( File.join( Dir.pwd, '_site' ) )
+#Mongrel::DirHandler::MIME_TYPES['.atom'] = 'text/plain'
+Mongrel::DirHandler::MIME_TYPES['.atom'] = 'application/atom+xml'
 server.register("/", handler )
 $stderr.puts "Server running"
 server.run.join

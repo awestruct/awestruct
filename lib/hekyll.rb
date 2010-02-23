@@ -2,6 +2,36 @@ require 'find'
 require 'haml'
 require 'sass'
 require 'ostruct'
+require 'hpricot'
+
+require 'haml/helpers'
+
+module Haml::Helpers
+  def html_to_text(str)
+    str.gsub( /<[^>]+>/, '' )
+  end
+
+  def fully_qualify_urls(base_url, text)
+    doc = Hpricot( text )
+ 
+    doc.search( "//a" ).each do |a|
+      a['href'] = fix_url( base_url, a['href'] )
+    end
+    doc.search( "//link" ).each do |link|
+      link['href'] = fix_url( base_url, link['href'] )
+    end
+    doc.search( "//img" ).each do |img|
+      img['src'] = fix_url( base_url, img['src'] )
+    end
+    return doc.to_s
+  end
+
+  def fix_url(base_url, url)
+    return url unless ( url =~ /^\// )
+    "#{base_url}#{url}"
+  end
+
+end
 
 module Hekyll
 
@@ -103,10 +133,12 @@ module Hekyll
     def apply_plugins
       Dir[ File.join( @dir, '_plugins', '*.rb' ) ].each do |rb_path|
         site_root = @dir
+        output_root = @output_dir
         begin
-          data = eval File.read( rb_path )
-          name = File.basename( rb_path, '.rb' )
-          @config[name] = data
+          eval File.read( rb_path )
+          #data = eval File.read( rb_path )
+          #name = File.basename( rb_path, '.rb' )
+          #@config[name] = data
         rescue => e
           puts e
           puts e.backtrace
@@ -152,11 +184,13 @@ module Hekyll
     attr_reader :path
     attr_reader :output_path
     attr_reader :url
+    attr_reader :extra_options
 
     def initialize(path, output_path, url)
       @path = path
       @output_path = output_path
       @url = url
+      @extra_options = {}
     end
 
     def prepare()
@@ -216,6 +250,7 @@ module Hekyll
   end
 
   class HamlPage < Renderable
+    attr_accessor :front_matter
     def initialize(path, output_path, url)
       super( path, output_path, url )
       read()
@@ -272,8 +307,7 @@ module Hekyll
     end
 
     def method_missing(sym, *args)
-      return super unless @front_matter[sym.to_s]
-      @front_matter[sym.to_s]
+      @front_matter[sym.to_s] || @extra_options[sym.to_s]
     end
 
 
