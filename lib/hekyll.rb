@@ -189,18 +189,17 @@ module Hekyll
     end
   end
 
-  class Renderable
+  class Renderable < OpenStruct
 
     attr_reader :path
     attr_reader :output_path
     attr_reader :url
-    attr_reader :extra_options
 
     def initialize(path, output_path, url)
-      @path = path
+      super( {} )
+      @path        = path
       @output_path = output_path
-      @url = url
-      @extra_options = {}
+      @url         = url
     end
 
     def prepare()
@@ -260,7 +259,6 @@ module Hekyll
   end
 
   class HamlPage < Renderable
-    attr_accessor :front_matter
     def initialize(path, output_path, url)
       super( path, output_path, url )
       read()
@@ -293,7 +291,10 @@ module Hekyll
         @yaml_content = ''
       end
 
-      @front_matter = YAML.load( @yaml_content ) || {}
+      front_matter = YAML.load( @yaml_content ) || {}
+      front_matter.each do |k,v| 
+        self.send( "#{k}=", v )
+      end
     end
 
     def do_render(config, page=nil, content='')
@@ -309,19 +310,6 @@ module Hekyll
       rescue =>e
         puts e
         puts e.backtrace
-      end
-    end
-
-    def layout
-      @front_matter['layout']
-    end
-
-    def method_missing(sym, *args)
-      if ( sym.to_s =~ /^(.*)=$/ )
-        puts "page[#{$1}]=#{args[0]}"
-        @extra_options[$1] = args[0]
-      else
-        @front_matter[sym.to_s] || @extra_options[sym.to_s]
       end
     end
 
