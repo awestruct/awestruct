@@ -1,5 +1,9 @@
+require 'ostruct'
+
 module Awestruct
-  class Renderable < Page
+  class Renderable < OpenStruct
+
+    attr_reader :site
 
     def initialize(site)
       super( {} )

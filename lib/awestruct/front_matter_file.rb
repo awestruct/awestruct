@@ -1,12 +1,12 @@
-require 'awestruct/page'
+require 'awestruct/renderable_file'
 
 module Awestruct
-  class FrontMatterPage < Page
+  class FrontMatterFile < RenderableFile
 
     attr_reader :raw_page_content
 
-    def initialize(site, source_path)
-      super( site, source_path )
+    def initialize(site, source_path, relative_source_path)
+      super( site, source_path, relative_source_path )
       @raw_page_content = ''
       load_page
     end

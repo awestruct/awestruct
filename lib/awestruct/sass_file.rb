@@ -1,0 +1,21 @@
+
+require 'sass'
+require 'awestruct/renderable_file'
+require 'awestruct/sassable'
+
+module Awestruct
+  class SassFile < RenderableFile
+
+    include Sassable
+
+    def initialize(site, source_path, relative_source_path)
+      super( site, source_path, relative_source_path )
+      self.output_path = File.join( File.dirname( relative_source_path ), output_filename )
+    end
+ 
+    def output_filename
+      File.basename( source_path, '.sass' ) + '.css'
+    end
+
+  end
+end

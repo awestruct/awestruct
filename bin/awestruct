@@ -3,13 +3,58 @@
 $: << File.dirname(__FILE__) + '/../lib'
 
 require 'rubygems'
-require 'awestruct'
+require 'optparse'
+require 'awestruct/commands/generate'
+require 'awestruct/commands/server'
 
-engine = Awestruct::Engine.new( Dir.pwd ) 
+def parse(args)
+  options = OpenStruct.new( {
+              :generate=>true,
+              :server=>false,
+              :port=>4242,
+              :bind_addr=>'0.0.0.0',
+            } )
 
-begin
-  engine.generate
-rescue =>e
-  puts e
-  puts e.backtrace
+  opts = OptionParser.new do |opts|
+    opts.on( '-s', '--server', 'Serve generated site' ) do |s|
+      options.server = s
+    end
+    opts.on( '-p', '--port PORT', Integer, 'Server port' ) do |port|
+      options.port = port
+    end
+    opts.on( '-b', '--bind ADDR', 'Server port' ) do |bind_addr|
+      options.bind_addr = bind_addr
+    end
+    opts.on( '-g', '--[no-]generate', 'Generated site' ) do |g|
+      options.generate = g
+    end
+
+    opts.separator ''
+    opts.separator "Common options:"
+
+    opts.on_tail("-h", "--help", "Show this message") do
+      puts opts
+      exit
+    end
+
+  end
+  
+  opts.parse!(args)
+  options
 end
+
+options = parse(ARGV)
+
+if ( options.generate )
+  cmd = Awestruct::Commands::Generate.new( Dir.pwd )
+  cmd.run
+end
+
+if ( options.server )
+  cmd = Awestruct::Commands::Server.new( File.join( Dir.pwd, '_site' ), options.port, options.bind_addr )
+  cmd.run
+end
+
+
+
+

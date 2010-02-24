@@ -8,24 +8,17 @@ module Awestruct
 
     include Hamlable
 
-    def initialize(site, source_path)
-      super(site, source_path)
+    def initialize(site, source_path, relative_source_path)
+      super(site, source_path, relative_source_path)
+      self.output_path = File.join( File.dirname( relative_source_path ), output_filename )
     end
 
     def output_filename
-      File.basename( source_path, '.haml' )
+      File.basename( self.source_path, '.haml' )
     end
 
-    def render(context)
-      rendered = ''
-      begin
-        haml_engine = Haml::Engine.new( raw_page_content )
-        rendered = haml_engine.render( context )
-      rescue => e
-        puts e
-        puts e.backtrace
-      end
-      rendered
+    def output_extension
+      File.extname( output_filename )
     end
 
   end

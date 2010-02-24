@@ -12,6 +12,11 @@ module Awestruct
       end
       rendered
     end
+
+    def content
+      context = OpenStruct.new( :site=>site, :page=>self )
+      render( context )
+    end
   end
 
 end

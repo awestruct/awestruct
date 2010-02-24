@@ -8,5 +8,9 @@ module Awestruct
       sass_engine.render
     end
 
+    def output_extension
+      'css'
+    end
+
   end
 end

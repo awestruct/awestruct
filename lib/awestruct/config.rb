@@ -5,14 +5,16 @@ module Awestruct
 
     attr_accessor :layouts_dir
     attr_accessor :config_dir
+    attr_accessor :extension_dir
     attr_accessor :output_dir
     attr_accessor :ignore
 
     def initialize()
-      @layouts_dir = '_layouts'
-      @config_dir  = '_config'
-      @output_dir  = '_site'
-      @ignore      = [ ]
+      @layouts_dir    = '_layouts'
+      @config_dir     = '_config'
+      @output_dir     = '_site'
+      @extension_dir  = '_ext'
+      @ignore         = [ ]
     end
 
   end

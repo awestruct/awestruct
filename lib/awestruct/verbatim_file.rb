@@ -1,15 +1,11 @@
-require 'awestruct/page'
+require 'awestruct/renderable_file'
 
 module Awestruct
 
-  class VerbatimFile < Page
+  class VerbatimFile < RenderableFile
 
-    def initialize(site, source_path)
-      super( site, source_path )
-    end
-
-    def render(context)
-      File.read( source_path )
+    def initialize(site, source_path, relative_source_path)
+      super( site, source_path, relative_source_path )
     end
 
   end
