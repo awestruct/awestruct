@@ -14,7 +14,6 @@ module Awestruct
     protected
 
     def load_page
-
       full_content = File.read( source_path )
       yaml_content = ''
 

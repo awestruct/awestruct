@@ -1,14 +1,14 @@
 
 require 'ostruct'
 require 'find'
+require 'compass'
+require 'time'
 
 require 'awestruct/config'
 require 'awestruct/site'
 require 'awestruct/haml_file'
 require 'awestruct/sass_file'
 require 'awestruct/verbatim_file'
-
-require 'rss'
 
 require 'awestruct/haml_helpers'
 
@@ -28,15 +28,16 @@ module Awestruct
       @dir    = dir
       @config = config
       @site   = Site.new( @dir )
+      @max_yaml_mtime = nil
     end
 
-    def generate()
+    def generate(force=false)
       load_layouts
       load_yamls
       load_pages
       load_extensions
       set_urls
-      generate_files
+      generate_files(force)
     end
 
     private
@@ -52,17 +53,43 @@ module Awestruct
       end
     end
 
-    def generate_files()
+    def generate_files(force)
       site.pages.each do |page|
-        generated_path = File.join( dir, config.output_dir, page.output_path )
-        $stderr.puts "rendering #{page.source_path}"
-        rendered = render_page(page, true)
-        #$stderr.puts "writing #{generated_path}"
-        FileUtils.mkdir_p( File.dirname( generated_path ) )
-        File.open( generated_path, 'w' ) do |file|
-          file << rendered
-        end
+        generate_page( page, force )
       end
+    end
+
+    def generate_page(page, force)
+      return unless requires_generation?(page, force)
+
+      generated_path = File.join( dir, config.output_dir, page.output_path )
+      $stderr.puts "rendering #{page.source_path}"
+      rendered = render_page(page, true)
+      FileUtils.mkdir_p( File.dirname( generated_path ) )
+      File.open( generated_path, 'w' ) do |file|
+        file << rendered
+      end
+    end
+
+    def requires_generation?(page,force)
+      return true if force
+      generated_path = File.join( @dir, config.output_dir, page.output_path )
+      return true unless File.exist?( generated_path )
+      generated_mtime = File.mtime( generated_path )
+      return true if ( ( @max_yaml_mtime || 0 ) > generated_mtime )
+      source_mtime = File.mtime( page.source_path )
+      return true if ( source_mtime > generated_mtime )
+      ext = page.output_extension
+      layout_name = page.layout
+      while ( ! layout_name.nil? )
+        layout = site.layouts[ layout_name + ext ]
+        if ( layout )
+          layout_mtime = File.mtime( layout.source_path )
+          return true if layout_mtime > generated_mtime
+        end
+        layout_name = layout.layout
+      end
+      false
     end
 
     def render_page(page, with_layouts=true)
@@ -92,7 +119,12 @@ module Awestruct
     end
 
     def load_yamls
+      @max_yaml_mtime = nil
       Dir[ File.join( dir, config.config_dir, '*.yml' ) ].each do |yaml_path|
+        mtime = File.mtime( yaml_path )
+        if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
+          @max_yaml_mtime = mtime
+        end
         data = YAML.load( File.read( yaml_path ) )
         name = File.basename( yaml_path, '.yml' )
         site.send( "#{name}=", massage_yaml( data ) )
@@ -101,6 +133,7 @@ module Awestruct
 
     def load_pages()
       dir_pathname = Pathname.new( dir )
+      site.pages.clear
       Find.find( dir ) do |path|
         basename = File.basename( path )
         if ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
@@ -151,7 +184,7 @@ module Awestruct
           simple_path = File.join( dir_name, File.basename( relative_path, '.rb' ) )
         end
         ext_classname = camelize(simple_path)
-        load( path )
+        require File.join( dir, config.extension_dir, simple_path )
         ext_class = eval( ext_classname )
         ext = ext_class.new
         ext.execute( site )

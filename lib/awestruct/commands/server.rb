@@ -19,6 +19,7 @@ module Awestruct
         @server = Mongrel::HttpServer.new( @bind_addr, @port )
         handler = Mongrel::DirHandler.new( @path )
         @server.register("/", handler )
+        $stderr.puts "Launching server on http://#{@bind_addr}:#{@port}/"
         @server.run.join
       end
     end

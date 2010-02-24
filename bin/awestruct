@@ -13,11 +13,19 @@ def parse(args)
               :server=>false,
               :port=>4242,
               :bind_addr=>'0.0.0.0',
+              :auto=>false,
+              :force=>false,
             } )
 
   opts = OptionParser.new do |opts|
+    opts.on( '--force', 'Force a regeneration' ) do |force|
+      options.force = force
+    end
     opts.on( '-s', '--server', 'Serve generated site' ) do |s|
       options.server = s
+    end
+    opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
+      options.auto = a
     end
     opts.on( '-p', '--port PORT', Integer, 'Server port' ) do |port|
       options.port = port
@@ -45,16 +53,33 @@ end
 
 options = parse(ARGV)
 
+threads = []
+
 if ( options.generate )
-  cmd = Awestruct::Commands::Generate.new( Dir.pwd )
+  cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.force )
   cmd.run
+end
+
+if ( options.auto )
+  threads << Thread.new {
+    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.force )
+    while ( true )
+      generate_cmd.run
+      sleep(1)
+    end
+  }
 end
 
 if ( options.server )
-  cmd = Awestruct::Commands::Server.new( File.join( Dir.pwd, '_site' ), options.port, options.bind_addr )
-  cmd.run
+  threads << Thread.new {
+    server_cmd = Awestruct::Commands::Server.new( File.join( Dir.pwd, '_site' ), options.bind_addr, options.port )
+    server_cmd.run
+  }
 end
 
+threads.each do |thr|
+  thr.join
+end
 
 
 
