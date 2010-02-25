@@ -54,6 +54,9 @@ module Awestruct
         else
           page.url = "/#{page_path}"
         end
+        if ( page.url =~ /^(.*\/)?index.html$/ )
+          page.url = $1
+        end
       end
     end
 
@@ -183,6 +186,9 @@ module Awestruct
     def load_extensions
       ext_dir = File.join( dir, config.extension_dir ) 
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
+      if ( $LOAD_PATH.index( ext_dir ).nil? )
+        $LOAD_PATH << ext_dir
+      end
       pipeline = eval File.read( pipeline_file )
       pipeline.execute( site )
     end
