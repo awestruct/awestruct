@@ -8,6 +8,10 @@ class Compass::Installers::StandAloneInstaller
   def write_configuration_files(config_file=nil)
     # skip it!
   end
+
+  def compilation_required?
+    false
+  end
 end
 
 module Awestruct
@@ -85,15 +89,15 @@ module Awestruct
         def unperform(dir)
           p = File.join( dir, @path ) 
           if ( ! File.exist?( p ) )
-            $sterr.puts "Does not exist: #{p}"
+            $stderr.puts "Does not exist: #{p}"
             return
           end
           if ( ! File.directory?( p ) )
-            $sterr.puts "Not a directory: #{p}"
+            $stderr.puts "Not a directory: #{p}"
             return
           end
           if ( Dir.entries( p ) != 2 )
-            $sterr.puts "Not empty: #{p}"
+            $stderr.puts "Not empty: #{p}"
             return
           end
           $stderr.puts "Remove: #{p}"
@@ -107,17 +111,17 @@ module Awestruct
           @content = content
         end
 
-        def perform
-          p = File.join( @dir, p )
+        def perform(dir )
+          p = File.join( dir, @path )
           if ( File.exist?( p ) )
-            $sterr.puts "Exists: #{p}"
+            $stderr.puts "Exists: #{p}"
             return
           end
           if ( ! File.directory?( File.dirname( p ) ) )
-            $sterr.puts "No directory: #{File.dirname( p )}"
+            $stderr.puts "No directory: #{File.dirname( p )}"
             return
           end
-          $sterr.puts "Create file: #{p}"
+          $stderr.puts "Create file: #{p}"
           File.open( p, 'w' ){|f| f.write( @content ) }
         end
 
@@ -128,10 +132,10 @@ module Awestruct
         def notunperform(dir)
           p = File.join( @dir, p )
           if ( ! File.exist?( p ) )
-            $sterr.puts "Does not exist: #{p}"
+            $stderr.puts "Does not exist: #{p}"
             return
           end
-          $sterr.puts "Remove: #{p}"
+          $stderr.puts "Remove: #{p}"
           FileUtils.rm( p )
         end
 
@@ -155,7 +159,6 @@ module Awestruct
                   :images_dir=>'images',
                   :javascripts_dir=>'javascripts',
                 } )
-          puts cmd.inspect
           cmd.perform
         end
 

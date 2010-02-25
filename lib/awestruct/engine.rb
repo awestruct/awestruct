@@ -76,7 +76,7 @@ module Awestruct
       generated_path = File.join( @dir, config.output_dir, page.output_path )
       return true unless File.exist?( generated_path )
       generated_mtime = File.mtime( generated_path )
-      return true if ( ( @max_yaml_mtime || 0 ) > generated_mtime )
+      return true if ( ( @max_yaml_mtime || Time.at(0) ) > generated_mtime )
       source_mtime = File.mtime( page.source_path )
       return true if ( source_mtime > generated_mtime )
       ext = page.output_extension

@@ -1,4 +1,4 @@
-#!/usr/bin/env jruby
+#!/usr/bin/env ruby
 
 $: << File.dirname(__FILE__) + '/../lib'
 
@@ -18,6 +18,7 @@ def parse(args)
               :force=>false,
               :init=>false,
               :framework=>'compass',
+              :scaffold=>true,
             } )
 
   opts = OptionParser.new do |opts|
@@ -28,6 +29,9 @@ def parse(args)
     opts.on( '-f', '--framework FRAMEWORK', 'Specify a framework during initialization' ) do |framework|
       options.framework = framework
     end
+    opts.on( '--[no-]scaffold', 'Create scaffolding during initialization (default: true)' ) do |s|
+      options.scaffold = s
+    end
     opts.on( '--force', 'Force a regeneration' ) do |force|
       options.force = force
     end
@@ -37,10 +41,10 @@ def parse(args)
     opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
       options.auto = a
     end
-    opts.on( '-p', '--port PORT', Integer, 'Server port' ) do |port|
+    opts.on( '-p', '--port PORT', Integer, 'Server port (default: 4242)' ) do |port|
       options.port = port
     end
-    opts.on( '-b', '--bind ADDR', 'Server port' ) do |bind_addr|
+    opts.on( '-b', '--bind ADDR', 'Server address (default: 0.0.0.0)' ) do |bind_addr|
       options.bind_addr = bind_addr
     end
     opts.on( '-g', '--[no-]generate', 'Generated site' ) do |g|
@@ -67,7 +71,7 @@ if ( options.init )
   if ( options.generate || options.auto || options.server )
     $stderr.puts "--init may not be used with --generate, --auto or --server"
   end
-  cmd = Awestruct::Commands::Init.new( Dir.pwd, options.framework )
+  cmd = Awestruct::Commands::Init.new( Dir.pwd, options.framework, options.scaffold )
   cmd.run
   exit
 end
