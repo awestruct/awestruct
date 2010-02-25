@@ -31,8 +31,8 @@ module Awestruct
         steps << MkDir.new( path )
       end
 
-      def create_file(path, content)
-        steps << CreateFile.new( path, content )
+      def copy_file(path, input_path)
+        steps << CopyFile.new( path, input_path )
       end
 
       def install_compass(framework)
@@ -105,10 +105,10 @@ module Awestruct
         end
       end
 
-      class CreateFile
-        def initialize(path, content)
-          @path    = path
-          @content = content
+      class CopyFile
+        def initialize(path, input_path)
+          @path       = path
+          @input_path = input_path
         end
 
         def perform(dir )
@@ -122,7 +122,7 @@ module Awestruct
             return
           end
           $stderr.puts "Create file: #{p}"
-          File.open( p, 'w' ){|f| f.write( @content ) }
+          File.open( p, 'w' ){|f| f.write( File.read( @input_path ) ) }
         end
 
         def unperform(dir)

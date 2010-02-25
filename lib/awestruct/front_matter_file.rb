@@ -9,6 +9,8 @@ module Awestruct
       super( site, source_path, relative_source_path )
       @raw_page_content = ''
       load_page
+      puts "X:: #{self.inspect}"
+      puts "X:: #{self.source_path} #{self.relative_source_path} #{self.output_path}"
     end
 
     protected

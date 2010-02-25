@@ -10,7 +10,6 @@ module Awestruct
 
     def initialize(site, source_path, relative_source_path)
       super( site, source_path, relative_source_path )
-      self.output_path = File.join( File.dirname( relative_source_path ), output_filename )
     end
  
     def output_filename

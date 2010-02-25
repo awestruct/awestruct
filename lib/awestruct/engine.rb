@@ -12,6 +12,10 @@ require 'awestruct/verbatim_file'
 
 require 'awestruct/haml_helpers'
 
+require 'awestruct/extensions/pipeline'
+require 'awestruct/extensions/posts'
+require 'awestruct/extensions/indexifier'
+
 module Awestruct
 
   IGNORE_NAMES = [
@@ -63,7 +67,7 @@ module Awestruct
       return unless requires_generation?(page, force)
 
       generated_path = File.join( dir, config.output_dir, page.output_path )
-      $stderr.puts "rendering #{page.source_path}"
+      $stderr.puts "rendering #{page.source_path} -> #{page.output_path}"
       rendered = render_page(page, true)
       FileUtils.mkdir_p( File.dirname( generated_path ) )
       File.open( generated_path, 'w' ) do |file|
@@ -143,12 +147,18 @@ module Awestruct
         unless ( site.has_page?( path ) )
           file_pathname = Pathname.new( path )
           relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
+          page = nil
           if ( path =~ /\.haml$/ )
-            site.pages << HamlFile.new( site, path, relative_path )
+            page = HamlFile.new( site, path, relative_path )
           elsif ( path =~ /\.sass$/ )
-            site.pages << SassFile.new( site, path, relative_path )
+            page = SassFile.new( site, path, relative_path )
           elsif ( File.file?( path ) )
-            site.pages << VerbatimFile.new( site, path, relative_path )
+            page = VerbatimFile.new( site, path, relative_path )
+          end
+          if ( page )
+            puts "O:: #{page.inspect} #{page}"
+            puts "O:: #{page.source_path} #{page.relative_source_path} #{page.output_path}"
+            site.pages << page
           end
         end
       end
@@ -173,6 +183,13 @@ module Awestruct
     end
 
     def load_extensions
+      ext_dir = File.join( dir, config.extension_dir ) 
+      pipeline_file = File.join( ext_dir, 'pipeline.rb' )
+      pipeline = eval File.read( pipeline_file )
+      pipeline.execute( site )
+    end
+
+    def old_load_extensions
       ext_dir_pathname = Pathname.new( File.join( dir, config.extension_dir ) )
       Dir[ File.join( dir, config.extension_dir, '*.rb' ) ].each do |path|
         ext_pathname = Pathname.new( path )

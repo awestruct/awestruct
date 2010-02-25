@@ -8,7 +8,14 @@ module Awestruct
       super( site )
       self.source_path          = source_path
       self.relative_source_path = relative_source_path
-      self.output_path          = File.join( File.dirname( relative_source_path ), output_filename )
+      dir_name = File.dirname( relative_source_path )
+      if ( dir_name == '.' )
+        self.output_path          = output_filename
+      else
+        self.output_path          = File.join( dir_name, output_filename )
+      end
+      puts "I:: #{self.inspect} #{self}"
+      puts "I:: #{self.source_path} #{self.relative_source_path} #{self.output_path}"
     end
 
     def raw_page_content
