@@ -6,7 +6,7 @@ module Awestruct
       def execute(site)
         site.pages.each do |page|
           if ( page.output_path =~ /^(.*\/)?index.html$/ )
-            puts "skipping #{page.output_path}"
+            # skip it!
           else
             page.output_path = page.output_path.gsub( /.html$/, '/index.html' )
           end

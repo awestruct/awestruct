@@ -14,8 +14,6 @@ module Awestruct
       else
         self.output_path          = File.join( dir_name, output_filename )
       end
-      puts "I:: #{self.inspect} #{self}"
-      puts "I:: #{self.source_path} #{self.relative_source_path} #{self.output_path}"
     end
 
     def raw_page_content

@@ -12,7 +12,6 @@ module Awestruct
     
         site.pages.each do |page|
           if ( page.relative_source_path =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-(.*)\.html.haml$/ )
-            puts "is a post!"
             year  = $1
             month = $2
             day   = $3

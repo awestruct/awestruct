@@ -156,8 +156,6 @@ module Awestruct
             page = VerbatimFile.new( site, path, relative_path )
           end
           if ( page )
-            puts "O:: #{page.inspect} #{page}"
-            puts "O:: #{page.source_path} #{page.relative_source_path} #{page.output_path}"
             site.pages << page
           end
         end
