@@ -4,6 +4,7 @@ $: << File.dirname(__FILE__) + '/../lib'
 
 require 'rubygems'
 require 'optparse'
+require 'awestruct/commands/init'
 require 'awestruct/commands/generate'
 require 'awestruct/commands/server'
 
@@ -15,9 +16,18 @@ def parse(args)
               :bind_addr=>'0.0.0.0',
               :auto=>false,
               :force=>false,
+              :init=>false,
+              :framework=>'compass',
             } )
 
   opts = OptionParser.new do |opts|
+    opts.on( '-i', '--init', 'Initialize a new project in the current directory' ) do |init|
+      options.init     = init
+      options.generate = false
+    end
+    opts.on( '-f', '--framework FRAMEWORK', 'Specify a framework during initialization' ) do |framework|
+      options.framework = framework
+    end
     opts.on( '--force', 'Force a regeneration' ) do |force|
       options.force = force
     end
@@ -52,6 +62,15 @@ def parse(args)
 end
 
 options = parse(ARGV)
+
+if ( options.init )
+  if ( options.generate || options.auto || options.server )
+    $stderr.puts "--init may not be used with --generate, --auto or --server"
+  end
+  cmd = Awestruct::Commands::Init.new( Dir.pwd, options.framework )
+  cmd.run
+  exit
+end
 
 threads = []
 
