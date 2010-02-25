@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
     s.summary   =   "Static site-baking utility"
     s.files     =   [
       Dir['lib/**/*.rb'],
+      Dir['lib/**/*.haml'],
     ].flatten
     s.executables     =   [
       'awestruct',

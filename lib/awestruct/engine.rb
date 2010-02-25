@@ -54,7 +54,7 @@ module Awestruct
         else
           page.url = "/#{page_path}"
         end
-        if ( page.url =~ /^(.*\/)?index.html$/ )
+        if ( page.url =~ /^(.*\/)index.html$/ )
           page.url = $1
         end
       end
@@ -134,7 +134,13 @@ module Awestruct
         end
         data = YAML.load( File.read( yaml_path ) )
         name = File.basename( yaml_path, '.yml' )
-        site.send( "#{name}=", massage_yaml( data ) )
+        if ( name == 'site' )
+          data.each do |k,v|
+            site.send( "#{k}=", v )
+          end
+        else
+          site.send( "#{name}=", massage_yaml( data ) )
+        end
       end
     end
 
@@ -143,7 +149,9 @@ module Awestruct
       site.pages.clear
       Find.find( dir ) do |path|
         basename = File.basename( path )
-        if ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
+        if ( basename == '.htaccess' )
+          #special case
+        elsif ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
           Find.prune
           next
         end

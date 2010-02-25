@@ -85,7 +85,7 @@ end
 
 if ( options.auto )
   threads << Thread.new {
-    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.force )
+    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd )
     while ( true )
       generate_cmd.run
       sleep(1)

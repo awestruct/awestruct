@@ -5,7 +5,7 @@ module Awestruct
     class Indexifier
       def execute(site)
         site.pages.each do |page|
-          if ( page.output_path =~ /^(.*\/)?index.html$/ )
+          if ( page.inhibit_indexifier || ( page.output_path =~ /^(.*\/)?index.html$/ ) )
             # skip it!
           else
             page.output_path = page.output_path.gsub( /.html$/, '/index.html' )
