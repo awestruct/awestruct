@@ -7,6 +7,7 @@ require 'time'
 require 'awestruct/config'
 require 'awestruct/site'
 require 'awestruct/haml_file'
+require 'awestruct/maruku_file'
 require 'awestruct/sass_file'
 require 'awestruct/verbatim_file'
 
@@ -82,10 +83,11 @@ module Awestruct
       return true if force
       generated_path = File.join( @dir, config.output_dir, page.output_path )
       return true unless File.exist?( generated_path )
+      now = Time.now
       generated_mtime = File.mtime( generated_path )
       return true if ( ( @max_yaml_mtime || Time.at(0) ) > generated_mtime )
       source_mtime = File.mtime( page.source_path )
-      return true if ( source_mtime > generated_mtime )
+      return true if ( source_mtime > generated_mtime ) && ( source_mtime + 1 < now )
       ext = page.output_extension
       layout_name = page.layout
       while ( ! layout_name.nil? )
@@ -99,9 +101,20 @@ module Awestruct
       false
     end
 
-    def render_page(page, with_layouts=true)
-      context = OpenStruct.new( :site=>site, :content=>'' )
+    def self.create_context(site, page, content='')
+      context = OpenStruct.new( :site=>site, :content=>content )
       context.page = page
+      class << context
+        def interpolate_string(str)
+          result = instance_eval("%@#{(str||'').gsub('@', '\@')}@")
+          result
+        end
+      end
+      context
+    end
+
+    def render_page(page, with_layouts=true)
+      context = Engine.create_context( site, page )
       rendered = page.render( context )
       if ( with_layouts )
         cur = page
@@ -160,11 +173,13 @@ module Awestruct
           relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
           page = nil
           if ( path =~ /\.haml$/ )
-            page = HamlFile.new( site, path, relative_path )
+            page = HamlFile.new( site, path, File.join( '', relative_path ) )
+          elsif ( path =~ /\.md$/ )
+            page = MarukuFile.new( site, path, File.join( '', relative_path ) )
           elsif ( path =~ /\.sass$/ )
-            page = SassFile.new( site, path, relative_path )
+            page = SassFile.new( site, path, File.join( '', relative_path ) )
           elsif ( File.file?( path ) )
-            page = VerbatimFile.new( site, path, relative_path )
+            page = VerbatimFile.new( site, path, File.join( '', relative_path ) )
           end
           if ( page )
             site.pages << page
