@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
     s.add_dependency 'hpricot'
     s.add_dependency 'haml'
+    s.add_dependency 'maruku'
     s.add_dependency 'compass'
     s.add_dependency 'mongrel'
 end
