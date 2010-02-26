@@ -10,7 +10,7 @@ module Awestruct
     attr_accessor :pages
 
     def initialize(dir)
-      super({ :base_url=>'localhost' })
+      super({ :base_url=>'http://localhost:4242' })
 
       @dir = dir
       @output_dir = File.join( dir, '_site' )
