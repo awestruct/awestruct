@@ -19,6 +19,7 @@ def parse(args)
               :init=>false,
               :framework=>'compass',
               :scaffold=>true,
+              :base_url=>nil,
             } )
 
   opts = OptionParser.new do |opts|
@@ -37,6 +38,15 @@ def parse(args)
     end
     opts.on( '-s', '--server', 'Serve generated site' ) do |s|
       options.server = s
+    end
+    opts.on( '-u', '--url URL', 'Set site.base_url' ) do |url|
+      options.base_url = url
+    end
+    opts.on( '-d', '--dev',     'Run in development mode (--auto, --server and --url http://localhost:4242)' ) do |url|
+      options.base_url = 'http://localhost:4242'
+      options.server   = true
+      options.auto     = true
+      options.port     = 4242
     end
     opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
       options.auto = a
@@ -79,13 +89,13 @@ end
 threads = []
 
 if ( options.generate )
-  cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.force )
+  cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.base_url, options.force )
   cmd.run
 end
 
 if ( options.auto )
   threads << Thread.new {
-    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd )
+    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.base_url )
     while ( true )
       generate_cmd.run
       sleep(1)

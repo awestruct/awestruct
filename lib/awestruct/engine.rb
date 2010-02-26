@@ -19,10 +19,6 @@ require 'awestruct/extensions/indexifier'
 
 module Awestruct
 
-  IGNORE_NAMES = [
-    'hekyll',
-  ]
-
   class Engine
 
     attr_reader :config
@@ -33,10 +29,14 @@ module Awestruct
       @dir    = dir
       @config = config
       @site   = Site.new( @dir )
+      @site.tmp_dir = File.join( dir, '_tmp' )
+      FileUtils.mkdir_p( @site.tmp_dir )
+      FileUtils.mkdir_p( @site.output_dir )
       @max_yaml_mtime = nil
     end
 
-    def generate(force=false)
+    def generate(base_url=nil, force=false)
+      @base_url = base_url
       load_layouts
       load_yamls
       load_pages
@@ -151,6 +151,7 @@ module Awestruct
           data.each do |k,v|
             site.send( "#{k}=", v )
           end
+          ( site.base_url = @base_url ) if ( @base_url )
         else
           site.send( "#{name}=", massage_yaml( data ) )
         end
