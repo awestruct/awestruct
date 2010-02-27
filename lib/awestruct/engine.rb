@@ -16,6 +16,7 @@ require 'awestruct/haml_helpers'
 require 'awestruct/extensions/pipeline'
 require 'awestruct/extensions/posts'
 require 'awestruct/extensions/indexifier'
+require 'awestruct/extensions/paginate'
 
 module Awestruct
 
@@ -29,6 +30,7 @@ module Awestruct
       @dir    = dir
       @config = config
       @site   = Site.new( @dir )
+      @site.engine = self
       @site.tmp_dir = File.join( dir, '_tmp' )
       FileUtils.mkdir_p( @site.tmp_dir )
       FileUtils.mkdir_p( @site.output_dir )
@@ -44,6 +46,30 @@ module Awestruct
       set_urls
       generate_files(force)
     end
+
+    def load_site_page(relative_path)
+      load_page( File.join( dir, relative_path ) )
+    end
+
+    def load_page(path, relative_path=nil)
+      page = nil
+      if ( relative_path.nil? )
+        dir_pathname = Pathname.new( dir )
+        path_name = Pathname.new( path )
+        relative_path = path_name.relative_path_from( dir_pathname ).to_s
+      end
+      if ( path =~ /\.haml$/ )
+        page = HamlFile.new( site, path, File.join( '', relative_path ) )
+      elsif ( path =~ /\.md$/ )
+        page = MarukuFile.new( site, path, File.join( '', relative_path ) )
+      elsif ( path =~ /\.sass$/ )
+        page = SassFile.new( site, path, File.join( '', relative_path ) )
+      elsif ( File.file?( path ) )
+        page = VerbatimFile.new( site, path, File.join( '', relative_path ) )
+      end
+      page
+    end
+
 
     private
 
@@ -134,7 +160,8 @@ module Awestruct
         layout_pathname = Pathname.new( layout_path )
         relative_path = layout_pathname.relative_path_from( dir_pathname ).to_s
         name = File.basename( layout_path, '.haml' )
-        site.layouts[ name ] =  HamlFile.new( site, layout_path, relative_path )
+        #site.layouts[ name ] =  HamlFile.new( site, layout_path, relative_path )
+        site.layouts[ name ] =  load_page( layout_path, relative_path )
       end
     end
 
@@ -172,16 +199,7 @@ module Awestruct
         unless ( site.has_page?( path ) )
           file_pathname = Pathname.new( path )
           relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
-          page = nil
-          if ( path =~ /\.haml$/ )
-            page = HamlFile.new( site, path, File.join( '', relative_path ) )
-          elsif ( path =~ /\.md$/ )
-            page = MarukuFile.new( site, path, File.join( '', relative_path ) )
-          elsif ( path =~ /\.sass$/ )
-            page = SassFile.new( site, path, File.join( '', relative_path ) )
-          elsif ( File.file?( path ) )
-            page = VerbatimFile.new( site, path, File.join( '', relative_path ) )
-          end
+          page = load_page( path, relative_path )
           if ( page )
             site.pages << page
           end

@@ -3,8 +3,9 @@ module Awestruct
   module Extensions
     class Posts
 
-      def initialize(path_prefix)
+      def initialize(path_prefix, assign_to=:posts)
         @path_prefix = path_prefix
+        @assign_to   = assign_to
       end
 
       def execute(site)
@@ -39,7 +40,7 @@ module Awestruct
           last = e
         end
         
-        site.posts = posts
+        site.send( "#{@assign_to}=", posts )
       end
     end
   end
