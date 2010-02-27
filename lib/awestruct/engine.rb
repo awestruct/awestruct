@@ -47,6 +47,14 @@ module Awestruct
       generate_files(force)
     end
 
+    def find_and_load_site_page(simple_path)
+      path_glob = File.join( dir, simple_path + '.*' )
+      candidates = Dir[ path_glob ]
+      return nil if candidates.empty?
+      throw Exception.new( "too many choices for #{simple_path}" ) if candidates.size != 1
+      load_page( candidates[0] )
+    end
+
     def load_site_page(relative_path)
       load_page( File.join( dir, relative_path ) )
     end
