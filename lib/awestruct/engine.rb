@@ -18,6 +18,9 @@ require 'awestruct/extensions/posts'
 require 'awestruct/extensions/indexifier'
 require 'awestruct/extensions/paginate'
 
+require 'awestruct/util/inflector'
+require 'awestruct/util/default_inflections'
+
 module Awestruct
 
   class Engine
