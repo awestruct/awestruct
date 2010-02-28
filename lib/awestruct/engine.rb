@@ -16,7 +16,7 @@ require 'awestruct/haml_helpers'
 require 'awestruct/extensions/pipeline'
 require 'awestruct/extensions/posts'
 require 'awestruct/extensions/indexifier'
-require 'awestruct/extensions/paginate'
+require 'awestruct/extensions/paginator'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
