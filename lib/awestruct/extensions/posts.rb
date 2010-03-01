@@ -32,10 +32,11 @@ module Awestruct
         posts = posts.sort_by{|each| [each.date, File.mtime( each.source_path ), each.slug ] }.reverse
         
         last = nil
+        singular = @assign_to.to_s.singularize
         posts.each do |e|
           if ( last != nil )
-             e.next = last
-             last.previous = e
+             e.send( "next_#{singular}=", last )
+             last.send( "previous_#{singular}=", e )
           end
           last = e
         end
