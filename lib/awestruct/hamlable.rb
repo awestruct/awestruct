@@ -14,7 +14,7 @@ module Awestruct
     end
 
     def content
-      context = OpenStruct.new( :site=>site, :page=>self )
+      context = site.engine.create_context( self )
       render( context )
     end
   end

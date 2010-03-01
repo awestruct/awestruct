@@ -4,14 +4,20 @@ module Awestruct
     class Pipeline
 
       attr_reader :extensions
+      attr_reader :helpers
 
       def initialize(&block)
         @extensions = []
+        @helpers    = []
         instance_eval &block if block
       end
 
       def extension(ext)
         @extensions << ext
+      end
+
+      def helper(helper)
+        @helpers << helper
       end
 
       def execute(site)

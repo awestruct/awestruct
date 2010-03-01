@@ -18,6 +18,8 @@ require 'awestruct/extensions/posts'
 require 'awestruct/extensions/indexifier'
 require 'awestruct/extensions/paginator'
 require 'awestruct/extensions/atomizer'
+require 'awestruct/extensions/intense_debate'
+require 'awestruct/extensions/google_analytics'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
@@ -36,6 +38,7 @@ module Awestruct
       @site   = Site.new( @dir )
       @site.engine = self
       @site.tmp_dir = File.join( dir, '_tmp' )
+      @helpers = []
       FileUtils.mkdir_p( @site.tmp_dir )
       FileUtils.mkdir_p( @site.output_dir )
       @max_yaml_mtime = nil
@@ -87,6 +90,22 @@ module Awestruct
       end
       page
     end
+
+    def create_context(page, content='')
+      context = OpenStruct.new( :site=>site, :content=>content )
+      @helpers.each do |h|
+        context.extend( h )
+      end
+      context.page = page
+      class << context
+        def interpolate_string(str)
+          result = instance_eval("%@#{(str||'').gsub('@', '\@')}@")
+          result
+        end
+      end
+      context
+    end
+
 
 
     private
@@ -145,20 +164,8 @@ module Awestruct
       false
     end
 
-    def self.create_context(site, page, content='')
-      context = OpenStruct.new( :site=>site, :content=>content )
-      context.page = page
-      class << context
-        def interpolate_string(str)
-          result = instance_eval("%@#{(str||'').gsub('@', '\@')}@")
-          result
-        end
-      end
-      context
-    end
-
     def render_page(page, with_layouts=true)
-      context = Engine.create_context( site, page )
+      context = create_context( page )
       rendered = page.render( context )
       if ( with_layouts )
         cur = page
@@ -251,25 +258,7 @@ module Awestruct
       end
       pipeline = eval File.read( pipeline_file )
       pipeline.execute( site )
-    end
-
-    def old_load_extensions
-      ext_dir_pathname = Pathname.new( File.join( dir, config.extension_dir ) )
-      Dir[ File.join( dir, config.extension_dir, '*.rb' ) ].each do |path|
-        ext_pathname = Pathname.new( path )
-        relative_path = ext_pathname.relative_path_from( ext_dir_pathname ).to_s
-        dir_name = File.dirname( relative_path )
-        if ( dir_name == '.' )
-          simple_path = File.basename( relative_path, '.rb' ) 
-        else
-          simple_path = File.join( dir_name, File.basename( relative_path, '.rb' ) )
-        end
-        ext_classname = camelize(simple_path)
-        require File.join( dir, config.extension_dir, simple_path )
-        ext_class = eval( ext_classname )
-        ext = ext_class.new
-        ext.execute( site )
-      end
+      @helpers = pipeline.helpers || []
     end
 
     def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)

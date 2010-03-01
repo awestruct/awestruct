@@ -16,7 +16,7 @@ module Awestruct
     end
 
     def content
-      context = Awestruct::Engine.create_context( site, self )
+      context = site.engine.create_context( self )
       render( context )
     end
   end
