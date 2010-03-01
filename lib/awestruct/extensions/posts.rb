@@ -3,7 +3,7 @@ module Awestruct
   module Extensions
     class Posts
 
-      def initialize(path_prefix, assign_to=:posts)
+      def initialize(path_prefix='', assign_to=:posts)
         @path_prefix = path_prefix
         @assign_to   = assign_to
       end
