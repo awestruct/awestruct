@@ -101,7 +101,8 @@ module Awestruct
       context.page = page
       class << context
         def interpolate_string(str)
-          result = instance_eval("%@#{(str||'').gsub('@', '\@')}@")
+    
+          result = instance_eval("%@#{(str||'').gsub( /\\/, '\\\\\\\\').gsub('@', '\@')}@")
           result
         end
       end
