@@ -17,6 +17,7 @@ require 'awestruct/extensions/pipeline'
 require 'awestruct/extensions/posts'
 require 'awestruct/extensions/indexifier'
 require 'awestruct/extensions/paginator'
+require 'awestruct/extensions/atomizer'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
@@ -55,7 +56,10 @@ module Awestruct
       candidates = Dir[ path_glob ]
       return nil if candidates.empty?
       throw Exception.new( "too many choices for #{simple_path}" ) if candidates.size != 1
-      load_page( candidates[0] )
+      dir_pathname = Pathname.new( dir )
+      path_name = Pathname.new( candidates[0] )
+      relative_path = path_name.relative_path_from( dir_pathname ).to_s
+      load_page( candidates[0], relative_path )
     end
 
     def load_site_page(relative_path)
@@ -65,18 +69,21 @@ module Awestruct
     def load_page(path, relative_path=nil)
       page = nil
       if ( relative_path.nil? )
-        dir_pathname = Pathname.new( dir )
-        path_name = Pathname.new( path )
-        relative_path = path_name.relative_path_from( dir_pathname ).to_s
+        #dir_pathname = Pathname.new( dir )
+        #path_name = Pathname.new( path )
+        #relative_path = path_name.relative_path_from( dir_pathname ).to_s
       end
+
+      fixed_relative_path = ( relative_path.nil? ? nil : File.join( '', relative_path ) )
+
       if ( path =~ /\.haml$/ )
-        page = HamlFile.new( site, path, File.join( '', relative_path ) )
+        page = HamlFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.md$/ )
-        page = MarukuFile.new( site, path, File.join( '', relative_path ) )
+        page = MarukuFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.sass$/ )
-        page = SassFile.new( site, path, File.join( '', relative_path ) )
+        page = SassFile.new( site, path, fixed_relative_path )
       elsif ( File.file?( path ) )
-        page = VerbatimFile.new( site, path, File.join( '', relative_path ) )
+        page = VerbatimFile.new( site, path, fixed_relative_path )
       end
       page
     end

@@ -8,11 +8,13 @@ module Awestruct
       super( site )
       self.source_path          = source_path
       self.relative_source_path = relative_source_path
-      dir_name = File.dirname( relative_source_path )
-      if ( dir_name == '.' )
-        self.output_path          = output_filename
-      else
-        self.output_path          = File.join( dir_name, output_filename )
+      unless ( relative_source_path.nil? )
+        dir_name = File.dirname( relative_source_path )
+        if ( dir_name == '.' )
+          self.output_path          = output_filename
+        else
+          self.output_path          = File.join( dir_name, output_filename )
+        end
       end
     end
 
