@@ -51,6 +51,7 @@ module Awestruct
       load_pages
       load_extensions
       set_urls
+      configure_compass 
       generate_files(force)
     end
 
@@ -107,9 +108,16 @@ module Awestruct
       context
     end
 
-
-
     private
+
+    def configure_compass
+      Compass.configuration.project_type    = :standalone
+      Compass.configuration.project_path    = dir
+      Compass.configuration.css_dir         = File.join( dir, config.output_dir, 'stylesheets' )
+      Compass.configuration.sass_dir        = File.join( dir, 'stylesheets' )
+      Compass.configuration.images_dir      = File.join( dir, 'images' )
+      Compass.configuration.javascripts_dir = File.join( dir, 'javascripts' )
+    end
 
     def set_urls
       site.pages.each do |page|
@@ -193,21 +201,29 @@ module Awestruct
 
     def load_yamls
       @max_yaml_mtime = nil
+      site_yaml = File.join( dir, config.config_dir, 'site.yml' )
+      if ( File.exist?( site_yaml ) )
+        load_yaml( site_yaml )
+      end
       Dir[ File.join( dir, config.config_dir, '*.yml' ) ].each do |yaml_path|
-        mtime = File.mtime( yaml_path )
-        if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
-          @max_yaml_mtime = mtime
+        load_yaml( yaml_path ) unless ( yaml_path == site_yaml )
+      end
+    end
+
+    def load_yaml(yaml_path)
+      mtime = File.mtime( yaml_path )
+      if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
+        @max_yaml_mtime = mtime
+      end
+      data = YAML.load( File.read( yaml_path ) )
+      name = File.basename( yaml_path, '.yml' )
+      if ( name == 'site' )
+        data.each do |k,v|
+          site.send( "#{k}=", v )
         end
-        data = YAML.load( File.read( yaml_path ) )
-        name = File.basename( yaml_path, '.yml' )
-        if ( name == 'site' )
-          data.each do |k,v|
-            site.send( "#{k}=", v )
-          end
-          ( site.base_url = @base_url ) if ( @base_url )
-        else
-          site.send( "#{name}=", massage_yaml( data ) )
-        end
+        ( site.base_url = @base_url ) if ( @base_url )
+      else
+        site.send( "#{name}=", massage_yaml( data ) )
       end
     end
 
