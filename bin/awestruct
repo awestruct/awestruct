@@ -7,6 +7,7 @@ require 'optparse'
 require 'awestruct/commands/init'
 require 'awestruct/commands/generate'
 require 'awestruct/commands/server'
+require 'awestruct/commands/deploy'
 
 def parse(args)
   options = OpenStruct.new( {
@@ -20,6 +21,8 @@ def parse(args)
               :framework=>'compass',
               :scaffold=>true,
               :base_url=>nil,
+              :profile=>nil,
+              :deploy=>false,
             } )
 
   opts = OptionParser.new do |opts|
@@ -42,12 +45,21 @@ def parse(args)
     opts.on( '-u', '--url URL', 'Set site.base_url' ) do |url|
       options.base_url = url
     end
-    opts.on( '-d', '--dev',     'Run in development mode (--auto, --server and --url http://localhost:4242)' ) do |url|
-      options.base_url = 'http://localhost:4242'
+    opts.on( '-d', '--dev',     'Run in development mode (--auto, --server and -profile development)' ) do |url|
       options.server   = true
       options.auto     = true
       options.port     = 4242
+      options.profile  = 'development'
     end
+
+    opts.on( '-P', '--profile PROFILE', 'Specify a profile' ) do |profile|
+      options.profile = profile
+    end
+
+    opts.on( '--deploy', 'Deploy site' ) do |deploy|
+      options.deploy = deploy
+    end
+
     opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
       options.auto = a
     end
@@ -80,22 +92,79 @@ options = parse(ARGV)
 if ( options.init )
   if ( options.generate || options.auto || options.server )
     $stderr.puts "--init may not be used with --generate, --auto or --server"
+    exit
   end
   cmd = Awestruct::Commands::Init.new( Dir.pwd, options.framework, options.scaffold )
   cmd.run
   exit
 end
 
+if ( options.deploy )
+  if ( options.auto || options.server )
+    $stderr.puts "--init may not be used with --generate, --auto or --server"
+    exit
+  end
+
+  if ( ! options.profile )
+    $stderr.puts "You must specify a --profile when using --deploy"
+    exit
+  end
+
+
+  site_dir = File.join( Dir.pwd, '_site' )
+  if ( ! File.exist?( site_dir ) )
+    $stderr.puts "No _site/ generated yet."
+    exit
+  end
+
+  site_yaml_file = File.join( Dir.pwd, '_config', 'site.yml' )
+
+  site_yaml = YAML.load( File.read( site_yaml_file ) )
+
+  profiles_data = site_yaml['profiles']
+
+  if ( profiles_data.nil? )
+    $stderr.puts "_config/site.yml must define a 'profiles' section"
+    exit
+  end
+
+  profile_data = profiles_data[options.profile]
+
+  if ( profile_data.nil? )
+    $stderr.puts "Unknown profile '#{options.profile}'"
+    exit
+  end
+
+  deploy_data = profile_data['deploy']
+ 
+  if ( deploy_data.nil? )
+    $stderr.puts "No configuration for 'deploy'"
+    exit
+  end
+
+  cmd = Awestruct::Commands::Deploy.new( site_dir, deploy_data )
+
+  cmd.run
+  exit
+end
+
 threads = []
 
+default_base_url = 'http://localhost:4242'
+
+if ( options.server )
+  hostname = ( options.bind_addr == '0.0.0.0' ? 'localhost' : options.bind_addr )
+  default_base_url = "http://#{hostname}:#{options.port}"
+end
+
 if ( options.generate )
-  cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.base_url, options.force )
+  cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.profile, options.base_url, default_base_url, options.force )
   cmd.run
 end
 
 if ( options.auto )
   threads << Thread.new {
-    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.base_url )
+    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.profile, options.base_url, default_base_url )
     while ( true )
       generate_cmd.run
       sleep(1)

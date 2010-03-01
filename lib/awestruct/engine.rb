@@ -44,10 +44,14 @@ module Awestruct
       @max_yaml_mtime = nil
     end
 
-    def generate(base_url=nil, force=false)
-      @base_url = base_url
-      load_layouts
+    def generate(profile=nil, base_url=nil, default_base_url=nil, force=false)
+      @base_url         = base_url
+      @default_base_url = default_base_url
+      @max_yaml_mtime = nil
+      load_site_yaml(profile)
       load_yamls
+      set_base_url
+      load_layouts
       load_pages
       load_extensions
       set_urls
@@ -101,8 +105,12 @@ module Awestruct
       context.page = page
       class << context
         def interpolate_string(str)
-    
-          result = instance_eval("%@#{(str||'').gsub( /\\/, '\\\\\\\\').gsub('@', '\@')}@")
+          str = str || ''
+          str = str.gsub( /\\/, '\\\\\\\\' )
+          str = str.gsub( /\\\\#/, '\\#' )
+          str = str.gsub( '@', '\@' )
+          str = "%@#{str}@"
+          result = instance_eval( str )
           result
         end
       end
@@ -118,6 +126,22 @@ module Awestruct
       Compass.configuration.sass_dir        = File.join( dir, 'stylesheets' )
       Compass.configuration.images_dir      = File.join( dir, 'images' )
       Compass.configuration.javascripts_dir = File.join( dir, 'javascripts' )
+    end
+
+    def set_base_url
+      if ( @base_url )
+        site.base_url = @base_url
+      end
+
+      if ( site.base_url.nil? )
+        site.base_url = @default_base_url 
+      end
+
+      if ( site.base_url ) 
+        if ( site.base_url =~ /^(.*)\/$/ )
+          site.base_url = $1
+        end
+      end
     end
 
     def set_urls
@@ -200,14 +224,32 @@ module Awestruct
       end
     end
 
-    def load_yamls
-      @max_yaml_mtime = nil
+    def load_site_yaml(profile)
       site_yaml = File.join( dir, config.config_dir, 'site.yml' )
       if ( File.exist?( site_yaml ) )
-        load_yaml( site_yaml )
+        mtime = File.mtime( site_yaml )
+        if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
+          @max_yaml_mtime = mtime
+        end
+        data = YAML.load( File.read( site_yaml ) )
+        profile_data = {}
+        data.each do |k,v|
+          if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
+            profile_data = ( v[profile] || {} )
+          else
+            site.send( "#{k}=", v )
+          end
+        end
+
+        profile_data.each do |k,v|
+          site.send( "#{k}=", v )
+        end
       end
+    end
+
+    def load_yamls
       Dir[ File.join( dir, config.config_dir, '*.yml' ) ].each do |yaml_path|
-        load_yaml( yaml_path ) unless ( yaml_path == site_yaml )
+        load_yaml( yaml_path ) unless ( File.basename( yaml_path ) == 'site.yml' ) 
       end
     end
 
@@ -218,14 +260,7 @@ module Awestruct
       end
       data = YAML.load( File.read( yaml_path ) )
       name = File.basename( yaml_path, '.yml' )
-      if ( name == 'site' )
-        data.each do |k,v|
-          site.send( "#{k}=", v )
-        end
-        ( site.base_url = @base_url ) if ( @base_url )
-      else
-        site.send( "#{name}=", massage_yaml( data ) )
-      end
+      site.send( "#{name}=", massage_yaml( data ) )
     end
 
     def load_pages()
