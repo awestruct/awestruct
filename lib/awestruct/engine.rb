@@ -11,7 +11,7 @@ require 'awestruct/maruku_file'
 require 'awestruct/sass_file'
 require 'awestruct/verbatim_file'
 
-require 'awestruct/haml_helpers'
+require 'awestruct/context_helper'
 
 require 'awestruct/extensions/pipeline'
 require 'awestruct/extensions/posts'
@@ -93,6 +93,7 @@ module Awestruct
 
     def create_context(page, content='')
       context = OpenStruct.new( :site=>site, :content=>content )
+      context.extend( Awestruct::ContextHelper )
       @helpers.each do |h|
         context.extend( h )
       end
