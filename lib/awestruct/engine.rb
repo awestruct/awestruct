@@ -239,7 +239,7 @@ module Awestruct
           else
             site.send( "#{k}=", v )
           end
-        end
+        end if data
 
         profile_data.each do |k,v|
           site.send( "#{k}=", v )

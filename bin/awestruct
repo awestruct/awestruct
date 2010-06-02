@@ -87,7 +87,18 @@ def parse(args)
   options
 end
 
+def site_path
+  dir = (@profiles_data.nil? || @profile_data.nil? || @profile_data['output_dir'].nil?) ? '_site' : @profile_data['output_dir']
+  path = File.join( Dir.pwd, dir )
+end
+
 options = parse(ARGV)
+unless options.init
+  site_yaml_file = File.join( Dir.pwd, '_config', 'site.yml' )
+  site_yaml      = YAML.load( File.read( site_yaml_file ) )
+  @profiles_data  = site_yaml ? site_yaml['profiles'] : {}
+  @profile_data   = @profiles_data[options.profile]
+end
 
 if ( options.init )
   if ( options.generate || options.auto || options.server )
@@ -101,7 +112,7 @@ end
 
 if ( options.deploy )
   if ( options.auto || options.server )
-    $stderr.puts "--init may not be used with --generate, --auto or --server"
+    $stderr.puts "--deploy may not be used with --auto or --server"
     exit
   end
 
@@ -111,38 +122,29 @@ if ( options.deploy )
   end
 
 
-  site_dir = File.join( Dir.pwd, '_site' )
-  if ( ! File.exist?( site_dir ) )
-    $stderr.puts "No _site/ generated yet."
-    exit
-  end
-
-  site_yaml_file = File.join( Dir.pwd, '_config', 'site.yml' )
-
-  site_yaml = YAML.load( File.read( site_yaml_file ) )
-
-  profiles_data = site_yaml['profiles']
-
-  if ( profiles_data.nil? )
+  if ( @profiles_data.nil? )
     $stderr.puts "_config/site.yml must define a 'profiles' section"
     exit
   end
 
-  profile_data = profiles_data[options.profile]
 
-  if ( profile_data.nil? )
+  if ( @profile_data.nil? )
     $stderr.puts "Unknown profile '#{options.profile}'"
     exit
   end
 
-  deploy_data = profile_data['deploy']
- 
+  if ( ! File.exist?( site_path ) )
+    $stderr.puts "No #{site_path}/ generated yet."
+    exit
+  end
+
+  deploy_data = @profile_data['deploy']
   if ( deploy_data.nil? )
     $stderr.puts "No configuration for 'deploy'"
     exit
   end
 
-  cmd = Awestruct::Commands::Deploy.new( site_dir, deploy_data )
+  cmd = Awestruct::Commands::Deploy.new( site_path, deploy_data )
 
   cmd.run
   exit
@@ -174,7 +176,8 @@ end
 
 if ( options.server )
   threads << Thread.new {
-    server_cmd = Awestruct::Commands::Server.new( File.join( Dir.pwd, '_site' ), options.bind_addr, options.port )
+    puts "Serving site at #{site_path}"
+    server_cmd = Awestruct::Commands::Server.new( site_path, options.bind_addr, options.port )
     server_cmd.run
   }
 end
