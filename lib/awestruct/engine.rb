@@ -11,6 +11,7 @@ require 'awestruct/erb_file'
 require 'awestruct/maruku_file'
 require 'awestruct/sass_file'
 require 'awestruct/scss_file'
+require 'awestruct/org_mode_file'
 require 'awestruct/verbatim_file'
 
 require 'awestruct/context_helper'
@@ -96,6 +97,8 @@ module Awestruct
         page = SassFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.scss$/ )
         page = ScssFile.new( site, path, fixed_relative_path )
+      elsif ( path =~ /\.org$/ )
+        page = OrgModeFile.new( site, path, fixed_relative_path )
       elsif ( File.file?( path ) )
         page = VerbatimFile.new( site, path, fixed_relative_path )
       end
@@ -214,7 +217,9 @@ module Awestruct
         cur = page
         while ( ! cur.nil? && ! cur.layout.nil? )
           layout_name = cur.layout.to_s + page.output_extension
+          puts "EXT #{page.output_extension} #{layout_name}"
           cur = site.layouts[ layout_name ]
+          puts "CUR #{cur}"
           context.content = rendered.to_s
           rendered = cur.render( context )
         end
