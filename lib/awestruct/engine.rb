@@ -7,6 +7,7 @@ require 'time'
 require 'awestruct/config'
 require 'awestruct/site'
 require 'awestruct/haml_file'
+require 'awestruct/erb_file'
 require 'awestruct/maruku_file'
 require 'awestruct/sass_file'
 require 'awestruct/verbatim_file'
@@ -86,6 +87,8 @@ module Awestruct
 
       if ( path =~ /\.haml$/ )
         page = HamlFile.new( site, path, fixed_relative_path )
+      elsif ( path =~ /\.erb$/ )
+        page = ErbFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.md$/ )
         page = MarukuFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.sass$/ )
@@ -112,6 +115,9 @@ module Awestruct
           str = "%@#{str}@"
           result = instance_eval( str )
           result
+        end
+        def evaluate_erb(erb)
+          erb.result( binding ) 
         end
       end
       context
