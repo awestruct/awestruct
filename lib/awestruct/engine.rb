@@ -217,9 +217,7 @@ module Awestruct
         cur = page
         while ( ! cur.nil? && ! cur.layout.nil? )
           layout_name = cur.layout.to_s + page.output_extension
-          puts "EXT #{page.output_extension} #{layout_name}"
           cur = site.layouts[ layout_name ]
-          puts "CUR #{cur}"
           context.content = rendered.to_s
           rendered = cur.render( context )
         end
@@ -281,6 +279,7 @@ module Awestruct
       dir_pathname = Pathname.new( dir )
       site.pages.clear
       Find.find( dir ) do |path|
+        next if path == dir
         basename = File.basename( path )
         if ( basename == '.htaccess' )
           #special case
