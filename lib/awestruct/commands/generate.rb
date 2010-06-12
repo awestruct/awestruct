@@ -1,4 +1,4 @@
-require 'awestruct'
+require 'awestruct/engine'
 
 module Awestruct
   module Commands

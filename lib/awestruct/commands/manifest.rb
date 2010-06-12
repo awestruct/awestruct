@@ -5,13 +5,27 @@ require 'compass/commands/registry'
 require 'compass/commands/create_project'
 require 'compass/installers/bare_installer'
 
-class Compass::Installers::StandAloneInstaller
-  def write_configuration_files(config_file=nil)
-    # skip it!
-  end
+module Compass::AppIntegration::StandAlone
+end
 
-  def compilation_required?
-    false
+class Compass::AppIntegration::StandAlone::Installer
+  def write_configuration_files(config_file = nil)
+    # no!
+  end
+  def finalize(opts={})
+    puts <<-END.gsub(/^ {6}/, '')
+
+      Now you're awestruct!
+
+      To generate your site continuous during development, simply run:
+
+        awestruct -d
+
+      and visit your site at
+
+        http://localhost:4242/
+
+    END
   end
 end
 
@@ -173,8 +187,8 @@ module Awestruct
           cmd = Compass::Commands::CreateProject.new( dir, {
                   :framework=>@framework,
                   :project_type=>:stand_alone,
-                  #:css_dir=>'_site/stylesheets',
-                  #:sass_dir=>'stylesheets',
+                  :css_dir=>'_site/stylesheets',
+                  :sass_dir=>'stylesheets',
                   :images_dir=>'images',
                   :javascripts_dir=>'javascripts',
                 } )

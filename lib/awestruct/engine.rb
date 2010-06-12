@@ -10,6 +10,7 @@ require 'awestruct/haml_file'
 require 'awestruct/erb_file'
 require 'awestruct/maruku_file'
 require 'awestruct/sass_file'
+require 'awestruct/scss_file'
 require 'awestruct/verbatim_file'
 
 require 'awestruct/context_helper'
@@ -93,6 +94,8 @@ module Awestruct
         page = MarukuFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.sass$/ )
         page = SassFile.new( site, path, fixed_relative_path )
+      elsif ( path =~ /\.scss$/ )
+        page = ScssFile.new( site, path, fixed_relative_path )
       elsif ( File.file?( path ) )
         page = VerbatimFile.new( site, path, fixed_relative_path )
       end
