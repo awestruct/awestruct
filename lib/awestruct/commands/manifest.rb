@@ -1,8 +1,9 @@
 require 'compass/logger'
 require 'compass/actions'
 require 'compass/commands/base'
+require 'compass/commands/registry'
 require 'compass/commands/create_project'
-require 'compass/installers/stand_alone'
+require 'compass/installers/bare_installer'
 
 class Compass::Installers::StandAloneInstaller
   def write_configuration_files(config_file=nil)
@@ -33,6 +34,10 @@ module Awestruct
 
       def copy_file(path, input_path)
         steps << CopyFile.new( path, input_path )
+      end
+      
+      def touch_file(path)
+        steps << TouchFile.new(path)
       end
 
       def install_compass(framework)
@@ -102,6 +107,20 @@ module Awestruct
           end
           $stderr.puts "Remove: #{p}"
           FileUtils.rmdir( p )
+        end
+      end
+      
+      class TouchFile
+        def initialize(path)
+          @path = path
+        end
+        
+        def perform(dir)
+          FileUtils.touch(File.join(dir, @path))
+        end
+        
+        def unperform(dir)
+          #nothing
         end
       end
 

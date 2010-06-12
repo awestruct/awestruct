@@ -26,6 +26,7 @@ module Awestruct
         if ( @scaffold )
           manifest.copy_file( '_layouts/base.html.haml', File.join( File.dirname(__FILE__), '/base_layout.html.haml' ) )
           manifest.copy_file( 'index.html.haml', File.join( File.dirname(__FILE__), '/base_index.html.haml' ) )
+          manifest.touch_file( '_config/site.yml' )
         end
         manifest.perform( @dir )
       end
