@@ -15,6 +15,10 @@ module Awestruct
     def output_filename
       File.basename( source_path, '.sass' ) + '.css'
     end
+  
+    def syntax
+      :sass
+    end
 
   end
 end

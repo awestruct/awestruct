@@ -16,5 +16,9 @@ module Awestruct
       File.basename( source_path, '.scss' ) + '.css'
     end
 
+    def syntax
+      :scss
+    end
+
   end
 end
