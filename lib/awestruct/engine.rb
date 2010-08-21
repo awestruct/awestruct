@@ -2,6 +2,7 @@
 require 'ostruct'
 require 'find'
 require 'compass'
+require 'ninesixty'
 require 'time'
 
 require 'awestruct/config'

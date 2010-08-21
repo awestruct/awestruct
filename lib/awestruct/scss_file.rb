@@ -1,7 +1,7 @@
 
 require 'sass'
 require 'awestruct/renderable_file'
-require 'awestruct/scssable'
+require 'awestruct/sassable'
 
 module Awestruct
   class ScssFile < RenderableFile

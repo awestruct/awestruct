@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
     s.add_dependency 'haml'
     s.add_dependency 'maruku'
     s.add_dependency 'compass'
+    s.add_dependency 'compass-960-plugin'
     s.add_dependency 'mongrel'
-    s.add_dependency 'org-mode'
+    s.add_dependency 'org-ruby'
 end
 
