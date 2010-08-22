@@ -46,15 +46,18 @@ module Awestruct
       end
 
       def initialize(prop_name, input_path, opts={})
-        @prop_name   = prop_name
-        @input_path  = input_path
-        @per_page    = opts[:per_page] || 20
-        @window_size = opts[:window_size] || 2
+        @prop_name    = prop_name
+        @input_path   = input_path
+        @per_page     = opts[:per_page] || 20
+        @window_size  = opts[:window_size] || 2
+        @remove_input = opts[:remove_input] || true
+        @output_prefix = opts[:output_prefix] || File.dirname( @input_path )
+        @collection    = opts[:collection] 
       end
 
       def execute(site)
         removal_path = nil
-        all = site.send( @prop_name )
+        all = @collection || site.send( @prop_name )
         i = 1
         paginated_pages = []
         all.each_slice( @per_page ) do |slice|
@@ -63,9 +66,9 @@ module Awestruct
           slice.extend( Paginated )
           page.send( "#{@prop_name}=", slice )
           if ( i == 1 )
-            page.output_path = File.join( File.dirname( @input_path ), File.basename( @input_path ) + ".html" )
+            page.output_path = File.join( @output_prefix, File.basename( @input_path ) + ".html" )
           else
-            page.output_path = File.join( File.dirname( @input_path ), "page#{i}.html" )
+            page.output_path = File.join( @output_prefix, "page#{i}.html" )
           end
           page.paginate_generated = true
           site.pages << page
@@ -73,9 +76,11 @@ module Awestruct
           i = i + 1
         end 
 
-        site.pages.reject!{|page|
-          ( ! page.paginate_generated && ( page.output_path == removal_path ) )
-        }
+        if ( @remove_input )
+          site.pages.reject!{|page|
+            ( ! page.paginate_generated && ( page.output_path == removal_path ) )
+          }
+        end
 
         prev_page = nil
         paginated_pages.each_with_index do |page,i|
@@ -92,6 +97,7 @@ module Awestruct
           prev_page = page
         end
 
+        paginated_pages.first
       end
     end
 

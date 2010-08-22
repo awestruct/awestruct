@@ -13,7 +13,6 @@ module Awestruct
       end
       sass_opts[:load_paths] << File.dirname( self.source_path ) 
       sass_opts[:syntax] = syntax()
-      puts "sass_opts #{sass_opts.inspect}"
       sass_engine = Sass::Engine.new( raw_page_content, sass_opts )
       sass_engine.render
     end

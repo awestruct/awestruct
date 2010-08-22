@@ -39,9 +39,13 @@ module Awestruct
         yaml_content = ''
       end
 
-      front_matter = YAML.load( yaml_content ) || {}
-      front_matter.each do |k,v| 
-        self.send( "#{k}=", v )
+      begin
+        front_matter = YAML.load( yaml_content ) || {}
+        front_matter.each do |k,v| 
+          self.send( "#{k}=", v )
+        end
+      rescue=>e
+        puts "error reading #{self}: #{e}"
       end
     end
   end
