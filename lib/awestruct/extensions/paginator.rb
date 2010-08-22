@@ -50,7 +50,7 @@ module Awestruct
         @input_path   = input_path
         @per_page     = opts[:per_page] || 20
         @window_size  = opts[:window_size] || 2
-        @remove_input = opts[:remove_input] || true
+        @remove_input = opts.has_key?( :remove_input ) ? opts[:remove_input] : true
         @output_prefix = opts[:output_prefix] || File.dirname( @input_path )
         @collection    = opts[:collection] 
       end
