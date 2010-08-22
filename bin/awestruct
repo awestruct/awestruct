@@ -97,7 +97,7 @@ unless options.init
   site_yaml_file = File.join( Dir.pwd, '_config', 'site.yml' )
   site_yaml      = YAML.load( File.read( site_yaml_file ) )
   @profiles_data  = site_yaml ? site_yaml['profiles'] : {}
-  @profile_data   = @profiles_data[options.profile]
+  @profile_data   = @profiles_data.nil? ? nil : @profiles_data[options.profile]
 end
 
 if ( options.init )
