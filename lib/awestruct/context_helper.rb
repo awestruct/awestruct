@@ -2,8 +2,13 @@ require 'hpricot'
 
 module Awestruct
   module ContextHelper
+    
     def html_to_text(str)
-      str.gsub( /<[^>]+>/, '' )
+      str.gsub( /<[^>]+>/, '' ).gsub( /&nbsp;/, ' ' )
+    end
+ 
+    def clean_html(str)
+      str.gsub( /&nbsp;/, ' ' )
     end
   
     def summarize(text, numwords=20)

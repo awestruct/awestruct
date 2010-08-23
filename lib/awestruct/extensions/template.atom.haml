@@ -23,7 +23,7 @@
           - else
             %name= entry.author
         %summary
-          = html_to_text( entry.content )
+          #{summarize( html_to_text( entry.content ), 100 )}...
         %content{:type=>'html'}
-          = escape_once( fully_qualify_urls( site.base_url, entry.content )  )
+          = clean_html( escape_once( fully_qualify_urls( site.base_url, entry.content )  ) )
   

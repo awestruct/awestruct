@@ -22,6 +22,8 @@ require 'awestruct/extensions/posts'
 require 'awestruct/extensions/indexifier'
 require 'awestruct/extensions/paginator'
 require 'awestruct/extensions/atomizer'
+require 'awestruct/extensions/tagger'
+require 'awestruct/extensions/tag_cloud'
 require 'awestruct/extensions/intense_debate'
 require 'awestruct/extensions/google_analytics'
 
