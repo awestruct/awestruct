@@ -11,7 +11,7 @@ module Awestruct
       end
 
       def run
-        cmd = "rsync -rv --delete #{@site_path} #{@host}:#{@path}"
+        cmd = "rsync -rvl --delete #{@site_path} #{@host}:#{@path}"
         puts "running #{cmd}"
         Open3.popen3( cmd ) do |stdin, stdout, stderr| 
           stdin.close
