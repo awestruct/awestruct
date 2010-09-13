@@ -29,7 +29,7 @@ module Awestruct
           end
         end
         
-        posts = posts.sort_by{|each| [each.date, File.mtime( each.source_path ), each.slug ] }.reverse
+        posts = posts.sort_by{|each| [each.date, each.sequence || 0, File.mtime( each.source_path ), each.slug ] }.reverse
         
         last = nil
         singular = @assign_to.to_s.singularize
