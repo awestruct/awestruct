@@ -3,7 +3,9 @@ module Awestruct
 
     class Pipeline
 
+      attr_reader :before_extensions
       attr_reader :extensions
+      attr_reader :after_extensions
       attr_reader :helpers
 
       def initialize(&block)
