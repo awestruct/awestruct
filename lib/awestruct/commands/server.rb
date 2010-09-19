@@ -1,10 +1,9 @@
-require 'mongrel'
+require 'webrick'
 
 module Awestruct
   module Commands
 
-    #Mongrel::DirHandler::MIME_TYPES['.atom'] = 'text/plain'
-    Mongrel::DirHandler::MIME_TYPES['.atom'] = 'application/atom+xml'
+    WEBrick::HTTPUtils::DefaultMimeTypes.store('atom', 'application/atom+xml')
 
     class Server
       attr_reader :server
@@ -16,11 +15,8 @@ module Awestruct
       end
 
       def run
-        @server = Mongrel::HttpServer.new( @bind_addr, @port )
-        handler = Mongrel::DirHandler.new( @path )
-        @server.register("/", handler )
-        $stderr.puts "Launching server on http://#{@bind_addr}:#{@port}/"
-        @server.run.join
+        @server = WEBrick::HTTPServer.new( :DocumentRoot=>@path, :Port=>@port, :BindAddress=>@bind_addr )
+        @server.start
       end
     end
   end

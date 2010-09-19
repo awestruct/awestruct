@@ -235,6 +235,7 @@ module Awestruct
     end
 
     def load_layouts
+      site.layouts.clear
       dir_pathname = Pathname.new( dir )
       Dir[ File.join( dir, config.layouts_dir, '*.haml' ) ].each do |layout_path|
         layout_pathname = Pathname.new( layout_path )
