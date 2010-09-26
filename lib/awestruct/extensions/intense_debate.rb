@@ -1,5 +1,5 @@
 
-require 'sha1'
+require 'digest/sha1'
 
 module Awestruct
   module Extensions
@@ -11,7 +11,7 @@ module Awestruct
 
       module IntenseDebatable
         def intense_debate_comments()
-          post_id = self.post_id ? self.post_id : SHA1.hexdigest( self.url )
+          post_id = self.post_id ? self.post_id : Digest::SHA1.hexdigest( self.url )
           html = %Q(<script>\n)
           html += %Q(  var idcomments_acct='#{site.intense_debate_acct}';\n)
           html += %Q(  var idcomments_post_id='#{post_id}';\n )
@@ -23,7 +23,7 @@ module Awestruct
         end
 
         def intense_debate_comments_link()
-          post_id = self.post_id ? self.post_id : SHA1.hexdigest( self.url )
+          post_id = self.post_id ? self.post_id : Digest::SHA1.hexdigest( self.url )
           html = %Q(<script>\n)
           html += %Q(  var idcomments_acct='#{site.intense_debate_acct}';\n)
           html += %Q(  var idcomments_post_id='#{post_id}';\n )

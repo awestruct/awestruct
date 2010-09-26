@@ -8,6 +8,7 @@ require 'awestruct/commands/init'
 require 'awestruct/commands/generate'
 require 'awestruct/commands/server'
 require 'awestruct/commands/deploy'
+require 'yaml'
 
 def parse(args)
   options = OpenStruct.new( {
