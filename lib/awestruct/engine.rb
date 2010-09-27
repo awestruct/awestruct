@@ -213,8 +213,10 @@ module Awestruct
         if ( layout )
           layout_mtime = File.mtime( layout.source_path )
           return true if layout_mtime > generated_mtime
+          layout_name = layout.layout
+        else
+          return false
         end
-        layout_name = layout.layout
       end
       false
     end
@@ -227,8 +229,10 @@ module Awestruct
         while ( ! cur.nil? && ! cur.layout.nil? )
           layout_name = cur.layout.to_s + page.output_extension
           cur = site.layouts[ layout_name ]
-          context.content = rendered.to_s
-          rendered = cur.render( context )
+          if ! cur.nil?
+            context.content = rendered.to_s
+            rendered = cur.render( context )
+          end
         end
       end
       rendered
