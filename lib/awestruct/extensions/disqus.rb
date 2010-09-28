@@ -1,5 +1,3 @@
-require 'digest/sha1'
-
 module Awestruct
   module Extensions
     class Disqus
