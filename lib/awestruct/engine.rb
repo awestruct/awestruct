@@ -381,7 +381,7 @@ module Awestruct
         skin_pipeline_file = File.join( skin_ext_dir, 'pipeline.rb' )
         if ( File.exists?( skin_pipeline_file ) )
           skin_pipeline = eval File.read( skin_pipeline_file )
-          @helpers = skin_pipeline.helpers || []
+          @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
         end
       end
 
