@@ -4,7 +4,7 @@ require 'rubygems'
 Gem::Specification.new do |s|
     s.platform  =   Gem::Platform::RUBY
     s.name      =   "awestruct"
-    s.version   =   "0.0.8"
+    s.version   =   "0.1.2"
     s.author    =   "Bob McWhirter"
     s.email     =   "bob@mcwhirter.org"
     s.summary   =   "Static site-baking utility"
@@ -20,10 +20,9 @@ Gem::Specification.new do |s|
 
     s.add_dependency 'hpricot'
     s.add_dependency 'haml'
-    s.add_dependency 'maruku'
+    s.add_dependency 'bluecloth'
     s.add_dependency 'compass'
     s.add_dependency 'compass-960-plugin'
-    s.add_dependency 'mongrel'
     s.add_dependency 'org-ruby'
 end
 

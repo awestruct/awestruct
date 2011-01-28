@@ -20,12 +20,15 @@ require 'awestruct/context_helper'
 require 'awestruct/extensions/pipeline'
 require 'awestruct/extensions/posts'
 require 'awestruct/extensions/indexifier'
+require 'awestruct/extensions/data_dir'
 require 'awestruct/extensions/paginator'
 require 'awestruct/extensions/atomizer'
 require 'awestruct/extensions/tagger'
 require 'awestruct/extensions/tag_cloud'
 require 'awestruct/extensions/intense_debate'
+require 'awestruct/extensions/disqus'
 require 'awestruct/extensions/google_analytics'
+require 'awestruct/extensions/partial'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
@@ -48,6 +51,10 @@ module Awestruct
       FileUtils.mkdir_p( @site.tmp_dir )
       FileUtils.mkdir_p( @site.output_dir )
       @max_yaml_mtime = nil
+    end
+
+    def skin_dir
+      @site.skin_dir
     end
 
     def generate(profile=nil, base_url=nil, default_base_url=nil, force=false)
@@ -207,8 +214,10 @@ module Awestruct
         if ( layout )
           layout_mtime = File.mtime( layout.source_path )
           return true if layout_mtime > generated_mtime
+          layout_name = layout.layout
+        else
+          return false
         end
-        layout_name = layout.layout
       end
       false
     end
@@ -221,21 +230,34 @@ module Awestruct
         while ( ! cur.nil? && ! cur.layout.nil? )
           layout_name = cur.layout.to_s + page.output_extension
           cur = site.layouts[ layout_name ]
-          context.content = rendered.to_s
-          rendered = cur.render( context )
+          if ! cur.nil?
+            context.content = rendered.to_s
+            rendered = cur.render( context )
+          end
         end
       end
       rendered
     end
 
     def load_layouts
+      site.layouts.clear
       dir_pathname = Pathname.new( dir )
       Dir[ File.join( dir, config.layouts_dir, '*.haml' ) ].each do |layout_path|
         layout_pathname = Pathname.new( layout_path )
         relative_path = layout_pathname.relative_path_from( dir_pathname ).to_s
         name = File.basename( layout_path, '.haml' )
-        #site.layouts[ name ] =  HamlFile.new( site, layout_path, relative_path )
         site.layouts[ name ] =  load_page( layout_path, relative_path )
+      end
+      if ( skin_dir )
+        skin_dir_pathname = Pathname.new( skin_dir )
+        Dir[ File.join( skin_dir, config.layouts_dir, '*.haml' ) ].each do |layout_path|
+          layout_pathname = Pathname.new( layout_path )
+          relative_path = layout_pathname.relative_path_from( skin_dir_pathname ).to_s
+          name = File.basename( layout_path, '.haml' )
+          unless ( site.layouts.key?( name ) )
+            site.layouts[ name ] =  load_page( layout_path, relative_path )
+          end
+        end
       end
     end
 
@@ -279,8 +301,8 @@ module Awestruct
     end
 
     def load_pages()
-      dir_pathname = Pathname.new( dir )
       site.pages.clear
+      dir_pathname = Pathname.new( dir )
       Find.find( dir ) do |path|
         next if path == dir
         basename = File.basename( path )
@@ -296,6 +318,28 @@ module Awestruct
           page = load_page( path, relative_path )
           if ( page )
             site.pages << page
+          end
+        end
+      end
+
+      if ( skin_dir )
+        skin_dir_pathname = Pathname( skin_dir )
+        Find.find( skin_dir ) do |path|
+          next if path == skin_dir
+          basename = File.basename( path )
+          if ( basename == '.htaccess' )
+            #special case
+          elsif ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
+            Find.prune
+            next
+          end
+          unless ( site.has_page?( path ) )
+            file_pathname = Pathname.new( path )
+            relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
+            page = load_page( path, relative_path )
+            if ( page )
+              site.pages << page
+            end
           end
         end
       end
@@ -320,14 +364,34 @@ module Awestruct
     end
 
     def load_extensions
+
+      pipeline = nil
+      skin_pipeline = nil
+
       ext_dir = File.join( dir, config.extension_dir ) 
-      pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( $LOAD_PATH.index( ext_dir ).nil? )
         $LOAD_PATH << ext_dir
       end
-      pipeline = eval File.read( pipeline_file )
-      pipeline.execute( site )
-      @helpers = pipeline.helpers || []
+      pipeline_file = File.join( ext_dir, 'pipeline.rb' )
+      if ( File.exists?( pipeline_file ) ) 
+        pipeline = eval File.read( pipeline_file )
+        @helpers = pipeline.helpers || []
+      end
+
+      if ( skin_dir )
+        skin_ext_dir = File.join( skin_dir, config.extension_dir )
+        if ( $LOAD_PATH.index( skin_ext_dir ).nil? )
+          $LOAD_PATH << skin_ext_dir
+        end
+        skin_pipeline_file = File.join( skin_ext_dir, 'pipeline.rb' )
+        if ( File.exists?( skin_pipeline_file ) )
+          skin_pipeline = eval File.read( skin_pipeline_file )
+          @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
+        end
+      end
+
+      pipeline.execute( site ) if pipeline
+      skin_pipeline.execute( site ) if skin_pipeline
     end
 
     def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)
