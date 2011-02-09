@@ -4,7 +4,7 @@ module Awestruct
     def render(context)
       rendered = ''
       begin
-        rendered = RedCloth.new(raw_page_content).to_html
+        rendered = RedCloth.new( context.interpolate_string( raw_page_content ) ).to_html
       rescue => e
         puts e
         puts e.backtrace
