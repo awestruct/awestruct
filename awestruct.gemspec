@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
 
     s.add_dependency 'hpricot'
     s.add_dependency 'haml'
+    s.add_dependency 'hashery'
     s.add_dependency 'bluecloth'
     s.add_dependency 'RedCloth', '<= 4.2.5'
     s.add_dependency 'maruku'

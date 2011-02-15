@@ -5,6 +5,8 @@ require 'compass'
 require 'ninesixty'
 require 'time'
 
+require 'hashery/opencascade'
+
 require 'awestruct/config'
 require 'awestruct/site'
 require 'awestruct/haml_file'
@@ -356,7 +358,7 @@ module Awestruct
           obj.each do |k,v|
             result[k] = massage_yaml(v)
           end
-          result = OpenStruct.new( result )
+          result = OpenCascade.new(result.inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo })
         when Array
           result = []
           obj.each do |v|
