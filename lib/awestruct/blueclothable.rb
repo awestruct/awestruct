@@ -6,7 +6,7 @@ module Awestruct
     def render(context)
       rendered = ''
       begin
-        doc = BlueCloth.new( context.interpolate_string( raw_page_content ) )
+        doc = BlueCloth.new( context.interpolate_string( raw_page_content ), :smartypants => true )
         rendered = doc.to_html
       rescue => e
         puts e

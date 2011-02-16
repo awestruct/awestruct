@@ -5,10 +5,13 @@ require 'compass'
 require 'ninesixty'
 require 'time'
 
+require 'hashery/opencascade'
+
 require 'awestruct/config'
 require 'awestruct/site'
 require 'awestruct/haml_file'
 require 'awestruct/erb_file'
+require 'awestruct/textile_file'
 require 'awestruct/maruku_file'
 require 'awestruct/sass_file'
 require 'awestruct/scss_file'
@@ -101,6 +104,8 @@ module Awestruct
         page = HamlFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.erb$/ )
         page = ErbFile.new( site, path, fixed_relative_path )
+      elsif ( path =~ /\.textile$/ )
+        page = TextileFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.md$/ )
         page = MarukuFile.new( site, path, fixed_relative_path )
       elsif ( path =~ /\.sass$/ )
@@ -353,7 +358,7 @@ module Awestruct
           obj.each do |k,v|
             result[k] = massage_yaml(v)
           end
-          result = OpenStruct.new( result )
+          result = OpenCascade.new(result.inject({}) { |memo, (k, v)| memo[k.to_sym] = v; memo })
         when Array
           result = []
           obj.each do |v|

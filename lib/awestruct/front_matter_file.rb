@@ -4,6 +4,7 @@ module Awestruct
   class FrontMatterFile < RenderableFile
 
     attr_reader :raw_page_content
+    attr_reader :front_matter
 
     def initialize(site, source_path, relative_source_path)
       super( site, source_path, relative_source_path )
@@ -40,8 +41,8 @@ module Awestruct
       end
 
       begin
-        front_matter = YAML.load( yaml_content ) || {}
-        front_matter.each do |k,v| 
+        @front_matter = YAML.load( yaml_content ) || {}
+        @front_matter.each do |k,v| 
           self.send( "#{k}=", v )
         end
       rescue=>e
