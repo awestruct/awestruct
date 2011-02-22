@@ -17,6 +17,16 @@ module Awestruct
         page.title  = @title
         page.tags = site.send( "#{@tagged_items_property}_tags" ) || []
         site.pages << page
+        site.send( "#{@tagged_items_property}_tag_cloud=", LazyPage.new( page ) )
+      end
+    end
+
+    class LazyPage
+      def initialize(page)
+        @page = page
+      end
+      def to_s
+        @page.content
       end
     end
   end

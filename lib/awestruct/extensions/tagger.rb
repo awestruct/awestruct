@@ -41,7 +41,7 @@ module Awestruct
         end
 
         all.each do |page|
-          page.tags = page.tags.collect{|t| @tags[t]}
+          page.tags = (page.tags||[]).collect{|t| @tags[t]}
         end
 
         ordered_tags = @tags.values
