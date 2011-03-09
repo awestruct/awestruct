@@ -14,6 +14,7 @@ module Awestruct
         end
         input_page = File.join( File.dirname(__FILE__), 'template.atom.haml' )
         page = site.engine.load_page( input_page )
+        page.date = page.timestamp unless page.timestamp.nil?
         page.output_path = @output_path
         page.entries = entries
         page.title = site.title || site.base_url
