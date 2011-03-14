@@ -19,7 +19,7 @@ module Awestruct
           feed_entry = site.engine.load_page(entry.source_path, :relative_path => entry.relative_source_path, :html_entities => false)
 
           feed_entry.output_path = entry.output_path
-          feed_entry.date = entry.date
+          feed_entry.date = feed_entry.timestamp.nil? ? entry.date : feed_entry.timestamp
 
           atom_pages << feed_entry
         end
