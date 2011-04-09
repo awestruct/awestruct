@@ -10,7 +10,7 @@ module Awestruct
 
       def execute(site)
         posts = []
-    
+
         site.pages.each do |page|
           if ( page.relative_source_path =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/ )
             year  = $1
@@ -25,6 +25,7 @@ module Awestruct
             })
             #page.body = page.render( context )
             page.output_path = "#{@path_prefix}/#{year}/#{month}/#{day}/#{slug}.html"
+            #page.layout = 'post'
             posts << page
           end
         end

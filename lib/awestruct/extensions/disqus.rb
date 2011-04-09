@@ -3,15 +3,17 @@ module Awestruct
     class Disqus
 
       def execute(site)
-        site.pages.each{|p| p.extend Disqus }
+        site.pages.each{ |p| p.extend Disqus }
       end
 
       module Disqus
         def disqus_comments()
+          developer = (site.disqus_developer) ? 'var disqus_developer = 1;' : ''
           %Q{
             <div id="disqus_thread"></div>
             <script type="text/javascript">
             var disqus_url = "#{self.url}";
+            #{developer}
             (function() {
               var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
               dsq.src = "http://#{site.disqus}.disqus.com/embed.js";
@@ -26,10 +28,10 @@ module Awestruct
           %Q{ <a href="#{self.url}#disqus_thread">Comments</a> }
         end
 
-        def disqus_comments_link_loader()
+        def disqus_comments_count()
           %Q{
             <script type="text/javascript">
-            var disqus_shortname = "#{site.disqus}";
+            var disqus = "#{site.disqus}";
             (function () {
               var s = document.createElement('script'); s.async = true;
               s.src = "http://disqus.com/forums/#{site.disqus}/count.js";

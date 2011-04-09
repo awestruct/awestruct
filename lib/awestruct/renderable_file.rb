@@ -18,6 +18,10 @@ module Awestruct
       end
     end
 
+    def to_root
+      self.output_path.gsub(/\/[^\/]+/,'../')
+    end
+
     def raw_page_content
       File.read( self.source_path )
     end
