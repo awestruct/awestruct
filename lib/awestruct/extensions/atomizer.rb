@@ -8,9 +8,9 @@ module Awestruct
       end
 
       def execute(site)
-        entries = site.send( @entries_name )
+        entries = site.send( @entries_name ) || []
         unless ( @num_entries == :all )
-          entries = entries[0,@num_entries]
+          entries = entries[0, @num_entries]
         end
         input_page = File.join( File.dirname(__FILE__), 'template.atom.haml' )
         page = site.engine.load_page( input_page )
