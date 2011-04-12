@@ -4,13 +4,13 @@ module Awestruct
   module Commands
     class Generate
 
-      def initialize(dir=Dir.pwd, profile=nil, base_url=nil, default_base_url='http://localhost:4242', force=false)
-        @dir              = dir
+      def initialize(config, profile=nil, base_url=nil, default_base_url='http://localhost:4242', force=false)
+        @dir              = config.input_dir
         @profile          = profile
         @base_url         = base_url
         @default_base_url = default_base_url
         @force            = force
-        @engine           = Awestruct::Engine.new( @dir )
+        @engine           = Awestruct::Engine.new( config )
       end
 
       def run()

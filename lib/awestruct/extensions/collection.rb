@@ -12,8 +12,8 @@ module Awestruct
       def execute(site)
         posts = []
 
-        Dir[ "#{site.dir}/#{@path_prefix}/*" ].each do |entry|
-          if entry =~ /^#{site.dir}\/#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/
+        Dir[ "#{@path_prefix}/*" ].each do |entry|
+          if entry =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/
             if ( File.directory?( entry ) )
               # TODO deal with dirs
             else

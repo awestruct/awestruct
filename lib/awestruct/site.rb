@@ -9,11 +9,13 @@ module Awestruct
     attr_reader   :layouts
     attr_accessor :pages
 
-    def initialize(dir)
+    def initialize(config)
       super({})
 
-      @dir = dir
-      @output_dir = File.join( dir, '_site' )
+      @dir = config.input_dir
+      @output_dir = config.output_dir
+
+      FileUtils.mkdir_p( @output_dir )
 
       @pages   = []
       @layouts = {}

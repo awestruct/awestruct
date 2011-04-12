@@ -19,7 +19,7 @@ module Awestruct
     end
 
     def to_root
-      self.output_path.gsub(/\/[^\/]+/,'../')
+      '../' * ( self.output_path.count('/') - 1 )
     end
 
     def raw_page_content

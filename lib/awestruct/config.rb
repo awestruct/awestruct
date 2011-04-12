@@ -6,16 +6,18 @@ module Awestruct
     attr_accessor :layouts_dir
     attr_accessor :config_dir
     attr_accessor :extension_dir
+    attr_accessor :input_dir
     attr_accessor :output_dir
     attr_accessor :skin_dir
     attr_accessor :ignore
 
-    def initialize()
-      @layouts_dir    = '_layouts'
-      @config_dir     = '_config'
-      @output_dir     = '_site'
-      @extension_dir  = '_ext'
-      @skin_dir       = '_skin'
+    def initialize(dir)
+      @layouts_dir    = File.join(dir, '_layouts')
+      @config_dir     = File.join(dir, '_config')
+      @input_dir      = File.join(dir, '')
+      @output_dir     = File.join(dir, '_site')
+      @extension_dir  = File.join(dir, '_ext')
+      @skin_dir       = File.join(dir, '_skin')
       @ignore         = [ ]
     end
 

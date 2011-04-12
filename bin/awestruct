@@ -98,12 +98,19 @@ def site_path
 end
 
 options = parse(ARGV)
+
 unless options.init
   site_yaml_file = File.join( Dir.pwd, '_config', 'site.yml' )
   site_yaml      = YAML.load( File.read( site_yaml_file ) )
-  @profiles_data  = site_yaml ? site_yaml['profiles'] : {}
-  @profile_data   = @profiles_data.nil? ? nil : @profiles_data[options.profile]
+  if site_yaml
+    @profiles_data  = site_yaml['profiles'] || {}
+    @profile_data   = @profiles_data.nil? ? nil : @profiles_data[options.profile]
+  end
 end
+
+config = Awestruct::Config.new(Dir.pwd)
+# config.input_dir = File.join(Dir.pwd, '_root')
+
 
 if ( options.init )
   if ( options.generate || options.auto || options.server )
@@ -178,13 +185,13 @@ if ( options.server )
 end
 
 if ( options.generate )
-  cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.profile, options.base_url, default_base_url, options.force )
+  cmd = Awestruct::Commands::Generate.new( config, options.profile, options.base_url, default_base_url, options.force )
   cmd.run
 end
 
 if ( options.auto )
   threads << Thread.new {
-    generate_cmd = Awestruct::Commands::Generate.new( Dir.pwd, options.profile, options.base_url, default_base_url )
+    generate_cmd = Awestruct::Commands::Generate.new( config, options.profile, options.base_url, default_base_url )
     while ( true )
       generate_cmd.run
       sleep(1)

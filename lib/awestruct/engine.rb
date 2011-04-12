@@ -22,6 +22,7 @@ require 'awestruct/context_helper'
 
 require 'awestruct/extensions/pipeline'
 require 'awestruct/extensions/posts'
+require 'awestruct/extensions/collection'
 require 'awestruct/extensions/indexifier'
 require 'awestruct/extensions/data_dir'
 require 'awestruct/extensions/paginator'
@@ -44,15 +45,14 @@ module Awestruct
     attr_reader :dir
     attr_reader :site
 
-    def initialize(dir, config=::Awestruct::Config.new)
-      @dir    = dir
+    def initialize(config)
+      @dir    = config.input_dir
       @config = config
-      @site   = Site.new( @dir )
+
+      @site   = Site.new( config )
       @site.engine = self
-      @site.tmp_dir = File.join( dir, '_tmp' )
+
       @helpers = []
-      FileUtils.mkdir_p( @site.tmp_dir )
-      FileUtils.mkdir_p( @site.output_dir )
       @max_yaml_mtime = nil
     end
 
@@ -76,7 +76,7 @@ module Awestruct
     end
 
     def find_and_load_site_page(simple_path)
-      path_glob = File.join( dir, simple_path + '.*' )
+      path_glob = File.join( config.input_dir, simple_path + '.*' )
       candidates = Dir[ path_glob ]
       return nil if candidates.empty?
       throw Exception.new( "too many choices for #{simple_path}" ) if candidates.size != 1
@@ -194,7 +194,7 @@ module Awestruct
     def generate_page(page, force)
       return unless requires_generation?(page, force)
 
-      generated_path = File.join( dir, config.output_dir, page.output_path )
+      generated_path = File.join( config.output_dir, page.output_path )
       $stderr.puts "rendering #{page.source_path} -> #{page.output_path}"
       rendered = render_page(page, true)
       FileUtils.mkdir_p( File.dirname( generated_path ) )
@@ -205,7 +205,7 @@ module Awestruct
 
     def requires_generation?(page,force)
       return true if force
-      generated_path = File.join( @dir, config.output_dir, page.output_path )
+      generated_path = File.join( config.output_dir, page.output_path )
       return true unless File.exist?( generated_path )
       now = Time.now
       generated_mtime = File.mtime( generated_path )
@@ -247,7 +247,7 @@ module Awestruct
     def load_layouts
       site.layouts.clear
       dir_pathname = Pathname.new( dir )
-      Dir[ File.join( dir, config.layouts_dir, '*.haml' ) ].each do |layout_path|
+      Dir[ File.join( config.layouts_dir, '*.haml' ) ].each do |layout_path|
         layout_pathname = Pathname.new( layout_path )
         relative_path = layout_pathname.relative_path_from( dir_pathname ).to_s
         name = File.basename( layout_path, '.haml' )
@@ -267,7 +267,7 @@ module Awestruct
     end
 
     def load_site_yaml(profile)
-      site_yaml = File.join( dir, config.config_dir, 'site.yml' )
+      site_yaml = File.join( config.config_dir, 'site.yml' )
       if ( File.exist?( site_yaml ) )
         mtime = File.mtime( site_yaml )
         if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
@@ -290,7 +290,7 @@ module Awestruct
     end
 
     def load_yamls
-      Dir[ File.join( dir, config.config_dir, '*.yml' ) ].each do |yaml_path|
+      Dir[ File.join( config.config_dir, '*.yml' ) ].each do |yaml_path|
         load_yaml( yaml_path ) unless ( File.basename( yaml_path ) == 'site.yml' ) 
       end
     end
@@ -373,7 +373,7 @@ module Awestruct
       pipeline = nil
       skin_pipeline = nil
 
-      ext_dir = File.join( dir, config.extension_dir ) 
+      ext_dir = File.join( config.extension_dir ) 
       if ( $LOAD_PATH.index( ext_dir ).nil? )
         $LOAD_PATH << ext_dir
       end
