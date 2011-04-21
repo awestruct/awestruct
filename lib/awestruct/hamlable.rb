@@ -4,7 +4,8 @@ module Awestruct
     def render(context)
       rendered = ''
       begin
-        haml_engine = Haml::Engine.new( raw_page_content )
+        options = (site.haml || {}).inject({}){|h,(k,v)| h[k.to_sym] = v.to_sym; h } 
+        haml_engine = Haml::Engine.new( raw_page_content, options )
         rendered = haml_engine.render( context )
       rescue => e
         puts e
