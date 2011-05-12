@@ -5,6 +5,14 @@
 %feed{ 'xml:base'=>site.base_url, 'xml:lang'=>'en-US', :xmlns=>'http://www.w3.org/2005/Atom' }
   %id #{site.base_url}
   %title #{page.title}
+  - if ( defined?( site.author ) )
+    %author
+      - if ( defined?( site.author.name ) )
+        %name= site.author.name
+        - if ( site.author.email )
+          %email= site.author.email
+      - else
+        %name= site.author
   - unless page.entries.empty?
     %updated= page.entries.first.date.xmlschema
     %link{:rel=>"alternate", :type=>"text/html",            :href=>site.base_url}
@@ -15,13 +23,14 @@
         %title= escape_once( entry.title )
         %updated= entry.date.xmlschema
         %link{:rel=>"alternate", :type=>"text/html", :href=>"#{site.base_url}#{entry.url}" }
-        %author
-          - if ( defined?( entry.author.name ) )
-            %name= entry.author.name
-            - if ( entry.author.email )
-              %name= entry.author.email
-          - else
-            %name= entry.author
+        - if ( defined?( entry.author ) )
+          %author
+            - if ( defined?( entry.author.name ) )
+              %name= entry.author.name
+              - if ( entry.author.email )
+                %email= entry.author.email
+            - else
+              %name= entry.author
         %summary
           #{summarize( html_to_text( entry.content ), 100 )}...
         %content{:type=>'html'}

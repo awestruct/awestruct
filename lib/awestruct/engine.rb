@@ -22,7 +22,6 @@ require 'awestruct/context_helper'
 
 require 'awestruct/extensions/pipeline'
 require 'awestruct/extensions/posts'
-require 'awestruct/extensions/collection'
 require 'awestruct/extensions/indexifier'
 require 'awestruct/extensions/data_dir'
 require 'awestruct/extensions/paginator'
