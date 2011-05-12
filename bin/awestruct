@@ -111,7 +111,6 @@ end
 config = Awestruct::Config.new(Dir.pwd)
 # config.input_dir = File.join(Dir.pwd, '_root')
 
-
 if ( options.init )
   if ( options.generate || options.auto || options.server )
     $stderr.puts "--init may not be used with --generate, --auto or --server"
@@ -120,6 +119,31 @@ if ( options.init )
   cmd = Awestruct::Commands::Init.new( Dir.pwd, options.framework, options.scaffold )
   cmd.run
   exit
+end
+
+default_base_url = 'http://localhost:4242'
+
+def camelize(str)
+  str.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
+end
+
+if ( options.script )
+  puts "Running #{options.script} and exiting"  
+  require "awestruct/scripts/#{options.script}"
+  script_class = eval "Awestruct::Scripts::#{camelize(options.script)}"
+  script = script_class.new(*ARGV)
+  script.run
+  exit
+end
+
+if ( options.server )
+  hostname = ( options.bind_addr == '0.0.0.0' ? 'localhost' : options.bind_addr )
+  default_base_url = "http://#{hostname}:#{options.port}"
+end
+
+if ( options.generate )
+  cmd = Awestruct::Commands::Generate.new( config, options.profile, options.base_url, default_base_url, options.force )
+  cmd.run
 end
 
 if ( options.deploy )
@@ -133,12 +157,10 @@ if ( options.deploy )
     exit
   end
 
-
   if ( @profiles_data.nil? )
     $stderr.puts "_config/site.yml must define a 'profiles' section"
     exit
   end
-
 
   if ( @profile_data.nil? )
     $stderr.puts "Unknown profile '#{options.profile}'"
@@ -162,32 +184,7 @@ if ( options.deploy )
   exit
 end
 
-default_base_url = 'http://localhost:4242'
-
-def camelize(str)
-  str.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
-end
-
-if ( options.script )
-  puts "Running #{options.script} and exiting"  
-  require "awestruct/scripts/#{options.script}"
-  script_class = eval "Awestruct::Scripts::#{camelize(options.script)}"
-  script = script_class.new(*ARGV)
-  script.run
-  exit
-end
-
 threads = []
-
-if ( options.server )
-  hostname = ( options.bind_addr == '0.0.0.0' ? 'localhost' : options.bind_addr )
-  default_base_url = "http://#{hostname}:#{options.port}"
-end
-
-if ( options.generate )
-  cmd = Awestruct::Commands::Generate.new( config, options.profile, options.base_url, default_base_url, options.force )
-  cmd.run
-end
 
 if ( options.auto )
   threads << Thread.new {
