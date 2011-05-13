@@ -12,7 +12,8 @@ module Awestruct
           %Q{
             <div id="disqus_thread"></div>
             <script type="text/javascript">
-            var disqus_url = "#{self.url}";
+            var disqus_shortname = '#{site.disqus}';
+            var disqus_url = "#{site.base_url}/#{self.url}";
             #{developer}
             (function() {
               var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
@@ -31,7 +32,7 @@ module Awestruct
         def disqus_comments_count()
           %Q{
             <script type="text/javascript">
-            var disqus = "#{site.disqus}";
+            var disqus_shortname = '#{site.disqus}';
             (function () {
               var s = document.createElement('script'); s.async = true;
               s.src = "http://disqus.com/forums/#{site.disqus}/count.js";
