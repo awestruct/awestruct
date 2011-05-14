@@ -20,18 +20,17 @@ module Awestruct
       def google_analytics_async()
         html = ''
         html += %Q(<script type="text/javascript">\n)
-        html += %Q(var _gaq = [['_setAccount','#{site.google_analytics}'],)
+        html += %Q(var _gaq = _qaq || [];\n)
+        html += %Q(_gaq.push(['_setAccount','#{site.google_analytics}']);\n)
         if site.google_analytics_anonymize
-          html += %Q(['_gat._anonymizeIp'],)
+          html += %Q(_gaq.push(['_gat._anonymizeIp']);\n)
         end
-        html += %Q(['_trackPageview']];\n)
-        html += %Q[(function(d, t) {\n]
-        html += %Q( var g = d.createElement(t),\n)
-        html += %Q(     s = d.getElementsByTagName(t)[0];\n)
-        html += %Q( g.async = true;\n)
-        html += %Q( g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n)
-        html += %Q( s.parentNode.insertBefore(g, s);\n)
-        html += %Q[})(document, 'script');\n</script>\n]
+        html += %Q(_gaq.push(['_trackPageview']);\n)
+        html += %Q[(function() {\n]
+        html += %Q( var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n)
+        html += %Q( ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n)
+        html += %Q( var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n)
+        html += %Q[})();\n</script>\n]
         html
       end
     end
