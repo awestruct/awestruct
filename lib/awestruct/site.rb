@@ -5,6 +5,7 @@ module Awestruct
 
     attr_reader :dir
     attr_reader :output_dir
+    attr_reader :tmp_dir
 
     attr_reader   :layouts
     attr_accessor :pages
@@ -14,8 +15,10 @@ module Awestruct
 
       @dir = config.input_dir
       @output_dir = config.output_dir
+      @tmp_dir = config.tmp_dir
 
       FileUtils.mkdir_p( @output_dir )
+      FileUtils.mkdir_p( @tmp_dir )
 
       @pages   = []
       @layouts = {}

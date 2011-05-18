@@ -9,6 +9,7 @@ module Awestruct
     attr_accessor :input_dir
     attr_accessor :output_dir
     attr_accessor :skin_dir
+    attr_accessor :tmp_dir
     attr_accessor :ignore
 
     def initialize(dir)
@@ -18,6 +19,7 @@ module Awestruct
       @output_dir     = File.join(dir, '_site')
       @extension_dir  = File.join(dir, '_ext')
       @skin_dir       = File.join(dir, '_skin')
+      @tmp_dir        = File.join(dir, '_tmp')
       @ignore         = [ ]
     end
 
