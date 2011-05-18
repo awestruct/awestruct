@@ -69,8 +69,8 @@ module Awestruct
       load_layouts
       load_pages
       load_extensions
-      set_urls
-      configure_compass 
+      set_urls(site.pages)
+      configure_compass
       generate_files(force)
     end
 
@@ -82,39 +82,39 @@ module Awestruct
       dir_pathname = Pathname.new( dir )
       path_name = Pathname.new( candidates[0] )
       relative_path = path_name.relative_path_from( dir_pathname ).to_s
-      load_page( candidates[0], relative_path )
+      load_page( candidates[0], :relative_path => relative_path )
     end
 
     def load_site_page(relative_path)
       load_page( File.join( dir, relative_path ) )
     end
 
-    def load_page(path, relative_path=nil)
+    def load_page(path, options = {})
       page = nil
-      if ( relative_path.nil? )
+      if ( options[:relative_path].nil? )
         #dir_pathname = Pathname.new( dir )
         #path_name = Pathname.new( path )
         #relative_path = path_name.relative_path_from( dir_pathname ).to_s
       end
 
-      fixed_relative_path = ( relative_path.nil? ? nil : File.join( '', relative_path ) )
+      fixed_relative_path = ( options[:relative_path].nil? ? nil : File.join( '', options[:relative_path] ) )
 
       if ( path =~ /\.haml$/ )
-        page = HamlFile.new( site, path, fixed_relative_path )
+        page = HamlFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.erb$/ )
-        page = ErbFile.new( site, path, fixed_relative_path )
+        page = ErbFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.textile$/ )
-        page = TextileFile.new( site, path, fixed_relative_path )
+        page = TextileFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.md$/ )
-        page = MarukuFile.new( site, path, fixed_relative_path )
+        page = MarukuFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.sass$/ )
-        page = SassFile.new( site, path, fixed_relative_path )
+        page = SassFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.scss$/ )
-        page = ScssFile.new( site, path, fixed_relative_path )
+        page = ScssFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.org$/ )
-        page = OrgModeFile.new( site, path, fixed_relative_path )
+        page = OrgModeFile.new( site, path, fixed_relative_path, options )
       elsif ( File.file?( path ) )
-        page = VerbatimFile.new( site, path, fixed_relative_path )
+        page = VerbatimFile.new( site, path, fixed_relative_path, options )
       end
       page
     end
@@ -137,10 +137,24 @@ module Awestruct
           result
         end
         def evaluate_erb(erb)
-          erb.result( binding ) 
+          erb.result( binding )
         end
       end
       context
+    end
+
+  def set_urls(pages)
+      pages.each do |page|
+        page_path = page.output_path
+        if ( page_path =~ /^\// )
+          page.url = page_path
+        else
+          page.url = "/#{page_path}"
+        end
+        if ( page.url =~ /^(.*\/)index.html$/ )
+          page.url = $1
+        end
+      end
     end
 
     private
@@ -160,26 +174,12 @@ module Awestruct
       end
 
       if ( site.base_url.nil? )
-        site.base_url = @default_base_url 
+        site.base_url = @default_base_url
       end
 
-      if ( site.base_url ) 
+      if ( site.base_url )
         if ( site.base_url =~ /^(.*)\/$/ )
           site.base_url = $1
-        end
-      end
-    end
-
-    def set_urls
-      site.pages.each do |page|
-        page_path = page.output_path
-        if ( page_path =~ /^\// )
-          page.url = page_path
-        else
-          page.url = "/#{page_path}"
-        end
-        if ( page.url =~ /^(.*\/)index.html$/ )
-          page.url = $1
         end
       end
     end
@@ -250,7 +250,7 @@ module Awestruct
         layout_pathname = Pathname.new( layout_path )
         relative_path = layout_pathname.relative_path_from( dir_pathname ).to_s
         name = File.basename( layout_path, '.haml' )
-        site.layouts[ name ] =  load_page( layout_path, relative_path )
+        site.layouts[ name ] =  load_page( layout_path, :relative_path => relative_path )
       end
       if ( skin_dir )
         skin_dir_pathname = Pathname.new( skin_dir )
@@ -259,7 +259,7 @@ module Awestruct
           relative_path = layout_pathname.relative_path_from( skin_dir_pathname ).to_s
           name = File.basename( layout_path, '.haml' )
           unless ( site.layouts.key?( name ) )
-            site.layouts[ name ] =  load_page( layout_path, relative_path )
+            site.layouts[ name ] =  load_page( layout_path, :relative_path => relative_path )
           end
         end
       end
@@ -319,7 +319,7 @@ module Awestruct
         unless ( site.has_page?( path ) )
           file_pathname = Pathname.new( path )
           relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
-          page = load_page( path, relative_path )
+          page = load_page( path, :relative_path => relative_path )
           if ( page )
             site.pages << page
           end
@@ -340,7 +340,7 @@ module Awestruct
           unless ( site.has_page?( path ) )
             file_pathname = Pathname.new( path )
             relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
-            page = load_page( path, relative_path )
+            page = load_page( path, :relative_path => relative_path )
             if ( page )
               site.pages << page
             end
@@ -377,7 +377,7 @@ module Awestruct
         $LOAD_PATH << ext_dir
       end
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
-      if ( File.exists?( pipeline_file ) ) 
+      if ( File.exists?( pipeline_file ) )
         pipeline = eval File.read( pipeline_file )
         @helpers = pipeline.helpers || []
       end

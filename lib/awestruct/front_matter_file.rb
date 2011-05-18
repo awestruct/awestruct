@@ -6,8 +6,8 @@ module Awestruct
     attr_reader :raw_page_content
     attr_reader :front_matter
 
-    def initialize(site, source_path, relative_source_path)
-      super( site, source_path, relative_source_path )
+    def initialize(site, source_path, relative_source_path, options = {})
+      super( site, source_path, relative_source_path, options )
       @raw_page_content = ''
       load_page
     end
@@ -45,7 +45,7 @@ module Awestruct
         @front_matter.each do |k,v| 
           self.send( "#{k}=", v )
         end
-      rescue=>e
+      rescue => e
         puts "error reading #{self}: #{e}"
       end
     end

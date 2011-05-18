@@ -12,15 +12,28 @@ module Awestruct
         unless ( @num_entries == :all )
           entries = entries[0, @num_entries]
         end
+
+        atom_pages = []
+
+        entries.each do |entry|
+          feed_entry = site.engine.load_page(entry.source_path, :relative_path => entry.relative_source_path, :html_entities => false)
+
+          feed_entry.output_path = entry.output_path
+          feed_entry.date = entry.date
+
+          atom_pages << feed_entry
+        end
+
+        site.engine.set_urls(atom_pages)
+
         input_page = File.join( File.dirname(__FILE__), 'template.atom.haml' )
         page = site.engine.load_page( input_page )
         page.date = page.timestamp unless page.timestamp.nil?
         page.output_path = @output_path
-        page.entries = entries
+        page.entries = atom_pages
         page.title = site.title || site.base_url
         site.pages << page
       end
-
     end
   end
 end

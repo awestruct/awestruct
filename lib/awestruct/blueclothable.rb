@@ -6,7 +6,13 @@ module Awestruct
     def render(context)
       rendered = ''
       begin
-        doc = BlueCloth.new( context.interpolate_string( raw_page_content ) )
+        bluecloth_options = { :smartypants => true }
+
+        unless self.options.nil?
+          bluecloth_options.merge!({ :smartypants => false }) if self.options[:html_entities] == false
+        end
+
+        doc = BlueCloth.new( context.interpolate_string( raw_page_content ), bluecloth_options )
         rendered = doc.to_html
       rescue => e
         puts e

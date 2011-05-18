@@ -8,8 +8,8 @@ module Awestruct
 
     include OrgModeable
 
-    def initialize(site, source_path, relative_source_path)
-      super( site, source_path, relative_source_path )
+    def initialize(site, source_path, relative_source_path, options = {})
+      super( site, source_path, relative_source_path, options )
     end
 
     def output_filename
