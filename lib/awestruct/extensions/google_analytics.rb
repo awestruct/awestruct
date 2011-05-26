@@ -20,7 +20,7 @@ module Awestruct
       def google_analytics_async()
         html = ''
         html += %Q(<script type="text/javascript">\n)
-        html += %Q(var _gaq = _qaq || [];\n)
+        html += %Q(var _gaq = _gaq || [];\n)
         html += %Q(_gaq.push(['_setAccount','#{site.google_analytics}']);\n)
         if site.google_analytics_anonymize
           html += %Q(_gaq.push(['_gat._anonymizeIp']);\n)
