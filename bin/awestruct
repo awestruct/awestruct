@@ -104,7 +104,17 @@ unless options.init
   site_yaml      = YAML.load( File.read( site_yaml_file ) )
   if site_yaml
     @profiles_data  = site_yaml['profiles'] || {}
-    @profile_data   = @profiles_data.nil? ? nil : @profiles_data[options.profile]
+    @profile_data = if @profiles_data.nil?
+      nil
+    else
+      if options.profile
+        @profiles_data[options.profile]
+      else
+        # if no profile given, pick the first with deploy config
+        options.profile, profile_data = @profiles_data.select { |k,v| v['deploy'] }.first
+        profile_data
+      end
+    end
   end
 end
 
@@ -178,6 +188,8 @@ if ( options.deploy )
     exit
   end
 
+  puts "Deploying to #{options.profile}"
+
   cmd = Awestruct::Commands::Deploy.new( site_path, deploy_data )
 
   cmd.run
@@ -207,6 +219,3 @@ end
 threads.each do |thr|
   thr.join
 end
-
-
-
