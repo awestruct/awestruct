@@ -15,8 +15,26 @@ module Awestruct
       str.gsub(/<img[^>]+>/,'').gsub(/<a[^>]+>([^<]*)<\/a>/, '\1')
     end
 
+    def close_tags(s)
+      stack = []
+      s.scan(/<\/?[^>]+>/).each do |tag|
+        if tag[1] != '/'
+          tag = tag[1..-1].scan(/\w+/).first
+          stack = [ tag ] + stack
+        else
+          tag = tag[2..-1].scan(/\w+/).first
+          if stack[0] == tag
+            stack = stack.drop(1)
+          else
+            raise "Malformed HTML expected #{tag[0]} but got #{tag} '#{s}'"
+          end
+        end
+      end
+      stack.inject(s) { |memo,tag| memo += "</#{tag}>" }
+    end
+
     def summarize(text, numwords=20)
-      text.split()[0, numwords].join(' ')
+      close_tags(text.split()[0, numwords].join(' '))
     end
 
     def fully_qualify_urls(base_url, text)
