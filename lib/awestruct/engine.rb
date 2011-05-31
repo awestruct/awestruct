@@ -242,7 +242,7 @@ module Awestruct
         end
       end
       @transformers.each do |transformer|
-        rendered = transformer.transform(page, rendered)
+        rendered = transformer.transform(site, page, rendered)
       end
       rendered
     end

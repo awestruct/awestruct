@@ -21,6 +21,8 @@ module Awestruct
               case line[0,9]
               when '<f.sT....'
                 puts " updating #{line[10..-1]}"
+              when '<f+++++++'
+                puts " adding #{line[10..-1]}"
               when '<f..T....'
                 # ignoring unchanged files
                 # puts " no change to #{line[10..-1]}"
