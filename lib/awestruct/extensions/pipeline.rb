@@ -7,10 +7,12 @@ module Awestruct
       attr_reader :extensions
       attr_reader :after_extensions
       attr_reader :helpers
+      attr_reader :transformers
 
       def initialize(&block)
         @extensions = []
         @helpers    = []
+        @transformers  = []
         instance_eval &block if block
       end
 
@@ -20,6 +22,10 @@ module Awestruct
 
       def helper(helper)
         @helpers << helper
+      end
+
+      def transformer(transformer)
+        @transformers << transformer
       end
 
       def execute(site)

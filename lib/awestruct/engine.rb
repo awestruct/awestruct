@@ -203,7 +203,7 @@ module Awestruct
       end
     end
 
-    def requires_generation?(page,force)
+    def requires_generation?(page, force)
       return true if force
       generated_path = File.join( config.output_dir, page.output_path )
       return true unless File.exist?( generated_path )
@@ -240,6 +240,9 @@ module Awestruct
             rendered = cur.render( context )
           end
         end
+      end
+      @transformers.each do |transformer|
+        rendered = transformer.transform(page, rendered)
       end
       rendered
     end
@@ -381,6 +384,7 @@ module Awestruct
       if ( File.exists?( pipeline_file ) )
         pipeline = eval File.read( pipeline_file )
         @helpers = pipeline.helpers || []
+        @transformers = pipeline.transformers || []
       end
 
       if ( skin_dir )
@@ -392,6 +396,7 @@ module Awestruct
         if ( File.exists?( skin_pipeline_file ) )
           skin_pipeline = eval File.read( skin_pipeline_file )
           @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
+          @transformers = ( @transformers + skin_pipeline.transformers || [] ).flatten
         end
       end
 
