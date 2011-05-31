@@ -19,10 +19,6 @@ module Awestruct
       end
     end
 
-    def to_root
-      '../' * ( self.output_path.count('/') - 1 )
-    end
-
     def raw_page_content
       File.read( self.source_path )
     end
