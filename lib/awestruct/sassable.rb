@@ -2,6 +2,13 @@ require 'sass'
 
 require 'compass'
 
+module Sass::Script::Functions
+  def site(path)
+    site = options[:custom]
+    Sass::Script::String.new(site.send(path.value.to_s).to_s)
+  end
+end
+
 module Awestruct
   module Sassable
 
