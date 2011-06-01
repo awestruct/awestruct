@@ -33,8 +33,8 @@ module Awestruct
       stack.inject(s) { |memo,tag| memo += "</#{tag}>" }
     end
 
-    def summarize(text, numwords=20)
-      close_tags(text.split()[0, numwords].join(' '))
+    def summarize(text, numwords=20, ellipsis='...')
+      close_tags(text.split()[0, numwords].join(' ') + ellipsis)
     end
 
     def fully_qualify_urls(base_url, text)
