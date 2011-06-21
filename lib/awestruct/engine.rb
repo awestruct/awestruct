@@ -132,7 +132,7 @@ module Awestruct
           str = str.gsub( /\\/, '\\\\\\\\' )
           str = str.gsub( /\\\\#/, '\\#' )
           str = str.gsub( '@', '\@' )
-          str = str.gsub( '#{', '\#\{' )
+          str = str.gsub( '#{', '\#\{' ) unless self.site.interpolate
           str = "%@#{str}@"
           result = instance_eval( str )
           result
@@ -277,6 +277,7 @@ module Awestruct
           @max_yaml_mtime = mtime
         end
         data = YAML.load( File.read( site_yaml ) )
+        site.interpolate = true
         profile_data = {}
         data.each do |k,v|
           if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
