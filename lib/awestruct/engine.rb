@@ -132,7 +132,7 @@ module Awestruct
           str = str.gsub( /\\/, '\\\\\\\\' )
           str = str.gsub( /\\\\#/, '\\#' )
           str = str.gsub( '@', '\@' )
-          str = str.gsub( '#{', '\#\{' ) unless self.site.interpolate
+          str = str.gsub( '#{', '\#\{' ) unless site.interpolate
           str = "%@#{str}@"
           result = instance_eval( str )
           result
