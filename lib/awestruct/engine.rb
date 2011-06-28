@@ -128,14 +128,17 @@ module Awestruct
       context.page = page
       class << context
         def interpolate_string(str)
-          str = str || ''
-          str = str.gsub( /\\/, '\\\\\\\\' )
-          str = str.gsub( /\\\\#/, '\\#' )
-          str = str.gsub( '@', '\@' )
-          str = str.gsub( '#{', '\#\{' ) unless site.interpolate
-          str = "%@#{str}@"
-          result = instance_eval( str )
-          result
+          if site.interpolate
+            str = str || ''
+            str = str.gsub( /\\/, '\\\\\\\\' )
+            str = str.gsub( /\\\\#/, '\\#' )
+            str = str.gsub( '@', '' ) #'\@' )
+            str = "%@#{str}@"
+            result = instance_eval( str )
+            result
+          else
+            str || ''
+          end
         end
         def evaluate_erb(erb)
           erb.result( binding )
