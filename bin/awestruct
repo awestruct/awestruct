@@ -7,6 +7,7 @@ require 'optparse'
 require 'awestruct/commands/init'
 require 'awestruct/commands/generate'
 require 'awestruct/commands/server'
+require 'awestruct/commands/clean'
 require 'awestruct/commands/deploy'
 require 'yaml'
 
@@ -23,6 +24,7 @@ def parse(args)
               :scaffold=>true,
               :base_url=>nil,
               :profile=>nil,
+              :clean=>false,
               :deploy=>false,
               :script=>nil,
             } )
@@ -56,6 +58,10 @@ def parse(args)
 
     opts.on( '-P', '--profile PROFILE', 'Specify a profile' ) do |profile|
       options.profile = profile
+    end
+
+    opts.on( '-c', '--clean', 'Clean site output directory') do |clean|
+      options.clean = true
     end
 
     opts.on( '--deploy', 'Deploy site' ) do |deploy|
@@ -149,6 +155,11 @@ end
 if ( options.server )
   hostname = ( options.bind_addr == '0.0.0.0' ? 'localhost' : options.bind_addr )
   default_base_url = "http://#{hostname}:#{options.port}"
+end
+
+if ( options.clean )
+  cmd = Awestruct::Commands::Clean.new( site_path )
+  cmd.run
 end
 
 if ( options.generate )
