@@ -30,6 +30,7 @@ require 'awestruct/extensions/tagger'
 require 'awestruct/extensions/tag_cloud'
 require 'awestruct/extensions/intense_debate'
 require 'awestruct/extensions/disqus'
+require 'awestruct/extensions/flattr'
 require 'awestruct/extensions/google_analytics'
 require 'awestruct/extensions/partial'
 
