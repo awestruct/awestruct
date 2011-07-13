@@ -30,6 +30,7 @@ require 'awestruct/extensions/tagger'
 require 'awestruct/extensions/tag_cloud'
 require 'awestruct/extensions/intense_debate'
 require 'awestruct/extensions/disqus'
+require 'awestruct/extensions/flattr'
 require 'awestruct/extensions/google_analytics'
 require 'awestruct/extensions/partial'
 
@@ -128,14 +129,17 @@ module Awestruct
       context.page = page
       class << context
         def interpolate_string(str)
-          str = str || ''
-          str = str.gsub( /\\/, '\\\\\\\\' )
-          str = str.gsub( /\\\\#/, '\\#' )
-          str = str.gsub( '@', '\@' )
-          str = str.gsub( '#{', '\#\{' ) unless site.interpolate
-          str = "%@#{str}@"
-          result = instance_eval( str )
-          result
+          if site.interpolate
+            str = str || ''
+            str = str.gsub( /\\/, '\\\\\\\\' )
+            str = str.gsub( /\\\\#/, '\\#' )
+            str = str.gsub( '@', '' ) #'\@' )
+            str = "%@#{str}@"
+            result = instance_eval( str )
+            result
+          else
+            str || ''
+          end
         end
         def evaluate_erb(erb)
           erb.result( binding )

@@ -9,12 +9,14 @@ module Awestruct
       module Disqus
         def disqus_comments()
           developer = (site.disqus_developer) ? 'var disqus_developer = 1;' : ''
+          identifier = (self.disqus_identifier) ? %Q{var disqus_identifier = "#{self.disqus_identifier}";} : ''
           %Q{
             <div id="disqus_thread"></div>
             <script type="text/javascript">
             var disqus_shortname = '#{site.disqus}';
             var disqus_url = "#{site.base_url}/#{self.url}";
             #{developer}
+            #{identifier}
             (function() {
               var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true;
               dsq.src = "http://#{site.disqus}.disqus.com/embed.js";
@@ -26,7 +28,8 @@ module Awestruct
         end
 
         def disqus_comments_link()
-          %Q{ <a href="#{self.url}#disqus_thread">Comments</a> }
+          identifier = self.disqus_identifier ? %Q(data-disqus-identifier="#{self.disqus_identifier}") : ''
+          %Q{ <a href="#{self.url}#disqus_thread" #{identifier}>Comments</a> }
         end
 
         def disqus_comments_count()

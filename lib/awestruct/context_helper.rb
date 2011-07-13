@@ -34,7 +34,7 @@ module Awestruct
     end
 
     def summarize(text, numwords=20, ellipsis='...')
-      close_tags(text.split()[0, numwords].join(' ') + ellipsis)
+      close_tags(text.split(/ /)[0, numwords].join(' ') + ellipsis)
     end
 
     def fully_qualify_urls(base_url, text)
