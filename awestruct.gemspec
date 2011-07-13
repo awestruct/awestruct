@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
     s.add_dependency 'haml', '<= 3.1.0'
     s.add_dependency 'sass', '<= 3.1.0'
     s.add_dependency 'hashery', '= 1.4.0'
-    s.add_dependency 'bluecloth', '<= 2.0.7'
+    s.add_dependency 'rdiscount', '= 1.6.8'
     s.add_dependency 'RedCloth', '<= 4.2.5'
     s.add_dependency 'compass', '<= 0.10.6'
     s.add_dependency 'compass-960-plugin', '<= 0.10.4'
