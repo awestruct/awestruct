@@ -1,3 +1,4 @@
 *.swp
 *.gem
 _tmp
+.DS_Store
