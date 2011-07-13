@@ -1,4 +1,4 @@
-require 'bluecloth'
+require 'rdiscount'
 
 module Awestruct
 
@@ -6,13 +6,7 @@ module Awestruct
     def render(context)
       rendered = ''
       begin
-        bluecloth_options = { :smartypants => true }
-
-        unless self.options.nil?
-          bluecloth_options.merge!({ :smartypants => false }) if self.options[:html_entities] == false
-        end
-
-        doc = BlueCloth.new( context.interpolate_string( raw_page_content ), bluecloth_options )
+        doc = RDiscount.new( context.interpolate_string( raw_page_content ) )
         rendered = doc.to_html
       rescue => e
         puts e
