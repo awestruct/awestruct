@@ -1,13 +1,11 @@
 
 require 'awestruct/front_matter_file'
-require 'awestruct/marukuable'
-require 'awestruct/blueclothable'
+require 'awestruct/markdownable'
 
 module Awestruct
-  class MarukuFile < FrontMatterFile
+  class MarkdownFile < FrontMatterFile
 
-    #include Marukuable
-    include Blueclothable
+    include Markdownable
 
     def initialize(site, source_path, relative_source_path, options = {})
       super(site, source_path, relative_source_path, options)

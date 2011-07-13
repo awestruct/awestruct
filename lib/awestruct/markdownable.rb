@@ -2,7 +2,7 @@ require 'bluecloth'
 
 module Awestruct
 
-  module Blueclothable
+  module Markdownable
     def render(context)
       rendered = ''
       begin
