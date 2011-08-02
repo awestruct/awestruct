@@ -14,7 +14,7 @@ module Awestruct
             <div id="disqus_thread"></div>
             <script type="text/javascript">
             var disqus_shortname = '#{site.disqus}';
-            var disqus_url = "#{site.base_url}/#{self.url}";
+            var disqus_url = "#{site.base_url}#{self.url}";
             #{developer}
             #{identifier}
             (function() {
