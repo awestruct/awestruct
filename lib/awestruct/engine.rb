@@ -247,7 +247,7 @@ module Awestruct
       end
       @transformers.each do |transformer|
         rendered = transformer.transform(site, page, rendered)
-      end
+      end if @transformers
       rendered
     end
 
