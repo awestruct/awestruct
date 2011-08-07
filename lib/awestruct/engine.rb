@@ -60,12 +60,13 @@ module Awestruct
       @site.skin_dir
     end
 
-    def generate(profile=nil, base_url=nil, default_base_url=nil, force=false)
+    def generate(profile=nil, base_url=nil, default_base_url=nil, force=false, watched_dir=[])
       @base_url         = base_url
       @default_base_url = default_base_url
       @max_yaml_mtime = nil
       load_site_yaml(profile)
       load_yamls
+      check_dir_for_change(watched_dir)
       set_base_url
       load_layouts
       load_pages
@@ -311,6 +312,30 @@ module Awestruct
       data = YAML.load( File.read( yaml_path ) )
       name = File.basename( yaml_path, '.yml' )
       site.send( "#{name}=", massage_yaml( data ) )
+    end
+    
+    def check_dir_for_change(watched_dir)
+      watched_dir.each do |dir|
+        Dir.chdir(dir){check_dir_for_change_recursively()}
+      end
+    end
+    
+    def check_dir_for_change_recursively()
+      directories=[]
+      Dir['*'].sort.each do |name|
+        if File.file?(name)
+          mtime = File.mtime(name)
+          if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
+            @max_yaml_mtime = mtime
+          end
+        elsif File.directory?(name)
+          directories << name
+        end
+      end
+      directories.each do |name|
+        #don't descend into . or .. on linux
+        Dir.chdir(name){check_dir_for_change_recursively()} if !Dir.pwd[File.expand_path(name)]
+      end
     end
 
     def load_pages()
