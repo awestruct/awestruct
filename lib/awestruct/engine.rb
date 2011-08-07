@@ -408,6 +408,30 @@ module Awestruct
       pipeline.execute( site ) if pipeline
       skin_pipeline.execute( site ) if skin_pipeline
     end
+    
+    def check_dir_for_change(watched_dir)
+      watched_dir.each do |dir|
+        Dir.chdir(dir){check_dir_for_change_recursively()}
+      end
+    end
+
+    def check_dir_for_change_recursively()
+      directories=[]
+      Dir['*'].sort.each do |name|
+        if File.file?(name)
+          mtime = File.mtime(name)
+          if ( mtime > ( @max_site_mtime || Time.at(0) ) )
+            @max_site_mtime = mtime
+          end
+        elsif File.directory?(name)
+          directories << name
+        end
+      end
+      directories.each do |name|
+        #don't descend into . or .. on linux
+        Dir.chdir(name){check_dir_for_change_recursively()} if !Dir.pwd[File.expand_path(name)]
+      end
+    end
 
     def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)
       if first_letter_in_uppercase
