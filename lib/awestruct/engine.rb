@@ -377,7 +377,7 @@ module Awestruct
     end
 
     def load_extensions
-
+      watched_dirs = []
       pipeline = nil
       skin_pipeline = nil
 
@@ -390,7 +390,7 @@ module Awestruct
         pipeline = eval File.read( pipeline_file )
         @helpers = pipeline.helpers || []
         @transformers = pipeline.transformers || []
-        check_dir_for_change([ext_dir.to_s])
+        watched_dirs << ext_dir.to_s
       end
 
       if ( skin_dir )
@@ -403,10 +403,14 @@ module Awestruct
           skin_pipeline = eval File.read( skin_pipeline_file )
           @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
           @transformers = ( @transformers + skin_pipeline.transformers || [] ).flatten
-          check_dir_for_change([skin_dir.to_s])
+          watched_dirs << skin_dir.to_s
         end
       end
-
+      
+      pipeline.watch(watched_dirs) if pipeline
+      skin_pipeline.watch(watched_dirs) if skin_pipeline
+      check_dir_for_change(watched_dirs)
+      
       pipeline.execute( site ) if pipeline
       skin_pipeline.execute( site ) if skin_pipeline
     end
