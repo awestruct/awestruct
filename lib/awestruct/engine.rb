@@ -407,6 +407,12 @@ module Awestruct
         end
       end
       
+      #if _partials directory (from Partial helper) is present, watch
+      partials = File.join( '_partials' )
+      if ( File.exists?( partials ) )
+        watched_dirs << partials
+      end
+      
       pipeline.watch(watched_dirs) if pipeline
       skin_pipeline.watch(watched_dirs) if skin_pipeline
       check_dir_for_change(watched_dirs)
