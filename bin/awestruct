@@ -25,6 +25,7 @@ def parse(args)
               :profile=>nil,
               :deploy=>false,
               :script=>nil,
+              :watched_dir=>[]
             } )
 
   opts = OptionParser.new do |opts|
@@ -52,6 +53,9 @@ def parse(args)
       options.auto     = true
       options.port     = 4242
       options.profile  = 'development'
+    end
+    opts.on( '-w', '--watch-extra DIR1,DIR2',  'Watch extra directories besides pages for changes (comma separated)' ) do |watch|
+      options.watched_dir = watch.split(",").collect{ |s| s.strip }
     end
 
     opts.on( '-P', '--profile PROFILE', 'Specify a profile' ) do |profile|
@@ -199,7 +203,7 @@ threads = []
 
 if ( options.auto )
   threads << Thread.new {
-    generate_cmd = Awestruct::Commands::Generate.new( config, options.profile, options.base_url, default_base_url )
+    generate_cmd = Awestruct::Commands::Generate.new( config, options.profile, options.base_url, default_base_url, false, options.watched_dir )
     while ( true )
       generate_cmd.run
       sleep(1)

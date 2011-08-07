@@ -2,3 +2,6 @@
 *.gem
 _tmp
 .DS_Store
+
+#Editor
+*.tmproj
