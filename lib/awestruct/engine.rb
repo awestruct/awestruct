@@ -409,8 +409,8 @@ module Awestruct
       skin_pipeline.execute( site ) if skin_pipeline
     end
     
-    def check_dir_for_change(watched_dir)
-      watched_dir.each do |dir|
+    def check_dir_for_change(watched_dirs)
+      watched_dirs.each do |dir|
         Dir.chdir(dir){check_dir_for_change_recursively()}
       end
     end
