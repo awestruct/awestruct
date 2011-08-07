@@ -390,6 +390,7 @@ module Awestruct
         pipeline = eval File.read( pipeline_file )
         @helpers = pipeline.helpers || []
         @transformers = pipeline.transformers || []
+        check_dir_for_change([ext_dir.to_s])
       end
 
       if ( skin_dir )
@@ -402,6 +403,7 @@ module Awestruct
           skin_pipeline = eval File.read( skin_pipeline_file )
           @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
           @transformers = ( @transformers + skin_pipeline.transformers || [] ).flatten
+          check_dir_for_change([skin_dir.to_s])
         end
       end
 
