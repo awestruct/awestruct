@@ -53,7 +53,7 @@ module Awestruct
       @site.engine = self
 
       @helpers = []
-      @max_yaml_mtime = nil
+      @max_site_mtime = nil
     end
 
     def skin_dir
@@ -63,7 +63,7 @@ module Awestruct
     def generate(profile=nil, base_url=nil, default_base_url=nil, force=false)
       @base_url         = base_url
       @default_base_url = default_base_url
-      @max_yaml_mtime = nil
+      @max_site_mtime = nil
       load_site_yaml(profile)
       load_yamls
       set_base_url
@@ -213,7 +213,7 @@ module Awestruct
       return true unless File.exist?( generated_path )
       now = Time.now
       generated_mtime = File.mtime( generated_path )
-      return true if ( ( @max_yaml_mtime || Time.at(0) ) > generated_mtime )
+      return true if ( ( @max_site_mtime || Time.at(0) ) > generated_mtime )
       source_mtime = File.mtime( page.source_path )
       return true if ( source_mtime > generated_mtime ) && ( source_mtime + 1 < now )
       ext = page.output_extension
@@ -277,8 +277,8 @@ module Awestruct
       site_yaml = File.join( config.config_dir, 'site.yml' )
       if ( File.exist?( site_yaml ) )
         mtime = File.mtime( site_yaml )
-        if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
-          @max_yaml_mtime = mtime
+        if ( mtime > ( @max_site_mtime || Time.at(0) ) )
+          @max_site_mtime = mtime
         end
         data = YAML.load( File.read( site_yaml ) )
         site.interpolate = true
@@ -305,8 +305,8 @@ module Awestruct
 
     def load_yaml(yaml_path)
       mtime = File.mtime( yaml_path )
-      if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
-        @max_yaml_mtime = mtime
+      if ( mtime > ( @max_site_mtime || Time.at(0) ) )
+        @max_site_mtime = mtime
       end
       data = YAML.load( File.read( yaml_path ) )
       name = File.basename( yaml_path, '.yml' )
