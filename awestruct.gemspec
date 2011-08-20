@@ -4,7 +4,7 @@ require 'rubygems'
 Gem::Specification.new do |s|
     s.platform  =   Gem::Platform::RUBY
     s.name      =   "awestruct"
-    s.version   =   "0.2.2"
+    s.version   =   "0.2.3"
     s.author    =   "Bob McWhirter"
     s.email     =   "bob@mcwhirter.org"
     s.summary   =   "Static site-baking utility"
