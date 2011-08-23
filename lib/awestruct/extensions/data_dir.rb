@@ -8,6 +8,9 @@ module Awestruct
         @data_dir = data_dir
       end
 
+      def watch(watched_dirs)
+          watched_dirs << @data_dir
+      end
 
       def execute(site)
     

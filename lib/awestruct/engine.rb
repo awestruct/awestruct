@@ -53,7 +53,7 @@ module Awestruct
       @site.engine = self
 
       @helpers = []
-      @max_yaml_mtime = nil
+      @max_site_mtime = nil
     end
 
     def skin_dir
@@ -63,7 +63,7 @@ module Awestruct
     def generate(profile=nil, base_url=nil, default_base_url=nil, force=false)
       @base_url         = base_url
       @default_base_url = default_base_url
-      @max_yaml_mtime = nil
+      @max_site_mtime = nil
       load_site_yaml(profile)
       load_yamls
       set_base_url
@@ -213,7 +213,7 @@ module Awestruct
       return true unless File.exist?( generated_path )
       now = Time.now
       generated_mtime = File.mtime( generated_path )
-      return true if ( ( @max_yaml_mtime || Time.at(0) ) > generated_mtime )
+      return true if ( ( @max_site_mtime || Time.at(0) ) > generated_mtime )
       source_mtime = File.mtime( page.source_path )
       return true if ( source_mtime > generated_mtime ) && ( source_mtime + 1 < now )
       ext = page.output_extension
@@ -277,8 +277,8 @@ module Awestruct
       site_yaml = File.join( config.config_dir, 'site.yml' )
       if ( File.exist?( site_yaml ) )
         mtime = File.mtime( site_yaml )
-        if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
-          @max_yaml_mtime = mtime
+        if ( mtime > ( @max_site_mtime || Time.at(0) ) )
+          @max_site_mtime = mtime
         end
         data = YAML.load( File.read( site_yaml ) )
         site.interpolate = true
@@ -305,8 +305,8 @@ module Awestruct
 
     def load_yaml(yaml_path)
       mtime = File.mtime( yaml_path )
-      if ( mtime > ( @max_yaml_mtime || Time.at(0) ) )
-        @max_yaml_mtime = mtime
+      if ( mtime > ( @max_site_mtime || Time.at(0) ) )
+        @max_site_mtime = mtime
       end
       data = YAML.load( File.read( yaml_path ) )
       name = File.basename( yaml_path, '.yml' )
@@ -377,7 +377,7 @@ module Awestruct
     end
 
     def load_extensions
-
+      watched_dirs = []
       pipeline = nil
       skin_pipeline = nil
 
@@ -390,6 +390,7 @@ module Awestruct
         pipeline = eval File.read( pipeline_file )
         @helpers = pipeline.helpers || []
         @transformers = pipeline.transformers || []
+        watched_dirs << ext_dir.to_s
       end
 
       if ( skin_dir )
@@ -402,11 +403,46 @@ module Awestruct
           skin_pipeline = eval File.read( skin_pipeline_file )
           @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
           @transformers = ( @transformers + skin_pipeline.transformers || [] ).flatten
+          watched_dirs << skin_dir.to_s
         end
       end
-
+      
+      #if _partials directory (from Partial helper) is present, watch
+      partials = File.join( '_partials' )
+      if ( File.exists?( partials ) )
+        watched_dirs << partials
+      end
+      
+      pipeline.watch(watched_dirs) if pipeline
+      skin_pipeline.watch(watched_dirs) if skin_pipeline
+      check_dir_for_change(watched_dirs)
+      
       pipeline.execute( site ) if pipeline
       skin_pipeline.execute( site ) if skin_pipeline
+    end
+    
+    def check_dir_for_change(watched_dirs)
+      watched_dirs.each do |dir|
+        Dir.chdir(dir){check_dir_for_change_recursively()}
+      end
+    end
+
+    def check_dir_for_change_recursively()
+      directories=[]
+      Dir['*'].sort.each do |name|
+        if File.file?(name)
+          mtime = File.mtime(name)
+          if ( mtime > ( @max_site_mtime || Time.at(0) ) )
+            @max_site_mtime = mtime
+          end
+        elsif File.directory?(name)
+          directories << name
+        end
+      end
+      directories.each do |name|
+        #don't descend into . or .. on linux
+        Dir.chdir(name){check_dir_for_change_recursively()} if !Dir.pwd[File.expand_path(name)]
+      end
     end
 
     def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)

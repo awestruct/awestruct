@@ -33,6 +33,12 @@ module Awestruct
           ext.execute( site )
         end
       end
+      
+      def watch(watched_dirs)
+        extensions.each do |ext|
+          ext.watch( watched_dirs ) if ext.respond_to?('watch')
+        end
+      end
     end
 
   end
