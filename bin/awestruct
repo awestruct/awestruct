@@ -111,7 +111,7 @@ unless options.init
         @profiles_data[options.profile]
       else
         # if no profile given, pick the first with deploy config
-        options.profile, profile_data = @profiles_data.select { |k,v| v['deploy'] }.first
+        options.profile, profile_data = @profiles_data.select { |k,v| v && v['deploy'] }.first
         profile_data
       end
     end
