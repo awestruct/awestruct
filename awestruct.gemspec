@@ -27,5 +27,6 @@ Gem::Specification.new do |s|
     s.add_dependency 'compass', '>= 0.11.5'
     s.add_dependency 'compass-960-plugin', '<= 0.10.4'
     s.add_dependency 'org-ruby', '= 0.5.3'
+    s.add_dependency 'fssm', '= 0.2.7'
 end
 

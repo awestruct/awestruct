@@ -9,6 +9,7 @@ require 'awestruct/commands/generate'
 require 'awestruct/commands/server'
 require 'awestruct/commands/deploy'
 require 'yaml'
+require 'fssm'
 
 def parse(args)
   options = OpenStruct.new( {
@@ -200,10 +201,34 @@ threads = []
 if ( options.auto )
   threads << Thread.new {
     generate_cmd = Awestruct::Commands::Generate.new( config, options.profile, options.base_url, default_base_url )
-    while ( true )
-      generate_cmd.run
-      sleep(1)
+
+    monitor = FSSM::Monitor.new
+
+    call_generate = lambda do |base, relative|
+      if !(relative =~ /.*~/)
+        puts "Triggered regeneration #{base} #{relative}"
+        generate_cmd.run
+        puts "Done"
+      end
     end
+
+    Dir.entries(config.input_dir).each do |sub|
+      if !(sub =~ /^(_site|_tmp|\.git|\.gitignore|\.sass-cache|\.|\.\.).*/)
+        if File::directory? File.join(config.input_dir, sub)
+          monitor.path(sub) do
+            update &call_generate
+            create &call_generate
+          end
+        elsif
+          monitor.file(sub) do
+            update &call_generate
+            create &call_generate
+          end
+        end
+      end
+    end
+
+    monitor.run
   }
 end
 
