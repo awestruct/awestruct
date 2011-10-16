@@ -18,6 +18,7 @@ module Awestruct
 
       def extension(ext)
         @extensions << ext
+        ext.transform(@transformers) if ext.respond_to?('transform')
       end
 
       def helper(helper)
@@ -33,7 +34,7 @@ module Awestruct
           ext.execute( site )
         end
       end
-      
+
       def watch(watched_dirs)
         extensions.each do |ext|
           ext.watch( watched_dirs ) if ext.respond_to?('watch')
@@ -43,4 +44,3 @@ module Awestruct
 
   end
 end
-    
