@@ -60,11 +60,11 @@ module Awestruct
         span = max - min
         
         if span > 0
-          slice = span / 6
+          slice = span / 6.0
           ordered_tags.each do |tag|
             adjusted_size = tag.pages.size - min
             scaled_size = adjusted_size / slice
-            tag.group = ( tag.pages.size - min ) / slice
+            tag.group = (( tag.pages.size - min ) / slice).ceil
           end
         else
           ordered_tags.each do |tag|
