@@ -4,7 +4,7 @@ Please see the complete site at <http://awestruct.org/>.
 
 # License
 
-    Copyright (c) 2010 Bob McWhirter
+    Copyright (c) 2010-2011 Bob McWhirter and contributors (see git log)
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to

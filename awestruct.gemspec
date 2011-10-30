@@ -1,10 +1,12 @@
 
 require 'rubygems'
 
+require 'lib/awestruct/version'
+
 Gem::Specification.new do |s|
     s.platform  =   Gem::Platform::RUBY
     s.name      =   "awestruct"
-    s.version   =   "0.2.5"
+    s.version   =   Awestruct::VERSION
     s.author    =   "Bob McWhirter"
     s.email     =   "bob@mcwhirter.org"
     s.summary   =   "Static site-baking utility"
