@@ -133,7 +133,7 @@ module Awestruct
             str = str || ''
             str = str.gsub( /\\/, '\\\\\\\\' )
             str = str.gsub( /\\\\#/, '\\#' )
-            str = str.gsub( '@', '' ) #'\@' )
+            str = str.gsub( '@', '\@' )
             str = "%@#{str}@"
             result = instance_eval( str )
             result
