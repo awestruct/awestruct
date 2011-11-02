@@ -216,6 +216,14 @@ if ( options.auto )
         puts "Triggered regeneration #{base} #{relative}"
         generate_cmd.run
         puts "Done"
+        if relative == '.'
+          # It's necessary to restart the monitor on individual files
+          # after a change is handled
+          monitor.file(base) do
+            update &call_generate
+            create &call_generate
+          end
+        end
       end
     end
 
