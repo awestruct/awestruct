@@ -1,4 +1,3 @@
-
 require 'ostruct'
 require 'find'
 require 'compass'
@@ -214,8 +213,20 @@ module Awestruct
       now = Time.now
       generated_mtime = File.mtime( generated_path )
       return true if ( ( @max_site_mtime || Time.at(0) ) > generated_mtime )
-      source_mtime = File.mtime( page.source_path )
-      return true if ( source_mtime > generated_mtime ) && ( source_mtime + 1 < now )
+
+      while true
+        now = Time.now
+        source_mtime = File.mtime( page.source_path )
+        if ( now - source_mtime > 1 )
+          if ( source_mtime - generated_mtime >= 0 )
+            return true
+          else
+            break
+          end
+        end
+        sleep 0.1
+      end
+
       ext = page.output_extension
       layout_name = page.layout
       while ( ! layout_name.nil? )
