@@ -4,5 +4,4 @@
 .tag-cloud
   - for tag in page.tags
     %span.tag{:class=>"tag-#{tag.group}"}
-      %a{:href=>tag.primary_page.url}
-        = tag.to_s
+      %a{:href=>tag.primary_page.url}= tag
