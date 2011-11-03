@@ -17,6 +17,14 @@ module Awestruct
         end
       end
 
+      module TagLinker
+        attr_accessor :tags
+        def tag_links(delimiter = ', ', style_class = nil)
+          class_attr = (style_class ? ' class="' + style_class + '"' : '')
+          tags.map{|tag| %Q{<a#{class_attr} href="#{tag.primary_page.url}">#{tag}</a>}}.join(delimiter)
+        end
+      end
+
       def initialize(tagged_items_property, input_path, output_path='tags', pagination_opts={})
         @tagged_items_property = tagged_items_property
         @input_path  = input_path
@@ -42,6 +50,7 @@ module Awestruct
 
         all.each do |page|
           page.tags = (page.tags||[]).collect{|t| @tags[t]}
+          page.extend( TagLinker )
         end
 
         ordered_tags = @tags.values
