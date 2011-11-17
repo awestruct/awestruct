@@ -32,6 +32,7 @@ require 'awestruct/extensions/disqus'
 require 'awestruct/extensions/flattr'
 require 'awestruct/extensions/google_analytics'
 require 'awestruct/extensions/partial'
+require 'awestruct/extensions/sitemap'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
