@@ -50,10 +50,14 @@ module Awestruct
       def munge_date( page )
         date = page.date
         if date
-          if date.kind_of? String
-            page.lastmod = Time.parse( page.date ).strftime( "%Y-%m-%d" )
-          else
-            page.lastmod = date.strftime( "%Y-%m-%d" )
+          begin
+            if date.kind_of? String
+              page.lastmod = Time.parse( page.date ).strftime( "%Y-%m-%d" )
+            else
+              page.lastmod = date.strftime( "%Y-%m-%d" )
+            end
+          rescue Exception => e
+            puts "[ERROR] Cannot parse date #{date.to_s}: #{e}"
           end
         else
           page.lastmod = Time.now.strftime( "%Y-%m-%d" )
