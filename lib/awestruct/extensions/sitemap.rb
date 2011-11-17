@@ -41,10 +41,23 @@ module Awestruct
       protected
       def set_sitemap_data( page )
         site = page.site
-        page.date             ||= Time.now
+        munge_date( page )
         page.priority         ||= (site.priority or 0.1)
         page.change_frequency ||= (site.change_frequency or 'never')
         page
+      end
+
+      def munge_date( page )
+        date = page.date
+        if date
+          if date.kind_of? String
+            page.lastmod = Time.parse( page.date ).strftime( "%Y-%m-%d" )
+          else
+            page.lastmod = date.strftime( "%Y-%m-%d" )
+          end
+        else
+          page.lastmod = Time.now.strftime( "%Y-%m-%d" )
+        end
       end
 
       def valid_sitemap_entry( page )

@@ -7,8 +7,8 @@
     - for entry in page.sitemap_entries
       %url
         %loc= "#{entry.site.base_url}#{entry.url}"
-        - if entry.date
-          %lastmod= entry.date
+        - if entry.lastmod
+          %lastmod= entry.lastmod
         - if entry.priority
           %priority= entry.priority
         - if entry.change_frequency
