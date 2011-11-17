@@ -24,3 +24,4 @@ Please see the complete site at <http://awestruct.org/>.
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 It also uses code from the Sequel project under the same license.
+
