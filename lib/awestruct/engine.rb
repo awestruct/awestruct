@@ -53,6 +53,7 @@ module Awestruct
 
       @helpers = []
       @max_site_mtime = nil
+      adjust_load_path
     end
 
     def skin_dir
@@ -147,7 +148,7 @@ module Awestruct
       context
     end
 
-  def set_urls(pages)
+    def set_urls(pages)
       pages.each do |page|
         page_path = page.output_path
         if ( page_path =~ /^\// )
@@ -162,6 +163,19 @@ module Awestruct
     end
 
     private
+
+    def adjust_load_path
+      ext_dir = File.join( config.extension_dir ) 
+      if ( $LOAD_PATH.index( ext_dir ).nil? )
+        $LOAD_PATH << ext_dir
+      end
+      if ( skin_dir )
+        skin_ext_dir = File.join( skin_dir, config.extension_dir )
+        if ( $LOAD_PATH.index( skin_ext_dir ).nil? )
+          $LOAD_PATH << skin_ext_dir
+        end
+      end
+    end
 
     def configure_compass
       Compass.configuration.project_type    = :standalone
@@ -324,6 +338,16 @@ module Awestruct
       site.send( "#{name}=", massage_yaml( data ) )
     end
 
+    def inherit_front_matter( page )
+      layout = page.layout
+      while ( layout )
+        layout_name = layout.to_s + page.output_extension
+        current = site.layouts[ layout_name ]
+        current.front_matter.each { |k,v| page.send( "#{k}=", v ) unless page.send( "#{k}" ) } if current
+        layout = current.layout
+      end
+    end
+
     def load_pages()
       site.pages.clear
       dir_pathname = Pathname.new( dir )
@@ -341,6 +365,7 @@ module Awestruct
           relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
           page = load_page( path, :relative_path => relative_path )
           if ( page )
+            inherit_front_matter( page )
             site.pages << page
           end
         end
@@ -362,6 +387,7 @@ module Awestruct
             relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
             page = load_page( path, :relative_path => relative_path )
             if ( page )
+              inherit_front_matter( page )
               site.pages << page
             end
           end
@@ -393,9 +419,6 @@ module Awestruct
       skin_pipeline = nil
 
       ext_dir = File.join( config.extension_dir ) 
-      if ( $LOAD_PATH.index( ext_dir ).nil? )
-        $LOAD_PATH << ext_dir
-      end
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( File.exists?( pipeline_file ) )
         pipeline = eval File.read( pipeline_file )
