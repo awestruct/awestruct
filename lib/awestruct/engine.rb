@@ -350,6 +350,7 @@ module Awestruct
     end
 
     def load_pages()
+      visited_paths = {}
       site.pages.clear
       dir_pathname = Pathname.new( dir )
       Find.find( dir ) do |path|
@@ -361,13 +362,14 @@ module Awestruct
           Find.prune
           next
         end
-        unless ( site.has_page?( path ) )
+        unless ( visited_paths.has_key?( path ) )
           file_pathname = Pathname.new( path )
           relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
           page = load_page( path, :relative_path => relative_path )
           if ( page )
             inherit_front_matter( page )
             site.pages << page
+            visited_paths[ path ] = page
           end
         end
       end
@@ -383,13 +385,14 @@ module Awestruct
             Find.prune
             next
           end
-          unless ( site.has_page?( path ) )
+          unless ( visited_paths.has_key?( path ) )
             file_pathname = Pathname.new( path )
             relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
             page = load_page( path, :relative_path => relative_path )
             if ( page )
               inherit_front_matter( page )
               site.pages << page
+              visited_paths[ path ] = page
             end
           end
         end
