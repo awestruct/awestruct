@@ -25,7 +25,7 @@ module Awestruct
     end
 
     def has_page?(path)
-      ! pages.find{|e| e.path == path}.nil?
+      ! pages.find{|e| e.source_path == path}.nil?
     end
 
     def output_path(path, ext=nil)
