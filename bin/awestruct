@@ -212,35 +212,43 @@ if ( options.auto )
     monitor = FSSM::Monitor.new
 
     call_generate = lambda do |base, relative|
-      if !(relative =~ /.*~/)
-        puts "Triggered regeneration #{base} #{relative}"
-        generate_cmd.run
-        puts "Done"
-        if relative == '.'
-          # It's necessary to restart the monitor on individual files
-          # after a change is handled
-          monitor.file(base) do
-            update &call_generate
-            create &call_generate
-          end
+      # Convert to absolute path and append file separator if necessary.
+      base = File::expand_path(base)
+      if base[base.length - 1] != File::SEPARATOR
+        base += File::SEPARATOR
+      end
+
+      # Filter out bad input just in case.
+      if base.length < config.input_dir.length or config.input_dir != base[0..config.input_dir.length]
+        return
+      end
+
+      path = base + relative
+      path = path[config.input_dir.length..path.length]
+
+      if path =~ /^(_site|_tmp|\.git|\.gitignore|\.sass-cache|\.|\.\.).*/
+        return
+      end
+      if path =~ /.*(~|\.(swp|bak|tmp))$/
+        return
+      end
+
+      puts "Triggered regeneration: #{path}"
+      generate_cmd.run
+      puts "Done"
+      if relative == '.'
+        # It's necessary to restart the monitor on individual files
+        # after a change is handled
+        monitor.file(base) do
+          update &call_generate
+          create &call_generate
         end
       end
     end
 
-    Dir.entries(config.input_dir).each do |sub|
-      if !(sub =~ /^(_site|_tmp|\.git|\.gitignore|\.sass-cache|\.|\.\.).*/)
-        if File::directory? File.join(config.input_dir, sub)
-          monitor.path(sub) do
-            update &call_generate
-            create &call_generate
-          end
-        elsif
-          monitor.file(sub) do
-            update &call_generate
-            create &call_generate
-          end
-        end
-      end
+    monitor.path(config.input_dir) do
+      update &call_generate
+      create &call_generate
     end
 
     monitor.run
