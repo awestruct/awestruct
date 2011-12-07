@@ -350,8 +350,7 @@ module Awestruct
     end
 
     def load_pages()
-      visited_paths = {}
-      site.pages.clear
+      visited_pages = {}
       dir_pathname = Pathname.new( dir )
       Find.find( dir ) do |path|
         next if path == dir
@@ -362,15 +361,12 @@ module Awestruct
           Find.prune
           next
         end
-        unless ( visited_paths.has_key?( path ) )
-          file_pathname = Pathname.new( path )
-          relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
-          page = load_page( path, :relative_path => relative_path )
-          if ( page )
-            inherit_front_matter( page )
-            site.pages << page
-            visited_paths[ path ] = page
-          end
+        file_pathname = Pathname.new( path )
+        relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
+        page = load_page( path, :relative_path => relative_path )
+        if ( page )
+          inherit_front_matter( page )
+          visited_pages[ path ] = page
         end
       end
 
@@ -385,18 +381,17 @@ module Awestruct
             Find.prune
             next
           end
-          unless ( visited_paths.has_key?( path ) )
-            file_pathname = Pathname.new( path )
-            relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
-            page = load_page( path, :relative_path => relative_path )
-            if ( page )
-              inherit_front_matter( page )
-              site.pages << page
-              visited_paths[ path ] = page
-            end
+          file_pathname = Pathname.new( path )
+          relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
+          page = load_page( path, :relative_path => relative_path )
+          if ( page )
+            inherit_front_matter( page )
+            visited_pages[ path ] = page
           end
         end
       end
+
+      site.pages = visited_pages.values
     end
 
     def massage_yaml(obj)
