@@ -91,6 +91,7 @@ def parse(args)
     opts.on_tail("-v", "--version", "Display the version") do
       puts "Awestruct: #{Awestruct::VERSION}"
       puts "http://awestruct.org/"
+      exit
     end
 
 
