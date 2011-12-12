@@ -34,7 +34,7 @@ def parse(args)
       options.init     = init
       options.generate = false
     end
-    opts.on( '-f', '--framework FRAMEWORK', 'Specify a framework during initialization' ) do |framework|
+    opts.on( '-f', '--framework FRAMEWORK', 'Specify a compass framework during initialization (blueprint, 960)' ) do |framework|
       options.framework = framework
     end
     opts.on( '--[no-]scaffold', 'Create scaffolding during initialization (default: true)' ) do |s|
