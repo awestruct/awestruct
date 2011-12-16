@@ -1,24 +1,21 @@
-
-require 'rubygems'
-
-require 'lib/awestruct/version'
+require 'awestruct/version'
 
 Gem::Specification.new do |s|
-    s.platform  =   Gem::Platform::RUBY
-    s.name      =   "awestruct"
-    s.version   =   Awestruct::VERSION
-    s.author    =   "Bob McWhirter"
-    s.email     =   "bob@mcwhirter.org"
-    s.summary   =   "Static site-baking utility"
-    s.files     =   [
+    s.platform       =   Gem::Platform::RUBY
+    s.name           =   "awestruct"
+    s.version        =   Awestruct::VERSION
+    s.author         =   "Bob McWhirter"
+    s.email          =   "bob@mcwhirter.org"
+    s.summary        =   "Static site-baking utility"
+    s.files          =   [
       Dir['lib/**/*.rb'],
       Dir['lib/**/*.haml'],
     ].flatten
-    s.executables     =   [
+    s.executables    = [
       'awestruct',
     ].flatten
-    s.require_paths  =   [ 'lib' ]
-    s.has_rdoc  =   true
+    s.require_paths  = [ 'lib' ]
+    s.has_rdoc       =   true
 
     s.add_dependency 'hpricot'
     s.add_dependency 'haml', '<= 3.1.0'
