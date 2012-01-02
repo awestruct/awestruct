@@ -420,7 +420,7 @@ module Awestruct
       ext_dir = File.join( config.extension_dir )
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( File.exists?( pipeline_file ) )
-        pipeline = eval File.read( pipeline_file )
+        pipeline = eval(File.read( pipeline_file ), nil, pipeline_file, 1)
         @helpers = pipeline.helpers || []
         @transformers = pipeline.transformers || []
         watched_dirs << ext_dir.to_s
@@ -433,7 +433,7 @@ module Awestruct
         end
         skin_pipeline_file = File.join( skin_ext_dir, 'pipeline.rb' )
         if ( File.exists?( skin_pipeline_file ) )
-          skin_pipeline = eval File.read( skin_pipeline_file )
+          skin_pipeline = eval(File.read( skin_pipeline_file ), nil, skin_pipeline_file, 1)
           @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
           @transformers = ( @transformers + skin_pipeline.transformers || [] ).flatten
           watched_dirs << skin_dir.to_s
