@@ -357,12 +357,16 @@ module Awestruct
         basename = File.basename( path )
         if ( basename == '.htaccess' )
           #special case
-        elsif ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
+        elsif ( basename =~ /^[_.]/ )
           Find.prune
           next
         end
         file_pathname = Pathname.new( path )
         relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
+        if config.ignore.include?(relative_path)
+          Find.prune
+          next
+        end
         page = load_page( path, :relative_path => relative_path )
         if ( page )
           inherit_front_matter( page )
@@ -377,12 +381,16 @@ module Awestruct
           basename = File.basename( path )
           if ( basename == '.htaccess' )
             #special case
-          elsif ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
+          elsif ( basename =~ /^[_.]/ )
             Find.prune
             next
           end
           file_pathname = Pathname.new( path )
           relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
+          if config.ignore.include?(relative_path)
+            Find.prune
+            next
+          end
           page = load_page( path, :relative_path => relative_path )
           if ( page )
             inherit_front_matter( page )
