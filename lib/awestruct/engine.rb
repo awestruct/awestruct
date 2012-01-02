@@ -166,7 +166,7 @@ module Awestruct
     private
 
     def adjust_load_path
-      ext_dir = File.join( config.extension_dir ) 
+      ext_dir = File.join( config.extension_dir )
       if ( $LOAD_PATH.index( ext_dir ).nil? )
         $LOAD_PATH << ext_dir
       end
@@ -325,7 +325,7 @@ module Awestruct
 
     def load_yamls
       Dir[ File.join( config.config_dir, '*.yml' ) ].each do |yaml_path|
-        load_yaml( yaml_path ) unless ( File.basename( yaml_path ) == 'site.yml' ) 
+        load_yaml( yaml_path ) unless ( File.basename( yaml_path ) == 'site.yml' )
       end
     end
 
@@ -417,10 +417,10 @@ module Awestruct
       pipeline = nil
       skin_pipeline = nil
 
-      ext_dir = File.join( config.extension_dir ) 
+      ext_dir = File.join( config.extension_dir )
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( File.exists?( pipeline_file ) )
-        pipeline = eval File.read( pipeline_file )
+        pipeline = eval(File.read( pipeline_file ), nil, pipeline_file, 1)
         @helpers = pipeline.helpers || []
         @transformers = pipeline.transformers || []
         watched_dirs << ext_dir.to_s
@@ -433,27 +433,27 @@ module Awestruct
         end
         skin_pipeline_file = File.join( skin_ext_dir, 'pipeline.rb' )
         if ( File.exists?( skin_pipeline_file ) )
-          skin_pipeline = eval File.read( skin_pipeline_file )
+          skin_pipeline = eval(File.read( skin_pipeline_file ), nil, skin_pipeline_file, 1)
           @helpers = ( @helpers + skin_pipeline.helpers || [] ).flatten
           @transformers = ( @transformers + skin_pipeline.transformers || [] ).flatten
           watched_dirs << skin_dir.to_s
         end
       end
-      
+
       #if _partials directory (from Partial helper) is present, watch
       partials = File.join( '_partials' )
       if ( File.exists?( partials ) )
         watched_dirs << partials
       end
-      
+
       pipeline.watch(watched_dirs) if pipeline
       skin_pipeline.watch(watched_dirs) if skin_pipeline
       check_dir_for_change(watched_dirs)
-      
+
       pipeline.execute( site ) if pipeline
       skin_pipeline.execute( site ) if skin_pipeline
     end
-    
+
     def check_dir_for_change(watched_dirs)
       watched_dirs.each do |dir|
         Dir.chdir(dir){check_dir_for_change_recursively()}
