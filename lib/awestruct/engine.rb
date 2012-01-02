@@ -166,7 +166,7 @@ module Awestruct
     private
 
     def adjust_load_path
-      ext_dir = File.join( config.extension_dir ) 
+      ext_dir = File.join( config.extension_dir )
       if ( $LOAD_PATH.index( ext_dir ).nil? )
         $LOAD_PATH << ext_dir
       end
@@ -325,7 +325,7 @@ module Awestruct
 
     def load_yamls
       Dir[ File.join( config.config_dir, '*.yml' ) ].each do |yaml_path|
-        load_yaml( yaml_path ) unless ( File.basename( yaml_path ) == 'site.yml' ) 
+        load_yaml( yaml_path ) unless ( File.basename( yaml_path ) == 'site.yml' )
       end
     end
 
@@ -357,12 +357,16 @@ module Awestruct
         basename = File.basename( path )
         if ( basename == '.htaccess' )
           #special case
-        elsif ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
+        elsif ( basename =~ /^[_.]/ )
           Find.prune
           next
         end
         file_pathname = Pathname.new( path )
         relative_path = file_pathname.relative_path_from( dir_pathname ).to_s
+        if config.ignore.include?(relative_path)
+          Find.prune
+          next
+        end
         page = load_page( path, :relative_path => relative_path )
         if ( page )
           inherit_front_matter( page )
@@ -377,12 +381,16 @@ module Awestruct
           basename = File.basename( path )
           if ( basename == '.htaccess' )
             #special case
-          elsif ( config.ignore.include?( basename ) || ( basename =~ /^[_.]/ ) )
+          elsif ( basename =~ /^[_.]/ )
             Find.prune
             next
           end
           file_pathname = Pathname.new( path )
           relative_path = file_pathname.relative_path_from( skin_dir_pathname ).to_s
+          if config.ignore.include?(relative_path)
+            Find.prune
+            next
+          end
           page = load_page( path, :relative_path => relative_path )
           if ( page )
             inherit_front_matter( page )
@@ -417,7 +425,7 @@ module Awestruct
       pipeline = nil
       skin_pipeline = nil
 
-      ext_dir = File.join( config.extension_dir ) 
+      ext_dir = File.join( config.extension_dir )
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( File.exists?( pipeline_file ) )
         pipeline = eval File.read( pipeline_file )
@@ -439,21 +447,21 @@ module Awestruct
           watched_dirs << skin_dir.to_s
         end
       end
-      
+
       #if _partials directory (from Partial helper) is present, watch
       partials = File.join( '_partials' )
       if ( File.exists?( partials ) )
         watched_dirs << partials
       end
-      
+
       pipeline.watch(watched_dirs) if pipeline
       skin_pipeline.watch(watched_dirs) if skin_pipeline
       check_dir_for_change(watched_dirs)
-      
+
       pipeline.execute( site ) if pipeline
       skin_pipeline.execute( site ) if skin_pipeline
     end
-    
+
     def check_dir_for_change(watched_dirs)
       watched_dirs.each do |dir|
         Dir.chdir(dir){check_dir_for_change_recursively()}
