@@ -52,7 +52,7 @@ module Awestruct
         @window_size  = opts[:window_size] || 2
         @remove_input = opts.has_key?( :remove_input ) ? opts[:remove_input] : true
         @output_prefix = opts[:output_prefix] || File.dirname( @input_path )
-        @collection    = opts[:collection] 
+        @collection    = opts[:collection]
       end
 
       def execute(site)
@@ -74,7 +74,7 @@ module Awestruct
           site.pages << page
           paginated_pages << page
           i = i + 1
-        end 
+        end
 
         if ( @remove_input )
           site.pages.reject!{|page|
@@ -84,10 +84,10 @@ module Awestruct
 
         prev_page = nil
         paginated_pages.each_with_index do |page,i|
-          page.posts.current_page       = page
-          page.posts.current_page_index = i
-          page.posts.pages              = paginated_pages
-          page.posts.window             = 1
+          page.send( @prop_name ).current_page       = page
+          page.send( @prop_name ).current_page_index = i
+          page.send( @prop_name ).pages              = paginated_pages
+          page.send( @prop_name ).window             = 1
 
           if ( prev_page != nil )
             prev_page.send( @prop_name ).next_page = page
