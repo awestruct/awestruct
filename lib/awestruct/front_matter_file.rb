@@ -16,6 +16,7 @@ module Awestruct
 
     def load_page
       full_content = File.read( source_path )
+      full_content.force_encoding(@site.encoding) if @site.encoding
       yaml_content = ''
 
       dash_lines = 0
@@ -42,7 +43,7 @@ module Awestruct
 
       begin
         @front_matter = YAML.load( yaml_content ) || {}
-        @front_matter.each do |k,v| 
+        @front_matter.each do |k,v|
           self.send( "#{k}=", v )
         end
       rescue => e

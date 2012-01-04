@@ -2,15 +2,15 @@ require 'hpricot'
 
 module Awestruct
   module ContextHelper
-    
+
     def html_to_text(str)
       str.gsub( /<[^>]+>/, '' ).gsub( /&nbsp;/, ' ' )
     end
- 
+
     def clean_html(str)
       str.gsub( /&nbsp;/, ' ' )
     end
-  
+
     def without_images(str)
       str.gsub(/<img[^>]+>/,'').gsub(/<a[^>]+>([^<]*)<\/a>/, '\1')
     end
@@ -49,7 +49,8 @@ module Awestruct
       doc.search( "//img" ).each do |img|
         img['src'] = fix_url( base_url, img['src'] )
       end
-      return doc.to_s
+      # Hpricot::Doc#to_s output encoding is not necessarily the same as the encoding of text
+      return doc.to_s.tap{|d| d.force_encoding(text.encoding) if d.encoding != text.encoding }
     end
 
     def fix_url(base_url, url)

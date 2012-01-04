@@ -20,7 +20,7 @@ module Awestruct
     end
 
     def raw_page_content
-      File.read( self.source_path )
+      File.read( self.source_path ).tap {|f| f.force_encoding(@site.encoding) if @site.encoding }
     end
 
     def render(context)
