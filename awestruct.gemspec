@@ -1,4 +1,4 @@
-require 'awestruct/version'
+require File.expand_path("../lib/awestruct/version", __FILE__)
 
 Gem::Specification.new do |s|
     s.platform       =   Gem::Platform::RUBY
