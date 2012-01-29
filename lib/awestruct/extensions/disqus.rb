@@ -55,8 +55,8 @@ module Awestruct
         def resolve_disqus_identifier()
           self.disqus_identifier ? self.disqus_identifier : Digest::SHA1.hexdigest(self.date.strftime('%Y-%m-%d-') + self.slug)
         end
+
       end
     end
   end
-
 end

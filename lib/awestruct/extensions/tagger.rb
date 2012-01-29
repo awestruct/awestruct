@@ -1,4 +1,3 @@
-
 module Awestruct
   module Extensions
     class Tagger
@@ -89,6 +88,7 @@ module Awestruct
 
         site.send( "#{@tagged_items_property}_tags=", ordered_tags )
       end
+
     end
   end
 end

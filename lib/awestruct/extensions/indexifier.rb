@@ -1,8 +1,7 @@
-
 module Awestruct
   module Extensions
-
     class Indexifier
+
       def execute(site)
         site.pages.each do |page|
           if ( page.inhibit_indexifier || ( page.output_path =~ /^(.*\/)?index.html$/ ) )
@@ -12,7 +11,7 @@ module Awestruct
           end
         end
       end
-    end
 
+    end
   end
 end

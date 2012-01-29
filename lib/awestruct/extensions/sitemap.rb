@@ -1,6 +1,6 @@
 # Generates a sitemap for search engines.  Defaults to /sitemap.xml
 # Ignores images, css, robots, atoms, javascript files.
-# Add a sitemap.yml file to add files that for one reason or 
+# Add a sitemap.yml file to add files that for one reason or
 # another won't be hanging off of site (e.g. they're in .htaccess)
 require 'ostruct'
 
@@ -16,10 +16,10 @@ module Awestruct
         entries.each { |entry| sitemap_pages << set_sitemap_data( entry ) if valid_sitemap_entry( entry ) } if entries
 
         # Generate sitemap pages for stuff in _config/sitemap.yml
-        site.sitemap.pages.each do |entry| 
+        site.sitemap.pages.each do |entry|
           page = Awestruct::Renderable.new( site )
-          page.output_path = entry.url 
-          page.date = entry.date( nil ) 
+          page.output_path = entry.url
+          page.date = entry.date( nil )
           page.priority = entry.priority( nil )
           page.change_frequency = entry.change_frequency( nil )
           sitemap_pages << page
@@ -28,7 +28,7 @@ module Awestruct
         # Generate the correct urls for each page in the sitemap
         site.engine.set_urls( sitemap_pages )
 
-        # Create a sitemap.xml file from our template 
+        # Create a sitemap.xml file from our template
         sitemap = File.join( File.dirname(__FILE__), 'sitemap.xml.haml' )
         page                 = site.engine.load_page( sitemap )
         page.output_path     = 'sitemap.xml'
@@ -39,6 +39,7 @@ module Awestruct
       end
 
       protected
+
       def set_sitemap_data( page )
         site = page.site
         munge_date( page )
@@ -78,6 +79,7 @@ module Awestruct
           page.output_extension != '.gif'       &&
           page.output_extension != '.js'
       end
+
     end
   end
 end

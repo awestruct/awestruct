@@ -1,4 +1,3 @@
-
 module Awestruct
   module Extensions
     module GoogleAnalytics
@@ -33,7 +32,7 @@ module Awestruct
         html += %Q[})();\n</script>\n]
         html
       end
+
     end
   end
-
 end

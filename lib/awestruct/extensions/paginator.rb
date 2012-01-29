@@ -1,5 +1,3 @@
-
-
 module Awestruct
   module Extensions
     class Paginator
@@ -99,7 +97,7 @@ module Awestruct
 
         paginated_pages.first
       end
-    end
 
+    end
   end
 end

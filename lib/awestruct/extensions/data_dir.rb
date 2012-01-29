@@ -1,7 +1,5 @@
-
 module Awestruct
   module Extensions
-
     class DataDir
 
       def initialize(data_dir="_data")
@@ -13,9 +11,8 @@ module Awestruct
       end
 
       def execute(site)
-    
         Dir[ "#{site.dir}/#{@data_dir}/*" ].each do |entry|
-          if ( File.directory?( entry ) ) 
+          if ( File.directory?( entry ) )
             data_key = File.basename( entry )
             data_map = {}
             Dir[ "#{entry}/*" ].each do |chunk|
@@ -27,10 +24,8 @@ module Awestruct
             site.send( "#{data_key}=", data_map )
           end
         end
-    
       end
-    
-    end
 
+    end
   end
 end

@@ -1,6 +1,5 @@
 module Awestruct
   module Extensions
-
     class Pipeline
 
       attr_reader :before_extensions
@@ -40,7 +39,7 @@ module Awestruct
           ext.watch( watched_dirs ) if ext.respond_to?('watch')
         end
       end
-    end
 
+    end
   end
 end

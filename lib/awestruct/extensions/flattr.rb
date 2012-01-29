@@ -1,4 +1,3 @@
-
 module Awestruct
   module Extensions
     class Flattr
@@ -37,6 +36,7 @@ module Awestruct
           html
         end
       end
+
     end
   end
 end

@@ -1,6 +1,7 @@
 module Awestruct
   module Extensions
     class Atomizer
+
       def initialize(entries_name, output_path, opts={})
         @entries_name = entries_name
         @output_path = output_path
@@ -34,6 +35,7 @@ module Awestruct
         page.title = site.title || site.base_url
         site.pages << page
       end
+
     end
   end
 end

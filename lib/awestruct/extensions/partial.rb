@@ -1,4 +1,3 @@
-
 module Awestruct
   module Extensions
     module Partial

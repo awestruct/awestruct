@@ -1,4 +1,3 @@
-
 module Awestruct
   module Extensions
     class Posts
@@ -48,7 +47,7 @@ module Awestruct
             end
           end
         end
-        
+
         posts = posts.sort_by{|each| [each.date, each.sequence || 0, File.mtime( each.source_path ), each.slug ] }.reverse
 
         last = nil
@@ -63,6 +62,7 @@ module Awestruct
 
         site.send( "#{@assign_to}=", posts )
       end
+
     end
   end
 end

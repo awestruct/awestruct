@@ -1,4 +1,3 @@
-
 module Awestruct
   module Extensions
     class TagCloud
@@ -19,6 +18,7 @@ module Awestruct
         site.pages << page
         site.send( "#{@tagged_items_property}_tag_cloud=", LazyPage.new( page ) )
       end
+
     end
 
     class LazyPage
@@ -29,5 +29,6 @@ module Awestruct
         @page.content
       end
     end
+
   end
 end

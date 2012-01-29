@@ -1,4 +1,3 @@
-
 require 'digest/sha1'
 
 module Awestruct
@@ -32,8 +31,8 @@ module Awestruct
           html += %Q(<script type='text/javascript' src='http://www.intensedebate.com/js/genericLinkWrapperV2.js'></script>\n)
           html
         end
+
       end
     end
   end
-
 end
