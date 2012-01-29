@@ -33,6 +33,10 @@ require 'awestruct/extensions/flattr'
 require 'awestruct/extensions/google_analytics'
 require 'awestruct/extensions/partial'
 require 'awestruct/extensions/sitemap'
+require 'awestruct/extensions/cachebuster'
+require 'awestruct/extensions/obfuscate'
+require 'awestruct/extensions/relative'
+require 'awestruct/extensions/assets'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
@@ -344,6 +348,7 @@ module Awestruct
       while ( layout )
         layout_name = layout.to_s + page.output_extension
         current = site.layouts[ layout_name ]
+        raise "Unknown layout '#{layout_name}' #{site.layouts.keys} for page #{page}" if current == nil
         current.front_matter.each { |k,v| page.send( "#{k}=", v ) unless page.send( "#{k}" ) } if current
         layout = current.layout
       end
