@@ -7,6 +7,8 @@ Gem::Specification.new do |s|
     s.author         =   "Bob McWhirter"
     s.email          =   "bob@mcwhirter.org"
     s.summary        =   "Static site-baking utility"
+    s.description    =   "Awestruct is a framework for creating static HTML sites."
+    s.homepage       =   "http://awestruct.org"
     s.files          =   [
       Dir['lib/**/*.rb'],
       Dir['lib/**/*.haml'],
