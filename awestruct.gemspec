@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
     s.has_rdoc       =   true
 
     s.add_dependency 'hpricot'
+    s.add_dependency 'versionomy', '= 0.4.1'
     s.add_dependency 'haml', '<= 3.1.0'
     s.add_dependency 'sass', '<= 3.1.0'
     s.add_dependency 'hashery', '= 1.4.0'
