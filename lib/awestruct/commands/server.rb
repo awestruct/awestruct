@@ -4,6 +4,7 @@ module Awestruct
   module Commands
 
     WEBrick::HTTPUtils::DefaultMimeTypes.store('atom', 'application/atom+xml')
+    WEBrick::HTTPUtils::DefaultMimeTypes.store('appcache', 'text/cache-manifest')
 
     class Server
       attr_reader :server
