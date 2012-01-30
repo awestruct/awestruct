@@ -320,6 +320,7 @@ module Awestruct
             site.send( "#{k}=", v )
           end
         end if data
+        site.profile = profile
 
         profile_data.each do |k,v|
           site.send( "#{k}=", v )
