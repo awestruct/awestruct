@@ -37,6 +37,7 @@ require 'awestruct/extensions/cachebuster'
 require 'awestruct/extensions/obfuscate'
 require 'awestruct/extensions/relative'
 require 'awestruct/extensions/assets'
+require 'awestruct/extensions/minify'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
