@@ -2,6 +2,7 @@ require 'ostruct'
 require 'find'
 require 'compass'
 require 'ninesixty'
+require 'bootstrap-sass'
 require 'time'
 
 require 'hashery/opencascade'

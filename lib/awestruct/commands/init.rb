@@ -25,7 +25,11 @@ module Awestruct
         scaffold_name = ( @framework == 'compass' ? 'blueprint' : @framework )
         if ( @scaffold )
           manifest.copy_file( '_layouts/base.html.haml', File.join( File.dirname(__FILE__), "/frameworks/#{scaffold_name}/base_layout.html.haml" ) )
-          manifest.copy_file( 'index.html.haml', File.join( File.dirname(__FILE__), "/frameworks/base_index.html.haml" ) )
+          if ( File.file? File.join( File.dirname(__FILE__), "/frameworks/#{scaffold_name}/base_index.html.haml" ) )
+            manifest.copy_file( 'index.html.haml', File.join( File.dirname(__FILE__), "/frameworks/#{scaffold_name}/base_index.html.haml" ) )
+          else
+            manifest.copy_file( 'index.html.haml', File.join( File.dirname(__FILE__), "/frameworks/base_index.html.haml" ) )
+          end
           manifest.touch_file( '_config/site.yml' )
         end
         manifest.perform( @dir )
