@@ -28,9 +28,12 @@ module Awestruct
             else
               input
             end
+          else
+            input
           end
+        else
+          input
         end
-        input
       end
 
       private
