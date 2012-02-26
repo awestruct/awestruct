@@ -1,5 +1,52 @@
 require 'fileutils'
 
+##
+# Awestruct:Extensions:Minify is a transformer that minimizes JavaScript, CSS and HTML files.
+# The transform runs on the rendered stream before it's written to the output path.
+#
+# Minification is performed by the following three libraries:
+#
+#   htmlcompressor (minifies HTML): http://code.google.com/p/htmlcompressor/
+#   yuicompressor (minifies JavaScript and CSS): http://developer.yahoo.com/yui/compressor/
+#   pngcrush (minifies PNG): http://pmt.sourceforge.net/pngcrush/
+#
+# These commands must be available on your PATH in order to use them.
+#
+# This class is loaded as a transformer in the Awestruct pipeline. The
+# constructor accepts an array of symbols representing the file types to minimize.
+#
+#   extension Awestruct::Extensions::Minify.new
+#
+# This transform recognizes the following symbols:
+#
+#   :css - CSS files with extension .css
+#   :js - JavaScript files with extension .js
+#   :html - HTML files with extension .html
+#   :png - PNG files with extension .png
+#
+# If no types are specified, the default value [:css, :js] is used.
+# 
+# In addition to registering the transformer in the pipeline, it must be enabled
+# by setting the following site property in _ext/config.yml:
+#
+#   minify: true
+#
+# You can limit activation to one or more profiles: 
+#
+#   profiles:
+#     production:
+#       minify: true
+#
+# You can also configure the option arguments passed to the compressor programs. Here's
+# how you specify options arguments for the htmlcompressor command:
+#
+#   minify_html_opts:
+#     remove_intertag_spaces: true
+#     compress_js: true
+#     compress_css: true
+# 
+# Note that any hypen (-) must be represented as an underscore (_) in the configuration.
+
 module Awestruct
   module Extensions
     class Minify
@@ -15,7 +62,7 @@ module Awestruct
             case ext
             when :html
               print "minifying html #{page.output_path}"
-              htmlcompressor(page, input)
+              htmlcompressor(page, input, site.minify_html_opts)
             when :css
               print "minifying css #{page.output_path}"
               yuicompressor(page, input, :css)
@@ -38,9 +85,20 @@ module Awestruct
 
       private
 
-      def htmlcompressor(page, input)
+      def htmlcompressor(page, input, minify_html_opts)
         output = ''
-        Open3.popen3("htmlcompressor --remove-intertag-spaces") do |stdin, stdout, stderr|
+        cmd = "htmlcompressor"
+        if minify_html_opts
+          minify_html_opts.each do |p, v|
+            # boolean options are simple flags (i.e., do not accept values)
+            if v === true
+              cmd += " --#{p.gsub('_', '-')}"
+            elsif not v === false
+              cmd += " --#{p.gsub('_', '-')}=#{v}"
+            end
+          end
+        end
+        Open3.popen3(cmd) do |stdin, stdout, stderr|
           threads = []
           threads << Thread.new(stdout) do |o|
             while ( ! o.eof? )
