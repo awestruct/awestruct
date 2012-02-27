@@ -15,7 +15,7 @@ require 'awestruct/textile_file'
 require 'awestruct/markdown_file'
 require 'awestruct/sass_file'
 require 'awestruct/scss_file'
-require 'awestruct/org_mode_file'
+require 'awestruct/orgmode_file'
 require 'awestruct/verbatim_file'
 
 require 'awestruct/context_helper'

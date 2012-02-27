@@ -1,7 +1,7 @@
 
 require 'sass'
 require 'awestruct/front_matter_file'
-require 'awestruct/org_modeable'
+require 'awestruct/orgmodeable'
 
 module Awestruct
   class OrgModeFile < FrontMatterFile
