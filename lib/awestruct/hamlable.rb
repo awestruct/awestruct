@@ -4,7 +4,7 @@ module Awestruct
     def render(context)
       rendered = ''
       begin
-        options = (site.haml || {}).inject({}){|h,(k,v)| h[k.to_sym] = v.to_sym; h } 
+        options = (site.haml || {}).inject({}){|h,(k,v)| h[k.to_sym] = v; h } 
         haml_engine = Haml::Engine.new( raw_page_content, options )
         rendered = haml_engine.render( context )
       rescue => e
