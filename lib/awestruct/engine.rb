@@ -13,6 +13,7 @@ require 'awestruct/haml_file'
 require 'awestruct/erb_file'
 require 'awestruct/textile_file'
 require 'awestruct/markdown_file'
+require 'awestruct/asciidoc_file'
 require 'awestruct/sass_file'
 require 'awestruct/scss_file'
 require 'awestruct/org_mode_file'
@@ -115,6 +116,8 @@ module Awestruct
         page = TextileFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.md$/ )
         page = MarkdownFile.new( site, path, fixed_relative_path, options )
+      elsif ( path =~ /\.(asciidoc|adoc)$/ )
+        page = AsciiDocFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.sass$/ )
         page = SassFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.scss$/ )
