@@ -66,7 +66,7 @@ module Awestruct
           if ( i == 1 )
             page.output_path = File.join( @output_prefix, File.basename( @input_path ) + ".html" )
           else
-            page.output_path = File.join( @output_prefix, "page#{i}.html" )
+            page.output_path = File.join( @output_prefix, "page/#{i}.html" )
           end
           page.paginate_generated = true
           site.pages << page
