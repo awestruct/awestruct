@@ -2,11 +2,20 @@ module Awestruct
   module AsciiDocable
 
     def render(context)
-      imagesdir = Pathname.new('/images').relative_path_from(Pathname.new(File.dirname(context.page.relative_source_path)))
+      _render(context.interpolate_string(raw_page_content), context.page.relative_source_path)
+    end
+
+    def content
+      context = site.engine.create_context( self )
+      render( context )
+    end
+
+    def _render(content, relative_source_path)
+      imagesdir = Pathname.new('/images').relative_path_from(Pathname.new(File.dirname(relative_source_path)))
       iconsdir = File.join(imagesdir, 'icons')
       rendered = ''
       begin
-        rendered = execute("asciidoc -s -b xhtml11 -a pygments -a icons -a iconsdir='#{iconsdir}' -a imagesdir='#{imagesdir}' -o - -", context.interpolate_string(raw_page_content))
+        rendered = execute("asciidoc -s -b html5 -a pygments -a icons -a iconsdir='#{iconsdir}' -a imagesdir='#{imagesdir}' -o - -", content)
       rescue => e
         puts e
         puts e.backtrace
