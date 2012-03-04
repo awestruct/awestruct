@@ -13,7 +13,7 @@ module Awestruct
     end
 
     def output_filename
-      self.source_path.gsub(/\.(asciidoc|adoc)$/, output_extension)
+      File.basename(self.source_path.gsub(/\.(asciidoc|adoc)$/, output_extension))
     end
 
     def output_extension
