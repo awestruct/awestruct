@@ -120,7 +120,7 @@ module Awestruct
       elsif ( path =~ /\.scss$/ )
         page = ScssFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.org$/ )
-        page = OrgModeFile.new( site, path, fixed_relative_path, options )
+        page = OrgmodeFile.new( site, path, fixed_relative_path, options )
       elsif ( File.file?( path ) )
         page = VerbatimFile.new( site, path, fixed_relative_path, options )
       end
