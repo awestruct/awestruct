@@ -6,6 +6,7 @@ module Awestruct
       begin
         options = (site.haml || {}).inject({}){|h,(k,v)| h[k.to_sym] = v; h } 
         options[:relative_source_path] = context.page.relative_source_path
+        options[:site] = site
         haml_engine = Haml::Engine.new( raw_page_content, options )
         rendered = haml_engine.render( context )
       rescue => e
