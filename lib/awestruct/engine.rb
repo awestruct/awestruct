@@ -16,7 +16,7 @@ require 'awestruct/markdown_file'
 require 'awestruct/asciidoc_file'
 require 'awestruct/sass_file'
 require 'awestruct/scss_file'
-require 'awestruct/org_mode_file'
+require 'awestruct/orgmode_file'
 require 'awestruct/verbatim_file'
 
 require 'awestruct/context_helper'
@@ -127,7 +127,7 @@ module Awestruct
       elsif ( path =~ /\.scss$/ )
         page = ScssFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.org$/ )
-        page = OrgModeFile.new( site, path, fixed_relative_path, options )
+        page = OrgmodeFile.new( site, path, fixed_relative_path, options )
       elsif ( File.file?( path ) )
         page = VerbatimFile.new( site, path, fixed_relative_path, options )
       end

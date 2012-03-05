@@ -1,8 +1,7 @@
-
 require 'org-ruby'
 
 module Awestruct
-  module OrgModeable
+  module Orgmodeable
 
     def render(context)
       Orgmode::Parser.new(raw_page_content).to_html
