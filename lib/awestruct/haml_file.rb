@@ -1,7 +1,10 @@
-
 require 'haml'
+require 'open3'
+require 'pathname'
 require 'awestruct/front_matter_file'
 require 'awestruct/hamlable'
+require 'awestruct/asciidocable'
+require 'awestruct/haml/filters/asciidoc'
 
 module Awestruct
   class HamlFile < FrontMatterFile

@@ -68,6 +68,10 @@ module Awestruct
       @site.skin_dir
     end
 
+    def config
+      @config
+    end
+
     def generate(profile=nil, base_url=nil, default_base_url=nil, force=false)
       @base_url         = base_url
       @default_base_url = default_base_url
