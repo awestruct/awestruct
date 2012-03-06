@@ -4,6 +4,7 @@ require 'compass'
 require 'ninesixty'
 require 'bootstrap-sass'
 require 'time'
+require 'notifier'
 
 require 'hashery/opencascade'
 
@@ -218,7 +219,12 @@ module Awestruct
 
     def generate_files(force)
       site.pages.each do |page|
-        generate_page( page, force )
+        begin
+          generate_page( page, force )
+        rescue Exception => e
+          Notifier.notify(:title=>"Error generating page #{page.name}", :message=>e.to_s)
+          puts "Cannot render page #{page.source_path}. #{e.to_s}"
+        end
       end
     end
 

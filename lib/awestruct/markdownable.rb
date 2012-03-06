@@ -5,14 +5,8 @@ module Awestruct
   module Markdownable
     def render(context)
       rendered = ''
-      begin
-        doc = RDiscount.new( context.interpolate_string( raw_page_content ) )
-        rendered = doc.to_html
-      rescue => e
-        puts e
-        puts e.backtrace
-      end
-      rendered
+      doc = RDiscount.new( context.interpolate_string( raw_page_content ) )
+      doc.to_html
     end
 
     def content

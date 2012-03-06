@@ -2,6 +2,6 @@
 *.gem
 _tmp
 .DS_Store
-
+Gemfile.lock
 #Editor
 *.tmproj

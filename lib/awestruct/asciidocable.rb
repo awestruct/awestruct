@@ -16,14 +16,7 @@ module Awestruct
       iconsdir = File.join(imagesdir, 'icons')
       conffile = File.join(site.engine.config.config_dir, 'asciidoc.conf')
       confopt = File.exist?(conffile) ? '-f ' + conffile : ''
-      rendered = ''
-      begin
-        rendered = execute("asciidoc -s -b html5 -a pygments -a icons -a iconsdir='#{iconsdir}' -a imagesdir='#{imagesdir}' #{confopt} -o - -", content)
-      rescue => e
-        puts e
-        puts e.backtrace
-      end
-      rendered
+      execute("asciidoc -s -b html5 -a pygments -a icons -a iconsdir='#{iconsdir}' -a imagesdir='#{imagesdir}' #{confopt} -o - -", content)
     end
 
     def execute(command, target)

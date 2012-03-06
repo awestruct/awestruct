@@ -32,5 +32,6 @@ Gem::Specification.new do |s|
     s.add_dependency 'org-ruby', '~> 0.5.3'
     s.add_dependency 'fssm', '~> 0.2.7'
     s.add_dependency 'json', '~> 1.6.5'
+    s.add_dependency 'notifier', '~> 0.1.4'
 end
 
