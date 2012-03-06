@@ -195,10 +195,16 @@ module Awestruct
     def configure_compass
       Compass.configuration.project_type    = :standalone
       Compass.configuration.project_path    = dir
-      Compass.configuration.css_dir         = File.join( config.output_dir, 'stylesheets' )
       Compass.configuration.sass_dir        = 'stylesheets'
-      Compass.configuration.images_dir      = 'images'
+      
+      site.images_dir      = File.join( config.output_dir, 'images' )
+      site.stylesheets_dir = File.join( config.output_dir, 'stylesheets' )
+      site.javascripts_dir = File.join( config.output_dir, 'javascripts' )
+
+      Compass.configuration.css_dir         = site.css_dir
       Compass.configuration.javascripts_dir = 'javascripts'
+      Compass.configuration.images_dir      = 'images'
+
     end
 
     def set_base_url
