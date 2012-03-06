@@ -19,6 +19,7 @@ require 'awestruct/sass_file'
 require 'awestruct/scss_file'
 require 'awestruct/orgmode_file'
 require 'awestruct/verbatim_file'
+require 'awestruct/restructuredtext_file'
 
 require 'awestruct/context_helper'
 
@@ -129,6 +130,8 @@ module Awestruct
         page = ScssFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.org$/ )
         page = OrgmodeFile.new( site, path, fixed_relative_path, options )
+      elsif ( path =~ /\.rst$/ )
+        page = ReStructuredTextFile.new( site, path, fixed_relative_path, options )
       elsif ( File.file?( path ) )
         page = VerbatimFile.new( site, path, fixed_relative_path, options )
       end
