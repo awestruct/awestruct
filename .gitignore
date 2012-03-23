@@ -5,3 +5,4 @@ _tmp
 Gemfile.lock
 #Editor
 *.tmproj
+spec/.sass-cache/*/*.scssc
