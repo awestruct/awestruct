@@ -11,6 +11,7 @@ require 'awestruct/commands/server'
 require 'awestruct/commands/deploy'
 require 'yaml'
 require 'fssm'
+require 'fileutils'
 
 def parse(args)
   options = OpenStruct.new( {
@@ -94,9 +95,8 @@ def parse(args)
       exit
     end
 
-
   end
-  
+
   opts.parse!(args)
   options
 end
@@ -128,7 +128,6 @@ unless options.init
 end
 
 config = Awestruct::Config.new(Dir.pwd)
-# config.input_dir = File.join(Dir.pwd, '_root')
 
 if ( options.init )
   if ( options.generate || options.auto || options.server )
@@ -147,7 +146,7 @@ def camelize(str)
 end
 
 if ( options.script )
-  puts "Running #{options.script} and exiting"  
+  puts "Running #{options.script} and exiting"
   require "awestruct/scripts/#{options.script}"
   script_class = eval "Awestruct::Scripts::#{camelize(options.script)}"
   script = script_class.new(*ARGV)
@@ -158,6 +157,12 @@ end
 if ( options.server )
   hostname = ( options.bind_addr == '0.0.0.0' ? 'localhost' : options.bind_addr )
   default_base_url = "http://#{hostname}:#{options.port}"
+end
+
+if ( options.force )
+  if File.exist?( site_path )
+    FileUtils.rmdir( site_path )
+  end
 end
 
 if ( options.generate )
