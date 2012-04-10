@@ -22,6 +22,7 @@
         %id #{site.base_url}#{entry.url}
         %title= escape_once( entry.title )
         %updated= entry.date.xmlschema
+        %published= entry.date.xmlschema
         %link{:rel=>"alternate", :type=>"text/html", :href=>"#{site.base_url}#{entry.url}" }
         - if ( defined?( entry.author ) )
           %author
