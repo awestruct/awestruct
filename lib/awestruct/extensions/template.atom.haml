@@ -3,7 +3,7 @@
 !!! XML
 
 %feed{ 'xml:lang'=>'en-US', :xmlns=>'http://www.w3.org/2005/Atom' }
-  %id= "#{site.base_url}/"
+  %id= "#{page.content_url}/"
   %title= escape_once( page.title )
   - if ( defined?( site.author ) )
     %author
@@ -16,7 +16,7 @@
   - unless page.entries.empty?
     %updated= page.entries.first.date.xmlschema
     %link{:rel=>"self",      :type=>"application/atom+xml", :href=>"#{site.base_url}#{page.url}" }
-    %link{:rel=>"alternate", :type=>"text/html",            :href=>"#{site.base_url}/" }
+    %link{:rel=>"alternate", :type=>"text/html",            :href=>"#{page.content_url}/" }
     - for entry in page.entries
       %entry
         %id #{site.base_url}#{entry.url}
