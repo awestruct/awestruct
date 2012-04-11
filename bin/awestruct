@@ -9,6 +9,7 @@ require 'awestruct/commands/init'
 require 'awestruct/commands/generate'
 require 'awestruct/commands/server'
 require 'awestruct/commands/deploy'
+require 'awestruct/commands/git_hub_pages'
 require 'yaml'
 require 'fssm'
 require 'fileutils'
@@ -203,7 +204,12 @@ if ( options.deploy )
   end
 
   puts "deploying to '#{options.profile}'"
-  cmd = Awestruct::Commands::Deploy.new( site_path, deploy_data )
+  if (deploy_data['host'] == 'github_pages')
+    puts "publishing to github pages"
+    cmd = Awestruct::Commands::GitHubPages.new( site_path )
+  else
+    cmd = Awestruct::Commands::Deploy.new( site_path, deploy_data )
+  end
   cmd.run
   puts "deploy finished"
   exit
