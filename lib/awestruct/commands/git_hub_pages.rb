@@ -10,16 +10,23 @@ module Awestruct
       end
 
       def run
-        return message_and_fail( :no_branch ) unless @git.is_branch?('gh-pages')
-        return message_and_fail( :existing_changes ) if !@git.status.changed.empty?
-        publish_site
+        @git.status.changed.empty? ? publish_site : message_for(:existing_changes)
       end
 
       private
       def publish_site
         current_branch = @git.branch
-        @git.checkout('gh-pages')
-        @git.with_working( @site_path ) do
+        checkout_pages_branch
+        add_and_commit_site @site_path
+        push_and_restore current_branch
+      end
+
+      def checkout_pages_branch
+        @git.branch('gh-pages').checkout
+      end
+
+      def add_and_commit_site( path )
+        @git.with_working( path ) do
           @git.add(".")
           begin
             @git.commit("Published to gh-pages.")
@@ -27,20 +34,16 @@ module Awestruct
             $stderr.puts "Can't commit. #{e}."
           end
         end
+      end
+
+      def push_and_restore( branch )
         @git.reset_hard
         @git.push( 'origin', 'gh-pages' )
-        @git.checkout( current_branch )
+        @git.checkout( branch )
       end
 
-      def message_and_fail( message )
-        $stderr.puts message_for( message )
-        return false
-      end
-
-      def message_for( err )
-        case err
-        when :no_branch        
-          "No gh-pages branch exists. See http://help.github.com/pages/ for more info."
+      def message_for( key )
+        $stderr.puts case key
         when :existing_changes 
           "You have uncommitted changes in the working branch. Please commit or stash them."
         else 
