@@ -21,7 +21,11 @@ module Awestruct
         @git.checkout('gh-pages')
         @git.with_working( @site_path ) do
           @git.add(".")
-          @git.commit("Published to gh-pages.")
+          begin
+            @git.commit("Published to gh-pages.")
+          rescue Git::GitExecuteError => e
+            $stderr.puts "Can't commit. #{e}."
+          end
         end
         @git.reset_hard
         @git.push( 'origin', 'gh-pages' )

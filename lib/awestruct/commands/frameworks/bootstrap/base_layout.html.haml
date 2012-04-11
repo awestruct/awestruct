@@ -8,17 +8,17 @@
       body {
         padding-top: 60px;
       }
-    %link{ :rel=>'stylesheet', :type=>'text/css', :href=>'/stylesheets/styles.css' }
+    %link{ :rel=>'stylesheet', :type=>'text/css', :href=>"#{site.base_url}/stylesheets/styles.css" }
     /[if lt IE 9]
       %script{ :type=>'text/javascript', :src=>'//html5shim.googlecode.com/svn/trunk/html5.js' }
   %body
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
-          %a.brand{ :href=>'/' } Project Name
+          %a.brand{ :href=>"#{site.base_url}" } Project Name
           %ul.nav
             %li
-              %a{ :href=>'/' } Home
+              %a{ :href=>"#{site.base_url}" } Home
     .container
       ~ content
       %hr
@@ -26,4 +26,4 @@
         %p &copy; Organization #{Date.today.year}
     -# Uncomment script tags (remove leading -#) when you're ready to use behaviors
     -# %script{ :type=>'text/javascript', :src=>'//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js' }
-    -# %script{ :type=>'text/javascript', :src=>'/javascripts/bootstrap-collapse.js' }
+    -# %script{ :type=>'text/javascript', :src=>"#{site.base_url}/javascripts/bootstrap-collapse.js" }
