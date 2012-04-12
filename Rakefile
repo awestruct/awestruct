@@ -1,10 +1,10 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'rspec/core/rake_task'
-require 'rake'
+require 'awestruct/version'
 
-task :default => :test
-task :test => :spec
+task :default => :build
+
 if !defined?(RSpec)
   puts "spec targets require RSpec"
 else
@@ -15,3 +15,12 @@ else
   end
 end
 
+desc "Run all tests and build the gem"
+task :build => :spec do
+  system "gem build awestruct.gemspec"
+end
+ 
+desc "Release the gem to rubygems"
+task :release => :build do
+  system "gem push awestruct-#{Awestruct::VERSION}.gem"
+end

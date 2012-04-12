@@ -1,6 +1,6 @@
 require File.expand_path("../lib/awestruct/version", __FILE__)
 
-Gem::Specification.new do |s|
+spec = Gem::Specification.new do |s|
     s.platform       =   Gem::Platform::RUBY
     s.name           =   "awestruct"
     s.version        =   Awestruct::VERSION
@@ -36,5 +36,6 @@ Gem::Specification.new do |s|
     s.add_dependency 'git', '~> 1.2.5'
 
     s.add_development_dependency 'rspec', '~> 2.9'
+    s.add_development_dependency 'rake', '~> 0.9.2'
 end
 
