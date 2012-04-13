@@ -30,7 +30,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'compass-960-plugin', '~> 0.10.4'
     s.add_dependency 'bootstrap-sass', '~> 2.0.1'
     s.add_dependency 'org-ruby', '~> 0.5.3'
-    s.add_dependency 'fssm', '~> 0.2.8.1'
+    s.add_dependency 'fssm', '~> 0.2.8'
     s.add_dependency 'json', '~> 1.6.6'
     s.add_dependency 'notifier', '~> 0.1.4'
     s.add_dependency 'git', '~> 1.2.5'
