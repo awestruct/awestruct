@@ -1,4 +1,4 @@
-require 'extend_string'
+require 'awestruct/extensions/extend_string'
 
 module Awestruct
   module Extensions
