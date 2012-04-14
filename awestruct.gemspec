@@ -26,6 +26,8 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'hashery', '~> 1.5.0'
     s.add_dependency 'rdiscount', '~> 1.6.8'
     s.add_dependency 'RedCloth', '~> 4.2.9'
+    s.add_dependency 'coffee-script', '~> 2.2.0'
+    s.add_dependency 'nokogiri', '~> 1.5.2'
     s.add_dependency 'compass', '~> 0.12.1'
     s.add_dependency 'compass-960-plugin', '~> 0.10.4'
     s.add_dependency 'bootstrap-sass', '~> 2.0.1'
