@@ -6,6 +6,8 @@ module Awestruct
         @entries_name = entries_name
         @output_path = output_path
         @num_entries = opts[:num_entries] || 50
+        @content_url = opts[:content_url]
+        @feed_title = opts[:feed_title]
       end
 
       def execute(site)
@@ -32,7 +34,8 @@ module Awestruct
         page.date = page.timestamp unless page.timestamp.nil?
         page.output_path = @output_path
         page.entries = atom_pages
-        page.title = site.title || site.base_url
+        page.title = @feed_title || site.title || site.base_url
+        page.content_url = @content_url || site.base_url
         site.pages << page
       end
 
