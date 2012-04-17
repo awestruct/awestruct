@@ -25,6 +25,15 @@ describe Awestruct::Commands::GitHubPages do
     @github.run
   end
 
+  it "should accept an alternate branch name for publishing" do
+    branch = double(:checkout=>true)
+    github = Awestruct::Commands::GitHubPages.new( @site_path, 'master' )
+    github.stub(:add_and_commit_site)
+    github.stub(:push_and_restore)
+    @git.should_receive(:branch).with('master').and_return(branch)
+    github.run
+  end
+
   it "should use the site_path as the working directory" do
     @github.should_receive(:add_and_commit_site).with(@site_path)
     @github.run

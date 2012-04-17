@@ -205,8 +205,9 @@ if ( options.deploy )
 
   puts "deploying to '#{options.profile}'"
   if (deploy_data['host'] == 'github_pages')
-    puts "publishing to github pages"
-    cmd = Awestruct::Commands::GitHubPages.new( site_path )
+    branch = deploy_data['branch'] ? deploy_data['branch'] : 'gh-pages'
+    puts "Publishing to github pages"
+    cmd = Awestruct::Commands::GitHubPages.new( site_path, branch )
   else
     cmd = Awestruct::Commands::Deploy.new( site_path, deploy_data )
   end
