@@ -13,6 +13,7 @@ require 'awestruct/site'
 require 'awestruct/haml_file'
 require 'awestruct/erb_file'
 require 'awestruct/textile_file'
+require 'awestruct/coffeescript_file'
 require 'awestruct/markdown_file'
 require 'awestruct/asciidoc_file'
 require 'awestruct/sass_file'
@@ -42,6 +43,7 @@ require 'awestruct/extensions/obfuscate'
 require 'awestruct/extensions/relative'
 require 'awestruct/extensions/assets'
 require 'awestruct/extensions/minify'
+require 'awestruct/extensions/coffeescripttransform'
 
 require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
@@ -120,6 +122,8 @@ module Awestruct
         page = ErbFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.textile$/ )
         page = TextileFile.new( site, path, fixed_relative_path, options )
+      elsif ( path =~ /\.coffee$/ )
+        page = CoffeeScriptFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.md$/ )
         page = MarkdownFile.new( site, path, fixed_relative_path, options )
       elsif ( path =~ /\.(asciidoc|adoc)$/ )
