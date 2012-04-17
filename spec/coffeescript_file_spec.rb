@@ -3,11 +3,13 @@ require 'awestruct/coffeescript_file'
 require 'awestruct/extensions/coffeescripttransform'
 
 describe Awestruct::CoffeeScriptFile do
-  @@test_script = 'spec/test-coffee-script.coffee'
+  before :all do
+    @test_script = 'spec/test-coffee-script.coffee'
+  end
 
   it "should compile coffeescript to javascript" do
     site = OpenStruct.new
-    coffee = Awestruct::CoffeeScriptFile.new(site, File.expand_path(@@test_script), @@test_script)
+    coffee = Awestruct::CoffeeScriptFile.new(site, File.expand_path(@test_script), @test_script)
     coffee.render(DummyContext.new)
   end
 
@@ -19,17 +21,19 @@ describe Awestruct::CoffeeScriptFile do
 end
 
 describe Awestruct::Extensions::CoffeeScriptTransform do
-  @@test_html = 'spec/test-coffee-script.html'
+  before :all do
+    @test_html = 'spec/test-coffee-script.html'
+  end
 
   it "should compile coffeescript to javascript for inline html" do
 
     site = OpenStruct.new
     page = OpenStruct.new
     page.site = site
-    page.output_path = File.expand_path(@@test_html)
+    page.output_path = File.expand_path(@test_html)
 
     coffee = Awestruct::Extensions::CoffeeScriptTransform.new
-    transformed = coffee.transform(site, page, File.read(@@test_html))
+    transformed = coffee.transform(site, page, File.read(@test_html))
 
     html = Nokogiri::HTML(transformed, nil, 'UTF-8');
 
