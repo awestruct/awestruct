@@ -3,6 +3,8 @@ require 'bundler/setup'
 require 'rspec/core/rake_task'
 require 'awestruct/version'
 
+GEMFILE = "awestruct-#{Awestruct::VERSION}.gem" 
+
 task :default => :build
 
 if !defined?(RSpec)
@@ -22,5 +24,10 @@ end
  
 desc "Release the gem to rubygems"
 task :release => :build do
-  #system "gem push awestruct-#{Awestruct::VERSION}.gem"
+  #system "gem push #{GEMFILE}"
+end
+
+desc "Build and install the gem locally (for testing)"
+task :install => :build do
+  system "gem install -l -f #{GEMFILE}"
 end

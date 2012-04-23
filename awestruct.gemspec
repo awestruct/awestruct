@@ -35,6 +35,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'json', '~> 1.6.6'
     s.add_dependency 'notifier', '~> 0.1.4'
     s.add_dependency 'git', '~> 1.2.5'
+    s.add_dependency 'sprockets', '~> 2.4.0'
 
     s.add_dependency 'guard'
 
