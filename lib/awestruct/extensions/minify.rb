@@ -57,30 +57,28 @@ module Awestruct
 
       def transform(site, page, input)
         if site.minify
-          ext = File.extname(page.output_path)[1..-1].to_sym
-          if @types.include?(ext)
-            case ext
-            when :html
-              print "minifying html #{page.output_path}"
-              htmlcompressor(page, input, site.minify_html_opts)
-            when :css
-              print "minifying css #{page.output_path}"
-              yuicompressor(page, input, :css)
-            when :js
-              print "minifying js #{page.output_path}"
-              yuicompressor(page, input, :js)
-            when :png
-              print "minifying png #{page.output_path}"
-              pngcrush(page, input)
-            else
-              input
+          ext = File.extname(page.output_path)
+          if !ext.empty?
+            ext_sym = ext[1..-1].to_sym
+            if @types.include?(ext_sym)
+              case ext_sym
+              when :html
+                print "minifying html #{page.output_path}"
+                input = htmlcompressor(page, input, site.minify_html_opts)
+              when :css
+                print "minifying css #{page.output_path}"
+                input = yuicompressor(page, input, :css)
+              when :js
+                print "minifying js #{page.output_path}"
+                input = yuicompressor(page, input, :js)
+              when :png
+                print "minifying png #{page.output_path}"
+                input = pngcrush(page, input)
+              end
             end
-          else
-            input
           end
-        else
-          input
         end
+        input
       end
 
       private
