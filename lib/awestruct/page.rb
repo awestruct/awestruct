@@ -68,10 +68,8 @@ module Awestruct
 
     def output_path=(path)
       case ( path )
-        when Pathname:
-          @output_path = path
-        else
-          @output_path = Pathname.new( path )
+        when Pathname then @output_path = path
+        else @output_path = Pathname.new( path )
       end
     end
 

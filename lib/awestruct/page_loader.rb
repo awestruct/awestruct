@@ -58,10 +58,8 @@ module Awestruct
 
     def load_page(path,prepare=:inline)
       pathname = case( path )
-        when Pathname:
-          pathname = path
-        else
-          pathname = Pathname.new( path )
+        when Pathname then pathname = path
+        else pathname = Pathname.new( path )
       end
       chain = site.engine.pipeline.handler_chains[ path ]
       return nil if chain.nil?
