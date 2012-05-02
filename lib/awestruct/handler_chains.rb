@@ -3,6 +3,7 @@ require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/front_matter_handler'
 require 'awestruct/handlers/interpolation_handler'
 require 'awestruct/handlers/markdown_handler'
+require 'awestruct/handlers/orgmode_handler'
 require 'awestruct/handlers/textile_handler'
 require 'awestruct/handlers/haml_handler'
 require 'awestruct/handlers/sass_handler'
@@ -28,6 +29,13 @@ module Awestruct
         Awestruct::Handlers::FrontMatterHandler,
         Awestruct::Handlers::InterpolationHandler,
         Awestruct::Handlers::TextileHandler,
+        Awestruct::Handlers::LayoutHandler
+      ),
+      HandlerChain.new( /\.org$/,
+        Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::InterpolationHandler,
+        Awestruct::Handlers::OrgmodeHandler,
         Awestruct::Handlers::LayoutHandler
       ),
       HandlerChain.new( /\.haml$/, 
