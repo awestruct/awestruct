@@ -23,7 +23,9 @@ module Awestruct
       def relative_source_path
         begin
           p = path.relative_path_from( site.dir ) 
-          return nil if !! ( %r(^\.\.) =~ p )
+          if !! ( %r(^\.\.) =~ p.to_s )
+            return nil 
+          end
           r = File.join( '', p )
           return r
         rescue Exception=>e

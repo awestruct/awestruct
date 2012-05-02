@@ -31,7 +31,7 @@ module Awestruct
           hash
         }
         options[:relative_source_path] = context.page.relative_source_path
-        options[:filename] = delegate.path
+        options[:filename] = delegate.path.to_s
         options[:line]     = delegate.content_line_offset + 1
         options[:site] = context.site
         haml_engine = Haml::Engine.new( delegate.raw_content, options )
