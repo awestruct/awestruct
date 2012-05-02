@@ -1,57 +1,51 @@
-require 'ostruct'
+
+#require 'hashery/open_cascade'
+require 'awestruct/layouts'
+require 'awestruct/astruct'
 
 module Awestruct
-  class Site < OpenStruct
+
+  class Site < Awestruct::AStruct
 
     attr_reader :dir
     attr_reader :output_dir
     attr_reader :tmp_dir
 
-    attr_reader   :layouts
-    attr_accessor :pages
+    attr_reader :pages
+    attr_reader :layouts
 
-    def initialize(config)
-      super({})
+    attr_reader :config
+    attr_reader :engine
 
-      @dir = config.input_dir
-      @output_dir = config.output_dir
-      @tmp_dir = config.tmp_dir
-
-      FileUtils.mkdir_p( @output_dir )
-      FileUtils.mkdir_p( @tmp_dir )
-
-      @pages   = []
-      @layouts = {}
+    def initialize(engine, config)
+      @engine = engine
+      @pages = []
+      @layouts = Layouts.new
+      @config = config
+      self.encoding = false
     end
 
-    def has_page?(path)
-      ! pages.find{|e| e.source_path == path}.nil?
+    def inspect
+      "Site{:dir=>#{dir}}"
     end
 
-    def output_path(path, ext=nil)
-      path = File.join( @output_dir, path[ @dir.size..-1] )
-      unless ( ext.nil? )
-        path = File.join( File.dirname( path ), File.basename( path, ext ) )
-      end
-      path 
+    def dir
+      @config.dir
     end
 
-    def url_path(path, ext=nil)
-      url_path = output_path( path, ext )[ @output_dir.size .. -1 ]
+    def output_dir
+      @config.output_dir
     end
 
-    def apply_plugins
-      Dir[ File.join( @dir, '_plugins', '*.rb' ) ].each do |rb_path|
-        site_root = @dir
-        output_root = @output_dir
-        begin
-          eval File.read( rb_path )
-        rescue => e
-          puts e
-          puts e.backtrace
-        end
-      end
+    def tmp_dir
+      @config.tmp_dir
     end
+
+    def load_page(path)
+      engine.load_path( self, path )
+    end
+
 
   end
+
 end
