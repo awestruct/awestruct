@@ -4,6 +4,7 @@ require 'awestruct/handlers/front_matter_handler'
 require 'awestruct/handlers/interpolation_handler'
 require 'awestruct/handlers/markdown_handler'
 require 'awestruct/handlers/orgmode_handler'
+require 'awestruct/handlers/asciidoc_handler'
 require 'awestruct/handlers/textile_handler'
 require 'awestruct/handlers/erb_handler'
 require 'awestruct/handlers/haml_handler'
@@ -44,6 +45,7 @@ module Awestruct
         Awestruct::Handlers::OrgmodeHandler,
         Awestruct::Handlers::LayoutHandler
       ),
+      Awestruct::Handlers::AsciidocHandler::CHAIN,
       HandlerChain.new( /\.haml$/, 
         Awestruct::Handlers::FileHandler,
         Awestruct::Handlers::FrontMatterHandler,

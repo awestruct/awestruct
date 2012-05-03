@@ -14,6 +14,9 @@ module Awestruct
     attr_accessor :ignore
     attr_accessor :track_dependencies
 
+    attr_accessor :images_dir
+    attr_accessor :stylesheets_dir
+
     def initialize(dir = Dir.pwd)
       @dir            = Pathname.new( dir ) 
       @layouts_dir    = Pathname.new( File.join(dir, '_layouts') )
@@ -23,6 +26,10 @@ module Awestruct
       @extension_dir  = Pathname.new( File.join(dir, '_ext') )
       @skin_dir       = Pathname.new( File.join(dir, '_skin') )
       @tmp_dir        = Pathname.new( File.join(dir, '_tmp') ) 
+
+      @images_dir      = Pathname.new( File.join(dir, 'images') ) 
+      @stylesheets_dir = Pathname.new( File.join(dir, 'stylesheets') ) 
+
       @ignore         = File.exists?(ignore_file = File.join(dir, ".awestruct_ignore")) ? Dir[*IO.read(ignore_file).each_line.map(&:strip)] : []
 
       @track_dependencies = false

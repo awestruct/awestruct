@@ -1,5 +1,6 @@
 
 require 'hashery/open_cascade'
+require 'open3'
 
 module Awestruct
   module Handlers
@@ -94,6 +95,15 @@ module Awestruct
         chain = [ self ]
         chain += @delegate.to_chain if @delegate
         chain.flatten
+      end
+
+      def execute_shell(command, input=nil)
+        Open3.popen3(command) do |stdin, stdout, _|
+          stdin.puts input unless input.nil?
+          out = stdout.read
+        end
+      rescue Errno::EPIPE
+        ""
       end
 
     end
