@@ -1,7 +1,5 @@
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/file_handler'
-require 'awestruct/handlers/front_matter_handler'
-require 'awestruct/handlers/interpolation_handler'
 require 'awestruct/handlers/markdown_handler'
 require 'awestruct/handlers/orgmode_handler'
 require 'awestruct/handlers/asciidoc_handler'
@@ -10,8 +8,7 @@ require 'awestruct/handlers/erb_handler'
 require 'awestruct/handlers/haml_handler'
 require 'awestruct/handlers/sass_handler'
 require 'awestruct/handlers/scss_handler'
-require 'awestruct/handlers/layout_handler'
-require 'awestruct/handlers/page_delegating_handler'
+require 'awestruct/handlers/coffeescript_handler'
 
 module Awestruct
 
@@ -26,6 +23,7 @@ module Awestruct
       Awestruct::Handlers::HamlHandler::CHAIN,
       Awestruct::Handlers::SassHandler::CHAIN,
       Awestruct::Handlers::ScssHandler::CHAIN,
+      Awestruct::Handlers::CoffeescriptHandler::CHAIN,
       HandlerChain.new( /.*/, Awestruct::Handlers::FileHandler )
     ]
 
