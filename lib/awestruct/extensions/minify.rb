@@ -12,10 +12,10 @@ require 'fileutils'
 #
 # These commands must be available on your PATH in order to use them.
 #
-# This class is loaded as a transformer in the Awestruct pipeline. The
+# This class is loaded as a transformer into the Awestruct pipeline. The
 # constructor accepts an array of symbols representing the file types to minimize.
 #
-#   extension Awestruct::Extensions::Minify.new
+#   transformer Awestruct::Extensions::Minify.new
 #
 # This transform recognizes the following symbols:
 #
@@ -57,30 +57,28 @@ module Awestruct
 
       def transform(site, page, input)
         if site.minify
-          ext = File.extname(page.output_path)[1..-1].to_sym
-          if @types.include?(ext)
-            case ext
-            when :html
-              print "minifying html #{page.output_path}"
-              htmlcompressor(page, input, site.minify_html_opts)
-            when :css
-              print "minifying css #{page.output_path}"
-              yuicompressor(page, input, :css)
-            when :js
-              print "minifying js #{page.output_path}"
-              yuicompressor(page, input, :js)
-            when :png
-              print "minifying png #{page.output_path}"
-              pngcrush(page, input)
-            else
-              input
+          ext = File.extname(page.output_path)
+          if !ext.empty?
+            ext_sym = ext[1..-1].to_sym
+            if @types.include?(ext_sym)
+              case ext_sym
+              when :html
+                print "minifying html #{page.output_path}"
+                input = htmlcompressor(page, input, site.minify_html_opts)
+              when :css
+                print "minifying css #{page.output_path}"
+                input = yuicompressor(page, input, :css)
+              when :js
+                print "minifying js #{page.output_path}"
+                input = yuicompressor(page, input, :js)
+              when :png
+                print "minifying png #{page.output_path}"
+                input = pngcrush(page, input)
+              end
             end
-          else
-            input
           end
-        else
-          input
         end
+        input
       end
 
       private
