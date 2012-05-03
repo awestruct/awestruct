@@ -24,7 +24,7 @@ end
  
 desc "Release the gem to rubygems"
 task :release => :build do
-  #system "gem push #{GEMFILE}"
+  system "gem push #{GEMFILE}"
 end
 
 desc "Build and install the gem locally (for testing)"
