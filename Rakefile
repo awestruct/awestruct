@@ -3,7 +3,7 @@ require 'bundler/setup'
 require 'rspec/core/rake_task'
 require 'awestruct/version'
 
-GEMFILE = "awestructx-#{Awestruct::VERSION}.gem" 
+GEMFILE = "awestruct-#{Awestruct::VERSION}.gem" 
 
 task :default => :build
 

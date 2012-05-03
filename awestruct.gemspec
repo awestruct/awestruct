@@ -2,7 +2,7 @@ require File.expand_path("../lib/awestruct/version", __FILE__)
 
 spec = Gem::Specification.new do |s|
     s.platform       =   Gem::Platform::RUBY
-    s.name           =   "awestructx"
+    s.name           =   "awestruct"
     s.version        =   Awestruct::VERSION
     s.author         =   "Bob McWhirter"
     s.email          =   "bob@mcwhirter.org"
