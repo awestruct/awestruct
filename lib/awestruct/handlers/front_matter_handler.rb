@@ -21,6 +21,11 @@ module Awestruct
         @raw_content
       end
 
+      def rendered_content(context, with_layouts)
+        parse_parts()
+        @raw_content
+      end
+
       def content_line_offset
         parse_parts()
         @content_line_offset

@@ -5,6 +5,7 @@ require 'awestruct/handlers/interpolation_handler'
 require 'awestruct/handlers/markdown_handler'
 require 'awestruct/handlers/orgmode_handler'
 require 'awestruct/handlers/textile_handler'
+require 'awestruct/handlers/erb_handler'
 require 'awestruct/handlers/haml_handler'
 require 'awestruct/handlers/sass_handler'
 require 'awestruct/handlers/scss_handler'
@@ -14,7 +15,6 @@ require 'awestruct/handlers/page_delegating_handler'
 module Awestruct
 
   class HandlerChains
-
 
     DEFAULTS = [
       HandlerChain.new( /\.md$/, 
@@ -29,6 +29,12 @@ module Awestruct
         Awestruct::Handlers::FrontMatterHandler,
         Awestruct::Handlers::InterpolationHandler,
         Awestruct::Handlers::TextileHandler,
+        Awestruct::Handlers::LayoutHandler
+      ),
+      HandlerChain.new( /\.erb$/,
+        Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::ErbHandler,
         Awestruct::Handlers::LayoutHandler
       ),
       HandlerChain.new( /\.org$/,
