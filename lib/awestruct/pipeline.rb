@@ -37,6 +37,13 @@ module Awestruct
       end
     end
 
+    def apply_transformers(site, page, rendered)
+      @transformers.each do |t|
+        rendered = t.transform( site, page, rendered )
+      end
+      rendered
+    end
+
     def mixin_helpers(context)
       context.extend( Awestruct::ContextHelper )
       @helpers.each do |h|

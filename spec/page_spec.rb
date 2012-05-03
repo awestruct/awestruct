@@ -2,19 +2,27 @@ require 'spec_helper'
 require 'fileutils'
 
 require 'awestruct/page'
+require 'awestruct/pipeline'
 require 'awestruct/handlers/file_handler'
 
 describe Awestruct::Handlers::FileHandler do
 
+  class TestTransformer
+    def transform(site, page, rendered)
+      rendered.gsub( /howdy/, 'adios' )
+    end
+  end
+
   before :all do
     @site = OpenCascade.new :encoding=>false
-
+    @site.engine = OpenCascade.new
   end
 
   before :each do
     @filename = Pathname.new( File.dirname(__FILE__) + "/test-data/simple-file.txt" )
     @handler = Awestruct::Handlers::FileHandler.new( @site, @filename )
     @page = Awestruct::Page.new( @site, @handler )
+    @site.engine.pipeline = Awestruct::Pipeline.new
   end
 
   it "should be stale before being read" do
@@ -46,6 +54,12 @@ describe Awestruct::Handlers::FileHandler do
     @page.relative_source_path = '/taco'
     @page.relative_source_path.should == '/taco'
   end
+
+  it "should apply transformers if present" do
+     @site.engine.pipeline.transformer TestTransformer.new
+     @page.rendered_content.strip.should == 'adios'
+  end
+
 
 end
 

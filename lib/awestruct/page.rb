@@ -124,7 +124,7 @@ module Awestruct
       Awestruct::Dependencies.push_page( self ) if context.site.config.track_dependencies
       c = handler.rendered_content( context, with_layouts )
       Awestruct::Dependencies.pop_page if context.site.config.track_dependencies
-      c
+      site.engine.pipeline.apply_transformers( site, self, c )
     end
 
     def content(with_layouts=false)
