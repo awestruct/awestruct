@@ -17,6 +17,7 @@ module Awestruct
 
     def extension(e)
       @extensions << e
+      e.transform(@transformers) if e.respond_to?('transform')
     end
 
     def helper(h)
