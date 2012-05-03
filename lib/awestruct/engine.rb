@@ -180,6 +180,7 @@ module Awestruct
     end
 
     def execute_pipeline
+      FileUtils.mkdir_p( site.config.output_dir )
       pipeline.execute( site )
     end
 
@@ -203,6 +204,7 @@ module Awestruct
     end
 
     def generate_output
+      FileUtils.mkdir_p( site.config.output_dir )
       @site.pages.each do |page|
         generated_path = File.join( site.config.output_dir, page.output_path )
         if ( page.stale_output?( generated_path ) )
