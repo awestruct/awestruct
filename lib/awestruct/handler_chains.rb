@@ -3,6 +3,7 @@ require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/markdown_handler'
 require 'awestruct/handlers/orgmode_handler'
 require 'awestruct/handlers/asciidoc_handler'
+require 'awestruct/handlers/restructuredtext_handler'
 require 'awestruct/handlers/textile_handler'
 require 'awestruct/handlers/erb_handler'
 require 'awestruct/handlers/haml_handler'
@@ -20,6 +21,7 @@ module Awestruct
       Awestruct::Handlers::ErbHandler::CHAIN,
       Awestruct::Handlers::OrgmodeHandler::CHAIN,
       Awestruct::Handlers::AsciidocHandler::CHAIN,
+      Awestruct::Handlers::RestructuredtextHandler::CHAIN,
       Awestruct::Handlers::HamlHandler::CHAIN,
       Awestruct::Handlers::SassHandler::CHAIN,
       Awestruct::Handlers::ScssHandler::CHAIN,
