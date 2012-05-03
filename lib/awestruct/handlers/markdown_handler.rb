@@ -1,10 +1,24 @@
 
+require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
+require 'awestruct/handlers/file_handler'
+require 'awestruct/handlers/front_matter_handler'
+require 'awestruct/handlers/interpolation_handler'
+require 'awestruct/handlers/layout_handler'
 require 'rdiscount'
 
 module Awestruct
   module Handlers
     class MarkdownHandler < BaseHandler
+
+
+      CHAIN = Awestruct::HandlerChain.new( /\.md$/,
+        Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::InterpolationHandler,
+        Awestruct::Handlers::MarkdownHandler,
+        Awestruct::Handlers::LayoutHandler
+      )
 
       def initialize(site, delegate)
         super( site, delegate )

@@ -1,11 +1,22 @@
 
+require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
+require 'awestruct/handlers/file_handler'
+require 'awestruct/handlers/front_matter_handler'
+require 'awestruct/handlers/layout_handler'
 
 require 'haml'
 
 module Awestruct
   module Handlers
     class HamlHandler < BaseHandler
+
+      CHAIN = Awestruct::HandlerChain.new( /\.haml$/,
+        Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::HamlHandler,
+        Awestruct::Handlers::LayoutHandler
+      )
 
       def initialize(site, delegate)
         super( site, delegate )

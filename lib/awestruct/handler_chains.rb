@@ -18,48 +18,14 @@ module Awestruct
   class HandlerChains
 
     DEFAULTS = [
-      HandlerChain.new( /\.md$/, 
-        Awestruct::Handlers::FileHandler,
-        Awestruct::Handlers::FrontMatterHandler,
-        Awestruct::Handlers::InterpolationHandler,
-        Awestruct::Handlers::MarkdownHandler,
-        Awestruct::Handlers::LayoutHandler
-      ),
-      HandlerChain.new( /\.textile$/,
-        Awestruct::Handlers::FileHandler,
-        Awestruct::Handlers::FrontMatterHandler,
-        Awestruct::Handlers::InterpolationHandler,
-        Awestruct::Handlers::TextileHandler,
-        Awestruct::Handlers::LayoutHandler
-      ),
-      HandlerChain.new( /\.erb$/,
-        Awestruct::Handlers::FileHandler,
-        Awestruct::Handlers::FrontMatterHandler,
-        Awestruct::Handlers::ErbHandler,
-        Awestruct::Handlers::LayoutHandler
-      ),
-      HandlerChain.new( /\.org$/,
-        Awestruct::Handlers::FileHandler,
-        Awestruct::Handlers::FrontMatterHandler,
-        Awestruct::Handlers::InterpolationHandler,
-        Awestruct::Handlers::OrgmodeHandler,
-        Awestruct::Handlers::LayoutHandler
-      ),
+      Awestruct::Handlers::MarkdownHandler::CHAIN,
+      Awestruct::Handlers::TextileHandler::CHAIN,
+      Awestruct::Handlers::ErbHandler::CHAIN,
+      Awestruct::Handlers::OrgmodeHandler::CHAIN,
       Awestruct::Handlers::AsciidocHandler::CHAIN,
-      HandlerChain.new( /\.haml$/, 
-        Awestruct::Handlers::FileHandler,
-        Awestruct::Handlers::FrontMatterHandler,
-        Awestruct::Handlers::HamlHandler,
-        Awestruct::Handlers::LayoutHandler
-      ),
-      HandlerChain.new( /\.sass$/,
-        Awestruct::Handlers::FileHandler,
-        Awestruct::Handlers::SassHandler
-      ),
-      HandlerChain.new( /\.scss$/,
-        Awestruct::Handlers::FileHandler,
-        Awestruct::Handlers::ScssHandler
-      ),
+      Awestruct::Handlers::HamlHandler::CHAIN,
+      Awestruct::Handlers::SassHandler::CHAIN,
+      Awestruct::Handlers::ScssHandler::CHAIN,
       HandlerChain.new( /.*/, Awestruct::Handlers::FileHandler )
     ]
 

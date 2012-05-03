@@ -1,10 +1,23 @@
 
+require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
+require 'awestruct/handlers/file_handler'
+require 'awestruct/handlers/front_matter_handler'
+require 'awestruct/handlers/interpolation_handler'
+require 'awestruct/handlers/layout_handler'
 require 'org-ruby'
 
 module Awestruct
   module Handlers
     class OrgmodeHandler < BaseHandler
+
+      CHAIN = Awestruct::HandlerChain.new( /\.org$/,
+        Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::InterpolationHandler,
+        Awestruct::Handlers::OrgmodeHandler,
+        Awestruct::Handlers::LayoutHandler
+      )
 
       def initialize(site, delegate)
         super( site, delegate )

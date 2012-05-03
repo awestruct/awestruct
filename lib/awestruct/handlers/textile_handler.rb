@@ -1,10 +1,25 @@
 
+require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
+require 'awestruct/handlers/file_handler'
+require 'awestruct/handlers/front_matter_handler'
+require 'awestruct/handlers/interpolation_handler'
+require 'awestruct/handlers/layout_handler'
 require 'redcloth'
 
 module Awestruct
   module Handlers
     class TextileHandler < BaseHandler
+
+      CHAIN = Awestruct::HandlerChain.new( /\.textile$/,
+        Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::InterpolationHandler,
+        Awestruct::Handlers::TextileHandler,
+        Awestruct::Handlers::LayoutHandler
+      )
+
+
 
       def initialize(site, delegate)
         super( site, delegate )

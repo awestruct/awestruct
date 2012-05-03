@@ -1,9 +1,19 @@
 
 require 'awestruct/handlers/base_handler'
+require 'awestruct/handlers/file_handler'
+require 'awestruct/handlers/front_matter_handler'
+require 'awestruct/handlers/layout_handler'
 
 module Awestruct
   module Handlers
     class ErbHandler < BaseHandler
+
+      CHAIN = Awestruct::HandlerChain.new( /\.erb$/,
+        Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::ErbHandler,
+        Awestruct::Handlers::LayoutHandler
+      )
 
       def initialize(site, delegate)
         super( site, delegate )
