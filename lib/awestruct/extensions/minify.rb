@@ -12,10 +12,10 @@ require 'fileutils'
 #
 # These commands must be available on your PATH in order to use them.
 #
-# This class is loaded as a transformer in the Awestruct pipeline. The
+# This class is loaded as a transformer into the Awestruct pipeline. The
 # constructor accepts an array of symbols representing the file types to minimize.
 #
-#   extension Awestruct::Extensions::Minify.new
+#   transformer Awestruct::Extensions::Minify.new
 #
 # This transform recognizes the following symbols:
 #
