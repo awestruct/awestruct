@@ -17,7 +17,7 @@ module Awestruct
 
         # Generate sitemap pages for stuff in _config/sitemap.yml
         site.sitemap.pages.each do |entry|
-          page = Awestruct::Renderable.new( site )
+          page = Awestruct::Page.new( site )
           page.output_path = entry.url
           page.date = entry.date( nil )
           page.priority = entry.priority( nil )
@@ -33,6 +33,7 @@ module Awestruct
         page                 = site.engine.load_page( sitemap )
         page.output_path     = 'sitemap.xml'
         page.sitemap_entries = sitemap_pages
+        page.do_not_track_dependencies = true
 
         # Add the sitemap to our site
         site.pages << page

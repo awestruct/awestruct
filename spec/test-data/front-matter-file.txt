@@ -1,0 +1,4 @@
+---
+foo: bar
+---
+This is some content

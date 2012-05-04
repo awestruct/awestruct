@@ -1,0 +1,8 @@
+
+profiles:
+  development:
+    cook: microwave
+  production:
+    cook: oven
+
+title: Awestruction!

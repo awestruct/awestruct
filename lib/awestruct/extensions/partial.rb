@@ -6,7 +6,6 @@ module Awestruct
         filename = File.join( '_partials', path )
 
         if !File.exists?( filename )
-          puts "no file #{filename} to include"
           return nil
         end
 
