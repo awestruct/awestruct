@@ -41,7 +41,7 @@ module Awestruct
       end
 
       def rendered_content(context, with_layouts=true)
-        doc = RDiscount.new( raw_content )
+        doc = RDiscount.new( delegate.rendered_content( context, with_layouts ) )
         doc.to_html
       end
 

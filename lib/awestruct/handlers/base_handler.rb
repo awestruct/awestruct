@@ -63,7 +63,7 @@ module Awestruct
       end
 
       def content_syntax
-        return @delegate.raw_content if @delegate
+        return @delegate.content_syntax if @delegate
         :none
       end
 
