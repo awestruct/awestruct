@@ -23,4 +23,14 @@ describe Awestruct::CLI::Deploy do
     deployer.deploy_type.should == :foo
   end
 
+  it "should work with strings for keys" do
+    deployer = Awestruct::CLI::Deploy.new({}, {'host' => :github_pages})
+    deployer.deploy_type.should == :github_pages
+  end
+
+  it "should work with strings for values" do
+    deployer = Awestruct::CLI::Deploy.new({}, {:host => 'github_pages'})
+    deployer.deploy_type.should == :github_pages
+  end
+
 end
