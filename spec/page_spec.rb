@@ -55,9 +55,9 @@ describe Awestruct::Handlers::FileHandler do
     @page.relative_source_path.should == '/taco'
   end
 
-  it "should apply transformers if present" do
+  it "should not apply transformers, even if present" do
      @site.engine.pipeline.transformer TestTransformer.new
-     @page.rendered_content.strip.should == 'adios'
+     @page.rendered_content.strip.should == 'howdy'
   end
 
 

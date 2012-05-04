@@ -219,8 +219,12 @@ module Awestruct
       if ( produce_output )
         puts "Generating: #{generated_path}"
         FileUtils.mkdir_p( File.dirname( generated_path ) )
+
+        c = page.rendered_content
+        c = site.engine.pipeline.apply_transformers( site, page, c )
+
         File.open( generated_path, 'w' ) do |file|
-          file << page.rendered_content
+          file << c
         end
       elsif ( site.config.track_dependencies )
         if page.dependencies.load!
