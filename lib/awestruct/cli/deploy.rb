@@ -12,7 +12,7 @@ module Awestruct
       def initialize(site_config, deploy_config)
         @site_config   = site_config
         @deploy_config = deploy_config
-        deploy_config[:type] ||= (deploy_config[:host] == :github_pages ? :github_pages : :rsync)
+        deploy_config[:type] ||= (is_github? ? :github_pages : :rsync)
       end
 
       def deploy_type
@@ -29,6 +29,11 @@ module Awestruct
   
         deployer = deployer_class.new( site_config, deploy_config )
         deployer.run
+      end
+
+      private
+      def is_github?
+        deploy_config[:host].to_s == :github_pages.to_s || deploy_config['host'].to_s == :github_pages.to_s
       end
     end
 
