@@ -21,7 +21,7 @@ module Awestruct
       attr_accessor :script
 
       def initialize()
-        @generate  = true
+        @generate  = nil
         @server    = false
         @port      = 4242
         @bind_addr = '0.0.0.0'
@@ -74,6 +74,7 @@ module Awestruct
       
           opts.on( '--deploy', 'Deploy site' ) do |deploy|
             self.deploy = deploy
+            self.generate = false if self.generate.nil?
           end
       
           opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
@@ -108,6 +109,7 @@ module Awestruct
         end
 
         opts.parse!(args)
+        self.generate = true if self.generate.nil?
         self
       end # parse()
 

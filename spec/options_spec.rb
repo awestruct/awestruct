@@ -5,7 +5,7 @@ describe Awestruct::CLI::Options do
 
   it "should have reasonable defaults" do
     options = Awestruct::CLI::Options.new
-    options.generate.should == true
+    options.generate.should == nil
     options.server.should   == false
     options.deploy.should   == false
 
@@ -61,6 +61,26 @@ describe Awestruct::CLI::Options do
 
     it "should parse script-related args" do
       parse!( '--run', 'puts "hi"' ).script.should == 'puts "hi"'
+    end
+
+    it "should turn off generate when doing a --deploy" do
+      result = parse!( '--deploy' )
+      result.deploy.should be_true
+      result.generate.should be_false
+    end
+
+    it "should turn off generate when doing a --deploy unless explicitly turned back on" do
+      result = parse!( '--deploy', '--generate' )
+      result.deploy.should be_true
+      result.generate.should be_true
+
+      result = parse!( '--generate', '--deploy' )
+      result.deploy.should be_true
+      result.generate.should be_true
+    end
+
+    it "should generate by default" do
+      parse!().generate.should be_true
     end
   end
 
