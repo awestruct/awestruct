@@ -15,7 +15,7 @@ module Awestruct
       def run()
         begin
           puts "Generating site"
-          @engine.run( @profile, @base_url, @profile['base_url'] || @default_base_url, @force )
+          @engine.run( @profile, @base_url, ( @profile ? @profile['base_url'] : @default_base_url ), @force )
         rescue =>e
           puts e
           puts e.backtrace
