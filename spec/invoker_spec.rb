@@ -51,4 +51,16 @@ describe Awestruct::CLI::Invoker do
     invoker.invoke!
   end
 
+  it "should invoke init without generating" do
+    invoker = Awestruct::CLI::Invoker.new( '--init' )
+    invoker.should_receive( :invoke_init )
+    invoker.should_not_receive( :invoke_script )
+    invoker.should_not_receive( :invoke_force )
+    invoker.should_not_receive( :invoke_generate )
+    invoker.should_not_receive( :invoke_deploy )
+    invoker.should_not_receive( :invoke_auto )
+    invoker.should_not_receive( :invoke_server )
+    invoker.invoke!
+  end
+
 end

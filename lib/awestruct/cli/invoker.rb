@@ -1,5 +1,6 @@
 require 'awestruct/cli/options'
 
+require 'awestruct/cli/init'
 require 'awestruct/cli/generate'
 require 'awestruct/cli/auto'
 require 'awestruct/cli/server'
@@ -69,6 +70,7 @@ module Awestruct
       end
 
       def invoke_init()
+        Awestruct::CLI::Init.new( Dir.pwd, options.framework, options.scaffold ).run
       end
 
       def invoke_script()
