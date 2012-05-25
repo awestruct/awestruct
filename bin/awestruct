@@ -162,7 +162,7 @@ end
 
 if ( options.force )
   if File.exist?( site_path )
-    FileUtils.rmdir( site_path )
+    FileUtils.rm_rf( site_path )
   end
 end
 
