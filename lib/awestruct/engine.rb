@@ -248,7 +248,7 @@ module Awestruct
       $stderr.puts "rendering #{page.source_path} -> #{page.output_path}"
       rendered = render_page(page, true)
       FileUtils.mkdir_p( File.dirname( generated_path ) )
-      File.open( generated_path, 'w' ) do |file|
+      File.open( generated_path, 'wb' ) do |file|
         file << rendered
       end
     end
