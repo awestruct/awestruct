@@ -2,8 +2,8 @@ module Awestruct
   module Extensions
     class Atomizer
 
-      def initialize(entries_name, output_path, opts={})
-        @entries_name = entries_name
+      def initialize(entries, output_path, opts={})
+        @entries = entries
         @output_path = output_path
         @num_entries = opts[:num_entries] || 50
         @content_url = opts[:content_url]
@@ -11,7 +11,7 @@ module Awestruct
       end
 
       def execute(site)
-        entries = site.send( @entries_name ) || []
+        entries = @entries.is_a?(Array) ? @entries : site.send( @entries ) || []
         unless ( @num_entries == :all )
           entries = entries[0, @num_entries]
         end
