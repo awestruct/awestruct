@@ -54,7 +54,7 @@ module Awestruct
       private 
 
       def read
-        ( @content = File.read( @path ) ) if stale?
+        ( @content = IO.binread( @path ) ) if stale?
         @mtime = File.mtime( @path )
         return @content
       end
