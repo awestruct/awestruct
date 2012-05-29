@@ -223,7 +223,7 @@ module Awestruct
         c = page.rendered_content
         c = site.engine.pipeline.apply_transformers( site, page, c )
 
-        File.open( generated_path, 'w' ) do |file|
+        File.open( generated_path, 'wb' ) do |file|
           file << c
         end
       elsif ( site.config.track_dependencies )
