@@ -54,9 +54,16 @@ module Awestruct
       private 
 
       def read
-        ( @content = File.read( @path ) ) if stale?
+        ( @content = open ) if stale?
         @mtime = File.mtime( @path )
         return @content
+      end
+      
+      def open
+      	input_stream = IO.open(IO.sysopen(@path, "rb"), "rb" )
+        result = input_stream.read
+        input_stream.close
+        return result
       end
 
     end
