@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/awestruct/awestruct.png)](http://travis-ci.org/awestruct/awestruct)
+
 # For more information
 
 Please see the complete site at <http://awestruct.org/>.
