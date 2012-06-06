@@ -20,7 +20,6 @@ spec = Gem::Specification.new do |s|
     s.has_rdoc       =   true
 
     s.add_dependency 'hpricot', '~> 0.8.6'
-    s.add_dependency 'versionomy', '~> 0.4.3'
     s.add_dependency 'haml', '~> 3.1.4'
     s.add_dependency 'sass', '~> 3.1.15'
     s.add_dependency 'hashery', '~> 1.5.0'
@@ -36,7 +35,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'notifier', '~> 0.1.4'
     s.add_dependency 'git', '~> 1.2.5'
 
-    s.add_dependency 'guard'
+    s.add_dependency 'listen', '~> 0.4.2'
 
     s.add_development_dependency 'rspec', '~> 2.9'
     s.add_development_dependency 'rake', '~> 0.9.2'
