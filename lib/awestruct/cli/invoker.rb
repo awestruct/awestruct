@@ -54,14 +54,22 @@ module Awestruct
               nil
             else
               if options.profile
-                profiles_data[options.profile]
+                profiles_data[options.profile] || {}
               else
                 # if no profile given, pick the first with deploy config
                 options.profile, profile_data = profiles_data.select { |k,v| v && v['deploy'] }.first
+                profile_data
               end
             end
           end
         end
+ 
+        unless @profile
+          $stderr.puts "Unable to locate profile: #{options.profile}" if options.profile
+          options.profile = 'NONE'
+          @profile = {}
+        end 
+        $stderr.puts "Using profile: #{options.profile}"
       end
 
       def setup_config()
