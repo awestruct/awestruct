@@ -36,6 +36,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'git', '~> 1.2.5'
 
     s.add_dependency 'listen', '~> 0.4.2'
+    s.add_dependency 'thin', '~> 1.3.1'
 
     s.add_development_dependency 'rspec', '~> 2.9'
     s.add_development_dependency 'rake', '~> 0.9.2'

@@ -1,10 +1,12 @@
-require 'webrick'
+#require 'webrick'
+require 'thin'
+require 'awestruct/rack/app'
 
 module Awestruct
   module CLI
 
-    WEBrick::HTTPUtils::DefaultMimeTypes.store('atom', 'application/atom+xml')
-    WEBrick::HTTPUtils::DefaultMimeTypes.store('appcache', 'text/cache-manifest')
+    #WEBrick::HTTPUtils::DefaultMimeTypes.store('atom', 'application/atom+xml')
+    #WEBrick::HTTPUtils::DefaultMimeTypes.store('appcache', 'text/cache-manifest')
 
     class Server
       attr_reader :server
@@ -16,6 +18,11 @@ module Awestruct
       end
 
       def run
+        @server = Thin::Server.new( '0.0.0.0', @port, Awestruct::Rack::App.new( @path ) )
+        @server.start
+      end
+
+      def run_webrick
         @server = WEBrick::HTTPServer.new( :DocumentRoot=>@path, :Port=>@port, :BindAddress=>@bind_addr )
         @server.start
       end
