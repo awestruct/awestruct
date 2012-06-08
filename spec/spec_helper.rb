@@ -1,5 +1,4 @@
 
-RSpec.configure do |conf|
-  # Nothing at the moment
+RSpec.configure do |config|
+  config.mock_framework = :rspec
 end
-

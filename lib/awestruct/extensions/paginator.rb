@@ -82,10 +82,12 @@ module Awestruct
 
         prev_page = nil
         paginated_pages.each_with_index do |page,i|
-          page.send( @prop_name ).current_page       = page
-          page.send( @prop_name ).current_page_index = i
-          page.send( @prop_name ).pages              = paginated_pages
-          page.send( @prop_name ).window             = 1
+          slice = page.send( @prop_name )
+          
+          slice.current_page       = page
+          slice.current_page_index = i
+          slice.pages              = paginated_pages
+          slice.window             = 1
 
           if ( prev_page != nil )
             prev_page.send( @prop_name ).next_page = page

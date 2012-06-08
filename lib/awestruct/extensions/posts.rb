@@ -20,28 +20,29 @@ module Awestruct
               day   = $3
               slug  = $4
               page.date = Time.utc( year.to_i, month.to_i, day.to_i )
-            elsif (page.date)
+            elsif (page.date?)
               page.relative_source_path =~ /^#{@path_prefix}\/(.*)\..*$/
               date = page.date;
               if date.kind_of? String
                 date = Time.parse page.date
               end
               year = date.year
-              month = date.month
-              day = date.day
+              month = sprintf( "%02d", date.month )
+              day = sprintf( "%02d", date.day )
               page.date = Time.utc(year, month, day)
               slug = $1
             end
 
             # if a date was found create a post
             if( year and month and day)
-              page.slug = slug
-              context = OpenStruct.new({
-                :site=>site,
-                :page=>page,
-              })
+              page.slug ||= slug
+              #context = OpenStruct.new({
+                #:site=>site,
+                #:page=>page,
+              #})
+              context = page.create_context
               #page.body = page.render( context )
-              page.output_path = "#{@path_prefix}/#{year}/#{month}/#{day}/#{slug}.html"
+              page.output_path = "#{@path_prefix}/#{year}/#{month}/#{day}/#{page.slug}.html"
               #page.layout = 'post'
               posts << page
             end
@@ -61,6 +62,7 @@ module Awestruct
         end
 
         site.send( "#{@assign_to}=", posts )
+
       end
 
     end
