@@ -11,7 +11,8 @@ module Awestruct
       end
 
       def run()
-        listener = Listen.to( @config.dir, :relative_paths=>true )
+        force_polling = ( RUBY_PLATFORM =~ /mingw/ ? true : false )
+        listener = Listen.to( @config.dir, :relative_paths=>true, :latency=>0.5, :force_polling=>force_polling )
         listener.ignore( %r(\.awestruct) )
         listener.ignore( %r(^#{File.basename( @config.tmp_dir )}) )
         listener.ignore( %r(^#{File.basename( @config.output_dir )}) )
@@ -23,7 +24,7 @@ module Awestruct
             end
           end
         end
-        listener.start( false )
+        listener.start(false)
       end
 
     end

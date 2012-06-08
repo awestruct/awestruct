@@ -105,7 +105,7 @@ module Awestruct
       end
 
       def invoke_auto()
-        run_in_thread( Awestruct::CLI::Auto.new( config ) )
+        Awestruct::CLI::Auto.new( config ).run
       end
 
       def invoke_server()
