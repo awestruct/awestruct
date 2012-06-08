@@ -87,6 +87,7 @@ module Awestruct
           site.base_url = $1
         end
       end
+
     end
 
     def load_site_yaml(profile)
