@@ -20,7 +20,12 @@ module Awestruct
           modified.each do |path|
             engine = ::Awestruct::Engine.instance
             unless ( path =~ %r(#{File.basename( engine.config.output_dir) }) || path =~ /.awestruct/ )
-              engine.generate_page_by_output_path( path )
+              begin
+                engine.generate_page_by_output_path( path )
+              rescue => e
+                puts e
+                puts e.backtrace
+              end
             end
           end
         end
