@@ -182,6 +182,7 @@ module Awestruct
 
     def execute_pipeline
       FileUtils.mkdir_p( site.config.output_dir )
+      FileUtils.mkdir_p( site.config.tmp_dir )
       pipeline.execute( site )
     end
 
