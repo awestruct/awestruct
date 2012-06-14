@@ -1,5 +1,4 @@
 
-require 'hashery/open_cascade'
 require 'open3'
 
 module Awestruct

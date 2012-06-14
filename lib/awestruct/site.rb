@@ -1,5 +1,4 @@
 
-#require 'hashery/open_cascade'
 require 'awestruct/layouts'
 require 'awestruct/astruct'
 

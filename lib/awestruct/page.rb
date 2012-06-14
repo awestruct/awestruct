@@ -3,7 +3,6 @@ require 'awestruct/context'
 
 require 'awestruct/handlers/no_op_handler'
 require 'awestruct/handlers/page_delegating_handler'
-require 'hashery/open_cascade'
 require 'ostruct'
 require 'awestruct/astruct'
 
