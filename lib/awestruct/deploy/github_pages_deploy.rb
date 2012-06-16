@@ -1,4 +1,5 @@
 require 'awestruct/deployers'
+require 'git'
 
 module Awestruct
   module Deploy
