@@ -7,13 +7,13 @@ module Awestruct
     class RSyncDeploy
 
       def initialize(site_config, deploy_config)
-        @site_path = File.join( site_config.output_dir, '/' )
+        @site_path = File.join( site_config.output_dir, '/' ).gsub(/^\w:\//, '/')
         @host      = deploy_config['host']
         @path      = File.join( deploy_config['path'], '/' )
       end
 
       def run
-        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+s,ug+w --delete #{@site_path} #{@host}:#{@path}"
+        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{@site_path} #{@host}:#{@path}"
         Open3.popen3( cmd ) do |stdin, stdout, stderr|
           stdin.close
           threads = []
