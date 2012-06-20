@@ -13,8 +13,7 @@ module Awestruct
       end
 
       def run
-        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+s,ug+rwx --delete #{@site_path} #{@host}:#{@path}"
-        puts cmd
+        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{@site_path} #{@host}:#{@path}"
         Open3.popen3( cmd ) do |stdin, stdout, stderr|
           stdin.close
           threads = []
