@@ -41,5 +41,6 @@ spec = Gem::Specification.new do |s|
     s.add_development_dependency 'hashery', '~> 1.5.0'
     s.add_development_dependency 'rspec', '~> 2.9'
     s.add_development_dependency 'rake', '~> 0.9.2'
+    s.add_development_dependency 'therubyracer', '~> 0.10.1'
 end
 
