@@ -1,4 +1,4 @@
-
+require 'awestruct/handler_chain'
 require 'open3'
 
 module Awestruct

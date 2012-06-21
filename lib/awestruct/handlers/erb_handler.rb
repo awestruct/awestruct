@@ -1,4 +1,3 @@
-
 require 'awestruct/handlers/base_handler'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/front_matter_handler'
