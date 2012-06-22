@@ -63,4 +63,9 @@ describe Awestruct::CLI::Invoker do
     invoker.invoke!
   end
 
+  it "should return a non-zero value on failure" do
+    pending "A fix for issue #103"
+  end
+
+
 end

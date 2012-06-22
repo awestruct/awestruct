@@ -35,3 +35,7 @@ end
 task :tag do
   system "git tag #{Awestruct::VERSION}"
 end
+
+task :tdd do
+  system "spectator"
+end
