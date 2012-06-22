@@ -41,7 +41,7 @@ module Awestruct
       doc = Hpricot( text )
 
       doc.search( "//a" ).each do |a|
-        a['href'] = fix_url( base_url, a['href'] )
+        a['href'] = fix_url( base_url, a['href'] ) if a['href']
       end
       doc.search( "//link" ).each do |link|
         link['href'] = fix_url( base_url, link['href'] )

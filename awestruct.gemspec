@@ -37,10 +37,5 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'listen', '~> 0.4.2'
     s.add_dependency 'thin', '~> 1.3.1'
     s.add_dependency 'eventmachine', '~> 1.0.0.beta.4'
-
-    s.add_development_dependency 'hashery', '~> 1.5.0'
-    s.add_development_dependency 'rspec', '~> 2.9'
-    s.add_development_dependency 'rake', '~> 0.9.2'
-    s.add_development_dependency 'therubyracer', '~> 0.10.1'
 end
 
