@@ -20,6 +20,7 @@ module Awestruct
         rescue =>e
           puts e
           puts e.backtrace
+          return false
         end
       end
     end

@@ -4,6 +4,7 @@ require 'awestruct/version'
 
 module Awestruct
   module CLI
+
     class Options
 
       attr_accessor :generate

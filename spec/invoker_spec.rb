@@ -63,8 +63,11 @@ describe Awestruct::CLI::Invoker do
     invoker.invoke!
   end
 
-  it "should return a non-zero value on failure" do
-    pending "A fix for issue #103"
+  it "should return false on failure" do
+    generator = mock
+    Awestruct::CLI::Generate.should_receive( :new ).and_return( generator )
+    generator.should_receive( :run ).and_return( false )
+    Awestruct::CLI::Invoker.new( '--generate' ).invoke!.should be_false
   end
 
 

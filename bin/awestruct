@@ -5,4 +5,7 @@ $: << File.dirname(__FILE__) + '/../lib'
 require 'rubygems'
 require 'awestruct/cli/invoker'
 
-Awestruct::CLI::Invoker.new( ARGV ).invoke!
+invoker = Awestruct::CLI::Invoker.new( ARGV )
+invoker.invoke!
+
+invoker.success ? exit 0 : exit -1

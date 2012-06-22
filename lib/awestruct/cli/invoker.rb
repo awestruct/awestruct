@@ -16,6 +16,7 @@ module Awestruct
 
       attr_reader :config
       attr_reader :profile
+      attr_reader :success
 
       def initialize(*options)
         options = options.flatten
@@ -26,6 +27,7 @@ module Awestruct
         end
         @threads = []
         @profile = nil
+        @success = true
       end
 
       def invoke!
@@ -42,6 +44,7 @@ module Awestruct
         invoke_auto()      if ( options.auto )
 
         wait_for_completion()
+        success
       end
 
       def load_profile()
@@ -90,7 +93,7 @@ module Awestruct
       end
 
       def invoke_generate()
-        Awestruct::CLI::Generate.new( config, options.profile, options.base_url, 'http://localhost:4242', options.force ).run
+        @success = Awestruct::CLI::Generate.new( config, options.profile, options.base_url, 'http://localhost:4242', options.force ).run
       end
 
       def invoke_deploy()
