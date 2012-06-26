@@ -6,4 +6,5 @@ Gemfile.lock
 #Editor
 *.tmproj
 spec/.sass-cache/*/*.scssc
-spec/test-data/handlers/.awestruct
+.awestruct
+.rvmrc
