@@ -8,4 +8,4 @@ require 'awestruct/cli/invoker'
 invoker = Awestruct::CLI::Invoker.new( ARGV )
 invoker.invoke!
 
-invoker.success ? exit 0 : exit -1
+invoker.success ? exit(0) : exit(-1)
