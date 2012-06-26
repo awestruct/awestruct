@@ -16,7 +16,7 @@ module Awestruct
 
       private
       def git
-        @git ||= Git.open('.')
+        @git ||= ::Git.open('.')
       end
 
       def publish_site
@@ -35,7 +35,7 @@ module Awestruct
           git.add(".")
           begin
             git.commit("Published #{@branch} to GitHub pages.")
-          rescue Git::GitExecuteError => e
+          rescue ::Git::GitExecuteError => e
             $stderr.puts "Can't commit. #{e}."
           end
         end
