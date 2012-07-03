@@ -10,10 +10,15 @@ module Awestruct
         @site_path = File.join( site_config.output_dir, '/' ).gsub(/^\w:\//, '/')
         @host      = deploy_config['host']
         @path      = File.join( deploy_config['path'], '/' )
+        @exclude   = deploy_config['exclude']
       end
 
       def run
-        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{@site_path} #{@host}:#{@path}"
+        exclude_option = ""
+        if ! (@exclude.nil? or @exclude.empty?)
+          exclude_option = "--exclude=#{@exclude}"
+        end
+        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{exclude_option} #{@site_path} #{@host}:#{@path}"
         Open3.popen3( cmd ) do |stdin, stdout, stderr|
           stdin.close
           threads = []
