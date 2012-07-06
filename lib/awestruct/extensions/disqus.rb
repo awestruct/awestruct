@@ -36,7 +36,7 @@ module Awestruct
           if self.disqus_identifier or site.disqus_generate_id
             identifier = %Q{ data-disqus-identifier="#{self.resolve_disqus_identifier()}"}
           end
-          %Q{ <a href="#{self.url}#disqus_thread"#{identifier}>Comments</a> }
+          %Q{ <a href="#{site.base_url}#{self.url}#disqus_thread"#{identifier}>Comments</a> }
         end
 
         def disqus_comments_count()
