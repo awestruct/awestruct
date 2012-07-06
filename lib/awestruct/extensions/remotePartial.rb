@@ -5,12 +5,14 @@ module Awestruct
   module Extensions
     module RemotePartial
 
-      def remotePartial(url)
+      def remote_partial(url)
         url_tmp = url.sub('http://', '')
         r = 'remote_partial/' + url_tmp[/(.*)\/[^\/].+$/, 1]
         tmp = File.join(tmp(site.tmp_dir, r), File.basename(url_tmp))
         get_or_cache(tmp, url)
       end
+
+      alias_method :remotePartial, :remote_partial
 
       def get_or_cache(tmp_file, url)
         response_body = ""
