@@ -16,12 +16,13 @@ module Awestruct
       def execute( site )
 
         # Add additional excludes from _config/sitemap.yml
-
-        if site.sitemap["excluded_files"]
-          @excluded_files.merge(site.sitemap.excluded_files)
-        end
-        if site.sitemap["excluded_extensions"]
-          @excluded_extensions.merge(site.sitemap.excluded_extensions)
+        if site.sitemap
+          if site.sitemap["excluded_files"]
+            @excluded_files.merge(site.sitemap.excluded_files)
+          end
+          if site.sitemap["excluded_extensions"]
+            @excluded_extensions.merge(site.sitemap.excluded_extensions)
+          end
         end
 
         # Go through all of the site's pages and add sitemap metadata
