@@ -76,6 +76,9 @@ module Awestruct
       handler.output_extension
     end
 
+    def output_filename
+      handler.output_filename
+    end
 
     def source_path
       handler.path.to_s
