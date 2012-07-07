@@ -9,8 +9,8 @@ module Awestruct
     class Sitemap
 
       def initialize
-        @excluded_files = [ '.htaccess', 'robots.txt' ]
-        @excluded_extensions = ['.atom', '.scss', '.css', '.png', '.jpg', '.gif', '.js' ]
+        @excluded_files = [ '.htaccess', 'robots.txt' ].to_set
+        @excluded_extensions = ['.atom', '.scss', '.css', '.png', '.jpg', '.gif', '.js' ].to_set
       end
 
       def execute( site )
@@ -18,10 +18,10 @@ module Awestruct
         # Add additional excludes from _config/sitemap.yml
 
         if site.sitemap["excluded_files"]
-          @excluded_files = @excluded_files + site.sitemap.excluded_files
+          @excluded_files.merge(site.sitemap.excluded_files)
         end
         if site.sitemap["excluded_extensions"]
-          @excluded_extensions = @excluded_extensions + site.sitemap.excluded_extensions
+          @excluded_extensions.merge(site.sitemap.excluded_extensions)
         end
 
         # Go through all of the site's pages and add sitemap metadata
@@ -81,7 +81,7 @@ module Awestruct
       end
 
       def valid_sitemap_entry( page )
-        @excluded_files.index(page.output_filename) == nil && @excluded_extensions.index(page.output_extension) == nil
+        !@excluded_files.member?(page.output_filename) && !@excluded_extensions.member?(page.output_extension)
       end
 
     end
