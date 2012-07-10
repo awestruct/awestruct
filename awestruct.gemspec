@@ -31,6 +31,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'bootstrap-sass', '~> 2.0.1'
     s.add_dependency 'org-ruby', '~> 0.5.3'
     s.add_dependency 'json', '~> 1.6.6'
+    s.add_dependency 'rest-client', '~> 1.6.7'
 #    s.add_dependency 'notifier', '~> 0.1.4'
     s.add_dependency 'git', '~> 1.2.5'
 
