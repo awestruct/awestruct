@@ -8,7 +8,22 @@ module Awestruct
   module Extensions
     class Sitemap
 
+      def initialize
+        @excluded_files = [ '.htaccess', 'robots.txt' ].to_set
+        @excluded_extensions = ['.atom', '.scss', '.css', '.png', '.jpg', '.gif', '.js' ].to_set
+      end
+
       def execute( site )
+
+        # Add additional excludes from _config/sitemap.yml
+        if site.sitemap
+          if site.sitemap["excluded_files"]
+            @excluded_files.merge(site.sitemap.excluded_files)
+          end
+          if site.sitemap["excluded_extensions"]
+            @excluded_extensions.merge(site.sitemap.excluded_extensions)
+          end
+        end
 
         # Go through all of the site's pages and add sitemap metadata
         sitemap_pages = []
@@ -67,18 +82,7 @@ module Awestruct
       end
 
       def valid_sitemap_entry( page )
-        page.output_filename != '.htaccess'     &&
-          page.output_filename  != 'screen.css' &&
-          page.output_filename  != 'print.css'  &&
-          page.output_filename  != 'ie.css'     &&
-          page.output_filename  != 'robots.txt' &&
-          page.output_extension != '.atom'      &&
-          page.output_extension != '.scss'      &&
-          page.output_extension != '.css'       &&
-          page.output_extension != '.png'       &&
-          page.output_extension != '.jpg'       &&
-          page.output_extension != '.gif'       &&
-          page.output_extension != '.js'
+        !@excluded_files.member?(page.output_filename) && !@excluded_extensions.member?(page.output_extension)
       end
 
     end
