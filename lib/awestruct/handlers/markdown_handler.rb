@@ -1,16 +1,14 @@
-
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/front_matter_handler'
 require 'awestruct/handlers/interpolation_handler'
 require 'awestruct/handlers/layout_handler'
-require 'rdiscount'
+require 'kramdown'
 
 module Awestruct
   module Handlers
     class MarkdownHandler < BaseHandler
-
 
       CHAIN = Awestruct::HandlerChain.new( /\.md$/,
         Awestruct::Handlers::FileHandler,
@@ -25,7 +23,7 @@ module Awestruct
       end
 
       def simple_name
-        File.basename( relative_source_path, '.md' ) 
+        File.basename( relative_source_path, '.md' )
       end
 
       def output_filename
@@ -41,8 +39,7 @@ module Awestruct
       end
 
       def rendered_content(context, with_layouts=true)
-        doc = RDiscount.new( delegate.rendered_content( context, with_layouts ) )
-        doc.to_html
+        return Kramdown::Document.new( delegate.rendered_content( context, with_layouts ), :auto_ids => false ).to_html
       end
 
     end
