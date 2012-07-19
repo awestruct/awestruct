@@ -1,4 +1,5 @@
 language: ruby
 rvm:
   - jruby-19mode
+  - jruby-18mode
 script: bundle exec rspec spec
