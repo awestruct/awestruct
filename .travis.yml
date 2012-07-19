@@ -1,5 +1,5 @@
-before_install:
-  - gem install bundler
 language: ruby
 rvm:
   - jruby-19mode
+  - 1.9.3
+script: bundle exec rspec spec
