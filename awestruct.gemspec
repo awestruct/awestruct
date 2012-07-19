@@ -33,6 +33,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'json', '~> 1.7'
     s.add_dependency 'rest-client', '~> 1.6.7'
     s.add_dependency 'git', '~> 1.2'
+    s.add_dependency 'jruby-openssl', '~> 0.7'
 
     s.add_dependency 'listen', '~> 0.4'
     s.add_dependency 'eventmachine', '~> 1.0.0.beta.4'
