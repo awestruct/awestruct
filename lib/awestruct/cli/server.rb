@@ -17,12 +17,12 @@ module Awestruct
         @port      = port
       end
 
-      def run
+      def run_other
         @server = Rack::Server.new( '0.0.0.0', @port, Awestruct::Rack::App.new( @path ) )
         @server.start
       end
 
-      def run_webrick
+      def run
         @server = WEBrick::HTTPServer.new( :DocumentRoot=>@path, :Port=>@port, :BindAddress=>@bind_addr )
         @server.start
       end
