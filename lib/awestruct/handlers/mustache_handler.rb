@@ -11,9 +11,7 @@ module Awestruct
   module Handlers
     class MustacheHandler < BaseHandler
 
-      @@mustache_extension = ".mustache"
-
-      CHAIN = Awestruct::HandlerChain.new( /\.haml$/,
+      CHAIN = Awestruct::HandlerChain.new( /\.mustache$/,
         Awestruct::Handlers::FileHandler,
         Awestruct::Handlers::FrontMatterHandler,
         Awestruct::Handlers::MustacheHandler,
@@ -25,16 +23,16 @@ module Awestruct
       end
 
       def simple_name
-        File.basename( self.path, "#{output_extension}#{@@mustache_extension}" )
+        File.basename( self.path, "#{output_extension}.mustache" )
       end
 
       def output_filename
-        return File.basename( relative_source_path, @@mustache_extension ) unless relative_source_path.nil?
+        return File.basename( relative_source_path, ".mustache") unless relative_source_path.nil?
         nil
       end
 
       def output_extension
-        File.extname( File.basename( path, @@mustache_extension ) )
+        File.extname( File.basename( path, ".mustache" ) )
       end
 
       def rendered_content(context, with_layouts=true)
