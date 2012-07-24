@@ -1,14 +1,12 @@
-[![Build Status](https://secure.travis-ci.org/awestruct/awestruct.png)](http://travis-ci.org/awestruct/awestruct)
-
 [![Build Status](https://secure.travis-ci.org/statonjr/awestruct.png?branch=master)](http://travis-ci.org/statonjr/awestruct)
 
 # For more information
 
-Please see the complete site at <http://awestruct.org/>.
+A JRuby version of Awestruct. Please see the complete site at <http://awestruct.org/>.
 
 # License
 
-    Copyright (c) 2010-2011 Bob McWhirter and contributors (see git log)
+    Copyright (c) 2010-2012 Bob McWhirter and contributors (see git log)
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to
