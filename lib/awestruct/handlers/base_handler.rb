@@ -99,6 +99,7 @@ module Awestruct
       def execute_shell(command, input=nil)
         Open3.popen3(command) do |stdin, stdout, _|
           stdin.puts input unless input.nil?
+          stdin.close
           out = stdout.read
         end
       rescue Errno::EPIPE
