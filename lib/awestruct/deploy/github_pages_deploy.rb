@@ -20,14 +20,11 @@ module Awestruct
       end
 
       def publish_site
-        current_branch = git.branch
-        checkout_pages_branch
-        add_and_commit_site @site_path
-        push_and_restore current_branch
-      end
-
-      def checkout_pages_branch
+        current_branch = git.current_branch
         git.branch( @branch ).checkout
+        add_and_commit_site @site_path
+        git.push( 'origin', @branch )
+        git.checkout( current_branch )
       end
 
       def add_and_commit_site( path )
@@ -39,12 +36,7 @@ module Awestruct
             $stderr.puts "Can't commit. #{e}."
           end
         end
-      end
-
-      def push_and_restore( original_branch )
         git.reset_hard
-        git.push( 'origin', @branch )
-        git.checkout( original_branch )
       end
 
       def message_for( key )

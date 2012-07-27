@@ -10,6 +10,10 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     deploy_config = mock
     deploy_config.stub(:[]).with('branch').and_return('the-branch')
     @deployer = Awestruct::Deploy::GitHubPagesDeploy.new( site_config, deploy_config )
+
+    @git = mock
+    @git.stub_chain(:status, :changed, :empty?).and_return true
+    ::Git.stub(:open).with('.').and_return @git
   end
 
   it "should be auto-registered" do
@@ -17,18 +21,24 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
   end
 
   it "should publish the site if there have been changes to the git repo" do
-    git = mock
-    git.stub_chain(:status, :changed, :empty?).and_return true
-    ::Git.should_receive(:open).with('.').and_return git
+    ::Git.should_receive(:open).with('.').and_return @git
     @deployer.should_receive(:publish_site)
     @deployer.run
   end
 
   it "should warn and noop if no changes have been committed" do
-    git = mock
-    git.stub_chain(:status, :changed, :empty?).and_return false
-    ::Git.should_receive(:open).with('.').and_return git
+    @git.stub_chain(:status, :changed, :empty?).and_return false
     @deployer.should_receive(:message_for).with(:existing_changes)
+    @deployer.run
+  end
+
+  it "should save and restore the current branch when publishing" do
+    @git.should_receive(:current_branch).and_return( 'bacon' )
+    @git.stub_chain(:branch, :checkout)
+    @git.should_receive(:push).with('origin', 'the-branch')
+    @git.should_receive(:checkout).with( 'bacon' )
+
+    @deployer.stub(:add_and_commit_site)
     @deployer.run
   end
 end
