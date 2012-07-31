@@ -198,6 +198,11 @@ module Awestruct
       Compass.configuration.css_dir         = site.css_dir
       Compass.configuration.javascripts_dir = 'javascripts'
       Compass.configuration.images_dir      = 'images'
+      Compass.configuration.line_comments   = include_line_comments?
+    end
+
+    def include_line_comments?
+      site.key?(:compass_line_comments) ? !!site.compass_line_comments : !site.profile.eql?('production')
     end
 
     def load_pages

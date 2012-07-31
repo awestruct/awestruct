@@ -4,5 +4,7 @@ profiles:
     cook: microwave
   production:
     cook: oven
+  staging:
+    compass_line_comments: off
 
 title: Awestruction!
