@@ -9,6 +9,7 @@ require 'awestruct/handlers/erb_handler'
 require 'awestruct/handlers/haml_handler'
 require 'awestruct/handlers/sass_handler'
 require 'awestruct/handlers/scss_handler'
+require 'awestruct/handlers/javascript_handler'
 require 'awestruct/handlers/coffeescript_handler'
 
 module Awestruct
@@ -25,6 +26,7 @@ module Awestruct
       Awestruct::Handlers::HamlHandler::CHAIN,
       Awestruct::Handlers::SassHandler::CHAIN,
       Awestruct::Handlers::ScssHandler::CHAIN,
+      Awestruct::Handlers::JavascriptHandler::CHAIN,
       Awestruct::Handlers::CoffeescriptHandler::CHAIN,
       HandlerChain.new( /.*/, Awestruct::Handlers::FileHandler )
     ]
