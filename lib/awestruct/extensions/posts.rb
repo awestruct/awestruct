@@ -14,13 +14,8 @@ module Awestruct
           year, month, day, slug = nil
 
           if ( page.relative_source_path =~ /^#{@path_prefix}\// )
-            if ( page.relative_source_path =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/ )
-              year  = $1
-              month = $2
-              day   = $3
-              slug  = $4
-              page.date = Time.utc( year.to_i, month.to_i, day.to_i )
-            elsif (page.date?)
+            # check for a date inside the page first
+            if (page.date?)
               page.relative_source_path =~ /^#{@path_prefix}\/(.*)\..*$/
               date = page.date;
               if date.kind_of? String
@@ -29,8 +24,17 @@ module Awestruct
               year = date.year
               month = sprintf( "%02d", date.month )
               day = sprintf( "%02d", date.day )
-              page.date = Time.utc(year, month, day)
+              page.date = date
               slug = $1
+              if ( page.relative_source_path =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/ )
+                slug = $4
+              end
+            elsif ( page.relative_source_path =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/ )
+              year  = $1
+              month = $2
+              day   = $3
+              slug  = $4
+              page.date = Time.utc( year.to_i, month.to_i, day.to_i )
             end
 
             # if a date was found create a post
