@@ -9,6 +9,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
 
     deploy_config = mock
     deploy_config.stub(:[]).with('branch').and_return('the-branch')
+    deploy_config.stub(:[]).with('repository').and_return('the-repo')
     @deployer = Awestruct::Deploy::GitHubPagesDeploy.new( site_config, deploy_config )
 
     @git = mock
@@ -35,7 +36,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
   it "should save and restore the current branch when publishing" do
     @git.should_receive(:current_branch).and_return( 'bacon' )
     @git.stub_chain(:branch, :checkout)
-    @git.should_receive(:push).with('origin', 'the-branch')
+    @git.should_receive(:push).with('the-repo', 'the-branch')
     @git.should_receive(:checkout).with( 'bacon' )
 
     @deployer.stub(:add_and_commit_site)
