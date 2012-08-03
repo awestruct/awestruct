@@ -17,12 +17,16 @@ module Awestruct
 
         content = content.gsub( /\\/, '\\\\\\\\' )
         content = content.gsub( /\\\\#/, '\\#' )
-        content = content.gsub( /#(?!{)/, '\#' )
+        content = content.gsub( /#(?!{)/, '\#' ) if is_ruby_19?
         content = content.gsub( '@', '\@' )
         content = "%@#{content}@"
         c = context.instance_eval( content )
         c
 
+      end
+
+      def is_ruby_19?
+        @is_ruby_19 ||= (::Config::CONFIG['ruby_version'] =~ %r(^1\.9))
       end
 
     end
