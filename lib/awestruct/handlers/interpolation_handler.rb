@@ -1,6 +1,7 @@
 
 require 'awestruct/handlers/base_handler'
 
+puts "RUBY_VERSION: " + ::Config::CONFIG['ruby_version'] 
 module Awestruct
   module Handlers
     class InterpolationHandler < BaseHandler
@@ -17,7 +18,7 @@ module Awestruct
 
         content = content.gsub( /\\/, '\\\\\\\\' )
         content = content.gsub( /\\\\#/, '\\#' )
-        content = content.gsub( /#(?!{)/, '\#' ) if is_ruby_19?
+        content = content.gsub( Regexp.new('#(?!{)'), '\#' ) if ruby_19?
         content = content.gsub( '@', '\@' )
         content = "%@#{content}@"
         c = context.instance_eval( content )
@@ -25,7 +26,7 @@ module Awestruct
 
       end
 
-      def is_ruby_19?
+      def ruby_19?
         @is_ruby_19 ||= (::Config::CONFIG['ruby_version'] =~ %r(^1\.9))
       end
 
