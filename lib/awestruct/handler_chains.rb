@@ -11,6 +11,7 @@ require 'awestruct/handlers/sass_handler'
 require 'awestruct/handlers/scss_handler'
 require 'awestruct/handlers/javascript_handler'
 require 'awestruct/handlers/coffeescript_handler'
+require 'awestruct/handlers/redirect_handler'
 
 module Awestruct
 
@@ -28,6 +29,7 @@ module Awestruct
       Awestruct::Handlers::ScssHandler::CHAIN,
       Awestruct::Handlers::JavascriptHandler::CHAIN,
       Awestruct::Handlers::CoffeescriptHandler::CHAIN,
+      Awestruct::Handlers::RedirectHandler::CHAIN,
       HandlerChain.new( /.*/, Awestruct::Handlers::FileHandler )
     ]
 
