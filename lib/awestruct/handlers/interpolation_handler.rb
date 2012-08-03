@@ -17,6 +17,7 @@ module Awestruct
 
         content = content.gsub( /\\/, '\\\\\\\\' )
         content = content.gsub( /\\\\#/, '\\#' )
+        content = content.gsub( /#(?!{)/, '\#' )
         content = content.gsub( '@', '\@' )
         content = "%@#{content}@"
         c = context.instance_eval( content )
