@@ -1,4 +1,5 @@
 
+
 module Awestruct
 
   class PageLoader
