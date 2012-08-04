@@ -9,7 +9,7 @@ module Awestruct
     class Sitemap
 
       def initialize
-        @excluded_files = [ '.htaccess', 'robots.txt' ].to_set
+        @excluded_files = [ '/.htaccess', '/robots.txt' ].to_set
         @excluded_extensions = ['.atom', '.scss', '.css', '.png', '.jpg', '.gif', '.js' ].to_set
       end
 
