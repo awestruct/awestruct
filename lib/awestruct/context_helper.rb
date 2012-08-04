@@ -40,14 +40,14 @@ module Awestruct
     def fully_qualify_urls(base_url, text)
       doc = Nokogiri::HTML::DocumentFragment.parse( text )
 
-      doc.xpath( "//a" ).each do |a|
-        a['href'] = fix_url( base_url, a['href'] ) if a['href']
+      doc.css( "a" ).each do |a|
+        a.attributes['href'].value = fix_url( base_url, a.attributes['href'].value ) if a.attributes['href']
       end
-      doc.xpath( "//link" ).each do |link|
-        link['href'] = fix_url( base_url, link['href'] )
+      doc.css( "link" ).each do |link|
+        link.attributes['href'].value = fix_url( base_url, link.attributes['href'].value )
       end
-      doc.xpath( "//img" ).each do |img|
-        img['src'] = fix_url( base_url, img['src'] )
+      doc.css( "img" ).each do |img|
+        img.attributes['src'].value = fix_url( base_url, img.attributes['src'].value )
       end
       if RUBY_VERSION.start_with? '1.8'
         doc.to_s
