@@ -43,6 +43,7 @@ module Awestruct
 
     def inherit_front_matter_from(hash)
       hash.each do |k,v|
+        #puts "#{self.output_path} overwrite key: #{k}:#{self[k]} -> #{v}" if ( key?( k ) and !self[k].nil? and !self[k].eql? v)
         unless ( key?( k ) )
           self[k.to_sym] = v
         end
@@ -123,9 +124,27 @@ module Awestruct
     end
 
     def rendered_content(context=create_context(), with_layouts=true)
-      Awestruct::Dependencies.push_page( self ) if context.site.config.track_dependencies
+      if context.site.config.track_dependencies
+        Awestruct::Dependencies.push_page( self )
+      end
       c = handler.rendered_content( context, with_layouts )
-      Awestruct::Dependencies.pop_page if context.site.config.track_dependencies
+      if context.site.config.track_dependencies
+        Awestruct::Dependencies.pop_page
+
+        # temp disable traqcking when we collect the hash to not dirty the results
+        Awestruct::Dependencies.track_dependencies = false
+        if with_layouts
+          @dependencies.content_hash = Digest::SHA2.hexdigest(c)
+
+          # create a new Page so we can inherit the updated values not reflected in self
+          tmp_page = Awestruct::Page.new @site
+          @handler.inherit_front_matter(tmp_page)
+          string_to_hash = tmp_page.to_a.each{|x| x[0]=x[0].to_s; x[1]=x[1].to_s; x}.sort.to_s
+          hash = Digest::SHA2.hexdigest(string_to_hash)
+          @dependencies.key_hash = hash
+        end
+        Awestruct::Dependencies.track_dependencies = true
+      end
       c
     end
 
