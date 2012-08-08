@@ -1,4 +1,3 @@
-
 require 'awestruct/deploy/github_pages_deploy'
 
 describe Awestruct::Deploy::GitHubPagesDeploy do
@@ -28,7 +27,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
 
   it "should warn and noop if no changes have been committed" do
     @git.stub_chain(:status, :changed, :empty?).and_return false
-    @deployer.should_receive(:message_for).with(:existing_changes)
+    $stderr.should_receive(:puts).with(Awestruct::Deploy::Base::UNCOMMITTED_CHANGES)
     @deployer.run
   end
 

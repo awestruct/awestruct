@@ -1,10 +1,9 @@
-require 'awestruct/deployers'
-
+require 'awestruct/deploy/base_deploy'
 require 'open3'
 
 module Awestruct
   module Deploy
-    class RSyncDeploy
+    class RSyncDeploy < Base
 
       def initialize(site_config, deploy_config)
         @site_path = File.join( site_config.output_dir, '/' ).gsub(/^\w:\//, '/')
@@ -13,7 +12,7 @@ module Awestruct
         @exclude   = deploy_config['exclude']
       end
 
-      def run
+      def publish_site
         exclude_option = ""
         if ! (@exclude.nil? or @exclude.empty?)
           exclude_option = "--exclude=#{@exclude}"

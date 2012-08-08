@@ -1,7 +1,6 @@
 
 require 'awestruct/handlers/base_handler'
 
-puts "RUBY_VERSION: " + ::Config::CONFIG['ruby_version'] 
 module Awestruct
   module Handlers
     class InterpolationHandler < BaseHandler
