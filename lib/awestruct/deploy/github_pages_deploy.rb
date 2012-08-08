@@ -1,22 +1,11 @@
-require 'awestruct/deployers'
-require 'git'
+require 'awestruct/deploy/base_deploy'
 
 module Awestruct
   module Deploy
-
-    class GitHubPagesDeploy
+    class GitHubPagesDeploy < Base
       def initialize( site_config, deploy_config )
         @site_path = site_config.output_dir
         @branch    = deploy_config[ 'branch' ] || 'gh-pages'
-      end
-
-      def run
-        git.status.changed.empty? ? publish_site : message_for(:existing_changes)
-      end
-
-      private
-      def git
-        @git ||= ::Git.open('.')
       end
 
       def publish_site
@@ -27,6 +16,7 @@ module Awestruct
         git.checkout( current_branch )
       end
 
+      private
       def add_and_commit_site( path )
         git.with_working( path ) do
           git.add(".")
@@ -37,15 +27,6 @@ module Awestruct
           end
         end
         git.reset_hard
-      end
-
-      def message_for( key )
-        $stderr.puts case key
-        when :existing_changes 
-          "You have uncommitted changes in the working branch. Please commit or stash them."
-        else 
-          "An error occured."
-        end
       end
     end
   end
