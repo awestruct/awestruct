@@ -3,7 +3,7 @@ require 'bundler/setup'
 require 'rspec/core/rake_task'
 require 'awestruct/version'
 
-GEMFILE = "awestruct-#{Awestruct::VERSION}.gem" 
+GEMFILE = "awestruct-#{Awestruct::VERSION}.gem"
 
 task :default => :build
 
@@ -21,7 +21,7 @@ desc "Run all tests and build the gem"
 task :build => :spec do
   system "gem build awestruct.gemspec"
 end
- 
+
 desc "Release the gem to rubygems"
 task :release => [ :build, :tag ] do
   system "gem push #{GEMFILE}"
@@ -39,4 +39,10 @@ end
 desc "Run `spectator` to monitor changes and execute specs in TDD fashion"
 task :tdd do
   system "spectator"
+end
+
+desc "Run RSpec in 1.9 mode and 1.8 mode"
+task :test do
+  system "jruby -S bundle exec rspec --tty --color spec"
+  system "jruby --1.8 -S bundle exec rspec --tty --color spec"
 end

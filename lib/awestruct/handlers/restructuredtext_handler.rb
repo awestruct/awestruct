@@ -1,4 +1,3 @@
-
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
 require 'awestruct/handlers/file_handler'
@@ -6,7 +5,7 @@ require 'awestruct/handlers/front_matter_handler'
 require 'awestruct/handlers/interpolation_handler'
 require 'awestruct/handlers/layout_handler'
 
-require 'hpricot'
+require 'nokogiri'
 
 module Awestruct
   module Handlers
@@ -33,7 +32,7 @@ module Awestruct
       end
 
       def output_extension
-        '.html' 
+        '.html'
       end
 
       def content_syntax
@@ -52,9 +51,9 @@ module Awestruct
           doc = execute_shell( [ "rst2html",
                                  "--strip-comments",
                                  "--no-doc-title",
-                                 " --initial-header-level=#{hl}" ].join(' '), 
+                                 " --initial-header-level=#{hl}" ].join(' '),
                                  content )
-          content = Hpricot( doc ).at( '/html/body/div[@class="document"]' ).inner_html.strip
+          content = Nokogiri::HTML( doc ).xpath( '/html/body/div[@class="document"]' ).inner_html.strip
           content = content.gsub( "\r", '' )
         rescue => e
           puts e

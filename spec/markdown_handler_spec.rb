@@ -1,4 +1,3 @@
-
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/markdown_handler'
 
@@ -22,16 +21,16 @@ describe Awestruct::Handlers::MarkdownHandler do
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "markdown-page.md" ) )
     markdown_handler = Awestruct::Handlers::MarkdownHandler.new( @site, file_handler )
 
-    markdown_handler.simple_name.should == 'markdown-page' 
+    markdown_handler.simple_name.should == 'markdown-page'
   end
-  
+
   it "should successfully render a HAML page" do
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "markdown-page.md" ) )
     markdown_handler = Awestruct::Handlers::MarkdownHandler.new( @site, file_handler )
 
     rendered = markdown_handler.rendered_content( create_context )
     rendered.should_not be_nil
-    rendered.should =~ %r(<h1>This is a Markdown page</h1>) 
+    rendered.should =~ %r(<h1>This is a Markdown page</h1>)
   end
 
 end

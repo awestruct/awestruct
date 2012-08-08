@@ -1,4 +1,4 @@
-require 'hpricot'
+require 'nokogiri'
 
 module Awestruct
   module ContextHelper
@@ -38,23 +38,22 @@ module Awestruct
     end
 
     def fully_qualify_urls(base_url, text)
-      doc = Hpricot( text )
+      doc = Nokogiri::HTML::DocumentFragment.parse( text )
 
-      doc.search( "//a" ).each do |a|
-        a['href'] = fix_url( base_url, a['href'] ) if a['href']
+      doc.css( "a" ).each do |a|
+        a.attributes['href'].value = fix_url( base_url, a.attributes['href'].value ) if a.attributes['href']
       end
-      doc.search( "//link" ).each do |link|
-        link['href'] = fix_url( base_url, link['href'] )
+      doc.css( "link" ).each do |link|
+        link.attributes['href'].value = fix_url( base_url, link.attributes['href'].value )
       end
-      doc.search( "//img" ).each do |img|
-        img['src'] = fix_url( base_url, img['src'] )
+      doc.css( "img" ).each do |img|
+        img.attributes['src'].value = fix_url( base_url, img.attributes['src'].value )
       end
-      # Hpricot::Doc#to_s output encoding is not necessarily the same as the encoding of text
       if RUBY_VERSION.start_with? '1.8'
         doc.to_s
       else
-        doc.to_s.tap do |d| 
-          d.force_encoding(text.encoding) if d.encoding != text.encoding 
+        doc.to_s.tap do |d|
+          d.force_encoding(text.encoding) if d.encoding != text.encoding
         end
       end
     end

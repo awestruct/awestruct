@@ -1,14 +1,14 @@
-[![Build Status](https://secure.travis-ci.org/awestruct/awestruct.png)](http://travis-ci.org/awestruct/awestruct)
+[![Build Status](https://secure.travis-ci.org/statonjr/awestruct.png?branch=master)](http://travis-ci.org/statonjr/awestruct)
 
 [![Build Status](https://buildhive.cloudbees.com/job/awestruct/job/awestruct/badge/icon)](https://buildhive.cloudbees.com/job/awestruct/job/awestruct/)
 
 # For more information
 
-Please see the complete site at <http://awestruct.org/>.
+A JRuby version of Awestruct. Please see the complete site at <http://awestruct.org/>.
 
 # License
 
-    Copyright (c) 2010-2011 Bob McWhirter and contributors (see git log)
+    Copyright (c) 2010-2012 Bob McWhirter and contributors (see git log)
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to
@@ -16,16 +16,15 @@ Please see the complete site at <http://awestruct.org/>.
     rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
     sell copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
-      
+
     The above copyright notice and this permission notice shall be included in
     all copies or substantial portions of the Software.
-       
+
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-    THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER 
+    THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 It also uses code from the Sequel project under the same license.
-
