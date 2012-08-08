@@ -248,20 +248,56 @@ module Awestruct
       page = site.pages.find{|p| p.relative_source_path.to_s==full_path} || site.layouts.find{|p| p.relative_source_path.to_s==full_path}
       return if page.nil?
 
-      #puts "regen page #{page.inspect}"
-      #puts "page.dependents #{page.dependencies.dependents.inspect}"
+      if !page.output_path.nil?
+        generate_page_internal(page)
+      end
+
+      pages = [] << page
+
+      pages.each{|page|
+        puts "--------------------"
+        puts "Page: #{page.output_path} #{page.relative_source_path} #{page.__is_layout ? 'Layout':''}"
+        puts "Detected change in content (#{page.dependencies.content_hash})" if page.dependencies.has_changed_content
+        puts "!! Detected change in front matter. To fully reflect the change you'll need to restart Awestruct (#{page.dependencies.key_hash})" if page.dependencies.has_changed_keys
+        puts "No changes detected" unless page.dependencies.has_changed_content or page.dependencies.has_changed_keys
+        puts "Dependencies Matrix: (non unique source path)"
+        puts "\t Outgoing dependencies:"
+        puts "\t\t Content -> #{page.dependencies.dependencies.size}"
+        puts "\t\t Key     -> #{page.dependencies.key_dependencies.size}"
+        puts "\t Incoming dependencies:"
+        puts "\t\t Content <- #{page.dependencies.dependents.size}"
+        puts "\t\t Key     <- #{page.dependencies.key_dependents.size}"
+        puts "--------------------"
+      }
 
       regen_pages = Set.new
-      regen_pages << page unless ( page.output_path.nil? )
-      regen_pages += page.dependencies.dependents
+      if page.dependencies.has_changed_content or page.__is_layout
+        regen_pages += page.dependencies.dependents
+      end
+      regen_pages = regen_pages.sort do |x, y|
+        xf = "#{@site.dir}#{x.relative_source_path}"
+        yf = "#{@site.dir}#{y.relative_source_path}"
+        xt = 0
+        yt = 0
+        xt = File.mtime(xf).to_i if File.exist? xf
+        yt = File.mtime(yf).to_i if File.exist? yf
 
-      #puts regen_pages.collect{|e|e.output_path}.inspect
+        yt <=> xt
+      end
+
+      puts "Starting regeneration of content dependent pages:" if regen_pages.size > 0
+      regen_pages.each{|x| puts x.output_path}
+
       regen_pages.each do |p|
+        generate_page_internal(p)
+      end
+    end
+
+    def generate_page_internal(p)
         unless ( p.output_path.nil? || p.__is_layout )
           generated_path = File.join( site.config.output_dir, p.output_path )
           generate_page( p, generated_path )
         end
-      end
     end
 
     ####

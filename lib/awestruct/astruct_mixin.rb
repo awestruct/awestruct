@@ -66,7 +66,7 @@ module Awestruct
       end
       if ( self.is_a? Awestruct::Page )
         unless UNTRACKED_KEYS.include? for_key.to_sym
-          Awestruct::Dependencies.track_dependency( self )
+          Awestruct::Dependencies.track_key_dependency( self, for_key )
         end
       end
       r

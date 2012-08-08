@@ -19,6 +19,7 @@ module Awestruct
       def inherit_front_matter(outer_page)
         #page.prepare!
         #page.handler.inherit_front_matter( outer_page )
+        @page.handler.inherit_front_matter(outer_page)
       end
 
       def output_path

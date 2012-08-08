@@ -60,7 +60,7 @@ module Awestruct
       end
       
       def open
-      	input_stream = IO.open(IO.sysopen(@path, "rb"), "rb" )
+        input_stream = IO.open(IO.sysopen(@path, "rb"), "rb" )
         result = input_stream.read
         input_stream.close
         return result
