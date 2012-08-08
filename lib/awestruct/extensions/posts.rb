@@ -8,7 +8,8 @@ module Awestruct
       end
 
       def execute(site)
-        posts = []
+        posts   = []
+        archive = Archive.new
 
         site.pages.each do |page|
           year, month, day, slug = nil
@@ -36,14 +37,8 @@ module Awestruct
             # if a date was found create a post
             if( year and month and day)
               page.slug ||= slug
-              #context = OpenStruct.new({
-                #:site=>site,
-                #:page=>page,
-              #})
               context = page.create_context
-              #page.body = page.render( context )
               page.output_path = "#{@path_prefix}/#{year}/#{month}/#{day}/#{page.slug}.html"
-              #page.layout = 'post'
               posts << page
             end
           end
@@ -59,12 +54,30 @@ module Awestruct
              last.send( "previous_#{singular}=", e )
           end
           last = e
+          archive << e
         end
 
         site.send( "#{@assign_to}=", posts )
+        site.send( "#{assign_to}_archive = ", archive )
 
+      end
+
+
+      class Archive
+        attr_accessor :posts
+
+        def initialize()
+          @posts  = {}
+        end
+
+        def <<( post )
+          posts[post.date.year] ||= {}
+          posts[post.date.year][post.date.month] ||= []
+          posts[post.date.year][post.date.month] << post
+        end
       end
 
     end
   end
 end
+
