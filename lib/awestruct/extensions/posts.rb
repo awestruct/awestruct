@@ -58,7 +58,7 @@ module Awestruct
         end
 
         site.send( "#{@assign_to}=", posts )
-        site.send( "#{assign_to}_archive = ", archive )
+        site.send( "#{@assign_to}_archive = ", archive )
 
       end
 

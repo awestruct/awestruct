@@ -1,4 +1,5 @@
 require 'awestruct/handler_chain'
+require 'shellwords'
 require 'open3'
 
 module Awestruct
@@ -97,7 +98,7 @@ module Awestruct
       end
 
       def execute_shell(command, input=nil)
-        Open3.popen3(command) do |stdin, stdout, _|
+        Open3.popen3(Shellwords.escape( command )) do |stdin, stdout, _|
           stdin.puts input unless input.nil?
           stdin.close
           out = stdout.read
