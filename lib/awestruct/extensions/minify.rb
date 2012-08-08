@@ -1,3 +1,4 @@
+require 'shellwords'
 require 'fileutils'
 
 ##
@@ -96,7 +97,7 @@ module Awestruct
             end
           end
         end
-        Open3.popen3(cmd) do |stdin, stdout, stderr|
+        Open3.popen3(Shellwords.escape(cmd)) do |stdin, stdout, stderr|
           threads = []
           threads << Thread.new(stdout) do |o|
             while ( ! o.eof? )
@@ -124,7 +125,7 @@ module Awestruct
 
       def yuicompressor(page, input, type)
         output = ''
-        Open3.popen3("yuicompressor --type #{type}") do |stdin, stdout, stderr|
+        Open3.popen3("yuicompressor --type #{Shellwords.escape(type)}") do |stdin, stdout, stderr|
           threads = []
           threads << Thread.new(stdout) do |o|
             while ( ! o.eof? )
@@ -152,7 +153,7 @@ module Awestruct
 
       def pngcrush(page, input)
         filename = page.source_path
-        cmd = "pngcrush #{filename} /tmp/pngcrush"
+        cmd = Shellwords.escape("pngcrush #{filename} /tmp/pngcrush")
         `#{cmd}`
         if $?.exitstatus != 0
           raise "Failed to execute pngcrush: #{cmd}"
