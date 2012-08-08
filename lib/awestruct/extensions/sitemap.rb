@@ -9,7 +9,7 @@ module Awestruct
     class Sitemap
 
       def initialize
-        @excluded_files = [ '.htaccess', 'robots.txt' ].to_set
+        @excluded_files = [ '/.htaccess', '/robots.txt' ].to_set
         @excluded_extensions = ['.atom', '.scss', '.css', '.png', '.jpg', '.gif', '.js' ].to_set
       end
 
@@ -82,7 +82,7 @@ module Awestruct
       end
 
       def valid_sitemap_entry( page )
-        !@excluded_files.member?(page.output_filename) && !@excluded_extensions.member?(page.output_extension)
+        !@excluded_files.member?(page.output_path) && !@excluded_extensions.member?(page.output_extension)
       end
 
     end
