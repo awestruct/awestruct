@@ -6,13 +6,14 @@ module Awestruct
       def initialize( site_config, deploy_config )
         @site_path = site_config.output_dir
         @branch    = deploy_config[ 'branch' ] || 'gh-pages'
+        @repo      = deploy_config[ 'repository' ] || 'origin'
       end
 
       def publish_site
         current_branch = git.current_branch
         git.branch( @branch ).checkout
         add_and_commit_site @site_path
-        git.push( 'origin', @branch )
+        git.push( @repo, @branch )
         git.checkout( current_branch )
       end
 
