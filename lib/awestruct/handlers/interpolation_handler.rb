@@ -20,7 +20,13 @@ module Awestruct
         content = content.gsub( Regexp.new('#(?!{)'), '\#' ) if ruby_19?
         content = content.gsub( '@', '\@' )
         content = "%@#{content}@"
-        c = context.instance_eval( content )
+        begin
+          c = context.instance_eval( content )
+        rescue Exception => e # Don't barf all over ourselves if an exception is thrown
+          $stderr.puts "Exception thrown interpolating content. #{e.to_s}"
+          $stderr.puts e.backtrace
+          c = delegate.raw_content
+        end
         c
 
       end
