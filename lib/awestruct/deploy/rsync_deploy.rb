@@ -19,7 +19,13 @@ module Awestruct
           exclude_option = "--exclude=#{@exclude}"
         end
         cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{exclude_option} #{@site_path} #{@host}:#{@path}"
-        Open3.popen3( Shellwords.escape(cmd) ) do |stdin, stdout, stderr|
+
+        # Shellwords mangles windows  rsync command so we need to skip shell words
+        if(RUBY_PLATFORM !~ /mingw/)
+          cmd = Shellwords.escape(cmd)
+        end
+
+        Open3.popen3( cmd ) do |stdin, stdout, stderr|
           stdin.close
           threads = []
           threads << Thread.new(stdout) do |i|
