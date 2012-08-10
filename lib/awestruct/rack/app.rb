@@ -8,9 +8,9 @@ module Awestruct
       end
 
       def call(env)
-        path = env['REQUEST_PATH']
+        path = env['PATH_INFO']
         fs_path = File.join( @doc_root, path )
-        
+
         if ( File.directory?( fs_path ) )
           if ( ! ( path =~ %r(/$) ) )
             return [ 301,
@@ -21,20 +21,31 @@ module Awestruct
           end
         end
 
+        # There must be a Content-Type, except when the Status is 1xx,
+        # 204 or 304, in which case there must be none given.
+        #
+        # The Body must respond to each and must only yield String
+        # values. The Body itself should not be an instance of String,
+        # as this will break in Ruby 1.9.
         if ( File.exist?( fs_path ) )
+          body = read_content( fs_path )
+          content_type = ::Rack::Mime.mime_type( File.extname(path) )
+          length = body.size.to_s
           [ 200,
-            {},
-            read_content( fs_path ) ]
+            {"Content-Type" => content_type, "Content-Length" => length},
+            [body] ]
         else
+          body = read_error_document(path)
+          length = body.size.to_s
           [ 404,
-            {},
-            read_error_document(path) ]
+            {"Content-Type" => 'text/plain', "Content-Length" => length},
+            [body] ]
         end
       end
 
       def read_error_document( path )
         doc_path = nil
-        htaccess = File.join( @doc_root, '.htaccess' ) 
+        htaccess = File.join( @doc_root, '.htaccess' )
         if ( File.exist?( htaccess ) )
           File.open( htaccess ).each_line do |line|
             if ( line =~ %r(^.*ErrorDocument[ \t]+404[ \t]+(.+)$) )
@@ -44,7 +55,7 @@ module Awestruct
         end
         if ( doc_path )
           fs_doc_path = File.join( @doc_root, doc_path )
-          return read_content( fs_doc_path ) if File.exist?( fs_doc_path ) 
+          return read_content( fs_doc_path ) if File.exist?( fs_doc_path )
         end
         "404: Not Found: #{path}"
       end
