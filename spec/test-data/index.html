@@ -1,0 +1,242 @@
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>awestruct: home</title>
+    <link href='/news.atom' rel='alternate' type='application/atom+xml' />
+    <meta content='width=device-width, initial-scale=1.0' name='viewport' />
+    <style type='text/css'>
+      /*<![CDATA[*/
+        body {
+          padding-top: 60px;
+        }
+      /*]]>*/
+    </style>
+    <script src='http://code.jquery.com/jquery-1.7.2.min.js' type='text/javascript'></script>
+    <link href='http://staging.awestruct.org/stylesheets/styles.css' rel='stylesheet' type='text/css' />
+    <link href='http://yandex.st/highlightjs/7.0/styles/default.min.css' rel='stylesheet' />
+    <script src='http://yandex.st/highlightjs/7.0/highlight.min.js'></script>
+    <!--[if lt IE 9]>
+      <script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+    <![endif]-->
+    <script type='text/javascript'>
+      //<![CDATA[
+        $.getJSON("https://rubygems.org/api/v1/versions/awestruct.json?callback=?", function(data) { alert( data.number ); });
+        hljs.initHighlightingOnLoad();
+      //]]>
+    </script>
+  </head>
+  <body>
+    <div class='navbar navbar-fixed-top'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <div class='github-banner'>
+            <a href='https://github.com/awestruct/awestruct'>
+              <img alt='Fork me on GitHub' src='https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png' style='position: absolute; top: 0; right: 0; border: 0;z-index: 900;' />
+            </a>
+          </div>
+          <a class='brand' href='http://staging.awestruct.org'>{:awestruct}</a>
+          <ul class='nav'>
+            <li>
+              <a href='http://staging.awestruct.org'>Home</a>
+            </li>
+            <li>
+              <a href='http://staging.awestruct.org/news/'>News</a>
+            </li>
+            <li class='dropdown' id='getting-started-menu'>
+              <a class='dropdown-toggle' data-toggle='dropdown' href='#getting-started-menu'>
+                Documentation
+                <b class='caret'></b>
+              </a>
+              <ul class='dropdown-menu'>
+                <li>
+                  <a href='http://staging.awestruct.org/getting_started/'>Getting Started</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/layout/'>Project Layout</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/profiles/'>Site Profiles</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/file_types/'>File Types</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/skins/'>Skins</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/template_context/'>Template Context</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/deployment/'>Site Deployment</a>
+                </li>
+              </ul>
+            </li>
+            <li class='dropdown' id='extensions-menu'>
+              <a class='dropdown-toggle' data-toggle='dropdown' href='#extensions-menu'>
+                Extensions
+                <b class='caret'></b>
+              </a>
+              <ul class='dropdown-menu'>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/'>Overview</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/atomizer/'>Atomizer</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/data_dir/'>DataDir</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/disqus/'>Disqus</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/flattr/'>Flattr</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/indexifier/'>Indexifier</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/intense_debate/'>IntenseDebate</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/paginator/'>Paginator</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/posts/'>Posts</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/sitemap/'>Sitemap</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/tag_cloud/'>TagCloud</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/tagger/'>Tagger</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/extensions/textile/'>Textile</a>
+                </li>
+              </ul>
+            </li>
+            <li class='dropdown' id='helpers-menu'>
+              <a class='dropdown-toggle' data-toggle='dropdown' href='#helpers-menu'>
+                Helpers
+                <b class='caret'></b>
+              </a>
+              <ul class='dropdown-menu'>
+                <li>
+                  <a href='http://staging.awestruct.org/helpers/'>Overview</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/helpers/partial/'>Partial</a>
+                </li>
+                <li>
+                  <a href='http://staging.awestruct.org/helpers/google_analytics/'>Google Analytics</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <div class='row'>
+        <div class='span3'>
+          <div class='well'>
+            <h2>Build Status</h2>
+            <p>
+              Travis-CI
+              <a href='http://travis-ci.org/awestruct/awestruct'>
+                <img src='https://secure.travis-ci.org/awestruct/awestruct.png' />
+              </a>
+            </p>
+            <p>
+              CloudBees
+              <a href='https://buildhive.cloudbees.com/job/awestruct/job/awestruct/'>
+                <img src='https://buildhive.cloudbees.com/job/awestruct/job/awestruct/badge/icon' />
+              </a>
+            </p>
+          </div>
+          <div id='sidebar'>
+            <ul class='nav nav-tabs nav-stacked'>
+              <li>
+                <a href='http://staging.awestruct.org/gallery/'>Gallery</a>
+              </li>
+              <li>
+                <a href='http://staging.awestruct.org/source/'>Source Code</a>
+              </li>
+              <li>
+                <a href='http://staging.awestruct.org/yardoc/'>API Documentation</a>
+              </li>
+              <li>
+                <a href='mailto:talk-subscribe@awestruct.org?subject=subscribe'>Mailing List</a>
+              </li>
+              <li>
+                <a href='http://talk-archive.awestruct.org/'>List Archives</a>
+              </li>
+              <li>
+                <a href='http://twitter.com/awestructed'>Twitter</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class='span8'>
+          <div class='page-header'>
+  <h1>
+    { :awestruct }
+    <small>A static site-baking tool</small>
+  </h1>
+</div>
+<p>
+  Awestruct is a framework for creating static HTML sites, inspired by the
+  <a href='http://github.com/mojombo/jekyll'>Jekyll</a>
+  utility in the same genre.
+</p>
+<p>
+  Awestruct makes it trivially easy to create non-trivial static websites using
+  tools like
+  <a href='http://compass-style.org'>Compass,</a>
+  <a href='http://daringfireball.net/projects/markdown/syntax'>Markdown,</a>
+  and
+  <a href='http://haml-lang.com'>Haml,</a>
+  as well as common frameworks like Twitter Bootstrap and Blueprint.
+</p>
+<p>
+  The core concept of Awestruct is that of structures, specifically Ruby
+  `OpenStruct` structures. The struct aspect allows arbitrary, schema-less data
+  to be associated with a specific page or the entire site.
+</p>
+<p>
+  Site-specific data is automatically loaded from simple YAML files, while data
+  can be provided on pages using a front-matter prolog.
+</p>
+<div class='row'>
+  <div class='span4'>
+    <div class='well'>
+      <h2>
+        Install
+        <small>Version 0.4.5</small>
+      </h2>
+      <pre><code class='bash'>$ gem install awestruct</code></pre>
+    </div>
+  </div>
+  <div class='span4'>
+    <div class='well'>
+      <h2>Getting Started</h2>
+      <pre><code class='bash'>$ awestruct -i -f bootstrap</code></pre>
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+      <div class='row'>
+        <hr />
+        <footer>
+          <p>&copy; Bob McWhirter 2012</p>
+          <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+          <script src='http://staging.awestruct.org/javascript/bootstrap-dropdown.js' type='text/javascript'></script>
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
