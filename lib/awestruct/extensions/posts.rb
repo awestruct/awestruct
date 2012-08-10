@@ -2,9 +2,13 @@ module Awestruct
   module Extensions
     class Posts
 
-      def initialize(path_prefix='', assign_to=:posts)
-        @path_prefix = path_prefix
-        @assign_to   = assign_to
+      attr_accessor :path_prefix, :assign_to, :archive_template, :archive_path
+
+      def initialize(path_prefix='', assign_to=:posts, archive_template=nil, archive_path=nil)
+        @archive_template = archive_template
+        @archive_path     = archive_path
+        @path_prefix      = path_prefix
+        @assign_to        = assign_to
       end
 
       def execute(site)
@@ -60,7 +64,7 @@ module Awestruct
           last = e
           archive << e
         end
-
+        site.pages.concat( archive.generate_pages( site.engine, archive_template, archive_path ) ) if (archive_template && archive_path)
         site.send( "#{@assign_to}=", posts )
         site.send( "#{@assign_to}_archive = ", archive )
 
@@ -70,14 +74,30 @@ module Awestruct
       class Archive
         attr_accessor :posts
 
-        def initialize()
-          @posts  = {}
+        def initialize
+          @posts        = {}
         end
 
         def <<( post )
           posts[post.date.year] ||= {}
-          posts[post.date.year][post.date.month] ||= []
-          posts[post.date.year][post.date.month] << post
+          posts[post.date.year][post.date.month] ||= {}
+          posts[post.date.year][post.date.month][post.date.day] ||= []
+          posts[post.date.year][post.date.month][post.date.day] << post
+        end
+
+        def generate_pages( engine, template, output_path )
+          pages = []
+          posts.keys.sort.each do |year|
+            posts[year].keys.sort.each do |month| 
+              posts[year][month].keys.sort.each do |day|
+                archive_page = engine.find_and_load_site_page( template )
+                archive_page.send( "archive=", posts[year][month][day] )
+                archive_page.output_path = File.join( output_path, year.to_s, month.to_s, day.to_s, File.basename( template ) + ".html" )
+                pages << archive_page
+              end
+            end
+          end
+          pages
         end
       end
 
