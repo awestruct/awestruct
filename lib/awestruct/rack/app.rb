@@ -29,7 +29,7 @@ module Awestruct
         # as this will break in Ruby 1.9.
         if ( File.exist?( fs_path ) )
           body = read_content( fs_path )
-          content_type = ::Rack::Mime.mime_type( File.extname(path) )
+          content_type = ::Rack::Mime.mime_type( File.extname(fs_path) )
           length = body.size.to_s
           [ 200,
             {"Content-Type" => content_type, "Content-Length" => length},
