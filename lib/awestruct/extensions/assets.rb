@@ -1,39 +1,35 @@
 require 'awestruct/extensions/relative'
-require 'pathname'
 
 module Awestruct
   module Extensions
     module Assets
 
+      include Awestruct::Extensions::Relative
+
       def asset(href)
         if site.assets_url
           File.join(site.assets_url, href)
         else
-          relative(File.join("/#{site.assets_path||'assets'}", href))
+	  relative(File.join("/#{site.assets_path || 'assets'}", href))
         end
       end
 
-      class Transformer
-        # FIXME this is not DRY at all
-        def relative(page, href)
-          Pathname.new(href).relative_path_from(Pathname.new(File.dirname(page.output_path))).to_s
+      class Extension
+
+	def execute(site)
+	  site.pages.each{ |p| p.extend Extension }
         end
-        def asset(site, page, href)
-          if site.assets_url
-            File.join(site.assets_url, href)
-          else
-            relative(page, File.join("/#{site.assets_path||'assets'}", href))
-          end
-        end
-        def transform(site, page, input)
-          if page.output_path =~ /\.html/
-            input.gsub('asset://', asset(site, page, "#{File.basename(File.basename(page.source_path, ".md"))}") + "/")
-          else
-            input
+
+	module Extension
+
+	  include Awestruct::Extensions::Relative
+
+	  def assets_url
+	    path = File.join("/#{site.assets_path || 'assets'}", File.join(File.dirname(output_path), File.basename(output_path, '.*')))
+	    relative(path, self)
           end
         end
       end
-
     end
   end
 end
