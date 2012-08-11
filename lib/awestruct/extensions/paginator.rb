@@ -50,6 +50,7 @@ module Awestruct
         @window_size  = opts[:window_size] || 2
         @remove_input = opts.has_key?( :remove_input ) ? opts[:remove_input] : true
         @output_prefix = opts[:output_prefix] || File.dirname( @input_path )
+	@page_name     = opts[:page_name] || 'page/'
         @collection    = opts[:collection]
       end
 
@@ -66,7 +67,7 @@ module Awestruct
           if ( i == 1 )
             page.output_path = File.join( @output_prefix, File.basename( @input_path ) + ".html" )
           else
-            page.output_path = File.join( @output_prefix, "page/#{i}.html" )
+	    page.output_path = File.join( @output_prefix, "#{@page_name}#{i}.html" )
           end
           page.paginate_generated = true
           site.pages << page
@@ -83,7 +84,7 @@ module Awestruct
         prev_page = nil
         paginated_pages.each_with_index do |page,i|
           slice = page.send( @prop_name )
-          
+
           slice.current_page       = page
           slice.current_page_index = i
           slice.pages              = paginated_pages
