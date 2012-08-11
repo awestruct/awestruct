@@ -156,7 +156,5 @@ module Awestruct
       self.object_id == other_page.object_id
     end
 
-
   end
-
 end
