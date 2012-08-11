@@ -9,6 +9,7 @@ module Awestruct
       end
 
       module Disqus
+
         def disqus_comments()
           identifier = "null"
           if self.disqus_identifier or site.disqus_generate_id
@@ -51,6 +52,8 @@ module Awestruct
             </script>
           }
         end
+
+	private
 
         def resolve_disqus_identifier()
           self.disqus_identifier ? self.disqus_identifier : Digest::SHA1.hexdigest(self.date.strftime('%Y-%m-%d-') + self.slug)
