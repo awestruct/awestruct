@@ -9,6 +9,7 @@ module Awestruct
     attr_reader :dir
     attr_reader :output_dir
     attr_reader :tmp_dir
+    attr_reader :timestamp
 
     attr_reader :pages
     attr_reader :layouts
@@ -22,6 +23,7 @@ module Awestruct
       @layouts = Layouts.new
       @config = config
       self.encoding = false
+      @timestamp = Time.now.to_i
     end
 
     def inspect
