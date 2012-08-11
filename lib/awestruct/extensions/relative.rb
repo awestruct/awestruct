@@ -5,7 +5,7 @@ module Awestruct
     module Relative
 
       def relative(href, p = page)
-	Pathname.new(href).relative_path_from(Pathname.new(File.dirname(p.output_path))).to_s
+        Pathname.new(href).relative_path_from(Pathname.new(File.dirname(p.output_path))).to_s
       end
 
     end

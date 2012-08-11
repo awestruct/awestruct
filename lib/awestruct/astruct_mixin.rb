@@ -13,7 +13,7 @@ module Awestruct
     end
 
     def cascade_for_nils!
-      @cascade_for_nils = true 
+      @cascade_for_nils = true
       self
     end
 
@@ -40,7 +40,7 @@ module Awestruct
         if key?(name)
           self[name]
         elsif @cascade_for_nils
-          self[name] = AStruct.new.cascade_for_nils! 
+          self[name] = AStruct.new.cascade_for_nils!
           self[name]
         else
           nil
@@ -75,7 +75,7 @@ module Awestruct
     def inspect
       "AStruct{...}"
     end
-  
+
   end
 
 end

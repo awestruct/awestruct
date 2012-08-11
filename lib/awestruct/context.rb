@@ -8,15 +8,15 @@ module Awestruct
     attr_accessor :page
 
     def initialize(hash)
-      super 
+      super
       @page = hash[:page]
       @site = hash[:site]
-     
-    end 
+
+    end
 
     def inspect
-      "Awestruct::Context{:page=>#{self.page.inspect}}" 
-    end  
+      "Awestruct::Context{:page=>#{self.page.inspect}}"
+    end
   end
 
 end

@@ -16,7 +16,7 @@ module Awestruct
     def inspect
       "AStruct{...}"
     end
-  
+
   end
 
 end
