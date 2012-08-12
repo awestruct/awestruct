@@ -3,7 +3,7 @@ module Awestruct
     module Cachebuster
 
       def cache(href)
-        "#{href}?#{cachebuster}"
+        "#{href}?#{page.cachebuster}"
       end
 
       class Extension
