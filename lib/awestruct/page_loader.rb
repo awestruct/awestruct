@@ -8,7 +8,7 @@ module Awestruct
     attr_reader :root_dir
 
     def initialize(site, target=:pages)
-      @site   = site 
+      @site   = site
       @target = target
 
       @root_dir = site.config.dir
@@ -18,10 +18,11 @@ module Awestruct
     end
 
     def ignore?(path)
-      site.config.ignore.include?( path ) 
+      site.config.ignore.include?( path )
     end
 
     def load_all(prepare=:inline)
+      raise "No such dir #{root_dir}" unless File.directory?(root_dir)
       pages = []
       root_dir.find do |path|
         if ( path == root_dir )
@@ -53,7 +54,7 @@ module Awestruct
         end
       end
       if ( prepare == :post )
-        pages.each{|p| p.prepare!} 
+        pages.each{|p| p.prepare!}
       end
     end
 
@@ -73,7 +74,7 @@ module Awestruct
       end
       p.track_dependencies!
       if prepare == :inline
-        p.prepare! 
+        p.prepare!
       end
       p
     end

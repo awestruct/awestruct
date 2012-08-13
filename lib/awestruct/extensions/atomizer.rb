@@ -8,6 +8,7 @@ module Awestruct
         @num_entries = opts[:num_entries] || 50
         @content_url = opts[:content_url]
         @feed_title = opts[:feed_title]
+        @template = opts[:template] || File.join( File.dirname(__FILE__), 'template.atom.haml' )
       end
 
       def execute(site)
@@ -29,8 +30,7 @@ module Awestruct
 
         site.engine.set_urls(atom_pages)
 
-        input_page = File.join( File.dirname(__FILE__), 'template.atom.haml' )
-        page = site.engine.load_page( input_page )
+        page = site.engine.load_page( @template )
         page.date = page.timestamp unless page.timestamp.nil?
         page.output_path = @output_path
         page.entries = atom_pages

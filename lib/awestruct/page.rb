@@ -33,7 +33,7 @@ module Awestruct
 
     def inspect
       "Awestruct::Page{ #{self.object_id}: output_path=>#{output_path}, source_path=>#{source_path}, layout=>#{layout} }"
-    end 
+    end
 
     def create_context(content='')
       context = Awestruct::Context.new( :site=>site, :page=>self, :content=>content )
@@ -86,11 +86,11 @@ module Awestruct
     end
 
     def stale?
-      handler.stale? || @dependencies.dependencies.any?(&:stale?) 
+      handler.stale? || @dependencies.dependencies.any?(&:stale?)
     end
 
     def stale_output?(output_path)
-      return true if ! File.exist?( output_path )  
+      return true if ! File.exist?( output_path )
       return true if input_mtime > File.mtime( output_path )
       false
     end
@@ -108,7 +108,7 @@ module Awestruct
           t = e.mtime
         end
       end
-      t 
+      t
     end
 
     def all_dependencies
@@ -127,7 +127,14 @@ module Awestruct
       if context.site.config.track_dependencies
         Awestruct::Dependencies.push_page( self )
       end
-      c = handler.rendered_content( context, with_layouts )
+      c = nil
+
+      begin
+        c = handler.rendered_content( context, with_layouts )
+      rescue => e
+        raise $!, "Failed to render #{self.url}", $!.backtrace
+      end
+
       if context.site.config.track_dependencies
         Awestruct::Dependencies.pop_page
 
