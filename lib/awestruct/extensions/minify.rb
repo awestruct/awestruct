@@ -125,7 +125,7 @@ module Awestruct
 
       def yuicompressor(page, input, type)
         output = ''
-        Open3.popen3("yuicompressor --type #{Shellwords.escape(type)}") do |stdin, stdout, stderr|
+        Open3.popen3("yuicompressor --type #{Shellwords.escape(type.to_s)}") do |stdin, stdout, stderr|
           threads = []
           threads << Thread.new(stdout) do |o|
             while ( ! o.eof? )
