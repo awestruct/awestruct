@@ -1,4 +1,4 @@
-
+# -*- coding: UTF-8 -*-
 require 'awestruct/page'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/haml_handler'
@@ -75,5 +75,12 @@ describe Awestruct::Handlers::HamlHandler do
     rendered = haml_handler.rendered_content( create_context )
     rendered.should_not be_nil
     rendered.should =~ %r(<h1>Hello From Markdown</h1>) 
+  end
+
+  it "should handle UTF character encodings" do
+    page = Awestruct::Page.new( site, Awestruct::Handlers::HamlHandler::CHAIN.create( site, handler_file("haml-with-utf.html.haml") ) )
+    page.prepare!
+    page.content.should == "<h1>Besøg fra Danmark</h1>\n"
+    page.content
   end
 end
