@@ -2,6 +2,12 @@ require 'awestruct/handler_chain'
 require 'shellwords'
 require 'open3'
 
+if RUBY_VERSION.start_with? "1.9"
+  Encoding.default_external = "UTF-8"
+else
+  puts RUBY_VERSION
+end
+
 module Awestruct
   module Handlers
     class BaseHandler
