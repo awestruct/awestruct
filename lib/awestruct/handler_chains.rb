@@ -7,6 +7,7 @@ require 'awestruct/handlers/restructuredtext_handler'
 require 'awestruct/handlers/textile_handler'
 require 'awestruct/handlers/erb_handler'
 require 'awestruct/handlers/haml_handler'
+require 'awestruct/handlers/mustache_handler'
 require 'awestruct/handlers/sass_handler'
 require 'awestruct/handlers/scss_handler'
 require 'awestruct/handlers/javascript_handler'
@@ -25,6 +26,7 @@ module Awestruct
       Awestruct::Handlers::AsciidocHandler::CHAIN,
       Awestruct::Handlers::RestructuredtextHandler::CHAIN,
       Awestruct::Handlers::HamlHandler::CHAIN,
+      Awestruct::Handlers::MustacheHandler::CHAIN,      
       Awestruct::Handlers::SassHandler::CHAIN,
       Awestruct::Handlers::ScssHandler::CHAIN,
       Awestruct::Handlers::JavascriptHandler::CHAIN,
