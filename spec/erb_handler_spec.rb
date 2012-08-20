@@ -48,7 +48,11 @@ describe Awestruct::Handlers::ErbHandler do
   it "should handle UTF character encodings" do
     page = Awestruct::Page.new( @site, Awestruct::Handlers::ErbHandler::CHAIN.create( @site, handler_file("erb-utf-page.html.erb") ) )
     page.prepare!
-    page.content.should == "# coding: UTF-8\nBesøg fra Danmark\n"
+    if(RUBY_PLATFORM !~ /mingw/)
+      page.content.should == "# coding: UTF-8\nBesøg fra Danmark\n"
+    else
+      page.content.should == "# coding: UTF-8\r\nBesøg fra Danmark\r\n"
+    end
     page.content
   end
 
