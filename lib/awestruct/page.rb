@@ -131,7 +131,7 @@ module Awestruct
 
       begin
         c = handler.rendered_content( context, with_layouts )
-        c = site.engine.pipeline.apply_transformers( context.site, self, c )
+        # c = site.engine.pipeline.apply_transformers( context.site, self, c )
       rescue => e
         raise $!, "Failed to render #{self.url}", $!.backtrace
       end
