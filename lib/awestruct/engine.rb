@@ -245,7 +245,8 @@ module Awestruct
 
     def generate_page_by_output_path(path)
       full_path = File.join( '', path )
-      page = site.pages.find{|p| p.relative_source_path.to_s==full_path} || site.layouts.find{|p| p.relative_source_path.to_s==full_path}
+      page = site.pages.find{ |p| p.relative_source_path.to_s == full_path } ||
+             site.layouts.find{ |p| p.relative_source_path.to_s == full_path }
       return if page.nil?
 
       if !page.output_path.nil?
