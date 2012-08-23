@@ -6,10 +6,11 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     site_config = mock
     site_config.stub(:output_dir).and_return '_site'
 
-    deploy_config = mock
-    deploy_config.stub(:[]).with('branch').and_return('the-branch')
-    deploy_config.stub(:[]).with('repository').and_return('the-repo')
-    @deployer = Awestruct::Deploy::GitHubPagesDeploy.new( site_config, deploy_config )
+    @deploy_config = mock
+    @deploy_config.stub(:[]).with('branch').and_return('the-branch')
+    @deploy_config.stub(:[]).with('repository').and_return('the-repo')
+    @deploy_config.stub(:[]).with('uncommitted').and_return('false')
+    @deployer = Awestruct::Deploy::GitHubPagesDeploy.new( site_config, @deploy_config )
 
     @git = mock
     @git.stub_chain(:status, :changed, :empty?).and_return true
@@ -23,13 +24,13 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
   it "should publish the site if there have been changes to the git repo" do
     ::Git.should_receive(:open).with('.').and_return @git
     @deployer.should_receive(:publish_site)
-    @deployer.run
+    @deployer.run(@deploy_config)
   end
 
   it "should warn and noop if no changes have been committed" do
     @git.stub_chain(:status, :changed, :empty?).and_return false
     $stderr.should_receive(:puts).with(Awestruct::Deploy::Base::UNCOMMITTED_CHANGES)
-    @deployer.run
+    @deployer.run(@deploy_config)
   end
 
   it "should save and restore the current branch when publishing" do
@@ -39,6 +40,6 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     @git.should_receive(:checkout).with( 'bacon' )
 
     @deployer.stub(:add_and_commit_site)
-    @deployer.run
+    @deployer.run(@deploy_config)
   end
 end
