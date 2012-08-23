@@ -6,7 +6,7 @@ module Awestruct
     class Base
       UNCOMMITTED_CHANGES = "You have uncommitted changes in the working branch. Please commit or stash them."
       def run(deploy_config)
-        if deploy_config['uncommited'] == true
+        if deploy_config['uncommitted'] == true
           publish_site
         else
           git.status.changed.empty? ? publish_site : existing_changes

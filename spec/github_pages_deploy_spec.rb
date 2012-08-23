@@ -9,7 +9,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     @deploy_config = mock
     @deploy_config.stub(:[]).with('branch').and_return('the-branch')
     @deploy_config.stub(:[]).with('repository').and_return('the-repo')
-    @deploy_config.stub(:[]).with('uncommited').and_return('false')
+    @deploy_config.stub(:[]).with('uncommitted').and_return('false')
     @deployer = Awestruct::Deploy::GitHubPagesDeploy.new( site_config, @deploy_config )
 
     @git = mock
