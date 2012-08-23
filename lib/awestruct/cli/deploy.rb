@@ -31,7 +31,7 @@ module Awestruct
         end
   
         deployer = deployer_class.new( site_config, deploy_config )
-        deployer.run
+        deployer.run(deploy_config)
       end
 
       private
