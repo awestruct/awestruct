@@ -79,8 +79,7 @@ module Awestruct
           @front_matter = YAML.load( yaml_content ) || {}
         rescue => e
           puts "could not parse #{relative_source_path}"
-          puts e
-          puts e.backtrace
+          raise e
         end
 
         @parsed_parts = true
