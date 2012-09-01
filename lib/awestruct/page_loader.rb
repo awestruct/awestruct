@@ -26,24 +26,25 @@ module Awestruct
       pages = []
       root_dir.find do |path|
         if ( path == root_dir )
-          #puts "skip #{path}"
+          puts "skip #{path}" if (site.config.verbose)
           next
         end
         basename = File.basename( path )
         if ( basename == '.htaccess' )
           #special case
         elsif ( basename =~ /^[_.]/ )
-          #puts "skip #{path} and prune"
+          puts "skip #{path} and prune" if (site.config.verbose)
           Find.prune
           next
         end
         relative_path = path.relative_path_from( root_dir ).to_s
         if ignore?(relative_path)
-          #puts "skip ignored #{path} and prune"
+          puts "skip ignored #{path} and prune" if (site.config.verbose)
           Find.prune
           next
         end
         unless path.directory?
+          puts "loading #{relative_path}" if (site.config.verbose)
           page = load_page( path, prepare )
           if ( page )
             #puts "loaded! #{path} and added to site"

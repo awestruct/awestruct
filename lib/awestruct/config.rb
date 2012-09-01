@@ -17,6 +17,8 @@ module Awestruct
     attr_accessor :images_dir
     attr_accessor :stylesheets_dir
 
+    attr_accessor :verbose
+
     def initialize(dir = Dir.pwd)
       @dir            = Pathname.new( dir )
       @layouts_dir    = Pathname.new( File.join(dir, '_layouts') )
