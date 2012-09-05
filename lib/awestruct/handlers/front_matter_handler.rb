@@ -75,7 +75,13 @@ module Awestruct
           @content_line_offset = -1
         end
 
-        @front_matter = YAML.load( yaml_content ) || {}
+        begin
+          @front_matter = YAML.load( yaml_content ) || {}
+        rescue => e
+          puts "could not parse #{relative_source_path}"
+          raise e
+        end
+
         @parsed_parts = true
 
       end
