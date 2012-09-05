@@ -20,6 +20,7 @@ module Awestruct
       attr_accessor :profile
       attr_accessor :deploy
       attr_accessor :script
+      attr_accessor :verbose
 
       def initialize()
         @generate  = nil
@@ -43,6 +44,9 @@ module Awestruct
 
       def parse!(args)
         opts = OptionParser.new do |opts|
+          opts.on('-w', '--verbose', 'Enable verbose mode') do |verbose|
+            self.verbose = true
+          end
           opts.on( '-i', '--init', 'Initialize a new project in the current directory' ) do |init|
             self.init     = init
             self.generate = false
