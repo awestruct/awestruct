@@ -78,6 +78,7 @@ module Awestruct
       def setup_config()
         @config = Awestruct::Config.new( Dir.pwd )
         @config.track_dependencies = true if ( options.auto )
+        @config.verbose = true if ( options.verbose )
       end
 
       def invoke_init()
