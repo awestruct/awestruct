@@ -32,6 +32,9 @@
                 %email= entry.author.email
             - else
               %name= entry.author
+        - if ( not entry.tags.nil? )
+          - for tag in entry.tags
+            %category{:term=>"#{tag}"}
         %summary
           #{summarize( html_to_text( entry.content ), 100 )}
         %content{:type=>'html'}
