@@ -1,5 +1,7 @@
 require 'shellwords'
 require 'fileutils'
+require 'htmlcompressor'
+require 'yui/compressor'
 
 ##
 # Awestruct:Extensions:Minify is a transformer that minimizes JavaScript, CSS and HTML files.
@@ -68,10 +70,10 @@ module Awestruct
                 input = htmlcompressor(page, input, site.minify_html_opts)
               when :css
                 print "minifying css #{page.output_path}"
-                input = yuicompressor(page, input, :css)
+                input = yuicompressor_css(page, input)
               when :js
                 print "minifying js #{page.output_path}"
-                input = yuicompressor(page, input, :js)
+                input = yuicompressor_js(page, input)
               when :png
                 print "minifying png #{page.output_path}"
                 input = pngcrush(page, input)
@@ -85,59 +87,20 @@ module Awestruct
       private
 
       def htmlcompressor(page, input, minify_html_opts)
-        output = ''
-        cmd = "htmlcompressor"
-        if minify_html_opts
-          minify_html_opts.each do |p, v|
-            # boolean options are simple flags (i.e., do not accept values)
-            if v === true
-              cmd += " --#{p.gsub('_', '-')}"
-            elsif not v === false
-              cmd += " --#{p.gsub('_', '-')}=#{v}"
-            end
-          end
-        end
-        Open3.popen3(Shellwords.escape(cmd)) do |stdin, stdout, stderr|
-          threads = []
-          threads << Thread.new(stdout) do |o|
-            while ( ! o.eof? )
-              output << o.readline
-            end
-          end
-          threads << Thread.new(stdin) do |i|
-            i.write input
-            i.close
-          end
-          threads.each{ |t|t.join }
-        end
-
-        input_len = input.length
-        output_len = output.length
-
-        if input_len > output_len
-          puts " %d bytes -> %d bytes = %.1f%%" % [ input_len, output_len, 100 * output_len/input_len ]
-          output
-        else
-          puts " no gain"
-          input
-        end
+        opts = minify_html_opts.nil? ? {}:minify_html_opts
+        compressor(page, input, HtmlCompressor::Compressor.new(opts))
       end
 
-      def yuicompressor(page, input, type)
-        output = ''
-        Open3.popen3("yuicompressor --type #{Shellwords.escape(type.to_s)}") do |stdin, stdout, stderr|
-          threads = []
-          threads << Thread.new(stdout) do |o|
-            while ( ! o.eof? )
-              output << o.readline
-            end
-          end
-          threads << Thread.new(stdin) do |i|
-            i.write input
-            i.close
-          end
-          threads.each{ |t|t.join }
-        end
+      def yuicompressor_css(page, input)
+        compressor(page, input, YUI::CssCompressor.new)
+      end
+
+      def yuicompressor_js(page, input)
+        compressor(page, input, YUI::JavaScriptCompressor.new)
+      end
+
+      def compressor(page, input, compressor)
+        output = compressor.compress input
 
         input_len = input.length
         output_len = output.length
