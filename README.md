@@ -27,5 +27,5 @@ Please see the complete site at <http://awestruct.org/>.
     IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-It also uses code from the Sequel project under the same license.
+It also uses code from the Sequel project under the same license. 
 
