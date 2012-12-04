@@ -35,6 +35,8 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'rest-client', '~> 1.6.7'
 #    s.add_dependency 'notifier', '~> 0.1.4'
     s.add_dependency 'git', '~> 1.2.5'
+    s.add_dependency 'htmlcompressor', '~> 0.0.3'
+    s.add_dependency 'yui-compressor', '~> 0.9.4'
 
     s.add_dependency 'listen', '~> 0.5.0'
     s.add_dependency 'thin', '~> 1.4.1'
