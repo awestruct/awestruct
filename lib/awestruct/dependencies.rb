@@ -164,9 +164,10 @@ module Awestruct
         File.open( file, 'r' ) do |file|
           file.lines.each do |line|
             type, path = line.split(':')
+            path ||= ""
             path.strip!
             if type.eql? 'c' or type.eql? 'k'
-              d = find_page_by_path( path.strip )
+              d = find_page_by_path( path )
               unless d.nil?
                 add_dependency( d ) if 'c'.eql? type
                 add_key_dependency( d ) if 'k'.eql? type
