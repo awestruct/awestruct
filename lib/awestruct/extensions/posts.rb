@@ -66,7 +66,7 @@ module Awestruct
         end
         site.pages.concat( archive.generate_pages( site.engine, archive_template, archive_path ) ) if (archive_template && archive_path)
         site.send( "#{@assign_to}=", posts )
-        site.send( "#{@assign_to}_archive = ", archive )
+        site.send( "#{@assign_to}_archive=", archive )
 
       end
 
