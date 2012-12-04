@@ -174,8 +174,8 @@ module Awestruct
         p.helpers.each do |h|
           pipeline.helper( h )
         end
-        p.transformers.each do |e|
-          pipeline.transformer( e )
+        p.transformers.each do |t|
+          pipeline.transformer( t )
         end
       end
     end
