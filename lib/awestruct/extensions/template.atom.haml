@@ -5,7 +5,7 @@
 %feed{ 'xml:lang'=>'en-US', :xmlns=>'http://www.w3.org/2005/Atom' }
   %id= "#{page.content_url}/"
   %title= escape_once( page.title )
-  - if ( defined?( site.author ) )
+  - if ( not site.author.nil? )
     %author
       - if ( defined?( site.author.name ) )
         %name= site.author.name
@@ -24,7 +24,7 @@
         %updated= entry.input_mtime.xmlschema
         %published= entry.date.xmlschema
         %link{:rel=>"alternate", :type=>"text/html", :href=>"#{site.base_url}#{entry.url}" }
-        - if ( defined?( entry.author ) )
+        - if ( not entry.author.nil? )
           %author
             - if ( defined?( entry.author.name ) )
               %name= entry.author.name
