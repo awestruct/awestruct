@@ -75,6 +75,7 @@ module Awestruct
 
     def set_base_url(base_url, default_base_url)
       site.path = ''
+      site.root_url = ''
       if ( base_url )
         site.base_url = base_url
       end
@@ -87,7 +88,9 @@ module Awestruct
         if ( site.base_url =~ /^(.*)\/$/ )
           site.base_url = $1
         end
-        site.path = URI(site.base_url).path
+        base_uri = URI(site.base_uri)
+        site.root_url = base_uri.scheme + '://' + base_uri.host
+        site.path = base_uri.path
       end
 
     end
