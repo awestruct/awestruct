@@ -27,7 +27,7 @@ describe Awestruct::PageLoader do
     page.relative_source_path.should be_nil
   end
 
-  it "should be able to load all site pages" do
+  it "should be able to load all non-draft site pages" do
     @loader.load_all
     @site.pages.size.should == 2
 
