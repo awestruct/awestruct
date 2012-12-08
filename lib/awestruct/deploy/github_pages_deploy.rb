@@ -11,6 +11,11 @@ module Awestruct
 
       def publish_site
         current_branch = git.current_branch
+        # we may be on a detached branch,
+        # in which case use that commit as the branch
+        if current_branch == '(no branch)'
+          current_branch = git.revparse('HEAD')
+        end
         git.branch( @branch ).checkout
         add_and_commit_site @site_path
         git.push( @repo, @branch )
