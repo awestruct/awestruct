@@ -9,6 +9,7 @@ module Awestruct
         @archive_path     = archive_path
         @path_prefix      = path_prefix
         @assign_to        = assign_to
+        @handle_subdirs    = true
       end
 
       def execute(site)
@@ -19,9 +20,18 @@ module Awestruct
           year, month, day, slug = nil
 
           if ( page.relative_source_path =~ /^#{@path_prefix}\// )
+            if (@handle_subdirs)
+              regexp_date = /^#{@path_prefix}(\/.*)*\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/
+              regexp_general = /^#{@path_prefix}(\/.*)*\/(.*)\..*$/
+              offset = 1
+            else
+              regexp_date = /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/
+              regexp_general = /^#{@path_prefix}\/(.*)\..*$/
+              offset = 0
+            end
             # check for a date inside the page first
             if (page.date?)
-              page.relative_source_path =~ /^#{@path_prefix}\/(.*)\..*$/
+              page.relative_source_path =~ regexp_general
               date = page.date;
               if date.kind_of? String
                 date = Time.parse page.date
@@ -30,15 +40,15 @@ module Awestruct
               month = sprintf( "%02d", date.month )
               day = sprintf( "%02d", date.day )
               page.date = date
-              slug = $1
-              if ( page.relative_source_path =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/ )
-                slug = $4
+              slug = $~[1 + offset]
+              if ( page.relative_source_path =~ regexp_date )
+                slug = $~[4 + offset]
               end
-            elsif ( page.relative_source_path =~ /^#{@path_prefix}\/(20[01][0-9])-([01][0-9])-([0123][0-9])-([^.]+)\..*$/ )
-              year  = $1
-              month = $2
-              day   = $3
-              slug  = $4
+            elsif ( page.relative_source_path =~ regexp_date )
+              year  = $~[1 + offset]
+              month = $~[2 + offset]
+              day   = $~[3 + offset]
+              slug  = $~[4 + offset]
               page.date = Time.utc( year.to_i, month.to_i, day.to_i )
             end
 
