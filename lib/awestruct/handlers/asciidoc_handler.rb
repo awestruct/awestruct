@@ -20,6 +20,16 @@ module Awestruct
 
       def initialize(site, delegate)
         super( site, delegate )
+        if !site.asciidoc? || !site.asciidoc.has_key?(:engine)
+          site.asciidoc[:engine] = 'asciidoctor'
+        end
+
+        if !site.asciidoc.has_key?(:engine_loaded)
+          if site.asciidoc[:engine] != 'system'
+            require site.asciidoc[:engine]
+          end
+          site.asciidoc[:engine_loaded] = true
+        end
       end
 
       def simple_name
@@ -40,17 +50,36 @@ module Awestruct
       end
 
       def rendered_content(context, with_layouts=true)
+        options = context.site.asciidoc
+
         content = delegate.rendered_content( context, with_layouts )
-        imagesdir = site.config.images_dir
-        iconsdir = File.join(imagesdir, 'icons')
-        conffile = File.join(site.config.config_dir, 'asciidoc.conf')
-        confopt = File.exist?(conffile) ? '-f ' + conffile : ''
-        content = execute_shell( [ "asciidoc -s -b html5 -a pygments -a icons",
-                                   "-a iconsdir='#{iconsdir}'",
-                                   "-a imagesdir='#{imagesdir}'",
-                                   "#{confopt} -o - -" ].join( ' ' ),
-                                 content)
-        content.gsub( "\r", '' )
+        if options[:engine] == 'system'
+          imagesdir = site.config.images_dir
+          iconsdir = File.join(imagesdir, 'icons')
+          conffile = File.join(site.config.config_dir, 'asciidoc.conf')
+          confopt = File.exist?(conffile) ? '-f ' + conffile : ''
+          content = execute_shell( [ "asciidoc -s -b html5 -a pygments -a icons",
+                                     "-a iconsdir='#{iconsdir}'",
+                                     "-a imagesdir='#{imagesdir}'",
+                                     "#{confopt} -o - -" ].join( ' ' ),
+                                   content, false)
+          content.gsub( "\r", '' )
+        elsif options[:engine] == 'asciidoctor'
+          opts = {
+            :header_footer => false,
+            :attributes => {
+              'backend' => 'html5',
+              'imagesdir' => site.config.images_dir,
+              'stylesdir' => site.config.stylesheets_dir,
+            }
+          }
+          if options.has_key? :templates
+            opts[:template_dir] = options[:templates]
+          end
+          Asciidoctor::Document.new(content, opts).render
+        else
+          raise 'Unknown AsciiDoc engine: ' + options[:engine]
+        end
       end
     end
   end

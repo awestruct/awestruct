@@ -97,8 +97,8 @@ module Awestruct
         chain.flatten
       end
 
-      def execute_shell(command, input=nil)
-        Open3.popen3(Shellwords.escape( command )) do |stdin, stdout, _|
+      def execute_shell(command, input=nil, escape=true)
+        Open3.popen3(escape ? Shellwords.escape( command ) : command) do |stdin, stdout, _|
           stdin.puts input unless input.nil?
           stdin.close
           out = stdout.read
