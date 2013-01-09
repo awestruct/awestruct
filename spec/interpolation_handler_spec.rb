@@ -17,7 +17,7 @@ describe Awestruct::Handlers::InterpolationHandler do
   end
 
   it "should correctly interpolate complicated stuff that includes regular expressions [Issue #139]" do
-    if ::Config::CONFIG['ruby_version'] =~ %r(^1\.9)
+    if ::RbConfig::CONFIG['ruby_version'] =~ %r(^1\.9)
       input = 'url = url.replace(/\/?#$/, \'\');' 
       handler = build_handler( input )
       content = handler.rendered_content( OpenCascade.new )
