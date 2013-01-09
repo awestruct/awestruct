@@ -42,4 +42,15 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     @deployer.stub(:add_and_commit_site)
     @deployer.run(@deploy_config)
   end
+
+  it "should save and restore the current detached branch when publishing" do
+    @git.should_receive(:current_branch).and_return( '(no branch)' )
+    @git.should_receive(:revparse).with( 'HEAD' ).and_return( '0123456789' )
+    @git.stub_chain(:branch, :checkout)
+    @git.should_receive(:push).with('the-repo', 'the-branch')
+    @git.should_receive(:checkout).with( '0123456789' )
+
+    @deployer.stub(:add_and_commit_site)
+    @deployer.run(@deploy_config)
+  end
 end
