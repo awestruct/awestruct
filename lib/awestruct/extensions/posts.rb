@@ -2,13 +2,14 @@ module Awestruct
   module Extensions
     class Posts
 
-      attr_accessor :path_prefix, :assign_to, :archive_template, :archive_path
+      attr_accessor :path_prefix, :assign_to, :archive_template, :archive_path, :default_layout
 
-      def initialize(path_prefix='', assign_to=:posts, archive_template=nil, archive_path=nil)
+      def initialize(path_prefix='', assign_to=:posts, archive_template=nil, archive_path=nil, opts={})
         @archive_template = archive_template
         @archive_path     = archive_path
         @path_prefix      = path_prefix
         @assign_to        = assign_to
+        @default_layout   = opts[:default_layout] || nil
       end
 
       def execute(site)
@@ -44,6 +45,7 @@ module Awestruct
 
             # if a date was found create a post
             if( year and month and day)
+              page.layout ||= @default_layout if @default_layout
               page.slug ||= slug
               context = page.create_context
               page.output_path = "#{@path_prefix}/#{year}/#{month}/#{day}/#{page.slug}.html"
