@@ -8,4 +8,3 @@ Gemfile.lock
 spec/.sass-cache/*/*.scssc
 .awestruct
 .rvmrc
-.project
