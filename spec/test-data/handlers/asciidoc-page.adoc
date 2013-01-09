@@ -1,1 +1,3 @@
-This is _asciidoc_
+= Title
+
+This is *AsciiDoc* in Awestruct.

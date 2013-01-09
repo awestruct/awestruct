@@ -20,6 +20,7 @@ spec = Gem::Specification.new do |s|
     s.has_rdoc       =   true
 
     s.add_dependency 'hpricot', '~> 0.8.6'
+    s.add_dependency 'asciidoctor', '>= 0.0.7'
     s.add_dependency 'haml', '~> 3.1.4'
     s.add_dependency 'sass', '~> 3.1.15'
     s.add_dependency 'less', '~> 2.2.2'
