@@ -84,7 +84,7 @@ module Awestruct
         @tags.values.each do |tag|
           ## Optionally sanitize tag URL
           output_prefix = File.join( @output_path, sanitize(tag.to_s) )
-          options = { :remove_input=>false, :output_prefix=>output_prefix, :collection=>tag.pages }.merge( @pagination_opts )
+          options = { :remove_input=>false, :output_prefix=>output_prefix, :collection=>tag.pages, :selected_tag=>tag.to_s }.merge( @pagination_opts )
           
           paginator = Awestruct::Extensions::Paginator.new( @tagged_items_property, @input_path, options )
           primary_page = paginator.execute( site )
