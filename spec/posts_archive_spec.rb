@@ -1,4 +1,6 @@
 require 'awestruct/extensions/posts'
+require 'awestruct/util/inflector'
+require 'hashery/open_cascade'
 
 describe Awestruct::Extensions::Posts do
 
@@ -42,6 +44,29 @@ describe Awestruct::Extensions::Posts do
     extension.archive_template.should == '/archive/index'
   end
 
+  it "should accept a default layout for post pages" do
+    extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'post' )
+    extension.archive_path.should be_nil
+    extension.archive_template.should be_nil
+    extension.default_layout.should == 'post'
+  end
+
+  it "should assign default layout if specified to post without layout" do
+    extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'post' )
+    site = OpenCascade.new :encoding=>false
+    page = __create_page( 2012, 8, 9, '/posts/mock-post.md' )
+    page.stub(:layout).and_return(nil)
+    page.should_receive(:layout=).with('post')
+    page.stub(:slug).and_return(nil, 'mock-post')
+    page.should_receive(:slug=).with('mock-post')
+    page.should_receive(:output_path=).with('/posts/2012/08/09/mock-post.html')
+
+    site.pages = [page]
+    extension.execute(site)
+    site.news.size.should == 1
+    site.news.first.should == page
+  end
+
   describe Awestruct::Extensions::Posts::Archive do
 
     before :each do
@@ -64,14 +89,20 @@ describe Awestruct::Extensions::Posts do
       @archive.generate_pages( engine, '/archive/index', '/archive' ) 
     end
 
-    def __create_page(year, month, day)
-      page = mock( "Page for #{year}-#{month}-#{day}" )
-      page.stub_chain(:date, :year).and_return( year )
-      page.stub_chain(:date, :month).and_return( month )
-      page.stub_chain(:date, :day).and_return( day )
-      page
-    end
+  end
 
+  def __create_page(year, month, day, path = nil)
+    page = mock( "Page for #{year}-#{month}-#{day}" )
+    page.stub(:date?).and_return( true )
+    page.stub(:date=).with(anything())
+    page.stub_chain(:date, :year).and_return( year )
+    page.stub_chain(:date, :month).and_return( month )
+    page.stub_chain(:date, :day).and_return( day )
+    page.stub(:relative_source_path).and_return( path ) if path
+    page.stub(:create_context)
+    page.stub(:sequence).and_return( nil )
+    page.stub(:source_path).and_return( '.' )
+    page
   end
 
 end
