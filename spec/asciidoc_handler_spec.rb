@@ -38,9 +38,9 @@ describe Awestruct::Handlers::AsciidocHandler do
     @site.asciidoc[:engine_loaded].should == true
     rendered = asciidoc_handler.rendered_content( create_context )
     rendered.should_not be_nil
-    rendered.gsub(/(^\s*\n|^\s*)/, '').should =~ %r(<div id='preamble'>
-<div class='sectionbody'>
-<div class='paragraph'>
+    rendered.gsub(/(^\s*\n|^\s*)/, '').should =~ %r(<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
 <p>This is <strong>AsciiDoc</strong> in Awestruct.</p>
 </div>
 </div>
