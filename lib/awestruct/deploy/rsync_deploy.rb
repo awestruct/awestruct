@@ -14,16 +14,12 @@ module Awestruct
       end
 
       def publish_site
-        exclude_option = ""
-        if ! (@exclude.nil? or @exclude.empty?)
-          exclude_option = "--exclude=#{@exclude}"
-        end
-        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{exclude_option} #{@site_path} #{@host}:#{@path}"
+        exclude_option = (!@exclude.nil? and !@exclude.empty?) ? "--exclude=" + Shellwords.escape(@exclude) : nil
+        site_path = Shellwords.escape(@site_path)
+        host = Shellwords.escape(@host)
+        path = Shellwords.escape(@path)
 
-        # Shellwords mangles windows  rsync command so we need to skip shell words
-        if(RUBY_PLATFORM !~ /mingw/)
-          cmd = Shellwords.escape(cmd)
-        end
+        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{exclude_option} #{site_path} #{host}:#{path}"
 
         Open3.popen3( cmd ) do |stdin, stdout, stderr|
           stdin.close
