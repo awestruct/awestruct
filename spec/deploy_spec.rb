@@ -23,6 +23,11 @@ describe Awestruct::CLI::Deploy do
     deployer.deploy_type.should == :foo
   end
 
+  it "should use s3 if deploy['type'] is s3" do
+    deployer = Awestruct::CLI::Deploy.new({}, {'type' => :s3})
+    deployer.deploy_type.should == :s3
+  end
+
   it "should work with strings for keys" do
     deployer = Awestruct::CLI::Deploy.new({}, {'host' => :github_pages})
     deployer.deploy_type.should == :github_pages
