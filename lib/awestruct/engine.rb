@@ -74,6 +74,8 @@ module Awestruct
     end
 
     def set_base_url(base_url, default_base_url)
+      site.path = ''
+      site.root_url = ''
       if ( base_url )
         site.base_url = base_url
       end
@@ -86,6 +88,9 @@ module Awestruct
         if ( site.base_url =~ /^(.*)\/$/ )
           site.base_url = $1
         end
+        base_uri = URI(site.base_uri)
+        site.root_url = base_uri.scheme + '://' + base_uri.host
+        site.path = base_uri.path
       end
 
     end
@@ -153,9 +158,9 @@ module Awestruct
         #puts "relative_source_path #{page.relative_source_path}"
         page_path = page.output_path
         if ( page_path =~ /^\// )
-          page.url = page_path
+          page.url = page.site.path + page_path
         else
-          page.url = "/#{page_path}"
+          page.url = "#{page.site.path}/#{page_path}"
         end
         if ( page.url =~ /^(.*\/)index.html$/ )
           page.url = $1
