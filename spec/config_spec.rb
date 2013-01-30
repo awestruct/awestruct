@@ -1,5 +1,6 @@
 require 'awestruct/config'
 require 'spec_helper'
+require 'awestruct/config'
 
 describe Awestruct::Config do
 

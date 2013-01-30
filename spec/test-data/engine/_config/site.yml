@@ -8,3 +8,7 @@ profiles:
     compass_line_comments: off
 
 title: Awestruction!
+
+asciidoctor:
+  attributes:
+    backend: html4

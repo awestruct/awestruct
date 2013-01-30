@@ -2,7 +2,7 @@
 require 'awestruct/layouts'
 require 'awestruct/page'
 require 'awestruct/handlers/file_handler'
-require 'awestruct/handlers/haml_handler'
+require 'awestruct/handlers/tilt_handler'
 
 require 'hashery/open_cascade'
 
@@ -12,7 +12,7 @@ describe Awestruct::Layouts do
     dir = Pathname.new( File.dirname( __FILE__ ) + '/test-data/handlers' )
     site = OpenCascade.new( :dir=>dir )
     file_handler = Awestruct::Handlers::FileHandler.new( site, File.join( dir, 'haml-layout.html.haml' ) )
-    haml_handler = Awestruct::Handlers::HamlHandler.new( site, file_handler )
+    haml_handler = Awestruct::Handlers::TiltHandler.new( site, file_handler )
     page = Awestruct::Page.new( nil, haml_handler )
     
     layouts = Awestruct::Layouts.new

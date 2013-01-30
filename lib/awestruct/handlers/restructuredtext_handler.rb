@@ -12,7 +12,7 @@ module Awestruct
   module Handlers
     class RestructuredtextHandler < BaseHandler
 
-      CHAIN = Awestruct::HandlerChain.new( /\.(adoc|asciidoc)$/,
+      CHAIN = Awestruct::HandlerChain.new( /\.(rst)$/,
         Awestruct::Handlers::FileHandler,
         Awestruct::Handlers::FrontMatterHandler,
         Awestruct::Handlers::InterpolationHandler,

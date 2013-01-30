@@ -32,7 +32,13 @@ module Awestruct
       @images_dir      = Pathname.new( File.join(dir, 'images') )
       @stylesheets_dir = Pathname.new( File.join(dir, 'stylesheets') )
 
-      @ignore         = File.exists?(ignore_file = File.join(dir, ".awestruct_ignore")) ? Dir[*IO.read(ignore_file).each_line.map(&:strip)] : []
+      # Dir[] doesn't like empty list
+      ignore_file = File.join(dir, ".awestruct_ignore")
+      if File.exists?(ignore_file)
+        ignore_stmts = IO.read(ignore_file).each_line.map(&:strip)
+      end
+
+      @ignore         = (!ignore_stmts.nil? and ignore_stmts.size > 0) ? Dir[*ignore_stmts] : []
 
       @track_dependencies = false
     end

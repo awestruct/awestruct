@@ -1,8 +1,6 @@
 
 require 'awestruct/handlers/base_handler'
 
-require 'haml'
-
 module Awestruct
   module Handlers
     class LayoutHandler < BaseHandler
