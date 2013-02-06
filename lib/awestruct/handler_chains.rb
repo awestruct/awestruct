@@ -1,39 +1,22 @@
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/file_handler'
-require 'awestruct/handlers/markdown_handler'
-require 'awestruct/handlers/orgmode_handler'
-require 'awestruct/handlers/asciidoc_handler'
+require 'awestruct/handlers/css_tilt_handler'
 require 'awestruct/handlers/restructuredtext_handler'
-require 'awestruct/handlers/textile_handler'
-require 'awestruct/handlers/erb_handler'
-require 'awestruct/handlers/haml_handler'
-require 'awestruct/handlers/mustache_handler'
-require 'awestruct/handlers/sass_handler'
-require 'awestruct/handlers/scss_handler'
-require 'awestruct/handlers/less_handler'
 require 'awestruct/handlers/javascript_handler'
-require 'awestruct/handlers/coffeescript_handler'
 require 'awestruct/handlers/redirect_handler'
+require 'awestruct/handlers/tilt_handler'
 
 module Awestruct
 
   class HandlerChains
 
     DEFAULTS = [
-      Awestruct::Handlers::MarkdownHandler::CHAIN,
-      Awestruct::Handlers::TextileHandler::CHAIN,
-      Awestruct::Handlers::ErbHandler::CHAIN,
-      Awestruct::Handlers::OrgmodeHandler::CHAIN,
-      Awestruct::Handlers::AsciidocHandler::CHAIN,
-      Awestruct::Handlers::RestructuredtextHandler::CHAIN,
-      Awestruct::Handlers::HamlHandler::CHAIN,
-      Awestruct::Handlers::MustacheHandler::CHAIN,      
-      Awestruct::Handlers::SassHandler::CHAIN,
-      Awestruct::Handlers::ScssHandler::CHAIN,
-      Awestruct::Handlers::LessHandler::CHAIN,
-      Awestruct::Handlers::JavascriptHandler::CHAIN,
-      Awestruct::Handlers::CoffeescriptHandler::CHAIN,
+      Awestruct::Handlers::CssTiltHandler::CHAIN,
       Awestruct::Handlers::RedirectHandler::CHAIN,
+      Awestruct::Handlers::RestructuredtextHandler::CHAIN,
+      Awestruct::Handlers::JavascriptHandler::CHAIN,
+      Awestruct::Handlers::TiltHandler::NON_INTERPOLATION_CHAIN,
+      Awestruct::Handlers::TiltHandler::INTERPOLATION_CHAIN,
       HandlerChain.new( /.*/, Awestruct::Handlers::FileHandler )
     ]
 

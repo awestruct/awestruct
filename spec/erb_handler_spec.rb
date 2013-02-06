@@ -1,59 +1,51 @@
-# -*- coding: ASCII-8BIT -*-
-require 'awestruct/page'
-require 'awestruct/handlers/file_handler'
-require 'awestruct/handlers/erb_handler'
+# -*- coding: UTF-8 -*-
+require 'spec_helper'
 
-require 'hashery/open_cascade'
+verify = lambda { |output|
+   output.should =~ %r(<h1>This is an ERB page</h1>) 
+   output.should =~ %r(<h2>The fruit of the day is: apples</h2>) 
+   output.should =~ %r(<h3>bacon</h3>) ## interpolated
+}
 
-describe Awestruct::Handlers::ErbHandler do
+verify_with_xml = lambda { |output|
+   output.should =~ %r(<h>bacon</h>) ## interpolated
+}
 
-  before :all do
-    @site = OpenCascade.new( :encoding=>false, 
-                            :crunchy => "bacon",  
-                            :config => { :dir => 'foo' },
-                            :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) )
+verify_with_utf8 = lambda { |output|
+  if(RUBY_PLATFORM !~ /mingw/)
+    output.should == "Besøg fra Danmark\n"
+  else
+    output.should == "Besøg fra Danmark\n"
   end
+}
 
-  def handler_file(path)
-    Pathname.new( File.dirname( __FILE__ ) + "/test-data/handlers/#{path}" )
-  end
+theories =
+  [
+    {
+      :page => "erb-page.html.erb",
+      :simple_name => "erb-page",
+      :syntax => :erb,
+      :extension => '.html',
+      :matcher => verify
+    },
+    {
+      :page => "erb-page.xml.erb",
+      :simple_name => "erb-page",
+      :syntax => :erb,
+      :extension => '.xml',
+      :matcher => verify_with_xml
+    },
+    {
+      :page => "erb-utf-page.html.erb",
+      :simple_name => "erb-utf-page",
+      :syntax => :erb,
+      :extension => '.html',
+      :matcher => verify_with_utf8
+    }
+  ]
 
-  def create_context
-    OpenCascade.new :site=>@site
-  end
-
-  it "should provide a simple name for the page" do
-    file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "erb-page.html.erb" ) )
-    erb_handler = Awestruct::Handlers::ErbHandler.new( @site, file_handler )
-
-    erb_handler.simple_name.should == 'erb-page' 
-  end
-  
-  it "should successfully render an ERB page" do
-    file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "erb-page.html.erb" ) )
-    erb_handler = Awestruct::Handlers::ErbHandler.new( @site, file_handler )
-
-    rendered = erb_handler.rendered_content( create_context )
-    rendered.should_not be_nil
-    rendered.should =~ %r(<h1>This is an ERB page</h1>) 
-    rendered.should =~ %r(<h2>The fruit of the day is: apples</h2>) 
-  end
-
-  it "should interpolate variables" do
-    page = Awestruct::Page.new( @site, Awestruct::Handlers::ErbHandler::CHAIN.create( @site, handler_file("erb-page.html.erb") ) )
-    page.prepare!
-    page.content.should =~ %r(<h3>bacon</h3>)
-  end
-
-  it "should handle UTF character encodings" do
-    page = Awestruct::Page.new( @site, Awestruct::Handlers::ErbHandler::CHAIN.create( @site, handler_file("erb-utf-page.html.erb") ) )
-    page.prepare!
-    if(RUBY_PLATFORM !~ /mingw/)
-      page.content.should == "# coding: UTF-8\nBesøg fra Danmark\n"
-    else
-      page.content.should == "# coding: UTF-8\r\nBesøg fra Danmark\r\n"
-    end
-    page.content
-  end
+describe Awestruct::Handlers::TiltHandler.to_s + "-Erb" do
+  let(:additional_config) { {:crunchy => 'bacon'} }
+  it_should_behave_like "a handler", theories
 
 end

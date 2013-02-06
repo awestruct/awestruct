@@ -1,38 +1,24 @@
+require 'spec_helper'
+require 'org-ruby'
 
-require 'awestruct/handlers/file_handler'
-require 'awestruct/handlers/orgmode_handler'
+verify = lambda { |output|
+   output.should =~ %r(<h1 class="title">Fruit</h1>)
+   output.should =~ %r(<p>Apples are red</p>)
+}
 
-require 'hashery/open_cascade'
+theories =
+  [
+    {
+      :page => "orgmode-page.org",
+      :simple_name => "orgmode-page",
+      :syntax => :orgmod,
+      :extension => '.html',
+      :matcher => verify
+    }
+  ]
 
-describe Awestruct::Handlers::OrgmodeHandler do
+describe Awestruct::Handlers::TiltHandler.to_s + "-OrgMode" do
 
-  before :all do
-    @site = OpenCascade.new :encoding=>false, :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' )
-  end
-
-  def handler_file(path)
-    "#{@site.dir}/#{path}"
-  end
-
-  def create_context
-    OpenCascade.new :site=>@site
-  end
-
-  it "should provide a simple name for the page" do
-    file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "orgmode-page.org" ) )
-    orgmode_handler = Awestruct::Handlers::OrgmodeHandler.new( @site, file_handler )
-
-    orgmode_handler.simple_name.should == 'orgmode-page' 
-  end
-  
-  it "should successfully render an org-mode page" do
-    file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "orgmode-page.org" ) )
-    orgmode_handler = Awestruct::Handlers::OrgmodeHandler.new( @site, file_handler )
-
-    rendered = orgmode_handler.rendered_content( create_context )
-    rendered.should_not be_nil
-    rendered.should =~ %r(<h1 class="title">Fruit</h1>)
-    rendered.should =~ %r(<p>Apples are red</p>)
-  end
+  it_should_behave_like "a handler", theories
 
 end

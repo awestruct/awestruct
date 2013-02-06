@@ -141,7 +141,7 @@ module Awestruct
 
     def persist!
       return if  page.output_path.nil? || page.output_path == ''
-      file = File.join( @page.site.config.dir, '.awestruct', 'dependency-cache', page.output_path )
+      file = File.join( @page.site.config.dir.to_s, '.awestruct', 'dependency-cache', page.output_path )
       #puts "store #{file}"
       FileUtils.mkdir_p( File.dirname( file ) )
       File.open( file, 'w' ) do |file|
