@@ -11,7 +11,18 @@ group :development do
 end
 
 group :test do
+  gem 'rdiscount', '~> 1.6.8'
   gem 'rack-test'
+  gem 'tilt', :git => 'git://github.com/rtomayko/tilt.git'
+  gem 'coffee-script', '~> 2.2.0'
+  gem 'asciidoctor', '>= 0.1.0'
+  gem 'haml', '~> 3.1.4'
+  gem 'less', '~> 2.2.2' 
+  gem 'org-ruby', '~> 0.7'
+  gem "maruku", "~> 0.6.1"
+  gem 'redcarpet', '~> 2.2.2'
+  gem 'RedCloth', '~> 4.2.9'
+  gem 'mustache', '~> 0.99.4'
 end
 
 gemspec
