@@ -1,0 +1,11 @@
+content_syntax:
+  coffee: coffeescript
+  md: markdown
+  mkd: markdown
+  org: orgmod
+  adoc: asciidoc
+  ad: asciidoc
+
+asciidoctor:
+  attributes:
+    backend: html5

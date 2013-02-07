@@ -1,38 +1,32 @@
-require 'hashery/open_cascade'
-require 'awestruct/page'
-require 'awestruct/handlers/file_handler'
-require 'awestruct/handlers/redirect_handler'
+require 'spec_helper'
 
-require 'hashery/open_cascade'
+verify = lambda { |output|
+  output.should =~ %r(<head><meta http-equiv="location" content="URL=http://google.com" /></head>)
+}
+verify_with_interpol = lambda { |output|
+  output.should =~ %r(<head><meta http-equiv="location" content="URL=http://bacon.com" /></head>)
+}
 
-describe Awestruct::Handlers::RedirectHandler do
+theories =
+  [
+    {
+      :page => "simple-redirect-page.redirect",
+      :simple_name => "simple-redirect-page",
+      :syntax => :text,
+      :extension => '.html',
+      :matcher => verify
+    },
+    {
+      :page => "redirect-page.redirect",
+      :simple_name => "redirect-page",
+      :syntax => :text,
+      :extension => '.html',
+      :matcher => verify_with_interpol
+    }
+  ]
 
-  before :all do
-    @page = Awestruct::Page.new( site, Awestruct::Handlers::RedirectHandler::CHAIN.create( site, handler_file("simple-redirect-page.redirect") ) )
-    @page.prepare!
-    @interpolated = Awestruct::Page.new( site, Awestruct::Handlers::RedirectHandler::CHAIN.create( site, handler_file("redirect-page.redirect") ) )
-    @interpolated.prepare!
-  end
-
-  def site
-    @site ||= OpenCascade.new( :encoding=>false, 
-                               :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ), 
-                               :crunchy => "bacon", 
-                               :config => { :dir => 'foo' } )
-  end
-
-  def handler_file(path)
-    Pathname.new( File.dirname( __FILE__ ) + "/test-data/handlers/#{path}" )
-  end
-
-  it "should emit <meta http-equiv ...>" do
-    @page.content.should =~ %r(<head><meta http-equiv="location" content="URL=http://google.com" /></head>)
-  end
-
-  it "should interpolate variables" do
-    @interpolated.content.should =~ %r(<head><meta http-equiv="location" content="URL=http://bacon.com" /></head>)
-  end
+describe Awestruct::Handlers::TiltHandler.to_s + "-Redirect" do
+  let(:additional_config) { {:interpolate => true, :crunchy => "bacon"} }
+  it_should_behave_like "a handler", theories
 
 end
-
-

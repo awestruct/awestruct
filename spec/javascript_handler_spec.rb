@@ -1,31 +1,23 @@
-require 'hashery/open_cascade'
-require 'awestruct/page'
-require 'awestruct/handlers/file_handler'
-require 'awestruct/handlers/javascript_handler'
+# -*- coding: UTF-8 -*-
+require 'spec_helper'
 
-require 'hashery/open_cascade'
+verify = lambda { |output|
+   output.should =~ %r(var crunchy = "bacon")
+}
 
-describe Awestruct::Handlers::JavascriptHandler do
+theories =
+  [
+    {
+      :page => "javascript-page.js",
+      :simple_name => "javascript-page",
+      :syntax => :javascript,
+      :extension => '.js',
+      :matcher => verify
+    }
+  ]
 
-  before :all do
-    @page = Awestruct::Page.new( site, Awestruct::Handlers::JavascriptHandler::CHAIN.create( site, handler_file("javascript-page.js") ) )
-    @page.prepare!
-  end
-
-  def site
-    @site ||= OpenCascade.new( :encoding=>false, 
-                               :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ), 
-                               :crunchy => "bacon", 
-                               :config => { :dir => 'foo' } )
-  end
-
-  def handler_file(path)
-    Pathname.new( File.dirname( __FILE__ ) + "/test-data/handlers/#{path}" )
-  end
-
-  it "should interpolate Javascript files" do
-    @page.content.should =~ %r(var crunchy = "bacon")
-  end
+describe Awestruct::Handlers::TiltHandler.to_s + "-JavaScript" do
+  let(:additional_config) { {:interpolate => true, :crunchy => 'bacon'} }
+  it_should_behave_like "a handler", theories
 
 end
-

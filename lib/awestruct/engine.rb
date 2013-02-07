@@ -47,6 +47,7 @@ module Awestruct
 
     def run(profile, base_url, default_base_url, force=false)
       adjust_load_path
+      load_default_site_yaml
       load_site_yaml(profile)
       set_base_url( base_url, default_base_url )
       load_yamls
@@ -88,6 +89,16 @@ module Awestruct
         end
       end
 
+    end
+
+    def load_default_site_yaml
+      default_site_yaml = File.join( File.dirname( __FILE__ ), 'default-site.yaml' )
+      if ( File.exist?( default_site_yaml ) )
+        data = YAML.load( File.read( default_site_yaml ) )
+        data.each do |k,v|
+          site.send( "#{k}=", v )
+        end if data
+      end
     end
 
     def load_site_yaml(profile)

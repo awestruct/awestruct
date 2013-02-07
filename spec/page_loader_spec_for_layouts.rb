@@ -16,7 +16,7 @@ describe Awestruct::PageLoader do
   it "should be able to load a site layout" do
     page = @loader.load_page( File.join( @config.dir, "_layouts", "layout-one.md" ) )
     page.should_not be_nil
-    page.handler.to_chain.collect{|e| e.class}.should be_include Awestruct::Handlers::MarkdownHandler
+    page.handler.to_chain.collect{|e| e.class}.should be_include Awestruct::Handlers::TiltHandler
     page.relative_source_path.to_s.should == "/_layouts/layout-one.md" 
   end
 

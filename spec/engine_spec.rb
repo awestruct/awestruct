@@ -5,6 +5,25 @@ require 'hashery/open_cascade'
 
 describe Awestruct::Engine do
 
+  it "should be able to load default-site.yml" do
+    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+
+    engine = Awestruct::Engine.new(config)
+    engine.load_default_site_yaml
+
+    engine.site.asciidoctor.attributes.backend.should == 'html5'
+  end
+
+  it "should be able to override default with site" do
+    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+
+    engine = Awestruct::Engine.new(config)
+    engine.load_default_site_yaml
+    engine.load_site_yaml( 'development' )
+
+    engine.site.asciidoctor.attributes.backend.should == 'html4'
+  end
+
   it "should be able to load site.yml with the correct profile" do
     config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
 

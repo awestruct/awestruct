@@ -16,14 +16,14 @@ describe Awestruct::PageLoader do
   it "should be able to load a site page" do
     page = @loader.load_page( File.join( @config.dir, "page-one.md" ) )
     page.should_not be_nil
-    page.handler.to_chain.collect{|e| e.class}.should be_include Awestruct::Handlers::MarkdownHandler
+    page.handler.to_chain.collect{|e| e.class}.should be_include Awestruct::Handlers::TiltHandler
     page.relative_source_path.to_s.should == "/page-one.md" 
   end
 
   it "should be able to load an out-of-site page" do
     page = @loader.load_page( File.join( @config.dir, '../out-of-site', "page-three.html.haml" ) )
     page.should_not be_nil
-    page.handler.to_chain.collect{|e| e.class}.should be_include Awestruct::Handlers::HamlHandler
+    page.handler.to_chain.collect{|e| e.class }.should be_include Awestruct::Handlers::TiltHandler
     page.relative_source_path.should be_nil
   end
 
