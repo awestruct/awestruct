@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'org-ruby'
 
 verify = lambda { |output|
-   output.should =~ %r(<h1 class="title">Fruit</h1>)
+   output.should =~ %r(<h1>Fruit</h1>)
    output.should =~ %r(<p>Apples are red</p>)
 }
 
