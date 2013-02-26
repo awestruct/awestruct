@@ -38,7 +38,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
 
     s.add_dependency 'listen', '~> 0.5.0'
-    s.add_dependency 'thin', '~> 1.4.1'
+    s.add_dependency 'rack', '~> 1.5.2'
     s.add_dependency 'eventmachine', '~> 1.0.0.rc.4'
 end
 
