@@ -23,7 +23,6 @@ spec = Gem::Specification.new do |s|
     s.requirements  << "Any markup languages you are using and it's dependencies" 
     s.requirements  << "If LESS is used, or some other fixes within tilt, it is required to use Bundler and the :git ref for the tilt gem"
 
-    s.add_dependency 'hpricot', '~> 0.8.6'
     s.add_dependency 'nokogiri', '~> 1.5.6'
     s.add_dependency 'tilt', '~> 1.3.3'
     s.add_dependency 'compass', '~> 0.12.1'
