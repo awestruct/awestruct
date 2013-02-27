@@ -31,10 +31,9 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'bootstrap-sass', '~> 2.2.2.0'
     s.add_dependency 'json', '~> 1.6.6'
     s.add_dependency 'rest-client', '~> 1.6.7'
-#    s.add_dependency 'notifier', '~> 0.1.4'
     s.add_dependency 'git', '~> 1.2.5'
     s.add_dependency 'htmlcompressor', '~> 0.0.3'
-    s.add_dependency 'yui-compressor', '~> 0.9.4'
+    s.add_dependency 'uglifier', '~> 1.3.0'
     s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
 
     s.add_dependency 'listen', '~> 0.5.0'

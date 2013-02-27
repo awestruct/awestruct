@@ -23,6 +23,7 @@ group :test do
   gem 'redcarpet', '~> 2.2.2'
   gem 'RedCloth', '~> 4.2.9'
   gem 'mustache', '~> 0.99.4'
+  gem 'uglifier', '~> 1.3.0'
 end
 
 gemspec

@@ -30,19 +30,20 @@ describe Awestruct::Extensions::Minify do
     minifier.transform(site, page, input).should == expected_output
   end
 
-  it "should compress css files" do
-    site = mock
-    page = mock
+  # Doing this if it's production now
+  #it "should compress css files" do
+    #site = mock
+    #page = mock
 
-    site.should_receive(:minify).and_return true
-    page.should_receive(:output_path).any_number_of_times.and_return "test.css"
+    #site.should_receive(:minify).and_return true
+    #page.should_receive(:output_path).any_number_of_times.and_return "test.css"
 
-    input = ".class     { \n a: b   ;}"
-    expected_output = ".class{a:b}"
+    #input = ".class     { \n a: b   ;}"
+    #expected_output = ".class{a:b}"
 
-    minifier = Awestruct::Extensions::Minify.new [:css]
-    minifier.transform(site, page, input).should == expected_output
-  end
+    #minifier = Awestruct::Extensions::Minify.new [:css]
+    #minifier.transform(site, page, input).should == expected_output
+  #end
 
   it "should compress js files" do
     site = mock
