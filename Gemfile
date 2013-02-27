@@ -6,8 +6,6 @@ group :development do
   gem 'hashery', '~> 1.5.0'
   gem 'rspec', '~> 2.9'
   gem 'rake', '~> 0.9.2'
-  gem 'therubyracer', '~> 0.10.0', :platforms => 'ruby'
-  gem 'therubyrhino', '~> 1.73', :platforms => 'jruby'
 end
 
 group :test do
@@ -17,6 +15,8 @@ group :test do
   gem 'coffee-script', '~> 2.2.0'
   gem 'asciidoctor', '>= 0.1.0'
   gem 'haml', '~> 3.1.4'
+  gem 'therubyracer', '~> 0.10.0', :platforms => :ruby
+  gem 'therubyrhino', '~> 1.73', :platforms => :jruby
   gem 'less', '~> 2.2.2' 
   gem 'org-ruby', '~> 0.7'
   gem "maruku", "~> 0.6.1"
