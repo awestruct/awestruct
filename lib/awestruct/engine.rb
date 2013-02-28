@@ -210,10 +210,15 @@ module Awestruct
       Compass.configuration.javascripts_dir = 'javascripts'
       Compass.configuration.images_dir      = 'images'
       Compass.configuration.line_comments   = include_line_comments?
+      Compass.configuration.output_style    = compress_css?
     end
 
     def include_line_comments?
       site.key?(:compass_line_comments) ? !!site.compass_line_comments : !site.profile.eql?('production')
+    end
+
+    def compress_css?
+      site.key?(:compass_output_style) ? site.compass_output_style.to_sym : site.profile.eql?('production') ? :compressed : :expanded
     end
 
     def load_pages
