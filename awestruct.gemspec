@@ -26,7 +26,7 @@ spec = Gem::Specification.new do |s|
 
     s.add_dependency 'hpricot', '~> 0.8.6'
     s.add_dependency 'nokogiri', '~> 1.5.6'
-    s.add_dependency 'tilt', '~> 1.3.3'
+    s.add_dependency 'tilt', '~> 1.3.4'
     s.add_dependency 'compass', '~> 0.12.1'
     s.add_dependency 'compass-960-plugin', '~> 0.10.4'
     s.add_dependency 'bootstrap-sass', '~> 2.2.2.0'
