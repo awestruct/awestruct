@@ -1,8 +1,0 @@
-markdown_handler_spec.rb
-haml_handler_spec.rb
-erb_handler_spec.rb
-asciidoc_handler_spec.rb
-mustache_handler_spec.rb
-orgmode_handler_spec.rb
-page_delegating_handler_spec.rb
-redirect_handler_spec.rb
