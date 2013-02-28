@@ -16,7 +16,7 @@ verify_with_utf8 = lambda { |output|
   if(RbConfig::CONFIG['target_os'] !~ /mswin|mingw/)
     output.should == "Besøg fra Danmark\n"
   else
-    output.should == "Besøg fra Danmark\r\n"
+    output.should == "\r\nBesøg fra Danmark\r\n"
   end
 }
 
