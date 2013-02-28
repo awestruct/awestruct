@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 require 'spec_helper'
+require 'rbconfig'
 
 verify = lambda { |output|
    output.should =~ %r(<h1>This is an ERB page</h1>) 
@@ -12,10 +13,10 @@ verify_with_xml = lambda { |output|
 }
 
 verify_with_utf8 = lambda { |output|
-  if(RUBY_PLATFORM !~ /mingw/)
+  if(RbConfig::CONFIG['target_os'] !~ /mswin|mingw/)
     output.should == "Besøg fra Danmark\n"
   else
-    output.should == "Besøg fra Danmark\n"
+    output.should == "Besøg fra Danmark\r\n"
   end
 }
 
