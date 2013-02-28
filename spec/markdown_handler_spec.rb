@@ -1,7 +1,12 @@
 require 'spec_helper'
 
 verify = lambda { |output|
-  output.should =~ %r(<h1>This is a Markdown page</h1>)
+  include NokogiriMatchers
+  output.should have_tag('h1')
+  # TODO: This is the next phase
+  #output.should have_tag('h1') do
+  #  with_text 'This is a Markdown page'
+  #end
 }
 
 theories =

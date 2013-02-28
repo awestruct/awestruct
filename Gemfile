@@ -9,7 +9,8 @@ group :development do
 end
 
 group :test do
-  gem 'rdiscount', '~> 1.6.8'
+  gem 'markdown_meta', '~> 0.0.2'
+  gem 'rb-inotify', '~> 0.8.8'
   gem 'rack-test'
   gem 'tilt', :git => 'git://github.com/rtomayko/tilt.git'
   gem 'coffee-script', '~> 2.2.0'
@@ -19,8 +20,6 @@ group :test do
   gem 'therubyrhino', '~> 1.73', :platforms => :jruby
   gem 'less', '~> 2.2.2' 
   gem 'org-ruby', '~> 0.7'
-  gem "maruku", "~> 0.6.1"
-  gem 'redcarpet', '~> 2.2.2'
   gem 'RedCloth', '~> 4.2.9'
   gem 'mustache', '~> 0.99.4'
   gem 'uglifier', '~> 1.3.0'
