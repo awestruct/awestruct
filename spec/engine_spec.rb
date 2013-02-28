@@ -63,6 +63,18 @@ describe Awestruct::Engine do
     engine.load_site_yaml( 'production' )
     Compass.stub(:configuration).and_return(compass)
     compass.should_receive(:line_comments=).with(false)
+    compass.should_receive(:output_style=).with(:compressed)
+    engine.configure_compass
+  end
+
+  it "should exclude minify in compass by default in production mode" do
+    compass = compass_config
+    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    engine = Awestruct::Engine.new(config)
+    engine.load_site_yaml( 'production' )
+    Compass.stub(:configuration).and_return(compass)
+    compass.should_receive(:line_comments=).with(false)
+    compass.should_receive(:output_style=).with(:compressed)
     engine.configure_compass
   end
 
@@ -73,6 +85,7 @@ describe Awestruct::Engine do
     engine.load_site_yaml( 'development' )
     Compass.stub(:configuration).and_return(compass)
     compass.should_receive(:line_comments=).with(true)
+    compass.should_receive(:output_style=).with(:expanded)
     engine.configure_compass
   end
 
@@ -83,6 +96,7 @@ describe Awestruct::Engine do
     engine.load_site_yaml( 'staging' )
     Compass.stub(:configuration).and_return(compass)
     compass.should_receive(:line_comments=).with(false)
+    compass.should_receive(:output_style=).with(:expanded)
     engine.configure_compass
   end
 

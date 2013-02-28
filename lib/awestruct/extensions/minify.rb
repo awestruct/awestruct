@@ -1,16 +1,16 @@
 require 'shellwords'
 require 'fileutils'
 require 'htmlcompressor'
-require 'yui/compressor'
+require 'uglifier'
 
 ##
 # Awestruct:Extensions:Minify is a transformer that minimizes JavaScript, CSS and HTML files.
 # The transform runs on the rendered stream before it's written to the output path.
 #
-# Minification is performed by the following three libraries:
+# Minification is performed by the following libraries:
 #
 #   htmlcompressor (minifies HTML): http://code.google.com/p/htmlcompressor/
-#   yuicompressor (minifies JavaScript and CSS): http://developer.yahoo.com/yui/compressor/
+#   uglifier (minifies javascript): http://github.com/lautis/uglifier
 #   pngcrush (minifies PNG): http://pmt.sourceforge.net/pngcrush/
 #
 # These commands must be available on your PATH in order to use them.
@@ -22,12 +22,11 @@ require 'yui/compressor'
 #
 # This transform recognizes the following symbols:
 #
-#   :css - CSS files with extension .css
 #   :js - JavaScript files with extension .js
 #   :html - HTML files with extension .html
 #   :png - PNG files with extension .png
 #
-# If no types are specified, the default value [:css, :js] is used.
+# If no types are specified, the default value [:js] is used.
 # 
 # In addition to registering the transformer in the pipeline, it must be enabled
 # by setting the following site property in _ext/config.yml:
@@ -46,7 +45,6 @@ require 'yui/compressor'
 #   minify_html_opts:
 #     remove_intertag_spaces: true
 #     compress_js: true
-#     compress_css: true
 # 
 # Note that any hypen (-) must be represented as an underscore (_) in the configuration.
 
@@ -54,7 +52,7 @@ module Awestruct
   module Extensions
     class Minify
 
-      def initialize(types = [ :css, :js ])
+      def initialize(types = [ :js ])
         @types = types
       end
 
@@ -69,11 +67,12 @@ module Awestruct
                 print "minifying html #{page.output_path}"
                 input = htmlcompressor(page, input, site.minify_html_opts)
               when :css
-                print "minifying css #{page.output_path}"
-                input = yuicompressor_css(page, input)
+                # TODO: Figure out how to do this is sass / less and document it
+                #print "minifying css #{page.output_path}"
+                #input = yuicompressor_css(page, input)
               when :js
                 print "minifying js #{page.output_path}"
-                input = yuicompressor_js(page, input)
+                input = js_compressor(page, input)
               when :png
                 print "minifying png #{page.output_path}"
                 input = pngcrush(page, input)
@@ -86,17 +85,19 @@ module Awestruct
 
       private
 
+      class JSCompressor
+        def compress( input )
+          Uglifier.new(:mangle => false).compile(input)
+        end
+      end
+
       def htmlcompressor(page, input, minify_html_opts)
         opts = minify_html_opts.nil? ? {}:minify_html_opts
         compressor(page, input, HtmlCompressor::Compressor.new(opts))
       end
 
-      def yuicompressor_css(page, input)
-        compressor(page, input, YUI::CssCompressor.new)
-      end
-
-      def yuicompressor_js(page, input)
-        compressor(page, input, YUI::JavaScriptCompressor.new)
+      def js_compressor(page, input)
+        compressor(page, input, JSCompressor.new)
       end
 
       def compressor(page, input, compressor)
