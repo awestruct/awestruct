@@ -31,12 +31,13 @@ module Awestruct
       end
 
       def for_layout_chain(page, &block)
-        # puts "for_layout_chain #{page.inspect}" 
         current_page = page 
+        $LOG.debug "layout_chain for #{current_page.inspect}" if $LOG.debug?
         while ( ! ( current_page.nil? || current_page.layout.nil? ) )
           current_page = site.layouts.find_matching( current_page.layout, current_page.output_extension )
-          # puts "layout #{current_page.inspect}" 
+          $LOG.debug "found matching layout #{current_page.inspect}" if $LOG.debug?
           if ( ! current_page.nil? )
+            $LOG.debug "calling: #{block.inspect}" if $LOG.debug?
             block.call( current_page )
           end
         end

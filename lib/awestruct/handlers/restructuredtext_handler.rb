@@ -57,8 +57,8 @@ module Awestruct
           content = Hpricot( doc ).at( '/html/body/div[@class="document"]' ).inner_html.strip
           content = content.gsub( "\r", '' )
         rescue => e
-          puts e
-          puts e.backtrace
+          $LOG.error e if $LOG.error?
+          $LOG.error e.backtrace if $LOG.error?
         end
         content
       end

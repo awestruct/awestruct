@@ -29,7 +29,7 @@ module Awestruct
           begin
             git.commit("Published #{@branch} to GitHub pages.")
           rescue ::Git::GitExecuteError => e
-            $stderr.puts "Can't commit. #{e}."
+            $LOG.error "Can't commit. #{e}." if $LOG.error?
           end
         end
         git.reset_hard

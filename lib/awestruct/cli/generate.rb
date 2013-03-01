@@ -15,11 +15,11 @@ module Awestruct
       def run()
         begin
           base_url = @profile['base_url'] || @default_base_url
-          puts "Generating site: #{base_url}"
+          $LOG.info "Generating site: #{base_url}" if $LOG.info?
           @engine.run( @profile, @base_url, ( @profile ? @profile['base_url'] || @default_base_url : @default_base_url ), @force )
         rescue =>e
-          puts e
-          puts e.backtrace
+          $stderr.puts e
+          $stderr.puts e.backtrace
           return false
         end
       end
