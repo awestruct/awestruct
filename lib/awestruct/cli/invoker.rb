@@ -30,7 +30,7 @@ module Awestruct
         @threads = []
         @profile = nil
         @success = true
-        $LOG = Logger.new(STDOUT)
+        $LOG = Logger.new(Awestruct::AwestructLoggerMultiIO.new(@options.verbose, STDOUT, File.open('.awestruct/debug.log', 'w')))
         $LOG.level = @options.verbose ? Logger::DEBUG : Logger::INFO
         $LOG.formatter = Awestruct::AwestructLogFormatter.new
       end

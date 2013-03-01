@@ -1,16 +1,35 @@
 require 'logger'
 
 module Awestruct
+  class AwestructLoggerMultiIO
+    def initialize(log_to_debug_io = false, *targets)
+      @targets = targets
+      @log_to_debug = log_to_debug_io
+    end
+
+    def write(*args)
+      @targets.each do |target|
+        if target.instance_of?(File) && @log_to_debug
+          target.write(*args)
+        end
+        if args[0] !~/\[/ && target.instance_of?(IO)
+          target.write(*args)
+        end
+      end
+    end
+
+    def close
+      @targs.each(&:close)
+    end
+  end
+
   class AwestructLogFormatter < Logger::Formatter
     attr_accessor :level
     attr_accessor :progname
 
     def call(severity, timestamp, who, object)
-      # override progname to be the caller if the log level threshold is DEBUG
-      # We only do this if the logger level is DEBUG because inspecting the
-      # stack and doing extra string manipulation can have performance impacts
-      # under high logging rates.
-      if $LOG.level == Logger::DEBUG
+      is_debug = $LOG.level == Logger::DEBUG
+      if is_debug
         # callstack inspection, include our caller
         # turn this: "/usr/lib/ruby/1.8/irb/workspace.rb:52:in `irb_binding'"
         # into this: ["/usr/lib/ruby/1.8/irb/workspace.rb", "52", "irb_binding"]
@@ -30,7 +49,11 @@ module Awestruct
         who = "#{file}:#{line}##{method}"
       end
 
-      "[%s#] %5s -- %s [%s]\n" % [timestamp, severity, object, who]
+      if severity =~ /DEBUG/
+        "[%s] %5s -- %s [%s]\n" % [timestamp.strftime('%Y-%m-%d %H:%M:%S'), severity, object, who]
+      else
+        "%s\n" % [object]
+      end
     end
   end
 end
