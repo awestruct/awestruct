@@ -46,17 +46,29 @@ module Awestruct
     end
 
     def run(profile, base_url, default_base_url, force=false)
+      $LOG.debug "adjust_load_path" if $LOG.debug?
       adjust_load_path
+      $LOG.debug "load_default_site_yaml" if $LOG.debug?
       load_default_site_yaml
+      $LOG.debug "load_site_yaml -- profile" if $LOG.debug?
       load_site_yaml(profile)
+      $LOG.debug "set_base_url" if $LOG.debug?
       set_base_url( base_url, default_base_url )
+      $LOG.debug "load_yamls" if $LOG.debug?
       load_yamls
+      $LOG.debug "load_pipeline" if $LOG.debug?
       load_pipeline
+      $LOG.debug "load_pages" if $LOG.debug?
       load_pages
+      $LOG.debug "execute_pipeline" if $LOG.debug?
       execute_pipeline
+      $LOG.debug "configure_compass" if $LOG.debug?
       configure_compass
+      $LOG.debug "set_urls" if $LOG.debug?
       set_urls( site.pages )
+      $LOG.debug "build_page_index" if $LOG.debug?
       build_page_index
+      $LOG.debug "generate_output" if $LOG.debug?
       generate_output
     end
 
@@ -161,7 +173,7 @@ module Awestruct
 
     def set_urls(pages)
       pages.each do |page|
-        #puts "relative_source_path #{page.relative_source_path}"
+        $LOG.debug "relative_source_path #{page.relative_source_path}" if $LOG.debug?
         page_path = page.output_path
         if ( page_path =~ /^\// )
           page.url = page_path
@@ -222,7 +234,9 @@ module Awestruct
     end
 
     def load_pages
+      $LOG.debug "layout_page_loader.load_all :post" if $LOG.debug?
       @layout_page_loader.load_all( :post )
+      $LOG.debug "site_page_loader.load_all :inline" if $LOG.debug?
       @site_page_loader.load_all( :inline )
     end
 
@@ -240,7 +254,7 @@ module Awestruct
 
     def generate_page(page, generated_path, produce_output=true)
       if ( produce_output )
-        puts "Generating: #{generated_path}"
+        $LOG.debug "Generating: #{generated_path}" if $LOG.debug?
         FileUtils.mkdir_p( File.dirname( generated_path ) )
 
         c = page.rendered_content
@@ -251,9 +265,9 @@ module Awestruct
         end
       elsif ( site.config.track_dependencies )
         if page.dependencies.load!
-          puts "Cached:     #{generated_path}"
+          $LOG.debug "Cached:     #{generated_path}" if $LOG.debug?
         else
-          puts "Analyzing:  #{generated_path}"
+          $LOG.debug "Analyzing:  #{generated_path}" if $LOG.debug?
           page.rendered_content
         end
       end
@@ -272,19 +286,19 @@ module Awestruct
       pages = [] << page
 
       pages.each{|page|
-        puts "--------------------"
-        puts "Page: #{page.output_path} #{page.relative_source_path} #{page.__is_layout ? 'Layout':''}"
-        puts "Detected change in content (#{page.dependencies.content_hash})" if page.dependencies.has_changed_content
-        puts "!! Detected change in front matter. To fully reflect the change you'll need to restart Awestruct (#{page.dependencies.key_hash})" if page.dependencies.has_changed_keys
-        puts "No changes detected" unless page.dependencies.has_changed_content or page.dependencies.has_changed_keys
-        puts "Dependencies Matrix: (non unique source path)"
-        puts "\t Outgoing dependencies:"
-        puts "\t\t Content -> #{page.dependencies.dependencies.size}"
-        puts "\t\t Key     -> #{page.dependencies.key_dependencies.size}"
-        puts "\t Incoming dependencies:"
-        puts "\t\t Content <- #{page.dependencies.dependents.size}"
-        puts "\t\t Key     <- #{page.dependencies.key_dependents.size}"
-        puts "--------------------"
+        $LOG.debug "--------------------" if $LOG.debug?
+        $LOG.debug "Page: #{page.output_path} #{page.relative_source_path} #{page.__is_layout ? 'Layout':''}" if $LOG.debug?
+        $LOG.debug "Detected change in content (#{page.dependencies.content_hash})" if page.dependencies.has_changed_content if $LOG.debug?
+        $LOG.debug "!! Detected change in front matter. To fully reflect the change you'll need to restart Awestruct (#{page.dependencies.key_hash})" if page.dependencies.has_changed_keys if $LOG.debug?
+        $LOG.debug "No changes detected" unless page.dependencies.has_changed_content or page.dependencies.has_changed_keys if $LOG.debug?
+        $LOG.debug "Dependencies Matrix: (non unique source path)" if $LOG.debug?
+        $LOG.debug "\t Outgoing dependencies:" if $LOG.debug?
+        $LOG.debug "\t\t Content -> #{page.dependencies.dependencies.size}" if $LOG.debug?
+        $LOG.debug "\t\t Key     -> #{page.dependencies.key_dependencies.size}" if $LOG.debug?
+        $LOG.debug "\t Incoming dependencies:" if $LOG.debug?
+        $LOG.debug "\t\t Content <- #{page.dependencies.dependents.size}" if $LOG.debug?
+        $LOG.debug "\t\t Key     <- #{page.dependencies.key_dependents.size}" if $LOG.debug?
+        $LOG.debug "--------------------" if $LOG.debug?
       }
 
       regen_pages = Set.new
@@ -302,8 +316,8 @@ module Awestruct
         yt <=> xt
       end
 
-      puts "Starting regeneration of content dependent pages:" if regen_pages.size > 0
-      regen_pages.each{|x| puts x.output_path}
+      $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
+      regen_pages.each{|x| $LOG.info x.output_path if $LOG.info?}
 
       regen_pages.each do |p|
         generate_page_internal(p)

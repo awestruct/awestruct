@@ -29,23 +29,23 @@ module Awestruct
               line = i.readline
               case line[0,9]
               when '<f.sT....'
-                puts " updating #{line[10..-1]}"
+                $LOG.info " updating #{line[10..-1]}" if $LOG.info?
               when 'cd+++++++'
-                puts " creating #{line[10..-1]}"
+                $LOG.info " creating #{line[10..-1]}" if $LOG.info?
               when '<f+++++++'
-                puts " adding #{line[10..-1]}"
+                $LOG.info " adding #{line[10..-1]}" if $LOG.info?
               when '<f..T....'
                 # ignoring unchanged files
-                # puts " no change to #{line[10..-1]}"
+                $LOG.debug " no change to #{line[10..-1]}" if $LOG.debug?
               else
-                puts line
+                $LOG.info line if $LOG.info
               end
             end
           end
           threads << Thread.new(stderr) do |i|
             while ( ! i.eof? )
               line = i.readline
-              puts line
+              $LOG.info line if $LOG.info?
             end
           end
           threads.each{|t|t.join}

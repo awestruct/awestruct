@@ -14,7 +14,7 @@ module Awestruct
         @site_config   = site_config
         @deploy_config = deploy_config
         @deploy_config['type'] ||= (is_github? ? :github_pages : :rsync)
-        puts "Deploying to #{deploy_type}"
+         $LOG.info "Deploying to #{deploy_type}" if $LOG.info?
       end
 
       def deploy_type
@@ -25,8 +25,8 @@ module Awestruct
         deployer_class = Awestruct::Deployers.instance[ deploy_type.to_sym ]
   
         if ( deployer_class.nil? )
-          $stderr.puts "Unable to locate correct deployer for #{deploy_type}"
-          $stderr.puts "Deployers available for #{::Awestruct::Deployers.instance.collect {|k,v| "#{v} (#{k})"}.join(', ')}"
+          $LOG.error "Unable to locate correct deployer for #{deploy_type}" if $LOG.error?
+          $LOG.error "Deployers available for #{::Awestruct::Deployers.instance.collect {|k,v| "#{v} (#{k})"}.join(', ')}" if $LOG.error?
           return
         end
   

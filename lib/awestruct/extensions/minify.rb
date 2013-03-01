@@ -107,10 +107,10 @@ module Awestruct
         output_len = output.length
 
         if input_len > output_len
-          puts " %d bytes -> %d bytes = %.1f%%" % [ input_len, output_len, 100 * output_len/input_len ]
+          $LOG.debug " %d bytes -> %d bytes = %.1f%%" % [ input_len, output_len, 100 * output_len/input_len ] if $LOG.debug?
           output
         else
-          puts " no gain"
+          $LOG.debug " no gain" if $LOG.debug?
           input
         end
       end
@@ -128,10 +128,10 @@ module Awestruct
         output_len = output.length
 
         if input_len > output_len
-          puts " %d bytes -> %d bytes = %.1f%%" % [ input_len, output_len, 100 * output_len/input_len ]
+          $LOG.debug " %d bytes -> %d bytes = %.1f%%" % [ input_len, output_len, 100 * output_len/input_len ] if $LOG.debug?
           output
         else
-          puts " no gain"
+          $LOG.debug " no gain" if $LOG.debug?
           input
         end
       end

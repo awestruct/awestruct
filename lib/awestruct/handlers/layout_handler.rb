@@ -31,21 +31,24 @@ module Awestruct
       end
 
       def for_layout_chain(page, &block)
-        # puts "for_layout_chain #{page.inspect}" 
         current_page = page 
+        $LOG.debug "layout_chain for #{current_page.source_path}" if $LOG.debug?
         while ( ! ( current_page.nil? || current_page.layout.nil? ) )
           current_page = site.layouts.find_matching( current_page.layout, current_page.output_extension )
-          # puts "layout #{current_page.inspect}" 
+          $LOG.debug "found matching layout for #{current_page}" if $LOG.debug?
           if ( ! current_page.nil? )
+            $LOG.debug "calling: #{block.inspect}" if $LOG.debug?
             block.call( current_page )
           end
         end
       end
 
       def rendered_content(context, with_layouts=true)
+        $LOG.debug "rendering content with layout #{with_layouts} for #{context}" if $LOG.debug?
         content = delegate.rendered_content( context, with_layouts )
 
         if ( with_layouts ) 
+          $LOG.debug "calling for_layout_chain" if $LOG.debug?
           for_layout_chain(context.__effective_page || context.page) do |layout|
             context.content = content
             context.__effective_page = layout
@@ -53,6 +56,7 @@ module Awestruct
            end
         end
 
+        $LOG.debug "finished rendering content for #{context}" if $LOG.debug?
         content
       end
 

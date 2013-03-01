@@ -74,7 +74,7 @@ module Awestruct
               page.lastmod = date.strftime( "%Y-%m-%d" )
             end
           rescue Exception => e
-            puts "[ERROR] Cannot parse date #{date.to_s}: #{e}"
+             $LOG.error "Cannot parse date #{date.to_s}: #{e}" if $LOG.error?
           end
         else
           page.lastmod = Time.now.strftime( "%Y-%m-%d" )

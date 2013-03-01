@@ -10,10 +10,10 @@ module Awestruct
       end
 
       def publish_site
-        $stdout.puts "Syncing #{@site_path} to bucket #{@bucket}"
+        $LOG.info "Syncing #{@site_path} to bucket #{@bucket}" if $LOG.info?
         s3cmd = RubyS3Cmd::S3Cmd.new
         s3cmd.sync("#{@site_path}/", @bucket)
-        $stdout.puts "DONE"
+        $LOG.info "DONE" if $LOG.info?
       end
     end
   end
