@@ -17,6 +17,21 @@ module Awestruct
       end
     end
 
+    class NonInterpolatingTiltMatcher
+      EXT_REGEX = /\.(haml|slim|erb|mustache)/
+
+      def match(path)
+        if match = EXT_REGEX.match(path)
+          if match[0] == '.slim' && !defined?(Slim)
+            require 'slim'
+          end
+          true
+        else
+          false
+        end
+      end
+    end
+
     class TiltHandler < BaseTiltHandler
 
       INTERPOLATION_CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::TiltMatcher.new(),
@@ -27,7 +42,7 @@ module Awestruct
         Awestruct::Handlers::LayoutHandler
       )
 
-      NON_INTERPOLATION_CHAIN = Awestruct::HandlerChain.new( /\.(haml|erb|mustache)$/,
+      NON_INTERPOLATION_CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::NonInterpolatingTiltMatcher.new(),
         Awestruct::Handlers::FileHandler,
         Awestruct::Handlers::FrontMatterHandler,
         Awestruct::Handlers::TiltHandler,
