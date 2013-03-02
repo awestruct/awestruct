@@ -14,6 +14,9 @@ group :test do
   gem 'coffee-script', '~> 2.2.0'
   gem 'asciidoctor', '>= 0.1.0'
   gem 'haml', '~> 4.0.0'
+  ## maruku required for testing haml 3.1
+  #gem 'haml', '~> 3.1.8'
+  #gem 'maruku'
   gem 'kramdown', '~> 0.14.2'
   gem 'therubyracer', '~> 0.10.0', :platforms => :ruby
   gem 'therubyrhino', '~> 1.73', :platforms => :jruby
