@@ -1,5 +1,4 @@
-
-source :rubygems
+source 'https://rubygems.org'
 
 group :development do
   gem 'spectator', '~> 1.2.5'
