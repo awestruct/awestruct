@@ -29,8 +29,10 @@ module Awestruct
     def self.push_page(page)
       $LOG.debug "push #{page.output_path}" if $LOG.debug?
       if ( top_page.nil? )
+        $LOG.debug "clearing dependencies" if $LOG.debug?
         page.dependencies.clear
       else
+        $LOG.debug "adding page as a dependency to top_page" if $LOG.debug?
         top_page.dependencies.add_dependency( page )
       end
       @pages.push( page )
@@ -57,7 +59,7 @@ module Awestruct
       return if top_page.nil?
       return if top_page == dep
       $LOG.debug "dep key #{top_page.relative_source_path} - #{dep.relative_source_path} -> #{key}" if $LOG.debug?
-      $LOG.debug Kernel.caller(4)[0] if $LOG.debug?
+      $LOG.debug "callers #{Kernel.caller}" if $LOG.debug?
       top_page.dependencies.add_key_dependency(dep)
     end
 
@@ -110,6 +112,7 @@ module Awestruct
       return if @page.do_not_track_dependencies
       return if @page.output_path.nil?
       return if dep == @page
+      $LOG.debug "adding dependency #{dep.source_path} to #{page.source_path}" if $LOG.debug?
       @dependencies << dep
       dep.dependencies.add_dependent( page )
     end

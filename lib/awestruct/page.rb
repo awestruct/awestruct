@@ -130,6 +130,7 @@ module Awestruct
       c = nil
 
       begin
+        $LOG.debug "calling rendered_content on handler for page #{self.output_path}" if $LOG.debug?
         c = handler.rendered_content( context, with_layouts )
         # c = site.engine.pipeline.apply_transformers( context.site, self, c )
       rescue => e
