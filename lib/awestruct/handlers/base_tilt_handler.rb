@@ -18,7 +18,7 @@ module Awestruct
       # e.g. html.haml, xml.erb
       # move to default-site.yml?
       def double_extension?
-        return true if input_extension =~ /haml|erb|mustache/
+        return true if input_extension =~ /haml|slim|erb|mustache/
       end
 
       def simple_name
