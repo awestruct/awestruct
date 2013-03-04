@@ -10,7 +10,7 @@ end
 group :test do
   gem 'rb-inotify', '~> 0.8.8'
   gem 'rack-test'
-  gem 'tilt', :git => 'git://github.com/rtomayko/tilt.git'
+  gem 'tilt', '~> 1.3.4'
   gem 'coffee-script', '~> 2.2.0'
   gem 'asciidoctor', '>= 0.1.0'
   gem 'haml', '~> 4.0.0'
