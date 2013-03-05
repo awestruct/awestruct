@@ -63,3 +63,14 @@ Tilt::register Tilt::MustacheTemplate, '.mustache'
 
 require 'awestruct/handlers/template/asciidoc'
 Tilt::register Tilt::AsciidoctorTemplate, '.ad', '.adoc', '.asciidoc'
+
+# As of Haml 4.0.0, Textile is no longer registered by default
+# Monkeypatch the Tilt templates to force Textile to be registered
+class Tilt::HamlTemplate
+  def initialize_engine
+    require_template_library 'haml'
+    if Haml::VERSION >= '4.0.0' && !Haml::Filters.constants.include?('Textile')
+      Haml::Filters.register_tilt_filter 'Textile'
+    end
+  end
+end

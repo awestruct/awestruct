@@ -6,10 +6,11 @@ verify = lambda { |output|
 }
 
 verify_with_markdown = lambda { |output|
-  include NokogiriMatchers
-  output.should have_tag('h1')
-  # TODO: add in the with text
-  #output.should =~ %r(<h1>Hello From Markdown</h1>)
+  output.should =~ %r(<h1[^>]*?>Hello From Markdown</h1>)
+}
+
+verify_with_textile = lambda { |output|
+  output.should =~ %r(<h1>Hello From Textile</h1>)
 }
 
 verify_with_utf8 = lambda { |output|
@@ -42,6 +43,13 @@ theories =
       :syntax => :haml,
       :extension => '.html',
       :matcher => verify_with_markdown
+    },
+    {
+      :page => "haml-with-textile-page.html.haml",
+      :simple_name => "haml-with-textile-page",
+      :syntax => :haml,
+      :extension => '.html',
+      :matcher => verify_with_textile
     },
     {
       :page => "haml-with-utf.html.haml",
