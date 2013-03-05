@@ -29,7 +29,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
 
   it "should warn and noop if no changes have been committed" do
     @git.stub_chain(:status, :changed, :empty?).and_return false
-    $stderr.should_receive(:puts).with(Awestruct::Deploy::Base::UNCOMMITTED_CHANGES)
+    $LOG.should_receive(:error).with(Awestruct::Deploy::Base::UNCOMMITTED_CHANGES)
     @deployer.run(@deploy_config)
   end
 
