@@ -1,0 +1,127 @@
+awestruct(1)
+============
+:doctype: manpage
+
+
+NAME
+----
+awestruct - generates a static HTML site from templates in the current project
+
+
+SYNOPSIS
+--------
+*awestruct* ['OPTION']...
+
+
+DESCRIPTION
+-----------
+The awestruct(1) command generates a static HTML site for the current project.
+Awestruct recognizes a variety of templates supported by the Ruby ecosystem, many of which are handled by Tilt.
+
+This command must be run from the root of the project.
+
+
+OPTIONS
+-------
+
+Project Setup
+~~~~~~~~~~~~~
+
+*-i, --init*::
+   Initialize a new project in the 'current' directory.
+
+*-f, --framework*='FRAMEWORK'::
+   Specify a Compass framework during initialization to use in the project. ('bootstrap', 'blueprint', '960')
+
+*--[no-]scaffold*::
+   Create scaffolding during initialization. (default: true)
+
+Site Generation / Preview
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*-d, --dev*::
+   Run in development mode. (implies *--auto*, *--server* and *--profile development*)
+
+*--auto*::
+   Auto-generate files whenever changes are noticed.
+
+*-p, --port*='PORT'::
+   The server port to use when running a local server. (default: 4242)
+
+*-b, --bind*='BIND'::
+   The server address to use when running a local server. (default: 0.0.0.0)
+
+*-g, --[no-]generate*::
+   Generate the site.
+
+*-P, --profile*='PROFILE'::
+   Specify a configuration profile.
+
+*--force*::
+   Force a regeneration of all files.
+
+*-s, --server*::
+   Serve the generated site from an embedded server.
+
+*-u, --url*='URL'::
+   Set the site.base_url property.
+
+*--run*='SCRIPT'::
+   Run a script before regenerating the site.
+
+Site Deployment
+~~~~~~~~~~~~~~~
+
+*--deploy*::
+   Deploy the site.
+
+Processing Information
+~~~~~~~~~~~~~~~~~~~~~~
+
+*-w, --verbose*::
+    Verbosely print processing information and configuration file checks to STDERR.
+
+Program Information
+~~~~~~~~~~~~~~~~~~~
+
+*-h, --help*::
+    Show the help message.
+
+*-v, --version*::
+    Print program version number.
+
+
+EXIT STATUS
+-----------
+*0*::
+    Success
+
+*1*::
+    Failure (syntax or usage error; configuration error; document processing failure; unexpected error).
+
+
+BUGS
+----
+See the *Awestruct* issue tracker: <**https://github.com/awestruct/awestruct/issues?state=open**>
+
+
+AUTHORS
+-------
+*Awestruct* was created by Bob McWhirter and has received contributions from many other individuals.
+The tool was inspired by Jekyll in the same genre.
+
+RESOURCES
+---------
+Git source repository on GitHub: <**https://github.com/awestruct/awestruct**>
+
+Project web site: <**http://awestruct.org**>
+
+GitHub organization: <**http://github.com/awestruct**>
+
+Mailinglist / forum: <**http://talk.awestruct.org**>
+
+
+COPYING
+-------
+Copyright \(C) Bob McWhirter 2013.
+Free use of this software is granted under the terms of the MIT License.
