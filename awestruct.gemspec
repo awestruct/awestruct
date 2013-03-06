@@ -9,7 +9,6 @@ spec = Gem::Specification.new do |s|
     s.summary        =   "Static site-baking utility"
     s.description    =   "Awestruct is a framework for creating static HTML sites."
     s.homepage       =   "http://awestruct.org"
-    s.version        =   "0.5.0"
     s.files          =   [
       Dir['lib/**/*.rb'],
       Dir['lib/**/*.haml'],
