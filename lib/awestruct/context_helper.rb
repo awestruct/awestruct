@@ -50,8 +50,12 @@ module Awestruct
         img['src'] = fix_url( base_url, img['src'] )
       end
 
-      doc.to_s.tap do |d| 
-        d.force_encoding(text.encoding) if d.encoding != text.encoding 
+      if RUBY_VERSION.start_with? '1.8'
+        doc.to_s
+      else
+        doc.to_s.tap do |d| 
+          d.force_encoding(text.encoding) if d.encoding != text.encoding 
+        end 
       end
     end
 
