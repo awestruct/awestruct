@@ -92,7 +92,7 @@ module Awestruct
     end
 
     def load_default_site_yaml
-      default_site_yaml = File.join( File.dirname( __FILE__ ), 'default-site.yaml' )
+      default_site_yaml = File.join( File.dirname( __FILE__ ), 'default-site.yml' )
       if ( File.exist?( default_site_yaml ) )
         data = YAML.load( File.read( default_site_yaml ) )
         data.each do |k,v|
