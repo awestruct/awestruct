@@ -1,0 +1,167 @@
+'\" t
+.\"     Title: awestruct
+.\"    Author: [see the "AUTHORS" section]
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 03/07/2013
+.\"    Manual: \ \&
+.\"    Source: \ \&
+.\"  Language: English
+.\"
+.TH "AWESTRUCT" "1" "03/07/2013" "\ \&" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+awestruct \- generates a static HTML site from templates in the current project
+.SH "SYNOPSIS"
+.sp
+\fBawestruct\fR [\fIOPTION\fR]\&...
+.SH "DESCRIPTION"
+.sp
+The awestruct(1) command generates a static HTML site for the current project\&. Awestruct recognizes a variety of templates supported by the Ruby ecosystem, many of which are handled by Tilt\&.
+.sp
+This command must be run from the root of the project\&.
+.SH "OPTIONS"
+.SS "Project Setup"
+.PP
+\fB\-i, \-\-init\fR
+.RS 4
+Initialize a new project in the
+\fIcurrent\fR
+directory\&.
+.RE
+.PP
+\fB\-f, \-\-framework\fR=\fIFRAMEWORK\fR
+.RS 4
+Specify a Compass framework during initialization to use in the project\&. (\fIbootstrap\fR,
+\fIblueprint\fR,
+\fI960\fR)
+.RE
+.PP
+\fB\-\-[no\-]scaffold\fR
+.RS 4
+Create scaffolding during initialization\&. (default: true)
+.RE
+.SS "Site Generation / Preview"
+.PP
+\fB\-d, \-\-dev\fR
+.RS 4
+Run in development mode\&. (implies
+\fB\-\-auto\fR,
+\fB\-\-server\fR
+and
+\fB\-\-profile development\fR)
+.RE
+.PP
+\fB\-\-auto\fR
+.RS 4
+Auto\-generate files whenever changes are noticed\&.
+.RE
+.PP
+\fB\-p, \-\-port\fR=\fIPORT\fR
+.RS 4
+The server port to use when running a local server\&. (default: 4242)
+.RE
+.PP
+\fB\-b, \-\-bind\fR=\fIBIND\fR
+.RS 4
+The server address to use when running a local server\&. (default: 0\&.0\&.0\&.0)
+.RE
+.PP
+\fB\-g, \-\-[no\-]generate\fR
+.RS 4
+Generate the site\&.
+.RE
+.PP
+\fB\-P, \-\-profile\fR=\fIPROFILE\fR
+.RS 4
+Specify a configuration profile\&.
+.RE
+.PP
+\fB\-\-force\fR
+.RS 4
+Force a regeneration of all files\&.
+.RE
+.PP
+\fB\-s, \-\-server\fR
+.RS 4
+Serve the generated site from an embedded server\&.
+.RE
+.PP
+\fB\-u, \-\-url\fR=\fIURL\fR
+.RS 4
+Set the site\&.base_url property\&.
+.RE
+.PP
+\fB\-\-run\fR=\fISCRIPT\fR
+.RS 4
+Run a script before regenerating the site\&.
+.RE
+.SS "Site Deployment"
+.PP
+\fB\-\-deploy\fR
+.RS 4
+Deploy the site\&.
+.RE
+.SS "Processing Information"
+.PP
+\fB\-w, \-\-verbose\fR
+.RS 4
+Verbosely print processing information and configuration file checks to STDERR\&.
+.RE
+.SS "Program Information"
+.PP
+\fB\-h, \-\-help\fR
+.RS 4
+Show the help message\&.
+.RE
+.PP
+\fB\-v, \-\-version\fR
+.RS 4
+Print program version number\&.
+.RE
+.SH "EXIT STATUS"
+.PP
+\fB0\fR
+.RS 4
+Success
+.RE
+.PP
+\fB1\fR
+.RS 4
+Failure (syntax or usage error; configuration error; document processing failure; unexpected error)\&.
+.RE
+.SH "BUGS"
+.sp
+See the \fBAwestruct\fR issue tracker: <\fBhttps://github\&.com/awestruct/awestruct/issues?state=open\fR>
+.SH "AUTHORS"
+.sp
+\fBAwestruct\fR was created by Bob McWhirter and has received contributions from many other individuals\&. The tool was inspired by Jekyll in the same genre\&.
+.SH "RESOURCES"
+.sp
+Git source repository on GitHub: <\fBhttps://github\&.com/awestruct/awestruct\fR>
+.sp
+Project web site: <\fBhttp://awestruct\&.org\fR>
+.sp
+GitHub organization: <\fBhttp://github\&.com/awestruct\fR>
+.sp
+Mailinglist / forum: <\fBhttp://talk\&.awestruct\&.org\fR>
+.SH "COPYING"
+.sp
+Copyright (C) Bob McWhirter 2013\&. Free use of this software is granted under the terms of the MIT License\&.
