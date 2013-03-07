@@ -12,7 +12,7 @@ if !defined?(RSpec)
 else
   desc "Run all examples"
   RSpec::Core::RakeTask.new(:spec) do |t|
-    t.pattern = 'spec/**/*.rb'
+    t.pattern = 'spec/*_spec.rb'
     t.rspec_opts = ['-cfs']
   end
 end

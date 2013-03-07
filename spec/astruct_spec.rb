@@ -1,6 +1,6 @@
 
 require 'awestruct/astruct'
-
+require 'awestruct/page'
 
 describe Awestruct::AStruct do 
 
