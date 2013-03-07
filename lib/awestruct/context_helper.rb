@@ -50,14 +50,8 @@ module Awestruct
         img['src'] = fix_url( base_url, img['src'] )
       end
 
-      # TODO: Double check if this is true with Nokogiri
-      # Hpricot::Doc#to_s output encoding is not necessarily the same as the encoding of text
-      if RUBY_VERSION.start_with? '1.8'
-        doc.to_xhtml
-      else
-        doc.to_xhtml.tap do |d| 
-          d.force_encoding(text.encoding) if d.encoding != text.encoding 
-        end
+      doc.to_s.tap do |d| 
+        d.force_encoding(text.encoding) if d.encoding != text.encoding 
       end
     end
 

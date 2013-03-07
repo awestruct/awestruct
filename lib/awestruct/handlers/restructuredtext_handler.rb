@@ -54,7 +54,7 @@ module Awestruct
                                  "--no-doc-title",
                                  " --initial-header-level=#{hl}" ].join(' '), 
                                  content )
-          content = Nokogiri::HTML.fragment( doc ).at( '/html/body/div[@class="document"]' ).inner_html.strip
+          content = Nokogiri::HTML( doc ).at( '/html/body/div[@class="document"]' ).inner_html.strip
           content = content.gsub( "\r", '' )
         rescue => e
           puts e
