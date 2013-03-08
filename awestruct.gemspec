@@ -12,6 +12,8 @@ spec = Gem::Specification.new do |s|
     s.files          =   [
       Dir['lib/**/*.rb'],
       Dir['lib/**/*.haml'],
+      Dir['lib/**/*.yml'],
+      Dir['spec/**/**'],
       Dir['man/*.1'],
     ].flatten
     s.executables    = [
