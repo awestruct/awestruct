@@ -1,6 +1,10 @@
 
 Dir[ File.join( File.dirname(__FILE__), '*.rb' ) ].each do |f|
-  require f
+  begin
+    require f
+  rescue LoadError => e
+    puts "INFO: Missing required dependency to activate optional built in extension #{File.basename(f)} -> #{e}"
+  end
 end
 
 module Awestruct
