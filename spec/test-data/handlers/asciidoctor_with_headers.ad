@@ -1,0 +1,8 @@
+= AsciiDoc
+Stuart Rackham
+2013-02-06
+:awestruct-tags: [a, b, c]
+:name: NOT_HANDLED
+
+This is *AsciiDoc* in {name}.
+{awestruct-version}
