@@ -76,6 +76,7 @@ module Awestruct
       end
 
       def rendered_content(context, with_layouts=true)
+        $LOG.debug "invoking tilt for #{delegate.path.to_s} with_layouts = #{with_layouts}" if $LOG.debug?
         template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options) { |engine|
             delegate.rendered_content( context, with_layouts )
         }

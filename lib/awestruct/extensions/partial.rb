@@ -6,7 +6,7 @@ module Awestruct
         filename = File.join( '_partials', path )
 
         if !File.exists?( filename )
-          puts "Could not find #{filename}"
+          $LOG.error "Could not find #{filename}" if $LOG.error?
           return nil
         end
 
