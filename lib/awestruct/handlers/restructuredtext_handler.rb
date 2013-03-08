@@ -6,7 +6,7 @@ require 'awestruct/handlers/front_matter_handler'
 require 'awestruct/handlers/interpolation_handler'
 require 'awestruct/handlers/layout_handler'
 
-require 'hpricot'
+require 'nokogiri'
 
 module Awestruct
   module Handlers
@@ -54,7 +54,7 @@ module Awestruct
                                  "--no-doc-title",
                                  " --initial-header-level=#{hl}" ].join(' '), 
                                  content )
-          content = Hpricot( doc ).at( '/html/body/div[@class="document"]' ).inner_html.strip
+          content = Nokogiri::HTML( doc ).at( '/html/body/div[@class="document"]' ).inner_html.strip
           content = content.gsub( "\r", '' )
         rescue => e
           puts e
