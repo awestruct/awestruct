@@ -43,7 +43,7 @@ module Awestruct
 
     def inherit_front_matter_from(hash)
       hash.each do |k,v|
-        #puts "#{self.output_path} overwrite key: #{k}:#{self[k]} -> #{v}" if ( key?( k ) and !self[k].nil? and !self[k].eql? v)
+        $LOG.debug "#{self.output_path} overwrite key: #{k}:#{self[k]} -> #{v}" if ( key?( k ) and !self[k].nil? and !self[k].eql? v) if $LOG.debug?
         unless ( key?( k ) )
           self[k.to_sym] = v
         end
@@ -130,6 +130,7 @@ module Awestruct
       c = nil
 
       begin
+        $LOG.debug "calling rendered_content on handler for page #{self.output_path}" if $LOG.debug?
         c = handler.rendered_content( context, with_layouts )
         # c = site.engine.pipeline.apply_transformers( context.site, self, c )
       rescue => e

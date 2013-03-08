@@ -16,7 +16,7 @@ class Compass::AppIntegration::StandAlone::Installer
     # no!
   end
   def finalize(opts={})
-    puts <<-END.gsub(/^ {6}/, '')
+    $LOG.info <<-END.gsub(/^ {6}/, '')
 
       Now you're awestruct!
 
@@ -67,8 +67,8 @@ module Awestruct
           begin
             step.perform( dir )
           rescue => e
-            puts e
-            puts e.backtrace
+            $LOG.error e if $LOG.error?
+            $LOG.error e.backtrace if $LOG.error?
           end
         end
       end
@@ -78,8 +78,8 @@ module Awestruct
           begin
             step.unperform( dir )
           rescue => e
-            puts e
-            puts e.backtrace
+            $LOG.error e if $LOG.error?
+            $LOG.error e.backtrace if $LOG.error?
           end
         end
       end
@@ -97,32 +97,32 @@ module Awestruct
         def perform(dir)
           p = File.join( dir, @path ) 
           if ( File.exist?( p ) )
-            $stderr.puts "Exists: #{p}"
+            $LOG.error "Exists: #{p}" if $LOG.error?
             return
           end
           if ( ! File.directory?( File.dirname( p ) ) )
-            $stderr.puts "Does not exist: #{File.dirname(p)}"
+            $LOG.error "Does not exist: #{File.dirname(p)}" if $LOG.error?
             return
           end
-          $stderr.puts "Create directory: #{p}"
+          $LOG.info "Create directory: #{p}" if $LOG.info?
           FileUtils.mkdir( p )
         end
 
         def unperform(dir)
           p = File.join( dir, @path ) 
           if ( ! File.exist?( p ) )
-            $stderr.puts "Does not exist: #{p}"
+            $LOG.error "Does not exist: #{p}" if $LOG.error?
             return
           end
           if ( ! File.directory?( p ) )
-            $stderr.puts "Not a directory: #{p}"
+            $LOG.error "Not a directory: #{p}" if $LOG.error?
             return
           end
           if ( Dir.entries( p ) != 2 )
-            $stderr.puts "Not empty: #{p}"
+            $LOG.error "Not empty: #{p}" if $LOG.error?
             return
           end
-          $stderr.puts "Remove: #{p}"
+          $LOG.info "Remove: #{p}" if $LOG.info?
           FileUtils.rmdir( p )
         end
       end
@@ -150,14 +150,14 @@ module Awestruct
         def perform(dir )
           p = File.join( dir, @path )
           if ( File.exist?( p ) )
-            $stderr.puts "Exists: #{p}"
+            $LOG.error "Exists: #{p}" if $LOG.error?
             return
           end
           if ( ! File.directory?( File.dirname( p ) ) )
-            $stderr.puts "No directory: #{File.dirname( p )}"
+            $LOG.error "No directory: #{File.dirname( p )}" if $LOG.error?
             return
           end
-          $stderr.puts "Create file: #{p}"
+          $LOG.info "Create file: #{p}" if $LOG.info?
           File.open( p, 'w' ){|f| f.write( File.read( @input_path ) ) }
         end
 
@@ -168,10 +168,10 @@ module Awestruct
         def notunperform(dir)
           p = File.join( @dir, p )
           if ( ! File.exist?( p ) )
-            $stderr.puts "Does not exist: #{p}"
+            $LOG.error "Does not exist: #{p}" if $LOG.error?
             return
           end
-          $stderr.puts "Remove: #{p}"
+          $LOG.info "Remove: #{p}" if $LOG.info?
           FileUtils.rm( p )
         end
 

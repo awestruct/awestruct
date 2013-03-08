@@ -5,8 +5,10 @@ require 'awestruct/cli/generate'
 require 'awestruct/cli/auto'
 require 'awestruct/cli/server'
 require 'awestruct/cli/deploy'
+require 'awestruct/logger'
 
 require 'pathname'
+require 'logger'
 
 module Awestruct
   module CLI
@@ -28,6 +30,11 @@ module Awestruct
         @threads = []
         @profile = nil
         @success = true
+        logging_path = Pathname.new '.awestruct'
+        logging_path.mkdir unless logging_path.exist?
+        $LOG = Logger.new(Awestruct::AwestructLoggerMultiIO.new(@options.verbose, STDOUT, File.open('.awestruct/debug.log', 'w')))
+        $LOG.level = @options.verbose ? Logger::DEBUG : Logger::INFO
+        $LOG.formatter = Awestruct::AwestructLogFormatter.new
       end
 
       def invoke!
@@ -72,7 +79,7 @@ module Awestruct
           options.profile = 'NONE'
           @profile = {}
         end 
-        $stderr.puts "Using profile: #{options.profile}"
+        $stdout.puts "Using profile: #{options.profile}"
       end
 
       def setup_config()
@@ -101,7 +108,7 @@ module Awestruct
         deploy_config = profile[ 'deploy' ]
 
         if ( deploy_config.nil? )
-          $stderr.puts "No configuration for 'deploy'"
+          $LOG.error "No configuration for 'deploy'" if $LOG.error?
           return
         end
 
