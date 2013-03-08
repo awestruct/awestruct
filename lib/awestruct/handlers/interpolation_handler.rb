@@ -23,8 +23,8 @@ module Awestruct
         begin
           c = context.instance_eval( content )
         rescue Exception => e # Don't barf all over ourselves if an exception is thrown
-          $stderr.puts "Exception thrown interpolating content. #{e.to_s}"
-          $stderr.puts e.backtrace
+          $LOG.error "Exception thrown interpolating content. #{e.to_s}" if $LOG.error?
+          $LOG.error e.backtrace if $LOG.error?
           c = delegate.raw_content
         end
         c

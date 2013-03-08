@@ -18,11 +18,11 @@ module Awestruct
       end
 
       def publish_site
-        $stderr.puts( "#{self.class.name}#publish_site not implemented." )
+        $LOG.error( "#{self.class.name}#publish_site not implemented." ) if $LOG.error?
       end
 
       def existing_changes
-        $stderr.puts UNCOMMITTED_CHANGES
+        $LOG.error UNCOMMITTED_CHANGES if $LOG.error?
       end
     end
   end

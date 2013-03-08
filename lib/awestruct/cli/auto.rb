@@ -26,7 +26,7 @@ module Awestruct
               begin
                 if path.eql? current_path
                   unless generate_thread.nil?
-                    puts "Same path triggered, stopping previous generation" if generate_thread.alive?
+                    $LOG.info "Same path triggered, stopping previous generation" if generate_thread.alive? && $LOG.info?
                     generate_thread.kill
                   end
                 else
@@ -37,15 +37,15 @@ module Awestruct
                 generate_thread = Thread.new {
                   begin
                     engine.generate_page_by_output_path( path )
-                    puts "Generating.... done!"
+                    $LOG.info "Generating.... done!" if $LOG.info?
                   rescue => e
-                    puts e
-                    puts e.backtrace
+                    $LOG.error e if $LOG.error?
+                    $LOG.error e.backtrace if $LOG.error?
                   end
                 }
               rescue => e
-                puts e
-                puts e.backtrace
+                $LOG.error e if $LOG.error?
+                $LOG.error e.backtrace if $LOG.error?
               end
             end
           end
