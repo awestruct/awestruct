@@ -23,5 +23,19 @@ module Tilt
     def allows_script?
       false
     end
+
+    def parse_headers(content, filter = /.*/)
+      doc = Asciidoctor.load(content, {:parse_header_only => true})
+      filtered = doc.attributes.select{|k,v| k =~ filter}.inject({}) do |hash, (k,v)|
+        hash[k.gsub(filter, '')] = v
+        hash
+      end
+
+      filtered["doctitle"] = doc.doctitle
+      filtered["date"] ||= doc.attributes["revdate"] unless doc.attributes["revdate"].nil?
+      filtered["author"] = doc.attributes["author"] unless doc.attributes["author"].nil?
+
+      filtered
+    end
   end
 end

@@ -7,5 +7,7 @@ content_syntax:
   ad: asciidoc
 
 asciidoctor:
-  attributes:
-    backend: html5
+  :backend: html5
+  :attributes:
+    imagesdir: '/images'
+    stylesdir: '/stylesheets'
