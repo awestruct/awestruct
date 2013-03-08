@@ -67,10 +67,13 @@ shared_examples "a handler" do |theories|
         it "should render page '#{theory[:page]}'" do
           if theory[:unless].nil? or !theory[:unless][:exp].call()
             handler = create_handler theory[:page]
-            output = handler.rendered_content( create_context )
+            handler.merge! additional_config_page if respond_to?("additional_config_page")
+
+            output = handler.rendered_content( handler.create_context )
             output.should_not be_nil
 
-            theory[:matcher].call(output)
+            theory[:matcher].call(output, handler) if theory[:matcher].arity == 2
+            theory[:matcher].call(output) if theory[:matcher].arity == 1
           else
             pending theory[:unless][:message]
           end

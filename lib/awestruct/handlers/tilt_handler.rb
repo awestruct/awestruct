@@ -61,9 +61,6 @@ end
 require 'awestruct/handlers/template/mustache'
 Tilt::register Tilt::MustacheTemplate, '.mustache'
 
-require 'awestruct/handlers/template/asciidoc'
-Tilt::register Tilt::AsciidoctorTemplate, '.ad', '.adoc', '.asciidoc'
-
 # As of Haml 4.0.0, Textile is no longer registered by default
 # Monkeypatch the Tilt templates to force Textile to be registered
 class Tilt::HamlTemplate
