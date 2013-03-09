@@ -12,7 +12,7 @@ verify = lambda { |output|
 }
 
 verify_front_matter = lambda { |output, page|
-  page.title.should == 'AwestructAsciiDoc'
+  page.title.should == 'AsciiDoc'
   output.should_not =~ %r(title: AwestructAsciiDoc)
 }
 
