@@ -22,6 +22,7 @@ module Awestruct
 
       CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::AsciidoctorMatcher.new(),
         Awestruct::Handlers::FileHandler,
+        Awestruct::Handlers::FrontMatterHandler,
         Awestruct::Handlers::AsciidoctorHandler,
         Awestruct::Handlers::LayoutHandler
       )
@@ -32,15 +33,19 @@ module Awestruct
         @front_matter = {}
       end
 
-
       def front_matter
         parse_header()
-        @front_matter
+        @front_matter.merge @delegate.front_matter if @delegate
       end
 
       def raw_content
         parse_header()
-        super
+        @delegate.raw_content if @delegate
+      end
+
+      def content_line_offset
+        parse_header()
+        @delegate.content_line_offset if @delegate
       end
 
       def rendered_content(context, with_layouts)
@@ -65,26 +70,19 @@ module Awestruct
         opts
       end
 
-      def content_line_offset
-        parse_header()
-        @content_line_offset
-      end
-
       def inherit_front_matter(page)
         parse_header()
         page.inherit_front_matter_from(@front_matter)
+        super
       end
 
       def parse_header
         return if @parsed_parts
 
-        parse_front_matter
-        if content_line_offset == 0
-          content = delegate.raw_content
-          unless content.nil?
-            @front_matter = parse_document_attributes(content)
-            @parsed_parts = true
-          end
+        content = delegate.raw_content
+        unless content.nil?
+          @front_matter = parse_document_attributes(content)
+          @parsed_parts = true
         end
       end
 
@@ -98,53 +96,6 @@ module Awestruct
         end
       end
 
-      def parse_front_matter
-        return if ( @parsed_parts && ! delegate.stale? )
-
-        full_content = delegate.raw_content
-        full_content.force_encoding(site.encoding) if site.encoding
-        yaml_content = ''
-
-        dash_lines = 0
-        mode = :yaml
-
-        @raw_content = ''
-        @content_line_offset = 0
-
-        full_content.each_line do |line|
-          if ( line.strip == '---' )
-            dash_lines = dash_lines +1
-          end
-          if ( mode == :yaml )
-            @content_line_offset += 1
-            yaml_content << line
-          else
-            @raw_content << line
-          end
-          if ( dash_lines == 2 )
-            mode = :page
-          end
-        end
-  
-        if ( dash_lines == 0 )
-          @raw_content = yaml_content
-          yaml_content = ''
-          @content_line_offset = 0
-        elsif ( mode == :yaml )
-          @raw_content = nil
-          @content_line_offset = -1
-        end
-
-        begin
-          @front_matter = YAML.load( yaml_content ) || {}
-        rescue => e
-          puts "could not parse #{relative_source_path}"
-          raise e
-        end
-
-        @parsed_parts = true
-
-      end
     end
 
   end

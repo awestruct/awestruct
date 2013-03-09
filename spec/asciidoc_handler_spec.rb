@@ -13,11 +13,13 @@ verify = lambda { |output|
 
 verify_front_matter = lambda { |output, page|
   page.title.should == 'AwestructAsciiDoc'
+  output.should_not =~ %r(title: AwestructAsciiDoc)
 }
 
 verify_headers = lambda { |output, page|
   extend RSpec::Matchers
-
+  page.doctitle.should == 'AsciiDoc'
+  page.author.should == 'Stuart Rackham'
   page.name.should == 'Awestruct'
   page.tags.should be_a_kind_of(Array)
   page.tags.should == %w(a b c)
