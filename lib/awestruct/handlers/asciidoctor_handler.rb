@@ -77,7 +77,7 @@ module Awestruct
 
       def inherit_front_matter(page)
         parse_header()
-        page.inherit_front_matter_from(@front_matter)
+        page.inherit_front_matter_from(front_matter)
         super
       end
 
@@ -87,8 +87,8 @@ module Awestruct
         content = delegate.raw_content
         unless content.nil?
           @front_matter = parse_document_attributes(content)
-          @parsed_parts = true
         end
+        @parsed_parts = true
       end
 
       def parse_document_attributes(content)
