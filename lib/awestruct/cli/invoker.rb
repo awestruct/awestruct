@@ -75,11 +75,11 @@ module Awestruct
         end
  
         unless @profile
-          $stderr.puts "Unable to locate profile: #{options.profile}" if options.profile
+          $LOG.error "Unable to locate profile: #{options.profile}" if options.profile && $LOG.error?
           options.profile = 'NONE'
           @profile = {}
         end 
-        $stdout.puts "Using profile: #{options.profile}"
+        $LOG.info "Using profile: #{options.profile}" if $LOG.info?
       end
 
       def setup_config()

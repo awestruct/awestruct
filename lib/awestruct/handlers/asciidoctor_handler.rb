@@ -138,7 +138,7 @@ module Awestruct
         begin
           @front_matter = YAML.load( yaml_content ) || {}
         rescue => e
-          puts "could not parse #{relative_source_path}"
+          $LOG.error "could not parse #{relative_source_path}" if $LOG.error?
           raise e
         end
 

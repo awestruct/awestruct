@@ -18,8 +18,8 @@ module Awestruct
           $LOG.info "Generating site: #{base_url}" if $LOG.info?
           @engine.run( @profile, @base_url, ( @profile ? @profile['base_url'] || @default_base_url : @default_base_url ), @force )
         rescue =>e
-          $stderr.puts e
-          $stderr.puts e.backtrace
+          $LOG.error e if $LOG.error?
+          $LOG.error e.backtrace if $LOG.error?
           return false
         end
       end
