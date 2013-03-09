@@ -32,7 +32,7 @@ module Awestruct
       end
 
       def ruby_19?
-        @is_ruby_19 ||= (::RbConfig::CONFIG['ruby_version'] =~ %r(^1\.9))
+        @is_ruby_19 ||= RUBY_VERSION >= '1.9'
       end
 
     end

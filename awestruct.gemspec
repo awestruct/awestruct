@@ -31,7 +31,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'compass', '~> 0.12.1'
     s.add_dependency 'compass-960-plugin', '~> 0.10.4'
     s.add_dependency 'bootstrap-sass', '~> 2.2.2.0'
-    s.add_dependency 'json', '~> 1.6.6'
+    s.add_dependency 'json', '~> 1.7.7'
     s.add_dependency 'rest-client', '~> 1.6.7'
     s.add_dependency 'git', '~> 1.2.5'
     s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
