@@ -10,7 +10,7 @@ end
 group :test do
   gem 'rb-inotify', '~> 0.8.8'
   gem 'rack-test'
-  gem 'tilt', '~> 1.3.4'
+  gem 'tilt', '~> 1.3.5'
   gem 'coffee-script', '~> 2.2.0'
   gem 'asciidoctor', '>= 0.1.1' # need 0.1.1 for Header support
   gem 'haml', '~> 4.0.0'
