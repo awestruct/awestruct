@@ -22,6 +22,7 @@ describe Awestruct::CLI::Options do
     options.base_url.should == nil
     options.profile.should  == nil
     options.script.should   == nil
+    options.verbose.should  == false
   end
 
   describe "parsing" do 
@@ -77,6 +78,14 @@ describe Awestruct::CLI::Options do
       result = parse!( '--generate', '--deploy' )
       result.deploy.should be_true
       result.generate.should be_true
+    end
+
+    it "should turn on verbose when -w or --verbose is explicitly turned back on" do
+      result = parse!( '-w' )
+      result.verbose.should be_true
+
+      result = parse!( '--verbose' )
+      result.verbose.should be_true
     end
 
     it "should generate by default" do

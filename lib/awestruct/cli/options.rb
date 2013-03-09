@@ -36,6 +36,7 @@ module Awestruct
         @profile   = nil
         @deploy    = false
         @script    = nil
+        @verbose   = false
       end
 
       def self.parse!(args)
