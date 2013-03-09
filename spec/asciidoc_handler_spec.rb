@@ -18,8 +18,8 @@ verify_front_matter = lambda { |output, page|
 
 verify_headers = lambda { |output, page|
   extend RSpec::Matchers
-  page.doctitle.should == 'AsciiDoc'
   page.author.should == 'Stuart Rackham'
+  page.title.should == 'AsciiDoc'
   page.name.should == 'Awestruct'
   page.tags.should be_a_kind_of(Array)
   page.tags.should == %w(a b c)

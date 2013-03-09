@@ -1,4 +1,3 @@
-
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_tilt_handler'
 require 'awestruct/handlers/file_handler'
@@ -53,7 +52,7 @@ module Awestruct
         parse_header()
         types = [String, Numeric, TrueClass, FalseClass, Array]
         @front_matter.merge!(context.page.inject({}) do |hash, (k,v)|
-          hash[k.to_s] = v if not k.to_s.start_with?("__") and types.detect { |t| v.kind_of? t}
+          hash[k.to_s] = v if not k.to_s.start_with?('__') and types.detect { |t| v.kind_of? t }
           hash
         end)
         super
@@ -66,8 +65,8 @@ module Awestruct
         else
           opts[:attributes] = opts[:attributes].merge @front_matter
         end
-        opts[:attributes]["awestruct"] = true
-        opts[:attributes]["awestruct-version"] = Awestruct::VERSION
+        opts[:attributes]['awestruct'] = true
+        opts[:attributes]['awestruct-version'] = Awestruct::VERSION
         opts
       end
 
