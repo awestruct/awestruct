@@ -9,12 +9,14 @@ content_syntax:
 haml:
   default:
     :attr_wrapper: '"' 
+    :escape_attrs: :once
   html:
     :format: :html5
 
 slim:
   default:
     :sort_attrs: false
+    :disable_escape: true
   html:
     :format: :html5
 
