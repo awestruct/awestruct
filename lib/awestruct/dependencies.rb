@@ -165,7 +165,7 @@ module Awestruct
       $LOG.debug "load #{file}" if $LOG.debug?
       if ( File.exist?( file ) )
         File.open( file, 'r' ) do |file|
-          file.lines.each do |line|
+          file.each_line do |line|
             type, path = line.split(':')
             path ||= ""
             path.strip!
