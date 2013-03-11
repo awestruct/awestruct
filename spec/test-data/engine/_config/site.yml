@@ -10,5 +10,6 @@ profiles:
 title: Awestruction!
 
 asciidoctor:
-  attributes:
-    backend: html4
+  default:
+    :attributes:
+      backend: html4

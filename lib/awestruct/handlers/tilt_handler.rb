@@ -18,11 +18,11 @@ module Awestruct
     end
 
     class NonInterpolatingTiltMatcher
-      EXT_REGEX = /\.(haml|slim|erb|mustache)/
+      EXT_REGEX = /\.(haml|slim|erb|mustache)$/
 
       def match(path)
         if match = EXT_REGEX.match(path)
-          if match[0] == '.slim' && !defined?(Slim)
+          if match[0] == '.slim' && Tilt[path].nil?
             require 'slim'
           end
           true

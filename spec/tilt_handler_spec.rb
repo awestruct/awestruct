@@ -42,8 +42,8 @@ describe Awestruct::Handlers::TiltHandler do
   end
 
   it "should override engine configuration options over output_extension" do
-    @site.asciidoc.property = 'test'
-    @site.asciidoctor.property = 'test1'
+    @site.asciidoctor.property = 'test'
+    @site.asciidoc.property = 'test1'
 
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "asciidoc-page.asciidoc" ) )
     handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )

@@ -44,11 +44,12 @@ module Awestruct
           if !mime.nil?
             return '.js' if mime.eql? 'application/javascript'
             return '.html' if mime.eql? 'text/html'
+            return '.xml' if mime.eql? 'text/xml'
             return '.css' if mime.eql? 'text/css'
             return '.html' # if all else falls trough
           end
         end
-        return ".html"
+        return '.html'
       end
 
       def content_syntax
@@ -65,12 +66,34 @@ module Awestruct
       def options
         opts = {}
 
-        extension = input_extension[1..-1].to_sym
-        extension_options = site[extension] unless site[extension].nil?
-        opts.merge! extension_options unless extension_options.nil?
+        engine_name = Tilt[path].name.gsub(/(Tilt|:|Template)/i, '').downcase.to_sym
+        engine_options = site[engine_name]
+        unless engine_options.nil?
+          if engine_options.has_key? 'default'
+            opts.merge! engine_options['default']
+            if engine_options.has_key? output_extension[1..-1]
+              opts.merge! engine_options[output_extension[1..-1]]
+            end
+          else
+            opts.merge! engine_options
+          end
+        end
 
-        engine_options = site[ Tilt[path].name.gsub(/(Tilt|:|Template)/i, '').downcase.to_sym ]
-        opts.merge! engine_options unless engine_options.nil?
+        # config overrides for specific file extension if different from engine name
+        extension = input_extension[1..-1].to_sym
+        unless engine_name == extension
+          extension_options = site[extension] unless site[extension].nil?
+          unless extension_options.nil?
+            if extension_options.has_key? 'default'
+              opts.merge! extension_options['default']
+              if extension_options.has_key? output_extension[1..-1]
+                opts.merge! extension_options[output_extension[1..-1]]
+              end
+            else
+              opts.merge! extension_options
+            end
+          end
+        end
 
         return opts
       end
