@@ -24,10 +24,12 @@ module Awestruct
             if (page.date?)
               page.relative_source_path =~ /^#{@path_prefix}\/(.*)\..*$/
               date = page.date
-              if date.kind_of? String
-                date = Time.parse date
-              elsif date.kind_of? Date
-                date = date.to_time
+              unless date.kind_of? DateTime
+                if date.kind_of? String
+                  date = DateTime.parse date
+                elsif date.kind_of? Date
+                  date = DateTime.new(date.year, date.month, date.day)
+                end
               end
               year = date.year
               month = sprintf( "%02d", date.month )
@@ -42,7 +44,7 @@ module Awestruct
               month = $2
               day   = $3
               slug  = $4
-              page.date = Time.utc( year.to_i, month.to_i, day.to_i )
+              page.date = DateTime.new( year.to_i, month.to_i, day.to_i )
             end
 
             # if a date was found create a post
