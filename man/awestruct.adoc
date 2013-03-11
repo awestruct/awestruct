@@ -40,7 +40,7 @@ Site Generation / Preview
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 *-d, --dev*::
-   Run in development mode. (implies *--auto*, *--server* and *--profile development*)
+   Run in development mode. (implies *--auto*, *--server*, *--port 4242* and *--profile development*)
 
 *--auto*::
    Auto-generate files whenever changes are noticed.
@@ -55,7 +55,7 @@ Site Generation / Preview
    Generate the site.
 
 *-P, --profile*='PROFILE'::
-   Specify a configuration profile.
+   Activate a configuration profile.
 
 *--force*::
    Force a regeneration of all files.
@@ -66,8 +66,10 @@ Site Generation / Preview
 *-u, --url*='URL'::
    Set the site.base_url property.
 
+////
 *--run*='SCRIPT'::
    Run a script before regenerating the site.
+////
 
 Site Deployment
 ~~~~~~~~~~~~~~~
