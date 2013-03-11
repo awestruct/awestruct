@@ -96,6 +96,10 @@ module Awestruct
         template.parse_headers(content, /^awestruct\-/).inject({}) do |hash, (k,v)|
           unless v.nil?
             hash[k] = v.empty? ? v : YAML.load(v)
+            if hash[k].kind_of? Time
+              # use DateTime to preserve timezone information
+              hash[k] = DateTime.parse(v)
+            end
           end
           hash
         end
