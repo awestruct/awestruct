@@ -123,13 +123,13 @@ module Awestruct
           if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
             profile_data = ( v[profile] || {} )
           else
-            site.send( "#{k}=", v )
+            site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
           end
         end if data
         site.profile = profile
 
         profile_data.each do |k,v|
-          site.send( "#{k}=", v )
+          site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
         end
       end
     end
@@ -144,6 +144,25 @@ module Awestruct
       data = YAML.load( File.read( yaml_path ) )
       name = File.basename( yaml_path, '.yml' )
       site.send( "#{name}=", massage_yaml( data ) )
+    end
+
+    def merge_data(existing, new)
+      if existing.kind_of? Hash
+        existing.inject({}) do |merged, (k,v)|
+          if new.has_key? k
+            if v.kind_of? Hash
+              merged[k] = v.merge new[k]
+            else
+              merged[k] = new[k]
+            end
+          else
+            merged[k] = v
+          end
+          merged
+        end
+      else
+        new
+      end
     end
 
     def massage_yaml(obj)

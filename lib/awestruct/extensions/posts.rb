@@ -23,9 +23,11 @@ module Awestruct
             # check for a date inside the page first
             if (page.date?)
               page.relative_source_path =~ /^#{@path_prefix}\/(.*)\..*$/
-              date = page.date;
+              date = page.date
               if date.kind_of? String
-                date = Time.parse page.date
+                date = Time.parse date
+              elsif date.kind_of? Date
+                date = date.to_time
               end
               year = date.year
               month = sprintf( "%02d", date.month )

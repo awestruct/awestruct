@@ -6,8 +6,24 @@ content_syntax:
   adoc: asciidoc
   ad: asciidoc
 
+haml:
+  default:
+    :attr_wrapper: '"' 
+    :escape_attrs: :once
+  html:
+    :format: :html5
+
+slim:
+  default:
+    :sort_attrs: false
+    :disable_escape: true
+  html:
+    :format: :html5
+
 asciidoctor:
-  :backend: html5
-  :attributes:
-    imagesdir: '/images'
-    stylesdir: '/stylesheets'
+  default:
+    :backend: html5
+    :safe: 1
+    :attributes:
+      imagesdir: /images
+      stylesdir: /stylesheets
