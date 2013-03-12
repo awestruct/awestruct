@@ -67,14 +67,14 @@ module Awestruct
           opts.on( '-u', '--url URL', 'Set site.base_url' ) do |url|
             self.base_url = url
           end
-          opts.on( '-d', '--dev',     'Run in development mode (--auto, --server and -profile development)' ) do |url|
+          opts.on( '-d', '--dev',     'Run site in development mode (--auto, --server, --port 4242 and --profile development)' ) do |url|
             self.server   = true
             self.auto     = true
             self.port     = 4242
             self.profile  = 'development'
           end
 
-          opts.on( '-P', '--profile PROFILE', 'Specify a profile' ) do |profile|
+          opts.on( '-P', '--profile PROFILE', 'Activate a configuration profile' ) do |profile|
             self.profile = profile
           end
       
@@ -92,12 +92,12 @@ module Awestruct
           opts.on( '-b', '--bind ADDR', 'Server address (default: 0.0.0.0)' ) do |bind_addr|
             self.bind_addr = bind_addr
           end
-          opts.on( '-g', '--[no-]generate', 'Generated site' ) do |g|
+          opts.on( '-g', '--[no-]generate', 'Generate site' ) do |g|
             self.generate = g
           end
-          opts.on( '--run SCRIPT', 'Force a regeneration' ) do |script|
-            self.script = script
-          end
+          #opts.on( '--run SCRIPT', 'Invoke a script after initialization' ) do |script|
+          #  self.script = script
+          #end
       
           opts.separator ''
           opts.separator "Common options:"
