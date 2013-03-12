@@ -133,8 +133,20 @@ module Awestruct
         $LOG.debug "calling rendered_content on handler for page #{self.output_path}" if $LOG.debug?
         c = handler.rendered_content( context, with_layouts )
         # c = site.engine.pipeline.apply_transformers( context.site, self, c )
-      rescue => e
-        raise $!, "Failed to render #{self.url}", $!.backtrace
+      rescue StandardError => e
+        lineno = nil
+        if e.respond_to?(:lineno)
+          lineno = e.lineno
+        elsif e.respond_to?(:line)
+          lineno = e.line
+        end
+        if lineno
+          if self.handler.respond_to?(:content_line_offset)
+            lineno += self.handler.content_line_offset
+          end
+        end
+        lineinfo = lineno ? " at line #{lineno}" : ''
+        raise StandardError, %(Failed to render #{self.relative_source_path}#{lineinfo}\n#{e.class}: #{e.message.rstrip}), e.backtrace
       end
 
       if context.site.config.track_dependencies

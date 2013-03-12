@@ -43,6 +43,9 @@ module Awestruct
           self[name] = AStruct.new.cascade_for_nils!
           self[name]
         else
+          unless args.size.zero?
+            $LOG.warn "Call to unknown method: #{name}"
+          end
           nil
         end
       end
