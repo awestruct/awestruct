@@ -5,7 +5,7 @@ require 'rspec'
 require 'hashery/open_cascade'
 
 REQUIRED_VARIABLES = [:page, :simple_name, :syntax, :extension]
-ALL_VARIABLES = REQUIRED_VARIABLES + [:matcher, :unless]
+ALL_VARIABLES = REQUIRED_VARIABLES + [:format, :matcher, :unless]
 
 shared_examples "a handler" do |theories|
 
@@ -47,19 +47,31 @@ shared_examples "a handler" do |theories|
 
       # Prove the theory
 
-      it "should provide simple name '#{theory[:simple_name]}'' for page '#{theory[:page]}'" do
+      it "should provide simple name '#{theory[:simple_name]}' for page '#{theory[:page]}'" do
         handler = create_handler theory[:page]
         handler.simple_name.should == theory[:simple_name]
       end
 
-      it "should provide content syntax '#{theory[:syntax]}'' for page '#{theory[:page]}'" do
+      it "should provide content syntax '#{theory[:syntax]}' for page '#{theory[:page]}'" do
         handler = create_handler theory[:page]
         handler.content_syntax.should == theory[:syntax]
       end
 
-      it "should provide output extension '#{theory[:extension]}'' for page '#{theory[:page]}'" do
+      it "should provide output extension '#{theory[:extension]}' for page '#{theory[:page]}'" do
         handler = create_handler theory[:page]
         handler.output_extension.should == theory[:extension]
+      end
+
+      if !theory[:format].nil?
+        it "should set the engine format '#{theory[:format]}' for page '#{theory[:page]}'" do
+          page = create_handler theory[:page]
+          handler = page.handler
+          begin
+            handler = handler.delegate
+          end while handler.delegate and !handler.kind_of?(Awestruct::Handlers::TiltHandler)
+          handler.should_not be_nil
+          handler.options[:format].should == theory[:format]
+        end
       end
 
       if !theory[:matcher].nil?

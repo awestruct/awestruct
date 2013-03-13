@@ -11,7 +11,7 @@ describe Awestruct::Engine do
     engine = Awestruct::Engine.new(config)
     engine.load_default_site_yaml
 
-    engine.site.asciidoctor['default'][:backend].should == 'html5'
+    engine.site.asciidoctor.backend.should == 'html5'
   end
 
   it "should be able to override default with site" do
@@ -21,7 +21,7 @@ describe Awestruct::Engine do
     engine.load_default_site_yaml
     engine.load_site_yaml( 'development' )
 
-    engine.site.asciidoctor['default'][:attributes]['backend'].should == 'html4'
+    engine.site.asciidoctor.attributes['backend'].should == 'html4'
   end
 
   it "should be able to load site.yml with the correct profile" do
