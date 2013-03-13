@@ -110,5 +110,6 @@ def compass_config
   config.stub(:css_dir=)
   config.stub(:javascripts_dir=)
   config.stub(:images_dir=)
+  config.stub(:fonts_dir=)
   config
 end
