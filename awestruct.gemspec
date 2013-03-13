@@ -30,7 +30,7 @@ spec = Gem::Specification.new do |s|
     s.add_dependency 'tilt', '~> 1.3.4'
     s.add_dependency 'compass', '~> 0.12.1'
     s.add_dependency 'compass-960-plugin', '~> 0.10.4'
-    s.add_dependency 'bootstrap-sass', '~> 2.2.2.0'
+    s.add_dependency 'bootstrap-sass', '~> 2.3.0.1'
     s.add_dependency 'json', '~> 1.7.7'
     s.add_dependency 'rest-client', '~> 1.6.7'
     s.add_dependency 'git', '~> 1.2.5'
@@ -38,6 +38,5 @@ spec = Gem::Specification.new do |s|
 
     s.add_dependency 'listen', '~> 0.5.0'
     s.add_dependency 'rack', '~> 1.5.2'
-    s.add_dependency 'eventmachine', '~> 1.0.0.rc.4'
 end
 
