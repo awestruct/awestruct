@@ -193,6 +193,7 @@ module Awestruct
                   :css_dir=>'_site/stylesheets',
                   :sass_dir=>'stylesheets',
                   :images_dir=>'images',
+                  :fonts_dir=>'fonts',
                   :javascripts_dir=>'javascripts',
                 } )
           cmd.perform
