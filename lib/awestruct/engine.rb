@@ -234,12 +234,14 @@ module Awestruct
       Compass.configuration.sass_dir        = 'stylesheets'
       
       site.images_dir      = File.join( site.config.output_dir, 'images' )
+      site.fonts_dir       = File.join( site.config.output_dir, 'fonts' )
       site.stylesheets_dir = File.join( site.config.output_dir, 'stylesheets' )
       site.javascripts_dir = File.join( site.config.output_dir, 'javascripts' )
 
       Compass.configuration.css_dir         = site.css_dir
       Compass.configuration.javascripts_dir = 'javascripts'
       Compass.configuration.images_dir      = 'images'
+      Compass.configuration.fonts_dir       = 'fonts'
       Compass.configuration.line_comments   = include_line_comments?
       Compass.configuration.output_style    = compress_css?
     end
