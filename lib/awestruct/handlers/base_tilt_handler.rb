@@ -66,32 +66,35 @@ module Awestruct
       def options
         opts = {}
 
+        in_ext = input_extension[1..-1].to_sym
+        out_ext = output_extension[1..-1].to_sym
+
         engine_name = Tilt[path].name.gsub(/(Tilt|:|Template)/i, '').downcase.to_sym
-        engine_options = site[engine_name]
-        unless engine_options.nil?
-          if engine_options.has_key? 'default'
-            opts.merge! engine_options['default']
-            if engine_options.has_key? output_extension[1..-1]
-              opts.merge! engine_options[output_extension[1..-1]]
-            end
-          else
-            opts.merge! engine_options
-          end
+
+        # example: slim
+        engine_opts = site[engine_name]
+        unless engine_opts.nil?
+          opts.merge! engine_opts
+        end
+
+        # example: slim|xml
+        engine_opts_for_output = site["#{engine_name}|#{out_ext}"]
+        unless engine_opts_for_output.nil?
+          opts.merge! engine_opts_for_output
         end
 
         # config overrides for specific file extension if different from engine name
-        extension = input_extension[1..-1].to_sym
-        unless engine_name == extension
-          extension_options = site[extension] unless site[extension].nil?
-          unless extension_options.nil?
-            if extension_options.has_key? 'default'
-              opts.merge! extension_options['default']
-              if extension_options.has_key? output_extension[1..-1]
-                opts.merge! extension_options[output_extension[1..-1]]
-              end
-            else
-              opts.merge! extension_options
-            end
+        unless engine_name == in_ext
+          # example: adoc
+          in_ext_opts = site[in_ext]
+          unless in_ext_opts.nil?
+            opts.merge! in_ext_opts
+          end
+
+          # example: adoc|xml
+          in_ext_opts_for_output = site["#{in_ext}|#{out_ext}"]
+          unless in_ext_opts_for_output.nil?
+            opts.merge! in_ext_opts_for_output
           end
         end
 

@@ -5,6 +5,15 @@ verify = lambda { |output|
   output.should =~ %r(<h1>This is a HAML page</h1>)
 }
 
+verify_atom = lambda { |output|
+  output.should == %(<?xml version="1.0" encoding="utf-8" ?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://example.com</id>
+  <title>A News Feed</title>
+</feed>
+)
+}
+
 verify_with_markdown = lambda { |output|
   output.should =~ %r(<h1[^>]*?>Hello From Markdown</h1>)
 }
@@ -28,6 +37,7 @@ theories =
       :simple_name => "haml-page",
       :syntax => :haml,
       :extension => '.html',
+      :format => :html5,
       :matcher => verify
     },
     {
@@ -35,7 +45,16 @@ theories =
       :simple_name => "haml-page",
       :syntax => :haml,
       :extension => '.xml',
+      :format => :xhtml,
       :matcher => verify
+    },
+    {
+      :page => 'haml-page.atom.haml',
+      :simple_name => 'haml-page',
+      :syntax => :haml,
+      :extension => '.atom',
+      :format => :xhtml,
+      :matcher => verify_atom
     },
     {
       :page => "haml-with-markdown-page.html.haml",

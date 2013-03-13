@@ -7,23 +7,24 @@ content_syntax:
   ad: asciidoc
 
 haml:
-  default:
-    :attr_wrapper: '"' 
-    :escape_attrs: :once
-  html:
-    :format: :html5
+  :attr_wrapper: '"' 
+  :escape_attrs: :once
+  :format: :xhtml
+
+haml|html:
+  :format: :html5
 
 slim:
-  default:
-    :sort_attrs: false
-    :disable_escape: true
-  html:
-    :format: :html5
+  :sort_attrs: false
+  :disable_escape: true
+  :format: :xhtml
+
+slim|html:
+  :format: :html5
 
 asciidoctor:
-  default:
-    :backend: html5
-    :safe: 1
-    :attributes:
-      imagesdir: /images
-      stylesdir: /stylesheets
+  :backend: html5
+  :safe: 1
+  :attributes:
+    imagesdir: /images
+    stylesdir: /stylesheets
