@@ -40,12 +40,12 @@ module Awestruct
                     $LOG.info "Generating.... done!" if $LOG.info?
                   rescue => e
                     $LOG.error e if $LOG.error?
-                    $LOG.error e.backtrace if $LOG.error?
+                    $LOG.error e.backtrace.join("\n") if $LOG.error?
                   end
                 }
               rescue => e
                 $LOG.error e if $LOG.error?
-                $LOG.error e.backtrace if $LOG.error?
+                $LOG.error e.backtrace.join("\n") if $LOG.error?
               end
             end
           end

@@ -58,7 +58,7 @@ module Awestruct
           content = content.gsub( "\r", '' )
         rescue => e
           $LOG.error e if $LOG.error?
-          $LOG.error e.backtrace if $LOG.error?
+          $LOG.error e.backtrace.join( "\n" ) if $LOG.error?
         end
         content
       end

@@ -68,7 +68,7 @@ module Awestruct
             step.perform( dir )
           rescue => e
             $LOG.error e if $LOG.error?
-            $LOG.error e.backtrace if $LOG.error?
+            $LOG.error e.backtrace.join("\n") if $LOG.error?
           end
         end
       end
@@ -79,7 +79,7 @@ module Awestruct
             step.unperform( dir )
           rescue => e
             $LOG.error e if $LOG.error?
-            $LOG.error e.backtrace if $LOG.error?
+            $LOG.error e.backtrace.join("\n") if $LOG.error?
           end
         end
       end

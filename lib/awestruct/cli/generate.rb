@@ -21,7 +21,7 @@ module Awestruct
           @engine.run( @profile, @base_url, ( @profile ? @profile['base_url'] || @default_base_url : @default_base_url ), @force )
         rescue =>e
           $LOG.error e if $LOG.error?
-          $LOG.error e.backtrace if $LOG.error?
+          $LOG.error e.backtrace.join("\n") if $LOG.error?
           return false
         end
       end

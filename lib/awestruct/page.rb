@@ -146,7 +146,7 @@ module Awestruct
           end
         end
         lineinfo = lineno ? " at line #{lineno}" : ''
-        raise StandardError, %(Failed to render #{self.relative_source_path}#{lineinfo}\n#{e.class}: #{e.message.rstrip}), e.backtrace
+        raise StandardError, %(Failed to render #{self.relative_source_path}#{lineinfo}\n#{e.class}: #{e.message.rstrip}), e.backtrace.join("\n")
       end
 
       if context.site.config.track_dependencies

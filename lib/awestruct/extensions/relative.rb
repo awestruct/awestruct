@@ -9,7 +9,7 @@ module Awestruct
           Pathname.new(href).relative_path_from(Pathname.new(File.dirname(p.output_path))).to_s
         rescue Exception => e
           $LOG.error "#{e}" if $LOG.error?
-          $LOG.error "#{e.backtrace}" if $LOG.error?
+          $LOG.error "#{e.backtrace.join("\n")}" if $LOG.error?
         end
       end
 
