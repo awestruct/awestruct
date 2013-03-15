@@ -17,6 +17,10 @@ module Awestruct
       "AStruct{...}"
     end
 
+    def hash()
+      self.output_path.hash
+    end
+
   end
 
 end
