@@ -12,6 +12,8 @@ describe Awestruct::Engine do
     engine.load_default_site_yaml
 
     engine.site.asciidoctor.backend.should == 'html5'
+    engine.site.asciidoctor.safe.should == 1
+    engine.site.asciidoctor.attributes['imagesdir'].should == '/images'
   end
 
   it "should be able to override default with site" do
@@ -21,21 +23,28 @@ describe Awestruct::Engine do
     engine.load_default_site_yaml
     engine.load_site_yaml( 'development' )
 
-    engine.site.asciidoctor.attributes['backend'].should == 'html4'
+    engine.site.asciidoctor.safe.should == 0
+    engine.site.asciidoctor.eruby.should == 'erubis'
+    engine.site.asciidoctor.attributes['imagesdir'].should == '/assets/images'
+    engine.site.asciidoctor.attributes['idprefix'].should == ''
   end
 
   it "should be able to load site.yml with the correct profile" do
     config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
 
     engine = Awestruct::Engine.new(config)
+    engine.load_default_site_yaml
     engine.load_site_yaml( 'development' )
     engine.site.cook.should == 'microwave'
     engine.site.title.should == 'Awestruction!'
 
     engine = Awestruct::Engine.new(config)
+    engine.load_default_site_yaml
     engine.load_site_yaml( 'production' )
     engine.site.cook.should == 'oven'
     engine.site.title.should == 'Awestruction!'
+    engine.site.asciidoctor.eruby.should == 'erb'
+    engine.site.asciidoctor.attributes['imagesdir'].should == '/img'
   end
 
   it "should be able to load arbitrary _config/*.yml files" do
