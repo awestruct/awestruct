@@ -38,7 +38,12 @@ module Awestruct
 
       def rendered_content(context, with_layouts=false)
         url = delegate.rendered_content( context, with_layouts ).strip
-        %{<head><meta http-equiv="location" content="URL=#{url}" /></head>}
+        # should we auto-qualify the URL?
+        # they can use #{site.base_url}/path currently
+        #if url.start_with? '/'
+        #  url = File.join(@site.base_url, url)
+        #end
+        %{<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=#{url}"></head></html>}
       end
 
     end
