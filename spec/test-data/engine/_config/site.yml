@@ -1,9 +1,12 @@
-
 profiles:
   development:
     cook: microwave
   production:
     cook: oven
+    asciidoctor:
+      :eruby: erb
+      :attributes:
+        imagesdir: /img
   staging:
     compass_line_comments: off
     compass_output_style: :compact
@@ -11,5 +14,8 @@ profiles:
 title: Awestruction!
 
 asciidoctor:
+  :safe: 0
+  :eruby: erubis
   :attributes:
-    backend: html4
+    imagesdir: /assets/images
+    idprefix: ''

@@ -148,18 +148,19 @@ module Awestruct
 
     def merge_data(existing, new)
       if existing.kind_of? Hash
-        existing.inject({}) do |merged, (k,v)|
+        result = existing.inject({}) do |merged, (k,v)|
           if new.has_key? k
             if v.kind_of? Hash
-              merged[k] = v.merge new[k]
+              merged[k] = merge_data(v, new.delete(k))
             else
-              merged[k] = new[k]
+              merged[k] = new.delete(k)
             end
           else
             merged[k] = v
           end
           merged
         end
+        result.merge new
       else
         new
       end
