@@ -242,6 +242,25 @@ module Awestruct
       Compass.configuration.images_dir      = 'images'
       Compass.configuration.line_comments   = include_line_comments?
       Compass.configuration.output_style    = compress_css?
+
+      # port old style configuration to new Tilt-based configuration
+      # TODO consider deprecating the old config mechanism and move to default-site.yml
+      [:scss, :sass].each do |sass_ext|
+        if !site.key? sass_ext
+          sass_config = {}
+          site[sass_ext] = sass_config
+        else
+          sass_config = site[sass_ext]
+        end
+
+        if !sass_config.has_key?(:line_numbers) || site.profile.eql?('production')
+          sass_config[:line_numbers] = Compass.configuration.line_comments
+        end
+
+        if !sass_config.has_key?(:style) || site.profile.eql?('production')
+          sass_config[:style] = Compass.configuration.output_style
+        end
+      end
     end
 
     def include_line_comments?

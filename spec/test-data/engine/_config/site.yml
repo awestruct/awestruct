@@ -6,6 +6,7 @@ profiles:
     cook: oven
   staging:
     compass_line_comments: off
+    compass_output_style: :compact
 
 title: Awestruction!
 

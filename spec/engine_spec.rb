@@ -56,26 +56,21 @@ describe Awestruct::Engine do
     engine.site.other.tags.should == [ 'a', 'b', 'c' ]
   end
 
-  it "should exclude line comments in compass by default in production mode" do
+  it "should exclude line comments and minify in compass by default in production mode" do
     compass = compass_config
     config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
     engine = Awestruct::Engine.new(config)
     engine.load_site_yaml( 'production' )
     Compass.stub(:configuration).and_return(compass)
     compass.should_receive(:line_comments=).with(false)
+    compass.stub(:line_comments).and_return(false)
     compass.should_receive(:output_style=).with(:compressed)
+    compass.stub(:output_style).and_return(:compressed)
     engine.configure_compass
-  end
-
-  it "should exclude minify in compass by default in production mode" do
-    compass = compass_config
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
-    engine = Awestruct::Engine.new(config)
-    engine.load_site_yaml( 'production' )
-    Compass.stub(:configuration).and_return(compass)
-    compass.should_receive(:line_comments=).with(false)
-    compass.should_receive(:output_style=).with(:compressed)
-    engine.configure_compass
+    engine.site.sass.line_numbers.should == false
+    engine.site.sass.style.should == :compressed
+    engine.site.scss.line_numbers.should == false
+    engine.site.scss.style.should == :compressed
   end
 
   it "should include line comments in compass by default in development mode" do
@@ -85,19 +80,31 @@ describe Awestruct::Engine do
     engine.load_site_yaml( 'development' )
     Compass.stub(:configuration).and_return(compass)
     compass.should_receive(:line_comments=).with(true)
+    compass.stub(:line_comments).and_return(true)
     compass.should_receive(:output_style=).with(:expanded)
+    compass.stub(:output_style).and_return(:expanded)
     engine.configure_compass
+    engine.site.sass.line_numbers.should == true
+    engine.site.sass.style.should == :expanded
+    engine.site.scss.line_numbers.should == true
+    engine.site.scss.style.should == :expanded
   end
 
-  it "should accept site.compass_line_comments to configure behavior" do
+  it "wip should accept site.compass_line_comments and site.compass_output_style to configure behavior" do
     compass = compass_config
     config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
     engine = Awestruct::Engine.new(config)
     engine.load_site_yaml( 'staging' )
     Compass.stub(:configuration).and_return(compass)
     compass.should_receive(:line_comments=).with(false)
-    compass.should_receive(:output_style=).with(:expanded)
+    compass.stub(:line_comments).and_return(false)
+    compass.should_receive(:output_style=).with(:compact)
+    compass.stub(:output_style).and_return(:compact)
     engine.configure_compass
+    engine.site.sass.line_numbers.should == false
+    engine.site.sass.style.should == :compact
+    engine.site.scss.line_numbers.should == false
+    engine.site.scss.style.should == :compact
   end
 
 end
