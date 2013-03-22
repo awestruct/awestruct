@@ -15,6 +15,15 @@ describe Awestruct::Rack::App do
     end
   end
 
+  describe "Directory redirect" do
+    it "should redirect to /" do
+      get('/subdir')
+      last_response.headers['location'].should == '/subdir/'
+      last_response.instance_variable_get('@body').should == ['Redirecting to: /subdir']
+      last_response.body.should == 'Redirecting to: /subdir'
+    end
+  end
+
   describe "CSS media type" do
     it "should return text/css" do
       get('/stylesheets/screen.css')
