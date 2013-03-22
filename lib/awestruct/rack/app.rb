@@ -14,8 +14,8 @@ module Awestruct
         if ( File.directory?( fs_path ) )
           if ( ! ( path =~ %r(/$) ) )
             return [ 301,
-                     { :location=>path + '/' },
-                     "Redirecting to: #{path}" ]
+                     { 'location'=>File.join(path, '') },
+                     ["Redirecting to: #{path}"] ]
           elsif ( File.exist?( File.join( fs_path, 'index.html' ) ) )
             fs_path = File.join( fs_path, 'index.html' )
           end
