@@ -1,1 +1,1 @@
-http://#{site.crunchy}.com
+#{site.base_url}/#{site.crunchy}/
