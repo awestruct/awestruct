@@ -139,7 +139,13 @@ module Awestruct
 
     def clear
       @dependencies.clear
-      @dependents.each{|d| d.remove_dependent( page ) }
+      @dependents.each do |d| 
+        if (d.instance_of? Awestruct::Dependencies) 
+          d.remove_dependent( page ) 
+        else 
+          d.dependencies.remove_dependent( page ) 
+        end 
+      end
     end
 
     def persist!

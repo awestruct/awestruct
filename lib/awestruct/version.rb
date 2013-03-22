@@ -1,4 +1,4 @@
 
 module Awestruct
-  VERSION='0.5.0.cr'
+  VERSION='0.5.0'
 end
