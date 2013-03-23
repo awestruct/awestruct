@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 verify = lambda { |output|
-  output.should =~ %r(<head><meta http-equiv="location" content="URL=http://google.com" /></head>)
+  output.should =~ %r(<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=http://google.com"></head></html>)
 }
 verify_with_interpol = lambda { |output|
-  output.should =~ %r(<head><meta http-equiv="location" content="URL=http://bacon.com" /></head>)
+  output.should =~ %r(<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=http://mysite/bacon/"></head></html>)
 }
 
 theories =
@@ -26,7 +26,7 @@ theories =
   ]
 
 describe Awestruct::Handlers::TiltHandler.to_s + "-Redirect" do
-  let(:additional_config) { {:interpolate => true, :crunchy => "bacon"} }
+  let(:additional_config) { {:interpolate => true, :crunchy => 'bacon', :base_url => 'http://mysite' } }
   it_should_behave_like "a handler", theories
 
 end
