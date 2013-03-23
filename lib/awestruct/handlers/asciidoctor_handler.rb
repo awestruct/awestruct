@@ -55,6 +55,9 @@ module Awestruct
           hash[k.to_s] = v if not k.to_s.start_with?('__') and types.detect { |t| v.kind_of? t }
           hash
         end)
+        if with_layouts && !context.page.layout
+          @front_matter['header_footer'] = true
+        end
         super
       end
 
@@ -67,6 +70,9 @@ module Awestruct
         end
         opts[:attributes]['awestruct'] = true
         opts[:attributes]['awestruct-version'] = Awestruct::VERSION
+        if @front_matter['header_footer']
+          opts[:header_footer] = true
+        end
         opts
       end
 
