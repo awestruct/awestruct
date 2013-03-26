@@ -8,7 +8,7 @@ group :development do
 end
 
 group :test do
-  gem 'rb-inotify', '~> 0.8.8'
+  gem 'rb-inotify', '~> 0.9.0'
   gem 'rack-test'
   gem 'tilt', '~> 1.3.5'
   gem 'coffee-script', '~> 2.2.0'
