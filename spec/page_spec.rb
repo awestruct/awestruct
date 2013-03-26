@@ -4,6 +4,7 @@ require 'fileutils'
 require 'awestruct/page'
 require 'awestruct/pipeline'
 require 'awestruct/handlers/file_handler'
+require 'hashery'
 
 describe Awestruct::Handlers::FileHandler do
 
@@ -14,8 +15,8 @@ describe Awestruct::Handlers::FileHandler do
   end
 
   before :all do
-    @site = OpenCascade.new :encoding=>false
-    @site.engine = OpenCascade.new
+    @site = Hashery::OpenCascade[ { :encoding=>false } ]
+    @site.engine = Hashery::OpenCascade[]
   end
 
   before :each do

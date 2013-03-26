@@ -1,11 +1,11 @@
 require 'fileutils'
-
+require 'hashery'
 require 'awestruct/handlers/file_handler'
 
 describe Awestruct::Handlers::FileHandler do
 
   before :all do
-    @site = OpenCascade.new :encoding=>false, :dir=>Pathname.new( File.dirname( __FILE__ ) + '/test-data' )
+    @site = Hashery::OpenCascade[ { :encoding=>false, :dir=>Pathname.new( File.dirname( __FILE__ ) + '/test-data' ) } ]
   end
 
   it "should be able to read a valid absolute file handler" do
