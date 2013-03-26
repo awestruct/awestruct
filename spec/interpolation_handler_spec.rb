@@ -1,17 +1,17 @@
-require 'hashery/open_cascade'
+require 'hashery'
 require 'awestruct/handlers/string_handler'
 require 'awestruct/handlers/interpolation_handler'
 
 describe Awestruct::Handlers::InterpolationHandler do
 
   before :all do
-    @site = OpenCascade.new :encoding=>false
+    @site = Hashery::OpenCascade[ { :encoding=>false } ]
   end
 
   it "should interpolate content when rendered" do 
     handler = build_handler( 'This is #{cheese}' )
 
-    context = OpenCascade.new :cheese=>'swiss' 
+    context = Hashery::OpenCascade[ { :cheese=>'swiss' } ] 
     content = handler.rendered_content( context )
     content.should == 'This is swiss'
   end
@@ -20,7 +20,7 @@ describe Awestruct::Handlers::InterpolationHandler do
     if RUBY_VERSION >= '1.9'
       input = %q(url = url.replace(/\/?#$/, '');)
       handler = build_handler( input )
-      content = handler.rendered_content( OpenCascade.new )
+      content = handler.rendered_content( Hashery::OpenCascade[] )
       content.should == input
     else
       pending "Cannot yet handle this test case with ruby 1.8"

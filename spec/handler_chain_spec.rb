@@ -1,7 +1,6 @@
 
 require 'awestruct/handler_chain'
-
-require 'hashery/open_cascade'
+require 'hashery'
 
 describe Awestruct::HandlerChain do
 
@@ -18,7 +17,7 @@ describe Awestruct::HandlerChain do
 
 
   before :all do
-    @site = OpenCascade.new :encoding=>false
+    @site = Hashery::OpenCascade[ { :encoding => false } ]
   end
 
   it "should use a regexp to match" do

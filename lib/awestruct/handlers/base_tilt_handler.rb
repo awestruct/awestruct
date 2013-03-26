@@ -55,9 +55,9 @@ module Awestruct
       def content_syntax
         # Check configuration for override, else convert extension to sym
         extension = input_extension[1..-1]
-        if !site[:content_syntax].nil?
+        if ( !site[:content_syntax].nil? && !site[:content_syntax].empty?) 
           syntax = site[:content_syntax][extension]
-          return syntax.to_sym unless syntax.nil?
+          return syntax.to_sym unless syntax.nil? or syntax.empty?
         end
 
         return extension.to_sym

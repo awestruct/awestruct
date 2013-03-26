@@ -2,11 +2,12 @@ require 'fileutils'
 
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/front_matter_handler'
+require 'hashery'
 
 describe Awestruct::Handlers::FrontMatterHandler do
 
   before :all do
-    @site = OpenCascade.new :encoding=>false
+    @site = Hashery::OpenCascade[ {  :encoding=>false } ]
   end
 
   before :each do

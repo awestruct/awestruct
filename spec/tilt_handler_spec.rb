@@ -3,16 +3,14 @@ require 'awestruct/config'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/tilt_handler'
 
-require 'hashery/open_cascade'
+require 'hashery'
 
 describe Awestruct::Handlers::TiltHandler do
 
   before do
     dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) 
 
-    @site = OpenCascade.new :encoding=>false, 
-                            :dir=>dir,
-                            :config=>Awestruct::Config.new( dir )
+    @site = Hashery::OpenCascade[ { :encoding=>false, :dir=>dir, :config=>Awestruct::Config.new( dir ) } ]
   end
 
   def handler_file(path)
@@ -20,7 +18,7 @@ describe Awestruct::Handlers::TiltHandler do
   end
 
   def create_context
-    OpenCascade.new :site=>@site
+    Hashery::OpenCascade[ { :site=>@site } ]
   end
 
   it "should provide default configuration options from site based on output_extension" do
@@ -57,12 +55,12 @@ describe Awestruct::Handlers::TiltHandler do
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "asciidoc-page.asciidoc" ) )
     handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
 
-    handler.relative_source_path.should be_nil
-    handler.simple_name.should == 'asciidoc-page'
-    handler.content_syntax.should == :asciidoc
-    handler.output_extension.should == '.html'
-    handler.input_extension.should == '.asciidoc'
-    handler.output_filename.should == 'asciidoc-page.html'
+    handler.relative_source_path.should be_nil 
+    handler.simple_name.should eql 'asciidoc-page'
+    handler.content_syntax.should eql :asciidoc
+    handler.output_extension.should eql '.html'
+    handler.input_extension.should eql '.asciidoc'
+    handler.output_filename.should eql 'asciidoc-page.html'
   end
 
   it "should handle non extension dots in source name" do
@@ -71,11 +69,11 @@ describe Awestruct::Handlers::TiltHandler do
     handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
 
     handler.relative_source_path.should be_nil
-    handler.simple_name.should == 'warp-1.0.0.Alpha2'
-    handler.content_syntax.should == :textile
-    handler.output_extension.should == '.html'
-    handler.input_extension.should == '.textile'
-    handler.output_filename.should == 'warp-1.0.0.Alpha2.html'
+    handler.simple_name.should eql 'warp-1.0.0.Alpha2'
+    handler.content_syntax.should eql :textile
+    handler.output_extension.should eql '.html'
+    handler.input_extension.should eql '.textile'
+    handler.output_filename.should eql 'warp-1.0.0.Alpha2.html'
 
   end
 end

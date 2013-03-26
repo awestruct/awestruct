@@ -4,13 +4,13 @@ require 'awestruct/page'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/tilt_handler'
 
-require 'hashery/open_cascade'
+require 'hashery'
 
 describe Awestruct::Layouts do
 
   it "should be able to index layouts by simple name and output extension" do
     dir = Pathname.new( File.dirname( __FILE__ ) + '/test-data/handlers' )
-    site = OpenCascade.new( :dir=>dir )
+    site = Hashery::OpenCascade[ { :dir=>dir } ]
     file_handler = Awestruct::Handlers::FileHandler.new( site, File.join( dir, 'haml-layout.html.haml' ) )
     haml_handler = Awestruct::Handlers::TiltHandler.new( site, file_handler )
     page = Awestruct::Page.new( nil, haml_handler )
