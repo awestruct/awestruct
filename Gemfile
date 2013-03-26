@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 group :development do
   gem 'spectator', '~> 1.2.5'
-  gem 'hashery', '~> 1.5.0'
+  gem 'hashery', '~> 2.1.0'
   gem 'rspec', '~> 2.9'
   gem 'rake', '~> 0.9.2'
 end

@@ -3,11 +3,12 @@ require 'awestruct/engine'
 require 'awestruct/site'
 require 'awestruct/page'
 require 'awestruct/handlers/page_delegating_handler'
+require 'hashery'
 
 describe Awestruct::Handlers::PageDelegatingHandler do
 
   before :all do
-    @config = OpenCascade.new( :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) )
+    @config = Hashery::OpenCascade[ { :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) } ] 
     @engine = Awestruct::Engine.new( @config )
     @site = @engine.site
     layout_loader = Awestruct::PageLoader.new( @site, :layouts )

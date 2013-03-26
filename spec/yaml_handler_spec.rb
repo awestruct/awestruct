@@ -1,12 +1,12 @@
 
-require 'hashery/open_cascade'
+require 'hashery'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/yaml_handler'
 
 describe Awestruct::Handlers::YamlHandler do
 
   before :all do
-    @site = OpenCascade.new :encoding=>false
+    @site = Hashery::OpenCascade[ { :encoding=>false } ]
   end
 
   it "should provide access to the yaml as front-matter" do 

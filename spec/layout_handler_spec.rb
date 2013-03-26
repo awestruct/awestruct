@@ -7,14 +7,14 @@ require 'awestruct/site'
 require 'awestruct/page'
 require 'awestruct/page_loader'
 
-require 'hashery/open_cascade'
+require 'hashery'
 require 'ostruct'
 
 describe Awestruct::Handlers::LayoutHandler do
 
 
   before :all do
-    @config = OpenCascade.new( :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) )
+    @config = Hashery::OpenCascade[ { :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) } ]
     @engine = Awestruct::Engine.new
     @site = Awestruct::Site.new( @engine, @config )
     layout_loader = Awestruct::PageLoader.new( @site, :layouts )

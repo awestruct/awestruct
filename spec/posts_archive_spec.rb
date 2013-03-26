@@ -1,6 +1,6 @@
 require 'awestruct/extensions/posts'
 require 'awestruct/util/inflector'
-require 'hashery/open_cascade'
+require 'hashery'
 
 describe Awestruct::Extensions::Posts do
 
@@ -53,7 +53,7 @@ describe Awestruct::Extensions::Posts do
 
   it "should assign default layout if specified to post without layout" do
     extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'post' )
-    site = OpenCascade.new :encoding=>false
+    site = Hashery::OpenCascade[ { :encoding=>false } ]
     page = __create_page( 2012, 8, 9, '/posts/mock-post.md' )
     page.stub(:layout).and_return(nil)
     page.should_receive(:layout=).with('post')

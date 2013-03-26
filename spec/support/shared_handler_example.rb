@@ -2,7 +2,7 @@ require 'awestruct/engine'
 require 'awestruct/config'
 require 'rspec'
 
-require 'hashery/open_cascade'
+require 'hashery'
 
 REQUIRED_VARIABLES = [:page, :simple_name, :syntax, :extension]
 ALL_VARIABLES = REQUIRED_VARIABLES + [:format, :matcher, :unless]
@@ -14,7 +14,7 @@ shared_examples "a handler" do |theories|
   end
 
   def create_context
-    OpenCascade.new :site=>@site
+    Hashery::OpenCascade[ { :site=>@site } ]
   end
 
   describe Awestruct::Handlers do
