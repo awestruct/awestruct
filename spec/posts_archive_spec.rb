@@ -14,9 +14,9 @@ describe Awestruct::Extensions::Posts do
     extension.assign_to.should == :posts
   end
 
-  it "should have a nil archive template by default" do
+  it "should have 'posts' as a layout by default" do
     extension = Awestruct::Extensions::Posts.new('/posts', :posts)
-    extension.archive_template.should be_nil
+    extension.default_layout.should eql 'posts' 
   end
 
   it "should have a nil archive template by default" do

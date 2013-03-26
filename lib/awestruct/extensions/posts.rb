@@ -9,7 +9,7 @@ module Awestruct
         @archive_path     = archive_path
         @path_prefix      = path_prefix
         @assign_to        = assign_to
-        @default_layout   = opts[:default_layout] || nil
+        @default_layout   = opts[:default_layout] || 'posts'
       end
 
       def execute(site)
