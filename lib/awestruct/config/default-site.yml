@@ -1,3 +1,5 @@
+encoding: UTF-8
+
 content_syntax:
   coffee: coffeescript
   md: markdown
