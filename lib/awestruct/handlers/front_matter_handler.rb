@@ -42,7 +42,10 @@ module Awestruct
         return if ( @parsed_parts && ! delegate.stale? )
 
         full_content = delegate.raw_content
-        full_content.force_encoding(site.encoding) if site.encoding
+
+        #if force_encoding is supported then set to charset defined in site config
+        full_content.force_encoding(site.encoding) if (full_content.respond_to?(:force_encoding) && site.encoding)
+
         yaml_content = ''
 
         dash_lines = 0
