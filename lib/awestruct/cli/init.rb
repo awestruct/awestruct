@@ -7,6 +7,7 @@ module Awestruct
     class Init
       BASE_MANIFEST = Manifest.new {
         mkdir( '_config' )
+        copy_file( '_config/site.yml', File.join( File.dirname(__FILE__), '/../frameworks/base_site.yml' ) )
         mkdir( '_layouts' )
         mkdir( '_ext' )
         copy_file( '_ext/pipeline.rb', File.join( File.dirname(__FILE__), '/../frameworks/base_pipeline.rb' ) )
@@ -34,7 +35,6 @@ module Awestruct
             manifest.copy_file( 'index.html.haml', 
                                 File.join( File.dirname(__FILE__), "/../frameworks/base_index.html.haml" ) )
           end
-          manifest.touch_file( '_config/site.yml' )
         end
         manifest.perform( @dir )
       end
