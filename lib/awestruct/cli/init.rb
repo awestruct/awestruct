@@ -10,8 +10,9 @@ module Awestruct
         mkdir( '_layouts' )
         mkdir( '_ext' )
         copy_file( '_ext/pipeline.rb', File.join( File.dirname(__FILE__), '/../frameworks/base_pipeline.rb' ) )
+        copy_file( '.awestruct_ignore', File.join( File.dirname(__FILE__), '/../frameworks/base_awestruct_ignore' ) )
+        copy_file( 'Rakefile', File.join( File.dirname(__FILE__), '/../frameworks/base_Rakefile' ) )
         mkdir( 'stylesheets' )
-        touch_file( '.awestruct_ignore' )
       }
 
       def initialize(dir=Dir.pwd,framework='compass',scaffold=true)
