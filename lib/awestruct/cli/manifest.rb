@@ -20,13 +20,15 @@ class Compass::AppIntegration::StandAlone::Installer
 
       Now you're awestruct!
 
-      To generate your site continuous during development, simply run:
+      To generate and run your site in development mode, execute:
 
         awestruct -d
 
-      and visit your site at
+      or, simply:
 
-        http://localhost:4242/
+        rake
+
+      then visit your site at: http://localhost:4242
 
     END
   end

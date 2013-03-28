@@ -13,7 +13,6 @@ group :test do
   gem 'tilt', '~> 1.3.5'
   gem 'coffee-script', '~> 2.2.0'
   gem 'asciidoctor', '>= 0.1.1' # need 0.1.1 for Header support
-  gem 'haml', '~> 4.0.0'
   gem 'slim', '~> 1.3.6'
   gem 'kramdown', '~> 0.14.2'
   gem 'therubyracer', '~> 0.10.0', :platforms => :ruby
