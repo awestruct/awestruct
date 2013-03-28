@@ -16,7 +16,7 @@ describe Awestruct::Extensions::Posts do
 
   it "should have 'posts' as a layout by default" do
     extension = Awestruct::Extensions::Posts.new('/posts', :posts)
-    extension.default_layout.should eql 'posts' 
+    extension.default_layout.should eql 'post' 
   end
 
   it "should have a nil archive template by default" do
@@ -45,18 +45,18 @@ describe Awestruct::Extensions::Posts do
   end
 
   it "should accept a default layout for post pages" do
-    extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'post' )
+    extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'blog' )
     extension.archive_path.should be_nil
     extension.archive_template.should be_nil
-    extension.default_layout.should == 'post'
+    extension.default_layout.should == 'blog'
   end
 
   it "should assign default layout if specified to post without layout" do
-    extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'post' )
+    extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'blog' )
     site = Hashery::OpenCascade[ { :encoding=>false } ]
     page = __create_page( 2012, 8, 9, '/posts/mock-post.md' )
     page.stub(:layout).and_return(nil)
-    page.should_receive(:layout=).with('post')
+    page.should_receive(:layout=).with('blog')
     page.stub(:slug).and_return(nil, 'mock-post')
     page.should_receive(:slug=).with('mock-post')
     page.should_receive(:output_path=).with('/posts/2012/08/09/mock-post.html')
