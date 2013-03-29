@@ -56,6 +56,7 @@ describe Awestruct::Extensions::Minify do
     expected_output = "function a(a,c){a=\"a\"};"
 
     minifier = Awestruct::Extensions::Minify.new [:js]
-    minifier.transform(site, page, input).should == expected_output
+    result = minifier.transform(site, page, input)
+    result.should == expected_output
   end
 end

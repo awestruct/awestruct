@@ -1,7 +1,7 @@
 require 'shellwords'
 require 'fileutils'
 require 'htmlcompressor'
-require 'uglifier'
+require 'yuicompressor'
 
 ##
 # Awestruct:Extensions:Minify is a transformer that minimizes JavaScript, CSS and HTML files.
@@ -97,11 +97,11 @@ module Awestruct
       end
 
       def js_compressor(page, input)
-        compressor(page, input, JSCompressor.new)
+        compressor(page, input, YUICompressor, :compress_js)
       end
 
-      def compressor(page, input, compressor)
-        output = compressor.compress input
+      def compressor(page, input, compressor, method = :compress)
+        output = compressor.send(method, input)
 
         input_len = input.length
         output_len = output.length
