@@ -23,7 +23,7 @@ group :test do
   gem 'mustache', '~> 0.99.4'
   gem 'uglifier', '~> 1.3.0'
   gem 'htmlcompressor', '~> 0.0.5'
-  gem 'yuicompressor', '~> 1.2.0'
+  gem 'yuicompressor', '~> 1.2.1'
 
 end
 
