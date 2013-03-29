@@ -10,9 +10,7 @@ spec = Gem::Specification.new do |s|
     s.description    =   "Awestruct is a framework for creating static HTML sites."
     s.homepage       =   "http://awestruct.org"
     s.files          =   [
-      Dir['lib/**/*.rb'],
-      Dir['lib/**/*.haml'],
-      Dir['lib/**/*.yml'],
+      Dir['lib/**/**'],
       Dir['spec/**/**'],
       Dir['man/*.1'],
     ].flatten
