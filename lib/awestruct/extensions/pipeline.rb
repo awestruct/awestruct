@@ -3,9 +3,9 @@ Dir[ File.join( File.dirname(__FILE__), '*.rb' ) ].each do |f|
   begin
     require f
   rescue LoadError => e
-    puts "WARNING: Missing required dependency to activate optional built in extension #{File.basename(f)}\n  #{e}"
+    puts "WARNING: Missing required dependency to activate optional built-in extension #{File.basename(f)}\n  #{e}"
   rescue StandardError => e
-    puts "WARNING: Missing runtime configuration to activate optional built in extension #{File.basename(f)}\n  #{e}"
+    puts "WARNING: Missing runtime configuration to activate optional built-in extension #{File.basename(f)}\n  #{e}"
   end
 end
 
