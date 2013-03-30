@@ -29,7 +29,6 @@ class Compass::AppIntegration::StandAlone::Installer
         rake
 
       then visit your site at: http://localhost:4242
-
     END
   end
 end
@@ -51,12 +50,20 @@ module Awestruct
         steps << MkDir.new( path )
       end
 
-      def copy_file(path, input_path)
-        steps << CopyFile.new( path, input_path )
+      def copy_file(path, input_path, opts = {})
+        steps << CopyFile.new( path, input_path, opts )
       end
       
       def touch_file(path)
         steps << TouchFile.new(path)
+      end
+
+      def remove_file(path)
+        steps << RemoveFile.new(path)
+      end
+
+      def add_requires(path, libs = [])
+        steps << AddRequires.new(path, libs)
       end
 
       def install_compass(framework)
@@ -143,15 +150,56 @@ module Awestruct
         end
       end
 
+      class RemoveFile
+        def initialize(path)
+          @path = path
+        end
+        
+        def perform(dir)
+          FileUtils.rm( File.join( dir, @path ), :force => true )
+        end
+        
+        def unperform(dir)
+          #nothing
+        end
+      end
+      
+      # Adds a requires for each library in libs to the
+      # top of the file specified by path
+      class AddRequires
+        def initialize(path, libs)
+          @path = path
+          @libs = libs
+        end
+        
+        def perform(dir)
+          file = File.join(dir, @path)
+          File.open(file, 'r') do |old|
+            File.unlink(file)
+            File.open(file, 'w') do |new|
+              @libs.each do |lib|
+                new.write "require '#{lib}'\n"
+              end
+              new.write old.read
+            end
+          end
+        end
+        
+        def unperform(dir)
+          #nothing
+        end
+      end
+
       class CopyFile
-        def initialize(path, input_path)
+        def initialize(path, input_path, opts = {})
           @path       = path
           @input_path = input_path
+          @overwrite  = opts[:overwrite]
         end
 
         def perform(dir )
           p = File.join( dir, @path )
-          if ( File.exist?( p ) )
+          if !@overwrite && File.exist?( p )
             $LOG.error "Exists: #{p}" if $LOG.error?
             return
           end
