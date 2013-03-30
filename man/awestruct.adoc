@@ -31,7 +31,7 @@ Project Setup
    Initialize a new project in the 'current' directory.
 
 *-f, --framework*='FRAMEWORK'::
-   Specify a Compass framework during initialization to use in the project. ('bootstrap', 'blueprint', '960')
+   Specify a Compass framework during initialization to use in the project. ('bootstrap', 'foundation', 'blueprint', '960')
 
 *--[no-]scaffold*::
    Create scaffolding during initialization. (default: true)

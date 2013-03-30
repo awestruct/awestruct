@@ -4,7 +4,6 @@ require 'awestruct/handlers/front_matter_handler'
 require 'awestruct/handlers/layout_handler'
 
 require 'compass'
-require 'bootstrap-sass'
 
 module Awestruct
   module Handlers

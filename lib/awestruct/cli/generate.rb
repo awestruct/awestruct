@@ -1,6 +1,5 @@
 require 'awestruct/engine'
 require 'compass'
-require 'ninesixty'
 
 module Awestruct
   module CLI
