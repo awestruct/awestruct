@@ -52,7 +52,7 @@ module Awestruct
             self.init     = init
             self.generate = false
           end
-          opts.on( '-f', '--framework FRAMEWORK', 'Specify a compass framework during initialization (bootstrap, blueprint, 960)' ) do |framework|
+          opts.on( '-f', '--framework FRAMEWORK', 'Specify a compass framework during initialization (bootstrap, foundation, blueprint, 960)' ) do |framework|
             self.framework = framework
           end
           opts.on( '--[no-]scaffold', 'Create scaffolding during initialization (default: true)' ) do |s|
