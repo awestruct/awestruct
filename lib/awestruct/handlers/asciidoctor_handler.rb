@@ -22,6 +22,7 @@ module Awestruct
       CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::AsciidoctorMatcher.new(),
         Awestruct::Handlers::FileHandler,
         Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::InterpolationHandler,
         Awestruct::Handlers::AsciidoctorHandler,
         Awestruct::Handlers::LayoutHandler
       )
