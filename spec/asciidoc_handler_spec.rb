@@ -2,7 +2,8 @@ require 'spec_helper'
 require 'rspec/matchers.rb'
 
 verify = lambda { |output|
-  output.gsub(/(^\s*\n|^\s*)/, '').should =~ %r(<div id="preamble">
+  # clean whitespace to make comparison easier
+  output.gsub(/(^\s*\n|^\s*|\s*$)/, '').should == %(<div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
 <p>This is <strong>AsciiDoc</strong> in Awestruct.</p>
@@ -22,6 +23,7 @@ verify_headers = lambda { |output, page|
   page.title.should == 'AsciiDoc'
   page.doctitle.should == 'AsciiDoc'
   page.name.should == 'Awestruct'
+  page.layout.should == 'haml-layout'
   page.tags.should be_a_kind_of(Array)
   page.tags.should == %w(a b c)
   page.date.should be_a_kind_of(Date)
@@ -69,7 +71,7 @@ theories =
   ]
 
 describe Awestruct::Handlers::AsciidoctorHandler do
-  let(:additional_config_page) { {:name => 'Awestruct', :test => 10} }
+  let(:additional_config_page) { {:name => 'Awestruct', :test => 10, :layout => 'empty-layout'} }
   it_should_behave_like "a handler", theories
 
 end
