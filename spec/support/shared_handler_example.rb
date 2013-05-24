@@ -79,8 +79,7 @@ shared_examples "a handler" do |theories|
         it "should render page '#{theory[:page]}'" do
           if theory[:unless].nil? or !theory[:unless][:exp].call()
             handler = create_handler theory[:page]
-            handler.merge! additional_config_page if respond_to?("additional_config_page")
-
+            handler.update(additional_config_page) {|k, oldval, newval| oldval } if respond_to?("additional_config_page")
             output = handler.rendered_content( handler.create_context )
             output.should_not be_nil
 
