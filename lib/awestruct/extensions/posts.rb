@@ -29,6 +29,8 @@ module Awestruct
                   date = DateTime.parse date
                 elsif date.kind_of? Date
                   date = DateTime.new(date.year, date.month, date.day)
+                elsif date.kind_of? Time
+                  date = date.to_datetime
                 end
               end
               year = date.year
