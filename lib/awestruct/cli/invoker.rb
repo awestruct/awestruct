@@ -4,7 +4,6 @@ require 'awestruct/cli/init'
 require 'awestruct/cli/generate'
 require 'awestruct/cli/auto'
 require 'awestruct/cli/server'
-require 'awestruct/cli/deploy'
 require 'awestruct/logger'
 
 require 'pathname'
@@ -105,6 +104,8 @@ module Awestruct
       end
 
       def invoke_deploy()
+        require 'awestruct/cli/deploy'
+
         deploy_config = profile[ 'deploy' ]
 
         if ( deploy_config.nil? )
