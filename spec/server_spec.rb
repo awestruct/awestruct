@@ -51,4 +51,11 @@ describe Awestruct::Rack::App do
       last_response.status.should == 404
     end
   end
+
+  describe "Directory with no index file" do
+    it "should return a 404 status code" do
+      get('/images/')
+      last_response.status.should == 404
+    end
+  end
 end
