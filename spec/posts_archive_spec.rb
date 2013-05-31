@@ -84,7 +84,7 @@ describe Awestruct::Extensions::Posts do
       engine = mock("Engine")
       template = mock("Template")
       template.should_receive( :archive= ).with( @archive.posts[2012][8][9] )
-      template.should_receive( :output_path= ).with( '/archive/2012/8/9/index.html' )
+      template.should_receive( :output_path= ).with( '/archive/2012/08/09/index.html' )
       engine.should_receive( :find_and_load_site_page ).with( '/archive/index' ).and_return( template )
       @archive.generate_pages( engine, '/archive/index', '/archive' ) 
     end
