@@ -64,17 +64,17 @@ module Awestruct
             if @types.include?(ext_sym)
               case ext_sym
               when :html
-                print "minifying html #{page.output_path}"
+                $LOG.debug "minifying html #{page.output_path}" if $LOG.debug?
                 input = htmlcompressor(page, input, site.minify_html_opts)
               when :css
                 # TODO: Figure out how to do this is sass / less and document it
                 #print "minifying css #{page.output_path}"
                 #input = yuicompressor_css(page, input)
               when :js
-                print "minifying js #{page.output_path}"
+                $LOG.debug "minifying js #{page.output_path}" if $LOG.debug?
                 input = js_compressor(page, input)
               when :png
-                print "minifying png #{page.output_path}"
+                $LOG.debug "minifying png #{page.output_path}" if $LOG.debug?
                 input = pngcrush(page, input)
               end
             end
@@ -135,7 +135,7 @@ module Awestruct
           input
         end
       end
-    end
-
+    end 
   end
 end
+
