@@ -53,7 +53,7 @@ describe Awestruct::Extensions::Minify do
     page.should_receive(:output_path).any_number_of_times.and_return "test.js"
 
     input = "function    a (a,     c) { \n a = \"a\";\n }"
-    expected_output = "function a(a,c){a=\"a\"};"
+    expected_output = "function a(a){a=\"a\"}" # we're minifying so we're going to strip dead or unreferenced code
 
     minifier = Awestruct::Extensions::Minify.new [:js]
     minifier.transform(site, page, input).should == expected_output

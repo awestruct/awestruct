@@ -12,6 +12,7 @@ RSpec.configure do |config|
   end
   config.mock_framework = :rspec
   config.include NokogiriMatchers
+  config.include EmmetMatchers
   config.after :all do
     FileUtils.rm_rf '.awestruct' if File.exists? '.awestruct'
   end

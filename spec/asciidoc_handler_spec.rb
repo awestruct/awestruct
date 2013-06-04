@@ -2,14 +2,9 @@ require 'spec_helper'
 require 'rspec/matchers.rb'
 
 verify = lambda { |output|
+  include EmmetMatchers
   # clean whitespace to make comparison easier
-  output.gsub(/(^\s*\n|^\s*|\s*$)/, '').should == %(<div id="preamble">
-<div class="sectionbody">
-<div class="paragraph">
-<p>This is <strong>AsciiDoc</strong> in Awestruct.</p>
-</div>
-</div>
-</div>)
+  output.should have_structure("div#preamble>div.sectionbody>div.paragraph>p>strong")
 }
 
 verify_front_matter = lambda { |output, page|
