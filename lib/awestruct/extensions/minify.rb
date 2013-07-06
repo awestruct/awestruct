@@ -117,7 +117,7 @@ module Awestruct
 
       def pngcrush(page, input)
         filename = page.source_path
-        cmd = Shellwords.escape("pngcrush #{filename} /tmp/pngcrush")
+        cmd = "pngcrush " + Shellwords.escape("#{filename}") + " /tmp/pngcrush"
         `#{cmd}`
         if $?.exitstatus != 0
           raise "Failed to execute pngcrush: #{cmd}"
