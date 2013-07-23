@@ -26,7 +26,7 @@ spec = Gem::Specification.new do |s|
     s.requirements  << "Haml and markdown filters are touchy things. Rdiscount works well if you're running on mri. jRuby should be using haml 4.0.0 with kramdown"
 
     s.add_dependency 'haml', '~> 4.0.1'
-    s.add_dependency 'nokogiri', '>= 1.5.6'
+    s.add_dependency 'nokogiri', '~> 1.5.6'
     s.add_dependency 'tilt', '>= 1.3.6'
     s.add_dependency 'compass', '>= 0.12.1'
     s.add_dependency 'compass-960-plugin', '~> 0.10.4'

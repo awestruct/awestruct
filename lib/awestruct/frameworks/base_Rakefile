@@ -92,9 +92,15 @@ task :preview => :check do
   run_awestruct '-d'
 end
 
-desc 'Generate the site using the development profile'
-task :gen => :check do
-  run_awestruct '-P development -g --force'
+# provide a serve task for those used to Jekyll commands
+desc 'An alias to the preview task'
+task :serve => :preview
+
+desc 'Generate the site using the specified profile (default: development)'
+task :gen, [:profile] => :check do |task, args|
+  profile = args[:profile] || 'development'
+  profile = 'production' if profile == 'prod'
+  run_awestruct "-P #{profile} -g --force"
 end
 
 desc 'Generate the site and deploy to production'
