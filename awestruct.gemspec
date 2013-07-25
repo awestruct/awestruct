@@ -12,18 +12,16 @@ spec = Gem::Specification.new do |s|
     s.license        =   "MIT"
     s.files          =   [
       Dir['lib/**/**'],
-      Dir['spec/**/**'],
+#      Dir['spec/**/**'],
       Dir['man/*.1'],
     ].flatten
-    s.executables    = [
-      'awestruct',
-    ].flatten
+    s.test_files     = Dir['spec/**/**'].flatten
+    s.executables    = 'awestruct'
     s.require_paths  = [ 'lib' ]
     s.has_rdoc       =   true
 
     s.requirements  << "Any markup languages you are using and its dependencies" 
-    s.requirements  << "If LESS is used, or some other fixes within tilt, it is required to use Bundler and the :git ref for the tilt gem"
-    s.requirements  << "Haml and markdown filters are touchy things. Rdiscount works well if you're running on mri. jRuby should be using haml 4.0.0 with kramdown"
+    s.requirements  << "Haml and markdown filters are touchy things. Rdiscount works well if you're running on mri. JRuby should be using haml 4.0.0+ with kramdown"
 
     s.add_dependency 'haml', '~> 4.0.1'
     s.add_dependency 'nokogiri', '1.5.10'
