@@ -7,7 +7,7 @@ module Awestruct
     class BaseTiltHandler < BaseHandler
 
       def initialize(site, delegate)
-        super( site, delegate )
+        super(site, delegate)
       end
 
       def source_file_name
@@ -22,8 +22,8 @@ module Awestruct
       end
 
       def simple_name
-        base = File.basename( source_file_name, File.extname( source_file_name ))
-        return File.basename( base, File.extname( base ) ) if double_extension?
+        base = File.basename(source_file_name, File.extname(source_file_name))
+        return File.basename(base, File.extname(base)) if double_extension?
         return base
       end
 
@@ -32,11 +32,11 @@ module Awestruct
       end
 
       def input_extension
-        File.extname( source_file_name )
+        File.extname(source_file_name)
       end
 
       def output_extension
-        return File.extname( File.basename( source_file_name, File.extname( source_file_name ))) if double_extension?
+        return File.extname(File.basename(source_file_name, File.extname(source_file_name))) if double_extension?
 
         template = Tilt[path]
         if !template.nil?
@@ -55,7 +55,7 @@ module Awestruct
       def content_syntax
         # Check configuration for override, else convert extension to sym
         extension = input_extension[1..-1]
-        if ( !site[:content_syntax].nil? && !site[:content_syntax].empty?) 
+        if (!site[:content_syntax].nil? && !site[:content_syntax].empty?)
           syntax = site[:content_syntax][extension]
           return syntax.to_sym unless syntax.nil? or syntax.empty?
         end
@@ -103,10 +103,16 @@ module Awestruct
 
       def rendered_content(context, with_layouts=true)
         $LOG.debug "invoking tilt for #{delegate.path.to_s} with_layouts = #{with_layouts}" if $LOG.debug?
-        template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options) { |engine|
-          delegate.rendered_content( context, with_layouts )
-        }
-        template.render( context )
+        begin
+          template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options) { |engine|
+            delegate.rendered_content(context, with_layouts)
+          }
+          return template.render(context)
+        rescue LoadError => e
+          return "<h1>#{e.message}</h1><h2>Rendering file #{delegate.path.to_s} resulted in a failure.</h2><p>Backtrace: #{e.backtrace.join '<br>'}</p>"
+        rescue Exception => e
+          return "<h1>#{e.message}</h1><h2>Rendering file #{delegate.path.to_s} resulted in a failure.</h2><h3>Line: #{e.line if e.respond_to?(:line)}</h3><p>Backtrace: #{e.backtrace.join '<br>'}</p>"
+        end
       end
 
     end

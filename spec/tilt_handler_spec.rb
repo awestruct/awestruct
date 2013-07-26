@@ -1,5 +1,6 @@
-
+require 'logger'
 require 'awestruct/config'
+#require 'awestruct/engine'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/tilt_handler'
 
@@ -76,4 +77,36 @@ describe Awestruct::Handlers::TiltHandler do
     handler.output_filename.should eql 'warp-1.0.0.Alpha2.html'
 
   end
+
+  context 'when loading an engine not installed' do
+    specify 'should not throw exceptions, and should instead have the error in the rendered output' do
+      # setup
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+      @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
+      file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "hello.xml.builder" ) )
+      handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
+      content = handler.rendered_content(create_context)
+
+      expect(content).to include('cannot', 'builder')
+    end
+  end
+
+  context 'when rendering a file with an error' do
+    specify 'should not stop processing, but render the error as the file' do
+      # setup
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+      @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
+      file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "haml-error.html.haml" ) )
+      handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
+      content = handler.rendered_content(create_context)
+
+      expect(content).to_not be_empty
+      expect(content).to include('Illegal', 'nesting', 'Line', '2')
+    end
+  end
+
 end
