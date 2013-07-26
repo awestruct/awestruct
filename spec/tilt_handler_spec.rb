@@ -79,7 +79,7 @@ describe Awestruct::Handlers::TiltHandler do
   end
 
   context 'when loading an engine not installed' do
-    specify 'should not throw exceptions, and should instead have the error in the rendered output' do
+    specify 'should not throw exceptions; instead have the error in the rendered output' do
       # setup
       log = StringIO.new
       $LOG = Logger.new(log)
@@ -89,7 +89,7 @@ describe Awestruct::Handlers::TiltHandler do
       handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
       content = handler.rendered_content(create_context)
 
-      expect(content).to include('cannot', 'builder')
+      expect(content).to include('load', 'builder')
     end
   end
 
