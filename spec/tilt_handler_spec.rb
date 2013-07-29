@@ -5,6 +5,31 @@ require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/tilt_handler'
 
 require 'hashery'
+require 'tilt/template'
+
+
+module Tilt
+  class BogusTemplate < Template
+    self.default_mime_type = 'text/html'
+
+    def self.engine_initialized?
+      defined? ::Bogus::Document
+    end
+
+    def initialize_engine
+      require_template_library 'bogus_awestruct_template'
+    end
+
+    def evaluate(scope, locals, &block)
+      @output ||= "bogus, bogus, bogus"
+    end
+
+    def allows_script?
+      false
+    end
+  end
+end
+
 
 describe Awestruct::Handlers::TiltHandler do
 
@@ -81,15 +106,17 @@ describe Awestruct::Handlers::TiltHandler do
   context 'when loading an engine not installed' do
     specify 'should not throw exceptions; instead have the error in the rendered output' do
       # setup
+      Tilt::register Tilt::BogusTemplate, '.bogus',
       log = StringIO.new
       $LOG = Logger.new(log)
       $LOG.level = Logger::DEBUG
       @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
-      file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "hello.xml.builder" ) )
+      file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "hello.bogus" ) )
       handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
       content = handler.rendered_content(create_context)
 
-      expect(content).to include('load', 'builder')
+      expect(content).to_not eql ('bogus, bogus, bogus')
+      expect(content).to include('load', 'bogus_awestruct_template')
     end
   end
 

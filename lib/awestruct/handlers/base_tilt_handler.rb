@@ -109,8 +109,10 @@ module Awestruct
           }
           return template.render(context)
         rescue LoadError => e
+          $LOG.error "Could not load template library required for rendering #{delegate.path.to_s}, please see rendered output for more information"
           return "<h1>#{e.message}</h1><h2>Rendering file #{delegate.path.to_s} resulted in a failure.</h2><p>Backtrace: #{e.backtrace.join '<br>'}</p>"
         rescue Exception => e
+          $LOG.error "An error during rendering #{delegate.path.to_s} occured, please see rendered output for more information"
           return "<h1>#{e.message}</h1><h2>Rendering file #{delegate.path.to_s} resulted in a failure.</h2><h3>Line: #{e.line if e.respond_to?(:line)}</h3><p>Backtrace: #{e.backtrace.join '<br>'}</p>"
         end
       end
