@@ -4,6 +4,8 @@ require 'awestruct/cli/init'
 require 'awestruct/cli/generate'
 require 'awestruct/cli/auto'
 require 'awestruct/cli/server'
+require 'awestruct/cli/deploy'
+require 'awestruct/cli/console'
 require 'awestruct/logger'
 
 require 'pathname'
@@ -48,6 +50,7 @@ module Awestruct
         invoke_deploy()    if ( options.deploy )
         invoke_server()    if ( options.server )
         invoke_auto()      if ( options.auto )
+        invoke_console()   if ( options.console )
 
         wait_for_completion()
         success
@@ -124,6 +127,9 @@ module Awestruct
         run_in_thread( Awestruct::CLI::Server.new( './_site', options.bind_addr, options.port ) )
       end
 
+      def invoke_console()
+        run_in_thread( Awestruct::CLI::Console.new )
+      end
 
       private
 
