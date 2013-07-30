@@ -40,7 +40,7 @@ module Awestruct
         @script    = nil
         @verbose   = false
         @source_dir = Dir.pwd
-        @output_dir = File.absolute_path '_site'
+        @output_dir = File.expand_path '_site'
       end
 
       def self.parse!(args)
@@ -103,11 +103,11 @@ module Awestruct
           #  self.script = script
           #end
           opts.on( '--source-dir DIR', 'Location of sources (default: .' ) do |source_dir|
-            self.source_dir = File.absolute_path source_dir
+            self.source_dir = File.expand_path source_dir
           end
 
           opts.on( '--output-dir DIR', 'Location to output generated site (default: _site' ) do |output_dir|
-            self.output_dir = File.absolute_path output_dir
+            self.output_dir = File.expand_path output_dir
           end
       
           opts.separator ''
