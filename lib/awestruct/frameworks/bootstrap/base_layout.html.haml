@@ -15,7 +15,7 @@
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
-          %a.brand{ :href=>"#{site.base_url}" } Project Name
+          %a.brand{ :href=>"#{site.base_url}" } #{site.name}
           %ul.nav
             %li
               %a{ :href=>"#{site.base_url}" } Home
@@ -23,7 +23,7 @@
       ~ content
       %hr
       %footer
-        %p &copy; Organization #{Date.today.year}
+        %p &copy; #{site.org} #{Date.today.year}
     -# Uncomment script tags (remove leading -#) when you're ready to use behaviors
     -# %script{ :type=>'text/javascript', :src=>'//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js' }
     -# %script{ :type=>'text/javascript', :src=>"#{site.base_url}/javascripts/bootstrap-collapse.js" }
