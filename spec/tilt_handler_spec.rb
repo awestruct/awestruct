@@ -8,9 +8,11 @@ require 'hashery'
 describe Awestruct::Handlers::TiltHandler do
 
   before do
-    dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) 
+    dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = dir
 
-    @site = Hashery::OpenCascade[ { :encoding=>false, :dir=>dir, :config=>Awestruct::Config.new( dir ) } ]
+    @site = Hashery::OpenCascade[ { :encoding=>false, :dir=>dir, :config=>Awestruct::Config.new( opts ) } ]
   end
 
   def handler_file(path)

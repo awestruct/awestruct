@@ -66,6 +66,12 @@ Site Generation / Preview
 *-u, --url*='URL'::
    Set the site.base_url property.
 
+*--output-dir*='DIR'::
+    The location of the output directory. Defaults to './_site'. Must either be absolute or relative to the current directory.
+
+*--source-dir*='DIR'::
+    The location of the director containing (or will contain) site sources. Defaults to the current directory. Must either be absolute or relative to the current directory.
+
 ////
 *--run*='SCRIPT'::
    Run a script before regenerating the site.

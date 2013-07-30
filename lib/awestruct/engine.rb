@@ -24,6 +24,7 @@ module Awestruct
 
     attr_reader :site
     attr_reader :pipeline
+    attr_reader :config
 
     def self.instance
       @instance
@@ -39,6 +40,7 @@ module Awestruct
       @pipeline = Pipeline.new
       @site_page_loader = PageLoader.new( @site )
       @layout_page_loader = PageLoader.new( @site, :layouts )
+      @config = config
     end
 
     def config
@@ -46,29 +48,29 @@ module Awestruct
     end
 
     def run(profile, base_url, default_base_url, force=false)
-      $LOG.debug "adjust_load_path" if $LOG.debug?
+      $LOG.debug 'adjust_load_path' if $LOG.debug?
       adjust_load_path
-      $LOG.debug "load_default_site_yaml" if $LOG.debug?
+      $LOG.debug 'load_default_site_yaml' if $LOG.debug?
       load_default_site_yaml
-      $LOG.debug "load_site_yaml -- profile" if $LOG.debug?
+      $LOG.debug 'load_site_yaml -- profile' if $LOG.debug?
       load_site_yaml(profile)
-      $LOG.debug "set_base_url" if $LOG.debug?
+      $LOG.debug 'set_base_url' if $LOG.debug?
       set_base_url( base_url, default_base_url )
-      $LOG.debug "load_yamls" if $LOG.debug?
+      $LOG.debug 'load_yamls' if $LOG.debug?
       load_yamls
-      $LOG.debug "load_pipeline" if $LOG.debug?
+      $LOG.debug 'load_pipeline' if $LOG.debug?
       load_pipeline
-      $LOG.debug "load_pages" if $LOG.debug?
+      $LOG.debug 'load_pages' if $LOG.debug?
       load_pages
-      $LOG.debug "execute_pipeline" if $LOG.debug?
+      $LOG.debug 'execute_pipeline' if $LOG.debug?
       execute_pipeline
-      $LOG.debug "configure_compass" if $LOG.debug?
+      $LOG.debug 'configure_compass' if $LOG.debug?
       configure_compass
-      $LOG.debug "set_urls" if $LOG.debug?
+      $LOG.debug 'set_urls' if $LOG.debug?
       set_urls( site.pages )
-      $LOG.debug "build_page_index" if $LOG.debug?
+      $LOG.debug 'build_page_index' if $LOG.debug?
       build_page_index
-      $LOG.debug "generate_output" if $LOG.debug?
+      $LOG.debug 'generate_output' if $LOG.debug?
       generate_output
     end
 
