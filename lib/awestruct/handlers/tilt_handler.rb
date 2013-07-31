@@ -11,18 +11,12 @@ require 'tilt'
 module Awestruct
   module Handlers
 
-    class TiltMatcher
-      def match(path)
-        !Tilt[path].nil?
-      end
-    end
-
     class NonInterpolatingTiltMatcher
       EXT_REGEX = /\.(haml|slim|erb|mustache)$/
 
       def match(path)
         if match = EXT_REGEX.match(path)
-          if match[0] == '.slim' && Tilt[path].nil?
+          if match[0] == '.slim' && !Tilt.registered?('slim')
             require 'slim'
           end
           true
