@@ -43,27 +43,23 @@ module Awestruct
       end
 
       def raw_content
-        read
-        @content
+        load_content
       end
 
       def rendered_content(context, with_layouts=true)
         raw_content
       end
+      
+      def read_content
+        File.open(@path, 'r') {|is| is.read }
+      end
 
       private 
 
-      def read
-        ( @content = open ) if stale?
+      def load_content
+        ( @content = read_content ) if stale?
         @mtime = File.mtime( @path )
-        return @content
-      end
-      
-      def open
-        input_stream = IO.open(IO.sysopen(@path, "rb"), "rb" )
-        result = input_stream.read
-        input_stream.close
-        return result
+        @content
       end
 
     end

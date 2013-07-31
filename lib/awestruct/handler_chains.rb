@@ -1,5 +1,5 @@
 require 'awestruct/handler_chain'
-require 'awestruct/handlers/file_handler'
+require 'awestruct/handlers/verbatim_file_handler'
 require 'awestruct/handlers/css_tilt_handler'
 require 'awestruct/handlers/restructuredtext_handler'
 require 'awestruct/handlers/javascript_handler'
@@ -19,7 +19,7 @@ module Awestruct
       Awestruct::Handlers::AsciidoctorHandler::CHAIN,
       Awestruct::Handlers::TiltHandler::NON_INTERPOLATION_CHAIN,
       Awestruct::Handlers::TiltHandler::INTERPOLATION_CHAIN,
-      HandlerChain.new( /.*/, Awestruct::Handlers::FileHandler )
+      HandlerChain.new( /.*/, Awestruct::Handlers::VerbatimFileHandler )
     ]
 
     def initialize(include_defaults=true)

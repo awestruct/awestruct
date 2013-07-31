@@ -12,7 +12,7 @@ group :test do
   gem 'rack-test'
   gem 'tilt', '>= 1.3.5'
   gem 'coffee-script', '>= 2.2.0'
-  gem 'asciidoctor', '>= 0.1.1' # need 0.1.1 for Header support
+  gem 'asciidoctor', '>= 0.1.3' # >= 0.1.1 is required for front matter integration
   gem 'slim', '>= 1.3.6'
   gem 'kramdown', '>= 0.14.2'
   gem 'therubyracer', '0.10.0', :platforms => :ruby
@@ -22,8 +22,7 @@ group :test do
   gem 'RedCloth', '>= 4.2.9'
   gem 'mustache', '>= 0.99.4'
   gem 'uglifier', '>= 1.3.0'
-  gem 'htmlcompressor', '>= 0.0.3'
-
+  gem 'htmlcompressor', '>= 0.0.7'
 end
 
 gemspec

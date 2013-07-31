@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 require 'fileutils'
+require 'spec_helper'
 
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/front_matter_handler'
@@ -45,10 +46,7 @@ describe Awestruct::Handlers::FrontMatterHandler do
     handler = Awestruct::Handlers::FrontMatterHandler.new( @site, file_input('front-matter-file-utf8.txt') )
     handler.front_matter.should_not be_nil
     handler.front_matter['foo'].should == 'bar'
-    if String.respond_to? :force_encoding
-      handler.front_matter['utf8-content'].should == 'Μεα ιυδισο μενθιτυμ ετ. Ιυς ευ ποπυλω'.encode('UTF-8')
-    end
-
+    handler.front_matter['utf8-content'].should == 'Μεα ιυδισο μενθιτυμ ετ. Ιυς ευ ποπυλω'
     handler.raw_content.should_not be_nil
   end
 
