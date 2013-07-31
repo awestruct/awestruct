@@ -1,9 +1,35 @@
-
+require 'logger'
 require 'awestruct/config'
+#require 'awestruct/engine'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/tilt_handler'
 
 require 'hashery'
+require 'tilt/template'
+
+
+module Tilt
+  class BogusTemplate < Template
+    self.default_mime_type = 'text/html'
+
+    def self.engine_initialized?
+      defined? ::Bogus::Document
+    end
+
+    def initialize_engine
+      require_template_library 'fake-gem-name'
+    end
+
+    def evaluate(scope, locals, &block)
+      @output ||= "bogus, bogus, bogus"
+    end
+
+    def allows_script?
+      false
+    end
+  end
+end
+
 
 describe Awestruct::Handlers::TiltHandler do
 
@@ -76,4 +102,43 @@ describe Awestruct::Handlers::TiltHandler do
     handler.output_filename.should eql 'warp-1.0.0.Alpha2.html'
 
   end
+
+  context 'when loading an engine not installed' do
+    specify 'should not throw exceptions; instead have the error in the rendered output' do
+      # setup
+      Tilt::register Tilt::BogusTemplate, '.bogus',
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+      @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
+      path = handler_file( "hello.bogus" )
+      expect(Awestruct::Handlers::TiltMatcher.new().match(path)).to be_false
+      expect(log.string).to include('missing required gem')
+
+      # we don't even want to process a file if we cannot load its Tilt template
+      #file_handler = Awestruct::Handlers::FileHandler.new( @site, path )
+      #handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
+      #content = handler.rendered_content(create_context)
+
+      #expect(content).to_not eql ('bogus, bogus, bogus')
+      #expect(content).to include('load', 'fake-gem-name')
+    end
+  end
+
+  context 'when rendering a file with an error' do
+    specify 'should not stop processing, but render the error as the file' do
+      # setup
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+      @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
+      file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "haml-error.html.haml" ) )
+      handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
+      content = handler.rendered_content(create_context)
+
+      expect(content).to_not be_empty
+      expect(content).to include('Illegal', 'nesting', 'Line', '2')
+    end
+  end
+
 end
