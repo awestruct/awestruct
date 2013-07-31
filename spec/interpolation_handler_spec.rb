@@ -17,14 +17,10 @@ describe Awestruct::Handlers::InterpolationHandler do
   end
 
   it "should correctly interpolate complicated stuff that includes regular expressions [Issue #139]" do
-    if RUBY_VERSION >= '1.9'
-      input = %q(url = url.replace(/\/?#$/, '');)
-      handler = build_handler( input )
-      content = handler.rendered_content( Hashery::OpenCascade[] )
-      content.should == input
-    else
-      pending "Cannot yet handle this test case with ruby 1.8"
-    end
+    input = %q(url = url.replace(/\/?#$/, '');)
+    handler = build_handler( input )
+    content = handler.rendered_content( Hashery::OpenCascade[] )
+    content.should == input
   end
 
   def build_handler( input )

@@ -44,7 +44,7 @@ module Awestruct
         full_content = delegate.raw_content
 
         #if force_encoding is supported then set to charset defined in site config
-        full_content.force_encoding(site.encoding) if (full_content.respond_to?(:force_encoding) && site.encoding)
+        full_content.force_encoding(site.encoding) if (site.encoding && full_content.respond_to?(:force_encoding))
 
         yaml_content = ''
 

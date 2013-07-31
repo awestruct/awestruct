@@ -17,7 +17,7 @@ module Awestruct
 
         content = content.gsub( /\\/, '\\\\\\\\' )
         content = content.gsub( /\\\\#/, '\\#' )
-        content = content.gsub( Regexp.new('#(?!{)'), '\#' ) if ruby_19?
+        content = content.gsub( /#(?!\{)/, '\#' )
         content = content.gsub( '@', '\@' )
         content = "%@#{content}@"
         begin
@@ -30,11 +30,6 @@ module Awestruct
         c
 
       end
-
-      def ruby_19?
-        @is_ruby_19 ||= RUBY_VERSION >= '1.9'
-      end
-
     end
   end
 end
