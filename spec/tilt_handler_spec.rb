@@ -17,7 +17,7 @@ module Tilt
     end
 
     def initialize_engine
-      require_template_library 'bogus_awestruct_template'
+      require_template_library 'fake-gem-name'
     end
 
     def evaluate(scope, locals, &block)
@@ -111,12 +111,17 @@ describe Awestruct::Handlers::TiltHandler do
       $LOG = Logger.new(log)
       $LOG.level = Logger::DEBUG
       @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
-      file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "hello.bogus" ) )
-      handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
-      content = handler.rendered_content(create_context)
+      path = handler_file( "hello.bogus" )
+      expect(Awestruct::Handlers::TiltMatcher.new().match(path)).to be_false
+      expect(log.string).to include('missing required gem')
 
-      expect(content).to_not eql ('bogus, bogus, bogus')
-      expect(content).to include('load', 'bogus_awestruct_template')
+      # we don't even want to process a file if we cannot load its Tilt template
+      #file_handler = Awestruct::Handlers::FileHandler.new( @site, path )
+      #handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
+      #content = handler.rendered_content(create_context)
+
+      #expect(content).to_not eql ('bogus, bogus, bogus')
+      #expect(content).to include('load', 'fake-gem-name')
     end
   end
 

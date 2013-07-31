@@ -10,16 +10,34 @@ require 'tilt'
 module Awestruct
   module Handlers
 
-    class AsciidoctorMatcher
+    class AsciidoctorTiltMatcher < TiltMatcher
+      # Use a lightweight lookup to avoid loading Tilt templates for
+      # non-matching paths. Once we are sure this is a match, then
+      # attempt to load the Tilt template for AsciiDoc files.
       def match(path)
-        engine = Tilt[path]
-        engine == Tilt::AsciidoctorTemplate
+        # formal lookup as implemented in Tilt
+        pattern = File.basename(path.downcase)
+        registered = false
+        until pattern.empty? || (registered = Tilt.registered?(pattern))
+          # shave pattern down to next extension
+          pattern = pattern.sub(/^[^.]*\.?/, '')
+        end
+        if registered && (Tilt.mappings[pattern] || []).include?(Tilt::AsciidoctorTemplate)
+          begin
+            Tilt[File.basename(path)]
+          rescue LoadError
+            # swallowing error as it will be picked up again by primary TiltHandler
+            false
+          end
+        else
+          false
+        end
       end
     end
 
     class AsciidoctorHandler < BaseTiltHandler
 
-      CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::AsciidoctorMatcher.new(),
+      CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::AsciidoctorTiltMatcher.new(),
         Awestruct::Handlers::FileHandler,
         Awestruct::Handlers::FrontMatterHandler,
         Awestruct::Handlers::AsciidoctorHandler,
