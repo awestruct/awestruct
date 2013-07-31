@@ -161,8 +161,28 @@ task :check => :init do
 end
 
 # Execute Awestruct
-def run_awestruct(args)
-  system "#{$use_bundle_exec ? 'bundle exec ' : ''}awestruct #{args}" 
+def run_awestruct(args, opts = {})
+  cmd = "#{$use_bundle_exec ? 'bundle exec ' : ''}awestruct #{args}"
+  if RUBY_VERSION < '1.9'
+    opts[:spawn] = false
+  else
+    opts[:spawn] ||= true
+  end
+
+  msg 'Starting the local preview server...(Press Ctrl-C to shutdown)'
+  puts "Running command: #{cmd}"
+  if opts[:spawn]
+    pid = spawn cmd
+    Signal.trap(:INT) {
+      # wait for rack server to receive signal and shutdown
+      Process.wait pid
+      # now we go down
+      exit
+    }
+    Process.wait pid
+  else
+    system cmd
+  end
 end
 
 # A cross-platform means of finding an executable in the $PATH.
