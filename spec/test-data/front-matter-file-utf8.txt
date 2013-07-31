@@ -1,0 +1,5 @@
+---
+foo: bar
+utf8-content: Μεα ιυδισο μενθιτυμ ετ. Ιυς ευ ποπυλω
+---
+This is some content
