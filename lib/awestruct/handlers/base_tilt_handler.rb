@@ -4,6 +4,22 @@ require 'tilt'
 
 module Awestruct
   module Handlers
+
+    class TiltMatcher
+      # Returns the Tilt template class if a portion of the path is registered
+      # to a Tilt template and the Tilt template can be loaded. Returns false
+      # if no portions of the path are registered to a Tilt template or the
+      # Tilt template cannot be loaded.
+      def match(path)
+        begin
+          Tilt[File.basename(path)]
+        rescue LoadError => e
+          $LOG.warn(%(Copying #{path} to generated site without processing; missing required gem -- #{e.message.split(/ *-- */).last} (or equivalent)))
+          false
+        end
+      end
+    end
+
     class BaseTiltHandler < BaseHandler
 
       def initialize(site, delegate)
