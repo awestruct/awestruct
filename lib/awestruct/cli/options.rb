@@ -21,6 +21,7 @@ module Awestruct
       attr_accessor :deploy
       attr_accessor :script
       attr_accessor :verbose
+      attr_accessor :console
 
       def initialize()
         @generate  = nil
@@ -37,6 +38,7 @@ module Awestruct
         @deploy    = false
         @script    = nil
         @verbose   = false
+        @console   = false
       end
 
       def self.parse!(args)
@@ -98,6 +100,9 @@ module Awestruct
           #opts.on( '--run SCRIPT', 'Invoke a script after initialization' ) do |script|
           #  self.script = script
           #end
+          opts.on( '--console', 'Launch the interactive console' ) do |console|
+            self.console = console if self.auto
+          end
       
           opts.separator ''
           opts.separator "Common options:"
