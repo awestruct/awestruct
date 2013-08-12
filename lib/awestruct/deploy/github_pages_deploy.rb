@@ -14,7 +14,9 @@ module Awestruct
         # we may be on a detached branch,
         # in which case use that commit as the branch
         if current_branch == '(no branch)'
-          current_branch = git.revparse('HEAD')
+          # create a branch from our "detached HEAD" state
+          git.branch("temporary").checkout
+          current_branch = git.current_branch
         end
         git.branch( @branch ).checkout
         add_and_commit_site @site_path
