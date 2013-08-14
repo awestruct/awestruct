@@ -7,14 +7,14 @@ require 'hashery'
 REQUIRED_VARIABLES = [:page, :simple_name, :syntax, :extension]
 ALL_VARIABLES = REQUIRED_VARIABLES + [:format, :matcher, :unless]
 
-shared_examples "a handler" do |theories|
+shared_examples 'a handler' do |theories|
 
   def handler_file(path)
     "#{@site.config.dir}/#{path}"
   end
 
   def create_context
-    Hashery::OpenCascade[ { :site=>@site } ]
+    Hashery::OpenCascade[{ :site => @site }]
   end
 
   describe Awestruct::Handlers do
@@ -27,7 +27,9 @@ shared_examples "a handler" do |theories|
       @engine = Awestruct::Engine.new( @config )
       @engine.load_default_site_yaml
       @site = @engine.site
+    end
 
+    before :each do
       @site.merge! additional_config if respond_to?("additional_config")
     end
 
@@ -64,7 +66,7 @@ shared_examples "a handler" do |theories|
         handler.output_extension.should == theory[:extension]
       end
 
-      if !theory[:format].nil?
+      unless theory[:format].nil?
         it "should set the engine format '#{theory[:format]}' for page '#{theory[:page]}'" do
           page = create_handler theory[:page]
           handler = page.handler
@@ -76,13 +78,13 @@ shared_examples "a handler" do |theories|
         end
       end
 
-      if !theory[:matcher].nil?
+      unless theory[:matcher].nil?
 
         it "should render page '#{theory[:page]}'" do
           if theory[:unless].nil? or !theory[:unless][:exp].call()
             handler = create_handler theory[:page]
-            handler.update(additional_config_page) {|k, oldval, newval| oldval } if respond_to?("additional_config_page")
-            output = handler.rendered_content( handler.create_context )
+            handler.update(additional_config_page) { |k, oldval, newval| oldval } if respond_to?('additional_config_page')
+            output = handler.rendered_content(handler.create_context)
             output.should_not be_nil
 
             theory[:matcher].call(output, handler) if theory[:matcher].arity == 2

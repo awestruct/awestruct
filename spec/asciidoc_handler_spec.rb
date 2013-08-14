@@ -4,7 +4,7 @@ require 'rspec/matchers.rb'
 verify = lambda { |output|
   include EmmetMatchers
   # clean whitespace to make comparison easier
-  output.should have_structure("div#preamble>div.sectionbody>div.paragraph>p>strong")
+  output.should have_structure('div#preamble>div.sectionbody>div.paragraph>p>strong')
 }
 
 verify_front_matter = lambda { |output, page|
@@ -27,46 +27,49 @@ verify_headers = lambda { |output, page|
 }
 
 theories =
-  [
-    {
-      :page => "asciidoc-page.ad",
-      :simple_name => "asciidoc-page",
-      :syntax => :asciidoc,
-      :extension => '.html',
-      :matcher => verify
-    },
-    {
-      :page => "asciidoc-page.adoc",
-      :simple_name => "asciidoc-page",
-      :syntax => :asciidoc,
-      :extension => '.html',
-      :matcher => verify
-    },
-    {
-      :page => "asciidoc-page.asciidoc",
-      :simple_name => "asciidoc-page",
-      :syntax => :asciidoc,
-      :extension => '.html',
-      :matcher => verify
-    },
-    {
-      :page => "asciidoctor_with_front_matter.ad",
-      :simple_name => "asciidoctor_with_front_matter",
-      :syntax => :asciidoc,
-      :extension => '.html' ,
-      :matcher => verify_front_matter
-    },
-    {
-      :page => "asciidoctor_with_headers.ad",
-      :simple_name => "asciidoctor_with_headers",
-      :syntax => :asciidoc,
-      :extension => '.html',
-      :matcher => verify_headers
-    }
-  ]
+    [
+        {
+            :page => 'asciidoc-page.ad',
+            :simple_name => 'asciidoc-page',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify
+        },
+        {
+            :page => 'asciidoc-page.adoc',
+            :simple_name => 'asciidoc-page',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify
+        },
+        {
+            :page => 'asciidoc-page.asciidoc',
+            :simple_name => 'asciidoc-page',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify
+        },
+        {
+            :page => 'asciidoctor_with_front_matter.ad',
+            :simple_name => 'asciidoctor_with_front_matter',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify_front_matter
+        },
+        {
+            :page => 'asciidoctor_with_headers.ad',
+            :simple_name => 'asciidoctor_with_headers',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify_headers
+        }
+    ]
+
 
 describe Awestruct::Handlers::AsciidoctorHandler do
-  let(:additional_config_page) { {:name => 'Awestruct', :test => 10, :layout => 'empty-layout'} }
-  it_should_behave_like "a handler", theories
+  def additional_config_page
+    { :name => 'Awestruct', :test => 10, :layout => 'empty-layout' }
+  end
 
+  it_should_behave_like 'a handler', theories
 end
