@@ -21,6 +21,8 @@ module Awestruct
       attr_accessor :deploy
       attr_accessor :script
       attr_accessor :verbose
+      attr_accessor :source_dir
+      attr_accessor :output_dir
 
       def initialize()
         @generate  = nil
@@ -37,6 +39,8 @@ module Awestruct
         @deploy    = false
         @script    = nil
         @verbose   = false
+        @source_dir = Dir.pwd
+        @output_dir = File.expand_path '_site'
       end
 
       def self.parse!(args)
@@ -98,6 +102,13 @@ module Awestruct
           #opts.on( '--run SCRIPT', 'Invoke a script after initialization' ) do |script|
           #  self.script = script
           #end
+          opts.on( '--source-dir DIR', 'Location of sources (default: .' ) do |source_dir|
+            self.source_dir = File.expand_path source_dir
+          end
+
+          opts.on( '--output-dir DIR', 'Location to output generated site (default: _site' ) do |output_dir|
+            self.output_dir = File.expand_path output_dir
+          end
       
           opts.separator ''
           opts.separator "Common options:"

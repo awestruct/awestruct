@@ -82,13 +82,13 @@ module Awestruct
       end
 
       def setup_config()
-        @config = Awestruct::Config.new( Dir.pwd )
-        @config.track_dependencies = true if ( options.auto )
-        @config.verbose = true if ( options.verbose )
+        @config = Awestruct::Config.new( @options )
+        @config.track_dependencies = true if ( @options.auto )
+        @config.verbose = true if ( @options.verbose )
       end
 
       def invoke_init()
-        Awestruct::CLI::Init.new( Dir.pwd, options.framework, options.scaffold ).run
+        Awestruct::CLI::Init.new( Dir.pwd, @options.framework, @options.scaffold ).run
       end
 
       def invoke_script()

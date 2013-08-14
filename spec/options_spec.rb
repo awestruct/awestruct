@@ -3,7 +3,7 @@ require 'awestruct/cli/options'
 
 describe Awestruct::CLI::Options do
 
-  it "should have reasonable defaults" do
+  it 'should have reasonable defaults' do
     options = Awestruct::CLI::Options.new
     options.generate.should == nil
     options.server.should   == false
@@ -23,14 +23,17 @@ describe Awestruct::CLI::Options do
     options.profile.should  == nil
     options.script.should   == nil
     options.verbose.should  == false
+
+    options.output_dir == File.join( __FILE__, '..', '_site' )
+    options.source_dir == File.join( __FILE__, '..' )
   end
 
-  describe "parsing" do 
+  describe 'parsing' do
     def parse!(*args)
       Awestruct::CLI::Options.parse! args
     end
 
-    it "should parse server-related args" do
+    it 'should parse server-related args' do
       parse!( '-s' ).server.should == true
       parse!( '--server' ).server.should == true
 
@@ -44,12 +47,12 @@ describe Awestruct::CLI::Options do
       parse!( '--url', 'http://mysite.com/' ).base_url.should == 'http://mysite.com/'
     end
 
-    it "should parse profile-related args" do
+    it 'should parse profile-related args' do
       parse!( '-P', 'numberwang' ).profile.should == 'numberwang'
       parse!( '--profile', 'superhans' ).profile.should == 'superhans'
     end
 
-    it "should parse generation-related args" do
+    it 'should parse generation-related args' do
       parse!( '-g' ).generate.should == true
       parse!( '--generate' ).generate.should == true
       parse!( '--no-generate' ).generate.should == false
@@ -60,18 +63,18 @@ describe Awestruct::CLI::Options do
       parse!( '--auto' ).auto.should == true
     end
 
-    it "should parse script-related args" do
-      pending "Not yet implemented. See issue #248."
+    it 'should parse script-related args' do
+      pending 'Not yet implemented. See issue #248.'
       #parse!( '--run', 'puts "hi"' ).script.should == 'puts "hi"'
     end
 
-    it "should turn off generate when doing a --deploy" do
+    it 'should turn off generate when doing a --deploy' do
       result = parse!( '--deploy' )
       result.deploy.should be_true
       result.generate.should be_false
     end
 
-    it "should turn off generate when doing a --deploy unless explicitly turned back on" do
+    it 'should turn off generate when doing a --deploy unless explicitly turned back on' do
       result = parse!( '--deploy', '--generate' )
       result.deploy.should be_true
       result.generate.should be_true
@@ -81,7 +84,7 @@ describe Awestruct::CLI::Options do
       result.generate.should be_true
     end
 
-    it "should turn on verbose when -w or --verbose is explicitly turned back on" do
+    it 'should turn on verbose when -w or --verbose is explicitly turned back on' do
       result = parse!( '-w' )
       result.verbose.should be_true
 
@@ -89,8 +92,14 @@ describe Awestruct::CLI::Options do
       result.verbose.should be_true
     end
 
-    it "should generate by default" do
+    it 'should generate by default' do
       parse!().generate.should be_true
+    end
+
+    it 'should parse directory options' do
+      result = Awestruct::CLI::Options.parse!(%w(--source-dir /tmp --output-dir /tmp/new-site))
+      result.source_dir.should eql '/tmp'
+      result.output_dir.should eql '/tmp/new-site'
     end
   end
 
