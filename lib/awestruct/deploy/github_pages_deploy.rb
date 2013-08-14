@@ -1,12 +1,13 @@
 require 'awestruct/deploy/base_deploy'
+require 'git'
 
 module Awestruct
   module Deploy
     class GitHubPagesDeploy < Base
-      def initialize( site_config, deploy_config )
+      def initialize(site_config, deploy_config)
         @site_path = site_config.output_dir
-        @branch    = deploy_config[ 'branch' ] || 'gh-pages'
-        @repo      = deploy_config[ 'repository' ] || 'origin'
+        @branch = deploy_config['branch'] || 'gh-pages'
+        @repo = deploy_config['repository'] || 'origin'
       end
 
       def publish_site
@@ -16,15 +17,15 @@ module Awestruct
         if current_branch == '(no branch)'
           current_branch = git.revparse('HEAD')
         end
-        git.branch( @branch ).checkout
+        git.branch(@branch).checkout
         add_and_commit_site @site_path
-        git.push( @repo, @branch )
-        git.checkout( current_branch )
+        git.push(@repo, @branch)
+        git.checkout(current_branch)
       end
 
       private
-      def add_and_commit_site( path )
-        git.with_working( path ) do
+      def add_and_commit_site(path)
+        git.with_working(path) do
           git.add(".")
           begin
             git.commit("Published #{@branch} to GitHub pages.")
@@ -34,8 +35,12 @@ module Awestruct
         end
         git.reset_hard
       end
+
+      def git
+        @git ||= ::Git.open('.')
+      end
     end
   end
 end
 
-Awestruct::Deployers.instance[ :github_pages ] = Awestruct::Deploy::GitHubPagesDeploy
+Awestruct::Deployers.instance[:github_pages] = Awestruct::Deploy::GitHubPagesDeploy
