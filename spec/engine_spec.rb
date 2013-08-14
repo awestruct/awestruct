@@ -1,4 +1,4 @@
-
+require 'awestruct/cli/options'
 require 'awestruct/engine'
 
 require 'hashery/open_cascade'
@@ -6,7 +6,9 @@ require 'hashery/open_cascade'
 describe Awestruct::Engine do
 
   it "should be able to load default-site.yml" do
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
     engine.load_default_site_yaml
@@ -17,7 +19,9 @@ describe Awestruct::Engine do
   end
 
   it "should be able to override default with site" do
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
     engine.load_default_site_yaml
@@ -30,7 +34,9 @@ describe Awestruct::Engine do
   end
 
   it "should be able to load site.yml with the correct profile" do
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
     engine.load_default_site_yaml
@@ -48,7 +54,9 @@ describe Awestruct::Engine do
   end
 
   it "should be able to load arbitrary _config/*.yml files" do
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
     engine.load_yaml( File.join( config.dir,  '_config/arbitrary.yml' ) )
@@ -56,7 +64,9 @@ describe Awestruct::Engine do
   end
 
   it "should be able to load all arbitary yamls" do
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
     engine.load_yamls
@@ -67,7 +77,9 @@ describe Awestruct::Engine do
 
   it "should exclude line comments and minify in compass by default in production mode" do
     compass = compass_config
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_site_yaml( 'production' )
     Compass.stub(:configuration).and_return(compass)
@@ -86,7 +98,9 @@ describe Awestruct::Engine do
 
   it "should include line comments in compass by default in development mode" do
     compass = compass_config
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_site_yaml( 'development' )
     Compass.stub(:configuration).and_return(compass)
@@ -105,7 +119,9 @@ describe Awestruct::Engine do
 
   it "wip should accept site.compass_line_comments and site.compass_output_style to configure behavior" do
     compass = compass_config
-    config = Awestruct::Config.new( File.dirname(__FILE__) + '/test-data/engine' )
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_site_yaml( 'staging' )
     Compass.stub(:configuration).and_return(compass)

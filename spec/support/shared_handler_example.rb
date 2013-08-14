@@ -20,9 +20,11 @@ shared_examples "a handler" do |theories|
   describe Awestruct::Handlers do
 
     before :all do
+      @opts = Awestruct::CLI::Options.new
+      @opts.source_dir = File.dirname(__FILE__) + '/../test-data/handlers'
+      @config = Awestruct::Config.new( @opts )
 
-      @engine = Awestruct::Engine.new(
-                    Awestruct::Config.new( File.expand_path(File.dirname(__FILE__) + '/../') + '/test-data/handlers' ))
+      @engine = Awestruct::Engine.new( @config )
       @engine.load_default_site_yaml
       @site = @engine.site
 

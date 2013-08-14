@@ -6,7 +6,9 @@ require 'awestruct/config'
 describe Awestruct::PageLoader do
 
   before :each do
-    @config = Awestruct::Config.new( File.dirname(__FILE__) + "/test-data/page-loader" )
+    @opts = Awestruct::CLI::Options.new
+    @opts.source_dir = File.dirname(__FILE__) + '/test-data/page-loader'
+    @config = Awestruct::Config.new( @opts )
     @engine = Awestruct::Engine.new
     @engine.pipeline.handler_chains << :defaults
     @site   = Awestruct::Site.new( @engine, @config )
