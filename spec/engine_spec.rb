@@ -75,6 +75,8 @@ describe Awestruct::Engine do
     compass.stub(:line_comments).and_return(false)
     compass.should_receive(:output_style=).with(:compressed)
     compass.stub(:output_style).and_return(:compressed)
+    compass.stub(:http_path=).with(nil)
+    compass.stub(:relative_assets=).with(false)
     engine.configure_compass
     engine.site.sass.line_numbers.should == false
     engine.site.sass.style.should == :compressed
@@ -92,6 +94,8 @@ describe Awestruct::Engine do
     compass.stub(:line_comments).and_return(true)
     compass.should_receive(:output_style=).with(:expanded)
     compass.stub(:output_style).and_return(:expanded)
+    compass.stub(:http_path=).with(nil)
+    compass.stub(:relative_assets=).with(false)
     engine.configure_compass
     engine.site.sass.line_numbers.should == true
     engine.site.sass.style.should == :expanded
@@ -109,6 +113,8 @@ describe Awestruct::Engine do
     compass.stub(:line_comments).and_return(false)
     compass.should_receive(:output_style=).with(:compact)
     compass.stub(:output_style).and_return(:compact)
+    compass.stub(:http_path=).with(nil)
+    compass.stub(:relative_assets=).with(false)
     engine.configure_compass
     engine.site.sass.line_numbers.should == false
     engine.site.sass.style.should == :compact

@@ -233,6 +233,7 @@ module Awestruct
       Compass.configuration.project_type    = :standalone
       Compass.configuration.project_path    = site.config.dir
       Compass.configuration.sass_dir        = 'stylesheets'
+      Compass.configuration.http_path       = site.base_url
       
       site.images_dir      = File.join( site.config.output_dir, 'images' )
       site.fonts_dir       = File.join( site.config.output_dir, 'fonts' )
@@ -245,6 +246,8 @@ module Awestruct
       Compass.configuration.fonts_dir       = 'fonts'
       Compass.configuration.line_comments   = include_line_comments?
       Compass.configuration.output_style    = compress_css?
+      Compass.configuration.relative_assets = false
+      # TODO: Should we add an on_stylesheet_error block?
 
       # port old style configuration to new Tilt-based configuration
       # TODO consider deprecating the old config mechanism and move to default-site.yml
