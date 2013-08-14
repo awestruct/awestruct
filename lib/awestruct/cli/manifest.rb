@@ -15,6 +15,7 @@ class Compass::AppIntegration::StandAlone::Installer
   def write_configuration_files(config_file = nil)
     # no!
   end
+
   def finalize(opts={})
     $LOG.info <<-END.gsub(/^ {6}/, '')
 
@@ -35,25 +36,26 @@ end
 
 module Awestruct
   module CLI
+    #noinspection RubyResolve
     class Manifest
 
       attr_reader :parent
       attr_reader :steps
 
-      def initialize(parent=nil,&block)
+      def initialize(parent=nil, &block)
         @parent = parent
         @steps = []
         instance_eval &block if block
       end
 
       def mkdir(path)
-        steps << MkDir.new( path )
+        steps << MkDir.new(path)
       end
 
       def copy_file(path, input_path, opts = {})
-        steps << CopyFile.new( path, input_path, opts )
+        steps << CopyFile.new(path, input_path, opts)
       end
-      
+
       def touch_file(path)
         steps << TouchFile.new(path)
       end
@@ -74,7 +76,7 @@ module Awestruct
         parent.perform(dir) if parent
         steps.each do |step|
           begin
-            step.perform( dir )
+            step.perform(dir)
           rescue => e
             $LOG.error e if $LOG.error?
             $LOG.error e.backtrace.join("\n") if $LOG.error?
@@ -85,7 +87,7 @@ module Awestruct
       def unperform(dir)
         steps.each do |step|
           begin
-            step.unperform( dir )
+            step.unperform(dir)
           rescue => e
             $LOG.error e if $LOG.error?
             $LOG.error e.backtrace.join("\n") if $LOG.error?
@@ -104,47 +106,47 @@ module Awestruct
         end
 
         def perform(dir)
-          p = File.join( dir, @path ) 
-          if ( File.exist?( p ) )
+          p = File.join(dir, @path)
+          if File.exist?(p)
             $LOG.error "Exists: #{p}" if $LOG.error?
             return
           end
-          if ( ! File.directory?( File.dirname( p ) ) )
+          unless File.directory?(File.dirname(p))
             $LOG.error "Does not exist: #{File.dirname(p)}" if $LOG.error?
             return
           end
           $LOG.info "Create directory: #{p}" if $LOG.info?
-          FileUtils.mkdir( p )
+          FileUtils.mkdir(p)
         end
 
         def unperform(dir)
-          p = File.join( dir, @path ) 
-          if ( ! File.exist?( p ) )
+          p = File.join(dir, @path)
+          unless File.exist?(p)
             $LOG.error "Does not exist: #{p}" if $LOG.error?
             return
           end
-          if ( ! File.directory?( p ) )
+          unless File.directory?(p)
             $LOG.error "Not a directory: #{p}" if $LOG.error?
             return
           end
-          if ( Dir.entries( p ) != 2 )
+          if Dir.entries(p) != 2
             $LOG.error "Not empty: #{p}" if $LOG.error?
             return
           end
           $LOG.info "Remove: #{p}" if $LOG.info?
-          FileUtils.rmdir( p )
+          FileUtils.rmdir(p)
         end
       end
-      
+
       class TouchFile
         def initialize(path)
           @path = path
         end
-        
+
         def perform(dir)
           FileUtils.touch(File.join(dir, @path))
         end
-        
+
         def unperform(dir)
           #nothing
         end
@@ -154,16 +156,16 @@ module Awestruct
         def initialize(path)
           @path = path
         end
-        
+
         def perform(dir)
-          FileUtils.rm( File.join( dir, @path ), :force => true )
+          FileUtils.rm(File.join(dir, @path), :force => true)
         end
-        
+
         def unperform(dir)
           #nothing
         end
       end
-      
+
       # Adds a requires for each library in libs to the
       # top of the file specified by path
       class AddRequires
@@ -171,20 +173,20 @@ module Awestruct
           @path = path
           @libs = libs
         end
-        
+
         def perform(dir)
           file = File.join(dir, @path)
-          File.open(file, 'r') do |old|
-            File.unlink(file)
-            File.open(file, 'w') do |new|
-              @libs.each do |lib|
-                new.write "require '#{lib}'\n"
-              end
-              new.write old.read
+          old_lines = File.read file
+          FileUtils.rm(file)
+
+          File.open(file, 'w') do |new|
+            @libs.each do |lib|
+              new.write "require '#{lib}'\n"
             end
+            new.write old_lines
           end
         end
-        
+
         def unperform(dir)
           #nothing
         end
@@ -192,23 +194,23 @@ module Awestruct
 
       class CopyFile
         def initialize(path, input_path, opts = {})
-          @path       = path
+          @path = path
           @input_path = input_path
-          @overwrite  = opts[:overwrite]
+          @overwrite = opts[:overwrite]
         end
 
-        def perform(dir )
-          p = File.join( dir, @path )
-          if !@overwrite && File.exist?( p )
+        def perform(dir)
+          p = File.join(dir, @path)
+          if !@overwrite && File.exist?(p)
             $LOG.error "Exists: #{p}" if $LOG.error?
             return
           end
-          if ( ! File.directory?( File.dirname( p ) ) )
-            $LOG.error "No directory: #{File.dirname( p )}" if $LOG.error?
+          unless File.directory?(File.dirname(p))
+            $LOG.error "No directory: #{File.dirname(p)}" if $LOG.error?
             return
           end
           $LOG.info "Create file: #{p}" if $LOG.info?
-          File.open( p, 'w' ){|f| f.write( File.read( @input_path ) ) }
+          File.open(p, 'w') { |f| f.write(File.read(@input_path)) }
         end
 
         def unperform(dir)
@@ -216,13 +218,13 @@ module Awestruct
         end
 
         def notunperform(dir)
-          p = File.join( @dir, p )
-          if ( ! File.exist?( p ) )
+          p = File.join(@dir, p)
+          unless File.exist?(p)
             $LOG.error "Does not exist: #{p}" if $LOG.error?
             return
           end
           $LOG.info "Remove: #{p}" if $LOG.info?
-          FileUtils.rm( p )
+          FileUtils.rm(p)
         end
 
       end
@@ -233,19 +235,19 @@ module Awestruct
         end
 
         def perform(dir)
-          Compass.configuration.sass_dir    = 'stylesheets'
-          Compass.configuration.css_dir     = '_site/stylesheets'
-          Compass.configuration.images_dir  = 'images'
+          Compass.configuration.sass_dir = 'stylesheets'
+          Compass.configuration.css_dir = '_site/stylesheets'
+          Compass.configuration.images_dir = 'images'
 
-          cmd = Compass::Commands::CreateProject.new( dir, {
-                  :framework=>@framework,
-                  :project_type=>:stand_alone,
-                  :css_dir=>'_site/stylesheets',
-                  :sass_dir=>'stylesheets',
-                  :images_dir=>'images',
-                  :fonts_dir=>'fonts',
-                  :javascripts_dir=>'javascripts',
-                } )
+          cmd = Compass::Commands::CreateProject.new(dir, {
+              :framework => @framework,
+              :project_type => :stand_alone,
+              :css_dir => '_site/stylesheets',
+              :sass_dir => 'stylesheets',
+              :images_dir => 'images',
+              :fonts_dir => 'fonts',
+              :javascripts_dir => 'javascripts',
+          })
           cmd.perform
         end
 
