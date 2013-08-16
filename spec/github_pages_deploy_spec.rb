@@ -11,6 +11,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     @deploy_config = mock
     @deploy_config.stub(:[]).with('branch').and_return('the-branch')
     @deploy_config.stub(:[]).with('repository').and_return('the-repo')
+    @deploy_config.stub(:[]).with('gzip').and_return('false')
     @deploy_config.stub(:[]).with('scm').and_return('git')
     @deploy_config.stub(:[]).with('source_dir').and_return('.')
     @deploy_config.stub(:[]).with('uncommitted').and_return('false')
