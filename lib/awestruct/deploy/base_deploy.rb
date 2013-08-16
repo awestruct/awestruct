@@ -46,16 +46,20 @@ module Awestruct
 
       def compress_site
         if @gzip
-          require 'zlib'
-          Dir.glob("#{@site_path}/**/*") do |item|
-            next if item == '.' or item == '..'
-            ext = File.extname(item)
-            if !ext.empty?
-              ext_sym = ext[1..-1].to_sym
-              case ext_sym
-              when :css, :js, :html
-                gzip_file item
-              end
+          gzip_site
+        end
+      end
+
+      def gzip_site
+        require 'zlib'
+        Dir.glob("#{@site_path}/**/*") do |item|
+          next if item == '.' or item == '..'
+          ext = File.extname(item)
+          if !ext.empty?
+            ext_sym = ext[1..-1].to_sym
+            case ext_sym
+            when :css, :js, :html
+              gzip_file item
             end
           end
         end

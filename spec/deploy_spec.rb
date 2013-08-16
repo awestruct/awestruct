@@ -38,4 +38,17 @@ describe Awestruct::CLI::Deploy do
     deployer.deploy_type.should == :github_pages
   end
 
+  it "should gzip if deploy['gzip'] is true" do
+    site_config = mock
+    site_config.stub(:output_dir).and_return '_site'
+
+    deploy_config = mock
+    deploy_config.stub(:[]).with('gzip').and_return true
+    deploy_config.stub(:[]).with('uncommitted').and_return true
+
+    deployer = Awestruct::Deploy::Base.new(site_config, deploy_config)
+    deployer.should_receive(:gzip_site)
+    deployer.run(deploy_config)
+  end
+
 end
