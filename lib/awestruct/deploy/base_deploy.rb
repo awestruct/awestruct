@@ -47,38 +47,38 @@ module Awestruct
 
       def compress_site
         if @gzip
-          gzip_site
+          gzip_site @site_path
         end
       end
 
-      def gzip_site
-        require 'zlib'
-        Dir.glob("#{@site_path}/**/*") do |item|
+      def gzip_site(site_path)
+        Dir.glob("#{site_path}/**/*") do |item|
           next if item == '.' or item == '..'
           ext = File.extname(item)
           if !ext.empty?
             ext_sym = ext[1..-1].to_sym
             case ext_sym
             when :css, :js, :html
-              gzip_file item
+              require 'zlib'
+              if !is_gzipped item
+                gzip_file item
+              end
             end
           end
         end
       end
 
-      def gzip_file( filename )
-        if !is_gzipped filename
-          $LOG.debug "Gzipping File #{filename}"
-          Zlib::GzipWriter.open("#{filename}.gz") do |gz|
-            gz.mtime = File.mtime(filename)
-            gz.orig_name = filename
-            gz.write File.binread(filename)
-          end
-          File.rename("#{filename}.gz", "#{filename}")
+      def gzip_file(filename)
+        $LOG.debug "Gzipping File #{filename}"
+        Zlib::GzipWriter.open("#{filename}.gz") do |gz|
+          gz.mtime = File.mtime(filename)
+          gz.orig_name = filename
+          gz.write File.binread(filename)
         end
+        File.rename("#{filename}.gz", "#{filename}")
       end
 
-      def is_gzipped( filename )
+      def is_gzipped(filename)
         begin
           File.open("#{filename}") do |f|
             Zlib::GzipReader.new(f)
