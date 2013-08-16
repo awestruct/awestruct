@@ -1,4 +1,5 @@
 require 'awestruct/deployers'
+require 'awestruct/compatibility'
 Dir[ File.join( File.dirname(__FILE__), '..', 'scm' '*.rb' ) ].each do |f|
   begin
     require f
@@ -71,7 +72,7 @@ module Awestruct
           Zlib::GzipWriter.open("#{filename}.gz") do |gz|
             gz.mtime = File.mtime(filename)
             gz.orig_name = filename
-            gz.write IO.binread(filename)
+            gz.write File.binread(filename)
           end
           File.rename("#{filename}.gz", "#{filename}")
         end
