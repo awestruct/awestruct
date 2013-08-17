@@ -5,7 +5,7 @@ module Awestruct
   module Deploy
     class S3Deploy < Base
       def initialize( site_config, deploy_config )
-        @site_path = site_config.output_dir
+        super
         @bucket = deploy_config['bucket']
       end
 

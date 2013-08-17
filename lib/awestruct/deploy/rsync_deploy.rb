@@ -7,7 +7,7 @@ module Awestruct
     class RSyncDeploy < Base
 
       def initialize(site_config, deploy_config)
-        @site_path = File.join( site_config.output_dir, '/' ).gsub(/^\w:\//, '/')
+        super
         @host      = deploy_config['host']
         @path      = File.join( deploy_config['path'], '/' )
         @exclude   = deploy_config['exclude']
