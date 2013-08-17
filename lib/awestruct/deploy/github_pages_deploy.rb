@@ -5,7 +5,7 @@ module Awestruct
   module Deploy
     class GitHubPagesDeploy < Base
       def initialize(site_config, deploy_config)
-        @site_path = site_config.output_dir
+        super
         @branch = deploy_config['branch'] || 'gh-pages'
         @repo = deploy_config['repository'] || 'origin'
       end
