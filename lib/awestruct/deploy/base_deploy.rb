@@ -18,6 +18,7 @@ module Awestruct
         # Add a single front slash at the end of output dir
         @site_path = File.join( site_config.output_dir, '/' ).gsub(/^\w:\//, '/')
         @gzip = deploy_config['gzip']
+        @gzip_level = deploy_config['gzip_level'] || Zlib::BEST_COMPRESSION
       end
 
       def run(deploy_config)
@@ -61,16 +62,16 @@ module Awestruct
             when :css, :js, :html
               require 'zlib'
               if !is_gzipped item
-                gzip_file item
+                gzip_file(item, @gzip_level)
               end
             end
           end
         end
       end
 
-      def gzip_file(filename)
+      def gzip_file(filename, level)
         $LOG.debug "Gzipping File #{filename}"
-        Zlib::GzipWriter.open("#{filename}.gz") do |gz|
+        Zlib::GzipWriter.open("#{filename}.gz", level) do |gz|
           gz.mtime = File.mtime(filename)
           gz.orig_name = filename
           gz.write File.binread(filename)
