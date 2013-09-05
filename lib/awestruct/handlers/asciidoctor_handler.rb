@@ -91,6 +91,19 @@ module Awestruct
         if @front_matter['header_footer']
           opts[:header_footer] = true
         end
+        path_expanded = File.expand_path path
+        opts[:attributes]['docdir'] = File.dirname path_expanded
+        opts[:attributes]['docfile'] = path_expanded
+        opts[:attributes]['docname'] = simple_name
+        path_mtime = path.mtime
+        opts[:attributes]['docdate'] = docdate = path_mtime.strftime('%Y-%m-%d')
+        opts[:attributes]['doctime'] = doctime = path_mtime.strftime('%H:%M:%S %Z')
+        opts[:attributes]['docdatetime'] = %(#{docdate} #{doctime})
+        # TODO once Asciidoctor 1.5.0 is release, we should set the base_dir as a jail
+        # we can't do this before 1.5.0 due to a bug in how includes are resolved
+        if (Object.const_defined? 'Asciidoctor') && Asciidoctor::VERSION >= '1.5.0'
+          opts[:base_dir] ||= @site.config.dir
+        end
         opts
       end
 
