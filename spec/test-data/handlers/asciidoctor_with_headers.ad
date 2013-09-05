@@ -1,5 +1,5 @@
 = AsciiDoc
-Stuart Rackham
+Stuart Rackham <srackham@example.com>; Dan Allen
 2013-02-06
 :page-tags: [a, b, c]
 :page-layout: haml-layout
