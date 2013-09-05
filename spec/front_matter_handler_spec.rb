@@ -42,6 +42,20 @@ describe Awestruct::Handlers::FrontMatterHandler do
     handler.raw_content.should be_nil
   end
 
+  it 'should not match front matter in the middle of a file' do
+    handler = Awestruct::Handlers::FrontMatterHandler.new( @site, file_input('front-matter-middle.txt') )
+    handler.front_matter.should_not be_nil
+    handler.front_matter.should be_empty
+    handler.raw_content.should_not be_nil
+  end
+
+  it 'should not mistake horizontal rule for front matter' do
+    handler = Awestruct::Handlers::FrontMatterHandler.new( @site, file_input('front-matter-looking.txt') )
+    handler.front_matter.should_not be_nil
+    handler.front_matter.should be_empty
+    handler.raw_content.should_not be_nil
+  end
+
   it 'should be able to handle UTF-8 characters' do
     handler = Awestruct::Handlers::FrontMatterHandler.new( @site, file_input('front-matter-file-utf8.txt') )
     handler.front_matter.should_not be_nil
