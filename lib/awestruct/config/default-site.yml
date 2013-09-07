@@ -30,3 +30,7 @@ asciidoctor:
   :attributes:
     imagesdir: /images
     stylesdir: /stylesheets
+
+profiles:
+  development:
+    show_drafts: true
