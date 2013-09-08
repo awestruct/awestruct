@@ -1,7 +1,11 @@
 require 'spec_helper'
 
-verify = lambda { |output|
-   output.should == "<h3>Test</h3>"
+verify_without_span = lambda { |output|
+   output.should == "<h3>Test</h3>\n<p>the WHO</p>"
+}
+
+verify_with_span = lambda { |output|
+   output.should == "<h3>Test</h3>\n<p>the <span class=\"caps\">WHO</span></p>"
 }
 
 theories =
@@ -11,12 +15,19 @@ theories =
       :simple_name => "textile-page",
       :syntax => :textile,
       :extension => '.html',
-      :matcher => verify
+      :matcher => verify_with_span,
+      :additional_config => { :textile => { ':no_span_caps' => false } }
+    },
+    {
+      :page => "textile-page.textile",
+      :simple_name => "textile-page",
+      :syntax => :textile,
+      :extension => '.html',
+      :matcher => verify_without_span
     }
   ]
 
 describe Awestruct::Handlers::TiltHandler.to_s + "-Textile" do
-
   it_should_behave_like "a handler", theories
 
 end
