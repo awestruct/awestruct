@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'awestruct/scm/git'
+require 'awestruct/deploy/base_deploy'
 
 describe Awestruct::Scm::Git do
   specify 'should respond_to :uncommitted_changes?' do

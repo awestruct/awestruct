@@ -14,7 +14,7 @@ module Awestruct
         @site_config   = site_config
         @deploy_config = deploy_config
         @deploy_config['type'] ||= (is_github? ? :github_pages : :rsync)
-         $LOG.info "Deploying to #{deploy_type}" if $LOG.info?
+        $LOG.info "Deploying to #{deploy_type}" if $LOG.info?
       end
 
       def deploy_type
@@ -31,7 +31,7 @@ module Awestruct
         end
   
         deployer = deployer_class.new( site_config, deploy_config )
-        deployer.run(deploy_config)
+        deployer.run
       end
 
       private

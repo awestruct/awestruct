@@ -1,6 +1,6 @@
 require 'awestruct/deployers'
 require 'awestruct/compatibility'
-Dir[ File.join( File.dirname(__FILE__), '..', 'scm' '*.rb' ) ].each do |f|
+Dir[ File.join( File.dirname(__FILE__), '..', 'scm', '*.rb' ) ].each do |f|
   begin
     require f
   rescue LoadError => e
@@ -18,17 +18,17 @@ module Awestruct
         # Add a single front slash at the end of output dir
         @site_path = File.join( site_config.output_dir, '/' ).gsub(/^\w:\//, '/')
         @gzip = deploy_config['gzip']
+        @source_dir = deploy_config['source_dir'] || site_config.dir
+        @ignore_uncommitted = deploy_config['uncommitted']
+        init_scm(deploy_config['scm'] || 'git')
       end
 
-      def run(deploy_config)
-        if deploy_config['uncommitted'] == true
+      def run
+        if @ignore_uncommitted == true
           compress_site
           publish_site
         else
-          scm = deploy_config['scm'] || 'git'
-          #require "awestruct/scm/#{scm}"
-          scm_class = Object.const_get('Awestruct').const_get('Scm').const_get(scm.slice(0, 1).capitalize + scm.slice(1..-1))
-          if scm_class.new.uncommitted_changes?(deploy_config['source_dir'])
+          if @scm.uncommitted_changes? @source_dir
             existing_changes
           else
             compress_site
@@ -86,6 +86,15 @@ module Awestruct
           end
         rescue
           false
+        end
+      end
+
+      def init_scm type
+        begin
+          clazz = Object.const_get('Awestruct').const_get('Scm').const_get(type.capitalize)
+          @scm = clazz.new
+        rescue
+          $LOG.error( "Could not resolve class for scm type: #{type}" ) if $LOG.error?
         end
       end
     end

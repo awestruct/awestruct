@@ -1,4 +1,4 @@
-
+require 'spec_helper'
 require 'awestruct/cli/deploy'
 
 describe Awestruct::CLI::Deploy do
@@ -44,11 +44,13 @@ describe Awestruct::CLI::Deploy do
 
     deploy_config = mock
     deploy_config.stub(:[]).with('gzip').and_return true
+    deploy_config.stub(:[]).with('source_dir').and_return '.'
+    deploy_config.stub(:[]).with('scm').and_return nil
     deploy_config.stub(:[]).with('uncommitted').and_return true
 
     deployer = Awestruct::Deploy::Base.new(site_config, deploy_config)
     deployer.should_receive(:gzip_site)
-    deployer.run(deploy_config)
+    deployer.run
   end
 
   it "should only gzip html, css and js files" do
@@ -62,6 +64,9 @@ describe Awestruct::CLI::Deploy do
 
     deploy_config = mock
     deploy_config.stub(:[]).with('gzip').and_return true
+    deploy_config.stub(:[]).with('source_dir').and_return '.'
+    deploy_config.stub(:[]).with('scm').and_return nil
+    deploy_config.stub(:[]).with('uncommitted').and_return nil
 
     deployer = Awestruct::Deploy::Base.new(site_config, deploy_config)
     deployer.should_receive(:gzip_file).with("#{site_dir}/yes.html")
@@ -83,6 +88,9 @@ describe Awestruct::CLI::Deploy do
 
     deploy_config = mock
     deploy_config.stub(:[]).with('gzip').and_return true
+    deploy_config.stub(:[]).with('source_dir').and_return '.'
+    deploy_config.stub(:[]).with('scm').and_return nil
+    deploy_config.stub(:[]).with('uncommitted').and_return nil
 
     deployer = Awestruct::Deploy::Base.new(site_config, deploy_config)
     deployer.gzip_site(site_dir)
