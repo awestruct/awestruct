@@ -1,13 +1,7 @@
-require 'awestruct/cli/options'
-
-require 'awestruct/cli/init'
-require 'awestruct/cli/generate'
-require 'awestruct/cli/auto'
-require 'awestruct/cli/server'
-require 'awestruct/logger'
-
 require 'pathname'
 require 'logger'
+require 'awestruct/logger'
+require 'awestruct/cli/options'
 
 module Awestruct
   module CLI
@@ -34,6 +28,12 @@ module Awestruct
         $LOG = Logger.new(Awestruct::AwestructLoggerMultiIO.new(@options.verbose, STDOUT, File.open('.awestruct/debug.log', 'w')))
         $LOG.level = @options.verbose ? Logger::DEBUG : Logger::INFO
         $LOG.formatter = Awestruct::AwestructLogFormatter.new
+
+        # these requires are deferred until after $LOG is set
+        require 'awestruct/cli/init'
+        require 'awestruct/cli/generate'
+        require 'awestruct/cli/auto'
+        require 'awestruct/cli/server'
       end
 
       def invoke!
