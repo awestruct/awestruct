@@ -24,6 +24,7 @@ verify_headers = lambda { |output, page|
   page.date.should be_a_kind_of(Date)
   output.should =~ %r(This is <strong>AsciiDoc</strong> in Awestruct.)
   output.should =~ %r(#{Awestruct::VERSION})
+  output.should =~ %r(UTF-8)
 }
 
 theories =

@@ -47,6 +47,7 @@ module Awestruct
       def initialize(site, delegate)
         super( site, delegate )
 
+        @site = site
         @front_matter = {}
       end
 
@@ -85,6 +86,10 @@ module Awestruct
           opts[:attributes] = @front_matter 
         else
           opts[:attributes] = opts[:attributes].merge @front_matter
+        end
+        @site.each do |key,value|
+          site_hash = { "site_#{key}" => value }
+          opts[:attributes] = opts[:attributes].merge site_hash
         end
         opts[:attributes]['awestruct'] = true
         opts[:attributes]['awestruct-version'] = Awestruct::VERSION
