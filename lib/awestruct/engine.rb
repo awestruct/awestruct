@@ -51,9 +51,9 @@ module Awestruct
       $LOG.debug 'adjust_load_path' if $LOG.debug?
       adjust_load_path
       $LOG.debug 'load_default_site_yaml' if $LOG.debug?
-      load_default_site_yaml
-      $LOG.debug 'load_site_yaml -- profile' if $LOG.debug?
-      load_site_yaml(profile)
+      load_default_site_yaml( profile )
+      $LOG.debug 'load_user_site_yaml -- profile' if $LOG.debug?
+      load_user_site_yaml( profile )
       $LOG.debug 'set_base_url' if $LOG.debug?
       set_base_url( base_url, default_base_url )
       $LOG.debug 'load_yamls' if $LOG.debug?
@@ -105,40 +105,44 @@ module Awestruct
 
     end
 
-    def load_default_site_yaml
-      default_site_yaml = File.join( File.dirname( __FILE__ ), 'config', 'default-site.yml' )
-      if ( File.exist?( default_site_yaml ) )
-        data = YAML.load( File.read( default_site_yaml ) )
-        data.each do |k,v|
-          site.send( "#{k}=", v )
-        end if data
-      end
+    def load_default_site_yaml(profile = nil)
+      default_site_yaml_path = File.join( File.dirname( __FILE__ ), 'config', 'default-site.yml' )
+      load_site_yaml( default_site_yaml_path, profile )
     end
 
-    def load_site_yaml(profile)
-      site_yaml = File.join( site.config.config_dir, 'site.yml' )
-      if ( File.exist?( site_yaml ) )
-        data = YAML.load( File.read( site_yaml ) )
-        site.interpolate = true
-        profile_data = {}
-        data.each do |k,v|
-          if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
-            profile_data = ( v[profile] || {} )
-          else
-            site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
-          end
-        end if data
-        site.profile = profile
-
-        profile_data.each do |k,v|
-          site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
-        end
-      end
+    def load_user_site_yaml(profile = nil)
+      site_yaml_path = File.join( site.config.config_dir, 'site.yml' )
+      load_site_yaml( site_yaml_path, profile )
     end
 
     def load_yamls
       Dir[ File.join( site.config.config_dir, '*.yml' ) ].each do |yaml_path|
         load_yaml( yaml_path ) unless ( File.basename( yaml_path ) == 'site.yml' )
+      end
+    end
+
+    def load_site_yaml(yaml_path, profile = nil)
+      if ( File.exist?( yaml_path ) )
+        data = YAML.load( File.read( yaml_path ) )
+        if ( profile )
+          site.interpolate = true
+          profile_data = {}
+          data.each do |k,v|
+            if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
+              profile_data = ( v[profile] || {} )
+            else
+              site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
+            end
+          end if data
+          site.profile = profile
+          profile_data.each do |k,v|
+            site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
+          end
+        else
+          data.each do |k,v|
+            site.send( "#{k}=", v )
+          end if data
+        end
       end
     end
 
