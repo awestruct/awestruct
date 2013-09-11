@@ -51,35 +51,40 @@ module Awestruct
         dash_lines = 0
         mode = :yaml
 
-        @raw_content = ''
+        @raw_content = nil
         @content_line_offset = 0
 
+        first_line = true
         full_content.each_line do |line|
-          if ( line.strip == '---' )
-            dash_lines = dash_lines +1
+          if line.rstrip == '---' && mode == :yaml
+            unless first_line
+              @content_line_offset += 1
+              yaml_content << line
+              mode = :page
+              next
+            end
+          elsif first_line
+            mode = :page
           end
-          if ( mode == :yaml )
+
+          if mode == :yaml
             @content_line_offset += 1
             yaml_content << line
+          elsif @raw_content.nil?
+            @raw_content = line
           else
             @raw_content << line
           end
-          if ( dash_lines == 2 )
-            mode = :page
-          end
+          first_line = false
         end
   
-        if ( dash_lines == 0 )
-          @raw_content = yaml_content
-          yaml_content = ''
-          @content_line_offset = 0
-        elsif ( mode == :yaml )
+        if mode == :yaml
           @raw_content = nil
           @content_line_offset = -1
         end
 
         begin
-          @front_matter = YAML.load( yaml_content ) || {}
+          @front_matter = yaml_content.empty? ? {} : (YAML.load yaml_content)
         rescue => e
           $LOG.error "could not parse #{relative_source_path}" if $LOG.error?
           raise e

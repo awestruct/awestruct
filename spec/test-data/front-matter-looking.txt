@@ -1,0 +1,9 @@
+ ---
+
+^ That was a Markdown horizontal rule.
+
+Here's another one:
+
+---
+
+This is more content.
