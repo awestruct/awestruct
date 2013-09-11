@@ -30,3 +30,6 @@ asciidoctor:
   :attributes:
     imagesdir: /images
     stylesdir: /stylesheets
+
+textile:
+  :no_span_caps: true
