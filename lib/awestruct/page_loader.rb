@@ -46,7 +46,7 @@ module Awestruct
         unless path.directory?
           $LOG.debug "loading #{relative_path}" if (site.config.verbose) if $LOG.debug?
           page = load_page( path, prepare )
-          if ( page && !page.draft )
+          if ( page && (!page.draft || @site.show_drafts) )
             $LOG.debug "loaded! #{path} and added to site" if $LOG.debug?
             #inherit_front_matter( page )
             site.send( @target ) << page

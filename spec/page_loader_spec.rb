@@ -42,4 +42,22 @@ describe Awestruct::PageLoader do
     @site.pages[1].output_path.should          == '/page-two.html'
   end
 
+  it "should be able to load all site pages (even drafts) if show_drafts is true" do
+    @site.show_drafts = true
+    @loader.load_all
+    @site.pages.size.should == 3
+
+    @site.pages.sort!{|l,r| l.relative_source_path <=> r.relative_source_path }
+
+    @site.pages[0].relative_source_path.should == '/page-draft.md'
+    @site.pages[0].output_path.should          == '/page-draft.html'
+
+    @site.pages[1].relative_source_path.should == '/page-one.md'
+    @site.pages[1].output_path.should          == '/page-one.html'
+
+    @site.pages[2].relative_source_path.should == '/page-two.html.haml'
+    @site.pages[2].output_path.should          == '/page-two.html'
+
+  end
+
 end

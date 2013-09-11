@@ -1,7 +1,9 @@
 profiles:
   development:
+    show_drafts: false
     cook: microwave
   production:
+    show_drafts: true
     cook: oven
     asciidoctor:
       :eruby: erb
