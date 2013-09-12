@@ -87,9 +87,13 @@ module Awestruct
         else
           opts[:attributes] = opts[:attributes].merge @front_matter
         end
+        # Keep only values that can be coerced to as string
+        types = [String, Numeric, TrueClass, FalseClass, Date]
         @site.each do |key,value|
-          site_hash = { "site_#{key}" => value }
-          opts[:attributes] = opts[:attributes].merge site_hash
+          if types.detect { |t| value.kind_of? t }
+            site_hash = { "site_#{key}" => value }
+            opts[:attributes] = opts[:attributes].merge site_hash
+          end
         end
         opts[:attributes]['awestruct'] = true
         opts[:attributes]['awestruct-version'] = Awestruct::VERSION
