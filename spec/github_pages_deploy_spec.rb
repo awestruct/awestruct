@@ -51,10 +51,15 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     git_scm.stub(:uncommitted_changes?).with('.').and_return false
     @deployer.instance_variable_set('@scm', git_scm)
     @git.should_receive(:current_branch).and_return( '(no branch)' )
-    @git.should_receive(:revparse).with( 'HEAD' ).and_return( '0123456789' )
-    @git.stub_chain(:branch, :checkout)
+    @git.stub_chain(:log, :first, :sha).and_return( '0123456789' )
+    @git.should_receive(:branch).with('__awestruct_deploy__').and_return @git
+    @git.should_receive(:checkout)
+    @git.should_receive(:branch).with('the-branch').and_return @git
+    @git.should_receive(:checkout)
     @git.should_receive(:push).with('the-repo', 'the-branch')
     @git.should_receive(:checkout).with( '0123456789' )
+    @git.should_receive(:branch).with('__awestruct_deploy__').and_return @git
+    @git.should_receive(:delete)
 
     @deployer.stub(:add_and_commit_site)
     @deployer.run
