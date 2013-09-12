@@ -26,6 +26,13 @@ verify_headers = lambda { |output, page|
   output.should =~ %r(#{Awestruct::VERSION})
 }
 
+verify_attributes = lambda { |output, page|
+  extend RSpec::Matchers
+  expect(output).to RSpec::Matchers::BuiltIn::Include.new("docname=#{page.simple_name};")
+  expect(output).to RSpec::Matchers::BuiltIn::Include.new("docfile=#{File.expand_path page.source_path};")
+  expect(output).to RSpec::Matchers::BuiltIn::Include.new("docdir=#{File.expand_path File.dirname(page.source_path)};")
+}
+
 theories =
     [
         {
@@ -62,6 +69,13 @@ theories =
             :syntax => :asciidoc,
             :extension => '.html',
             :matcher => verify_headers
+        },
+        {
+            :page => 'asciidoc_with_attributes.ad',
+            :simple_name => 'asciidoc_with_attributes',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify_attributes
         }
     ]
 
