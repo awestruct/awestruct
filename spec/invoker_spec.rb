@@ -64,6 +64,7 @@ describe Awestruct::CLI::Invoker do
   end
 
   it "should return false on failure" do
+    require 'awestruct/cli/generate'
     generator = mock
     Awestruct::CLI::Generate.should_receive( :new ).and_return( generator )
     generator.should_receive( :run ).and_return( false )
