@@ -11,16 +11,29 @@ module Awestruct
       end
 
       def publish_site
-        current_branch = git.current_branch
-        # we may be on a detached branch,
-        # in which case use that commit as the branch
-        if current_branch == '(no branch)'
-          current_branch = git.revparse('HEAD')
+        tmp_branch = '__awestruct_deploy__'
+        detached_branch = nil
+
+        original_branch = git.current_branch
+
+        # detect a detached state
+        # values include (no branch), (detached from x), etc
+        if original_branch.start_with? '('
+          detached_branch = git.log(1).first.sha
+          git.branch(original_branch = tmp_branch).checkout
         end
+
+        # work in a branch, then revert to current branch
         git.branch(@branch).checkout
         add_and_commit_site @site_path
         git.push(@repo, @branch)
-        git.checkout(current_branch)
+
+        if detached_branch
+          git.checkout detached_branch
+          git.branch(original_branch).delete
+        else
+          git.checkout original_branch
+        end
       end
 
       private
