@@ -27,10 +27,9 @@ verify_headers = lambda { |output, page|
 }
 
 verify_attributes = lambda { |output, page|
-  include RSpec::Matchers
-  expect(output).to BuiltIn::Include.new("docname=#{page.simple_name};")
-  expect(output).to BuiltIn::Include.new("docfile=#{File.expand_path page.source_path};")
-  expect(output).to BuiltIn::Include.new("docdir=#{File.expand_path File.dirname(page.source_path)};")
+  expect(output).to RSpec::Matchers::BuiltIn::Include.new("docname=#{page.simple_name};")
+  expect(output).to RSpec::Matchers::BuiltIn::Include.new("docfile=#{File.expand_path page.source_path};")
+  expect(output).to RSpec::Matchers::BuiltIn::Include.new("docdir=#{File.expand_path File.dirname(page.source_path)};")
 }
 
 theories =
