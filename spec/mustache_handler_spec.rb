@@ -11,23 +11,20 @@ theories =
       :simple_name => 'mustache-page',
       :syntax => :mustache,
       :extension => '.html',
-      :matcher => verify
+      :matcher => verify,
+      :site_overrides => { :markup_type => 'Mustache' }
     },
     {
       :page => 'mustache-page.xml.mustache',
       :simple_name => 'mustache-page',
       :syntax => :mustache,
       :extension => '.xml',
-      :matcher => verify
+      :matcher => verify,
+      :site_overrides => { :markup_type => 'Mustache' }
     }
   ]
 
 
 describe Awestruct::Handlers::TiltHandler.to_s + '-Mustache' do
-  def additional_config
-    {:markup_type => 'Mustache'}
-  end
-
   it_should_behave_like 'a handler', theories
-
 end

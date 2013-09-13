@@ -5,7 +5,7 @@ require 'rspec'
 require 'hashery'
 
 REQUIRED_VARIABLES = [:page, :simple_name, :syntax, :extension]
-ALL_VARIABLES = REQUIRED_VARIABLES + [:format, :matcher, :unless, :additional_config]
+ALL_VARIABLES = REQUIRED_VARIABLES + [:format, :matcher, :unless, :site_overrides]
 
 shared_examples 'a handler' do |theories|
 
@@ -19,26 +19,27 @@ shared_examples 'a handler' do |theories|
 
   describe Awestruct::Handlers do
 
-    before :all do
-      @opts = Awestruct::CLI::Options.new
-      @opts.source_dir = File.dirname(__FILE__) + '/../test-data/handlers'
-      @config = Awestruct::Config.new( @opts )
-
-      @engine = Awestruct::Engine.new( @config )
-      @engine.load_default_site_yaml
+    before :each do
+      @engine = init
       @site = @engine.site
     end
 
-    before :each do
-      @site.merge! additional_config if respond_to?("additional_config")
+    def init
+      opts = Awestruct::CLI::Options.new
+      opts.source_dir = File.dirname(__FILE__) + '/../test-data/handlers'
+      config = Awestruct::Config.new( opts )
+
+      engine = Awestruct::Engine.new( config )
+      engine.load_default_site_yaml
+      engine
     end
 
     def create_handler(page)
       @engine.load_page File.join(@engine.config.dir, page)
     end
 
-    def merge_additional_config(theory)
-      @site.merge! theory[:additional_config] if theory[:additional_config]
+    def merge_site_overrides(overrides)
+      @site.update overrides
     end
 
     theories.each do |theory|
@@ -86,7 +87,9 @@ shared_examples 'a handler' do |theories|
 
         it "should render page '#{theory[:page]}'" do
           if theory[:unless].nil? or !theory[:unless][:exp].call()
-            merge_additional_config(theory)
+            if theory.has_key? :site_overrides
+              merge_site_overrides(theory[:site_overrides])
+            end
             handler = create_handler theory[:page]
             handler.update(additional_config_page) { |k, oldval, newval| oldval } if respond_to?('additional_config_page')
             output = handler.rendered_content(handler.create_context)

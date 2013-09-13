@@ -15,19 +15,18 @@ theories =
       :simple_name => "textile-page",
       :syntax => :textile,
       :extension => '.html',
-      :matcher => verify_with_span,
-      :additional_config => { :textile => { ':no_span_caps' => false } }
+      :matcher => verify_without_span
     },
     {
       :page => "textile-page.textile",
       :simple_name => "textile-page",
       :syntax => :textile,
       :extension => '.html',
-      :matcher => verify_without_span
+      :matcher => verify_with_span,
+      :site_overrides => { :textile => { :no_span_caps => false } }
     }
   ]
 
 describe Awestruct::Handlers::TiltHandler.to_s + "-Textile" do
   it_should_behave_like "a handler", theories
-
 end
