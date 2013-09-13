@@ -5,7 +5,7 @@ module Awestruct
   module CLI
     class Generate
 
-      def initialize(config, profile=nil, base_url=nil, default_base_url='http://localhost:4242', force=false)
+      def initialize(config, profile=nil, base_url=nil, default_base_url=Options::DEFAULT_BASE_URL, force=false)
         @profile          = profile
         @base_url         = base_url
         @default_base_url = default_base_url

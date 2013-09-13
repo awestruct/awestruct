@@ -100,7 +100,7 @@ module Awestruct
       end
 
       def invoke_generate()
-        @success = Awestruct::CLI::Generate.new( config, options.profile, options.base_url, 'http://localhost:4242', options.force ).run
+        @success = Awestruct::CLI::Generate.new( config, options.profile, options.base_url, Options::DEFAULT_BASE_URL, options.force ).run
       end
 
       def invoke_deploy()
