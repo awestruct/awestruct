@@ -121,7 +121,7 @@ module Awestruct
       end
 
       def invoke_server()
-        run_in_thread( Awestruct::CLI::Server.new( './_site', options.bind_addr, options.port ) )
+        run_in_thread( Awestruct::CLI::Server.new( options.output_dir, options.bind_addr, options.port ) )
       end
 
 
