@@ -21,16 +21,12 @@ theories =
             :simple_name => "redirect-page",
             :syntax => :text,
             :extension => '.html',
-            :matcher => verify_with_interpol
+            :matcher => verify_with_interpol,
+            :site_overrides => { :interpolate => true, :crunchy => 'bacon', :base_url => 'http://mysite' }
         }
     ]
 
 
 describe Awestruct::Handlers::TiltHandler.to_s + "-Redirect" do
-  def additional_config
-    { :interpolate => true, :crunchy => 'bacon', :base_url => 'http://mysite' }
-  end
-
   it_should_behave_like "a handler", theories
-
 end

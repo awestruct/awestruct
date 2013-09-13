@@ -31,6 +31,9 @@ asciidoctor:
     imagesdir: /images
     stylesdir: /stylesheets
 
+textile:
+  :no_span_caps: true
+
 profiles:
   development:
     show_drafts: true

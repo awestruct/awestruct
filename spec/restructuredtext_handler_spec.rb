@@ -16,7 +16,5 @@ theories =
   ]
 
 describe Awestruct::Handlers::TiltHandler.to_s + "-reStructuredText" do
-
   it_should_behave_like "a handler", theories
-
 end
