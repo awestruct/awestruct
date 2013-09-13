@@ -1,10 +1,12 @@
 = AsciiDoc
 Stuart Rackham
 2013-02-06
-:awestruct-tags: [a, b, c]
-:awestruct-layout: haml-layout
+:page-tags: [a, b, c]
+:page-layout: haml-layout
 :name: NOT_HANDLED
+:site-test: preserved
 
-This is *AsciiDoc* in {name}.
+This is *AsciiDoc* page named {page-name} in an Awestruct site.
 {awestruct-version}
-{site_encoding}
+{site-encoding}
+{site-test}
