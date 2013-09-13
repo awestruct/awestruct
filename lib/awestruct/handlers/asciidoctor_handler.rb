@@ -82,19 +82,17 @@ module Awestruct
 
       def options
         opts = super
-        if opts[:attributes].nil?
-          opts[:attributes] = @front_matter 
-        else
-          opts[:attributes] = opts[:attributes].merge @front_matter
-        end
+        opts[:attributes] ||= {}
+        opts[:attributes].update(@front_matter.inject({}) {|collector, (key,val)|
+          collector["page-#{key}"] = "#{val}@"
+          collector
+        })
         # Keep only values that can be coerced to as string
-        types = [String, Numeric, TrueClass, FalseClass, Date]
-        @site.each do |key,value|
-          if types.detect { |t| value.kind_of? t }
-            site_hash = { "site_#{key}" => value }
-            opts[:attributes] = opts[:attributes].merge site_hash
-          end
-        end
+        types = [String, Numeric, TrueClass, FalseClass, Date, Time]
+        opts[:attributes].update(@site.inject({}) {|collector, (key,val)|
+          collector["site-#{key}"] = "#{val}@" if types.detect {|t| val.kind_of? t }
+          collector
+        })
         opts[:attributes]['awestruct'] = true
         opts[:attributes]['awestruct-version'] = Awestruct::VERSION
         if @front_matter['header_footer']
@@ -138,8 +136,9 @@ module Awestruct
       end
 
       def parse_document_attributes(content)
+        warned = false
         template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options)
-        template.parse_headers(content, /^awestruct\-/).inject({}) do |hash, (k,v)|
+        template.parse_headers(content, /^(?:page|awestruct)\-(?=.)/).inject({}) do |hash, (k,v)|
           unless v.nil?
             hash[k] = v.empty? ? v : YAML.load(v)
             if hash[k].kind_of? Time

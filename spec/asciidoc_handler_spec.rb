@@ -22,7 +22,7 @@ verify_headers = lambda { |output, page|
   page.tags.should be_a_kind_of(Array)
   page.tags.should == %w(a b c)
   page.date.should be_a_kind_of(Date)
-  output.should =~ %r(This is <strong>AsciiDoc</strong> in Awestruct.)
+  output.should =~ %r(This is <strong>AsciiDoc</strong> page named Awestruct in an Awestruct site.)
   output.should =~ %r(#{Awestruct::VERSION})
   output.should =~ %r(UTF-8)
 }
