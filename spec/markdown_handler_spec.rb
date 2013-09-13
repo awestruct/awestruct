@@ -35,7 +35,5 @@ theories =
   ]
 
 describe Awestruct::Handlers::TiltHandler.to_s + "-Markdown" do
-  
   it_should_behave_like "a handler", theories
-
 end

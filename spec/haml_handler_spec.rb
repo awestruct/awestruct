@@ -82,15 +82,12 @@ theories =
             :simple_name => 'haml-with-variables',
             :syntax => :haml,
             :extension => '.html',
-            :matcher => verify_with_variables
+            :matcher => verify_with_variables,
+            :site_overrides => { :crunchy => 'bacon' }
         }
     ]
 
 
 describe Awestruct::Handlers::TiltHandler.to_s + '-Haml' do
-  def additional_config
-    { :crunchy => 'bacon' }
-  end
-
   it_should_behave_like 'a handler', theories
 end
