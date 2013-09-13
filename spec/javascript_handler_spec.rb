@@ -12,15 +12,12 @@ theories =
             :simple_name => 'javascript-page',
             :syntax => :javascript,
             :extension => '.js',
-            :matcher => verify
+            :matcher => verify,
+            :site_overrides => { :interpolate => true, :crunchy => 'bacon' }
         }
     ]
 
 
 describe Awestruct::Handlers::TiltHandler.to_s + '-JavaScript' do
-  def additional_config
-    { :interpolate => true, :crunchy => 'bacon' }
-  end
-
   it_should_behave_like 'a handler', theories
 end

@@ -27,14 +27,16 @@ theories =
             :simple_name => 'erb-page',
             :syntax => :erb,
             :extension => '.html',
-            :matcher => verify
+            :matcher => verify,
+            :site_overrides => { :crunchy => 'bacon' }
         },
         {
             :page => 'erb-page.xml.erb',
             :simple_name => 'erb-page',
             :syntax => :erb,
             :extension => '.xml',
-            :matcher => verify_with_xml
+            :matcher => verify_with_xml,
+            :site_overrides => { :crunchy => 'bacon' }
         },
         {
             :page => 'erb-utf-page.html.erb',
@@ -46,9 +48,5 @@ theories =
     ]
 
 describe Awestruct::Handlers::TiltHandler.to_s + '-Erb' do
-  def additional_config
-    { :crunchy => 'bacon' }
-  end
   it_should_behave_like 'a handler', theories
-
 end

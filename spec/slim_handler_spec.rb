@@ -70,14 +70,11 @@ theories =
             :simple_name => 'slim-with-variables',
             :syntax => :slim,
             :extension => '.html',
-            :matcher => verify_with_variables
+            :matcher => verify_with_variables,
+            :site_overrides => { :crunchy => 'bacon' }
         }
     ]
 
 describe Awestruct::Handlers::TiltHandler.to_s + '-Slim' do
-  def additional_config
-    { :crunchy => 'bacon' }
-  end
-
   it_should_behave_like 'a handler', theories
 end
