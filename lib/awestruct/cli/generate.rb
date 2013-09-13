@@ -5,7 +5,7 @@ module Awestruct
   module CLI
     class Generate
 
-      def initialize(config, profile=nil, base_url=nil, default_base_url='http://localhost:4242', force=false)
+      def initialize(config, profile=nil, base_url=nil, default_base_url=Options::DEFAULT_BASE_URL, force=false)
         @profile          = profile
         @base_url         = base_url
         @default_base_url = default_base_url
@@ -15,9 +15,9 @@ module Awestruct
 
       def run()
         begin
-          base_url = @profile['base_url'] || @default_base_url
+          base_url = @base_url || @default_base_url
           $LOG.info "Generating site: #{base_url}" if $LOG.info?
-          @engine.run( @profile, @base_url, ( @profile ? @profile['base_url'] || @default_base_url : @default_base_url ), @force )
+          @engine.run( @profile, @base_url, @default_base_url, @force )
         rescue =>e
           $LOG.error e if $LOG.error?
           $LOG.error e.backtrace.join("\n") if $LOG.error?
