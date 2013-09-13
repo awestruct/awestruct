@@ -6,6 +6,16 @@ module Awestruct
   module CLI
 
     class Options
+      LOCAL_HOSTS = {
+        'localhost'  => 'localhost',
+        '0.0.0.0'    => 'localhost',
+        '127.0.0.1'  => 'localhost',
+        '::1'        => '[::1]',
+        'localhost6' => 'localhost6'
+      }
+      DEFAULT_BIND_ADDR = '0.0.0.0'
+      DEFAULT_PORT = 4242
+      DEFAULT_BASE_URL = %(http://#{LOCAL_HOSTS[DEFAULT_BIND_ADDR] || DEFAULT_BIND_ADDR}:#{DEFAULT_PORT})
 
       attr_accessor :generate
       attr_accessor :server
@@ -27,8 +37,8 @@ module Awestruct
       def initialize()
         @generate  = nil
         @server    = false
-        @port      = 4242
-        @bind_addr = '0.0.0.0'
+        @port      = DEFAULT_PORT
+        @bind_addr = DEFAULT_BIND_ADDR
         @auto      = false
         @force     = false
         @init      = false
@@ -71,10 +81,10 @@ module Awestruct
           opts.on( '-u', '--url URL', 'Set site.base_url' ) do |url|
             self.base_url = url
           end
-          opts.on( '-d', '--dev',     'Run site in development mode (--auto, --server, --port 4242 and --profile development)' ) do |url|
+          opts.on( '-d', '--dev',     "Run site in development mode (--auto, --server, --port #{DEFAULT_PORT} and --profile development)" ) do |url|
             self.server   = true
             self.auto     = true
-            self.port     = 4242
+            self.port     = DEFAULT_PORT
             self.profile  = 'development'
           end
 
@@ -90,10 +100,10 @@ module Awestruct
           opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
             self.auto = a
           end
-          opts.on( '-p', '--port PORT', Integer, 'Server port (default: 4242)' ) do |port|
+          opts.on( '-p', '--port PORT', Integer, "Server port (default: #{DEFAULT_PORT})" ) do |port|
             self.port = port
           end
-          opts.on( '-b', '--bind ADDR', 'Server address (default: 0.0.0.0)' ) do |bind_addr|
+          opts.on( '-b', '--bind ADDR', "Server address (default: #{DEFAULT_BIND_ADDR})" ) do |bind_addr|
             self.bind_addr = bind_addr
           end
           opts.on( '-g', '--[no-]generate', 'Generate site' ) do |g|

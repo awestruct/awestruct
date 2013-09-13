@@ -29,7 +29,7 @@ class Compass::AppIntegration::StandAlone::Installer
 
         rake
 
-      then visit your site at: http://localhost:4242
+      then visit your site at: #{::Awestruct::CLI::Options::DEFAULT_BASE_URL}
     END
   end
 end
