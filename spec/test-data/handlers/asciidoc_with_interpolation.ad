@@ -1,0 +1,4 @@
+= Title
+:page-interpolate: true
+
+#{site.encoding}

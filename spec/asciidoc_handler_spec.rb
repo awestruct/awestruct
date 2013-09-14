@@ -34,6 +34,18 @@ verify_attributes = lambda { |output, page|
   expect(output).to RSpec::Matchers::BuiltIn::Include.new("docdir=#{File.expand_path File.dirname(page.source_path)};")
 }
 
+verify_interpolation = lambda { |output, page|
+  extend RSpec::Matchers
+  output.should =~ %r(UTF-8)
+  page.site.interpolate.should == true
+}
+
+verify_no_interpolation = lambda { |output, page|
+  extend RSpec::Matchers
+  output.should =~ %r(\#\{site\.encoding\})
+  page.site.interpolate.should == true
+}
+
 theories =
     [
         {
@@ -77,6 +89,22 @@ theories =
             :syntax => :asciidoc,
             :extension => '.html',
             :matcher => verify_attributes
+        },
+        {
+            :page => 'asciidoc_with_interpolation.ad',
+            :simple_name => 'asciidoc_with_interpolation',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify_interpolation,
+            :site_overrides => { :interpolate => true }
+        },
+        {
+            :page => 'asciidoc_without_interpolation.ad',
+            :simple_name => 'asciidoc_without_interpolation',
+            :syntax => :asciidoc,
+            :extension => '.html',
+            :matcher => verify_no_interpolation,
+            :site_overrides => { :interpolate => true }
         }
     ]
 
