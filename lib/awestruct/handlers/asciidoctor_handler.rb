@@ -40,6 +40,7 @@ module Awestruct
       CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::AsciidoctorTiltMatcher.new(),
         Awestruct::Handlers::FileHandler,
         Awestruct::Handlers::FrontMatterHandler,
+        Awestruct::Handlers::InterpolationHandler,
         Awestruct::Handlers::AsciidoctorHandler,
         Awestruct::Handlers::LayoutHandler
       )
@@ -54,7 +55,12 @@ module Awestruct
 
       def front_matter
         parse_header()
-        @front_matter.merge @delegate.front_matter if @delegate
+        if @delegate
+          @front_matter.update @delegate.front_matter
+          # push front matter forward as well
+          @delegate.front_matter.replace @front_matter
+          @front_matter
+        end
       end
 
       def raw_content
@@ -69,13 +75,14 @@ module Awestruct
 
       def rendered_content(context, with_layouts)
         parse_header()
+        front_matter_ref = front_matter
         types = [String, Numeric, TrueClass, FalseClass, Array]
-        @front_matter.merge!(context.page.inject({}) do |hash, (k,v)|
+        front_matter_ref.update(context.page.inject({}) {|hash, (k,v)|
           hash[k.to_s] = v if not k.to_s.start_with?('__') and types.detect { |t| v.kind_of? t }
           hash
-        end)
+        })
         if with_layouts && !context.page.layout
-          @front_matter['header_footer'] = true
+          front_matter_ref['header_footer'] = true
         end
         super
       end
@@ -138,7 +145,7 @@ module Awestruct
       def parse_document_attributes(content)
         warned = false
         template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options)
-        template.parse_headers(content, /^(?:page|awestruct)\-(?=.)/).inject({}) do |hash, (k,v)|
+        template.parse_headers(content, /^(?:page|awestruct)\-(?=.)/).inject({'interpolate' => false}) do |hash, (k,v)|
           unless v.nil?
             hash[k] = v.empty? ? v : YAML.load(v)
             if hash[k].kind_of? Time
