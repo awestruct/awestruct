@@ -15,6 +15,13 @@ verify_front_matter = lambda { |output, page|
 verify_headers = lambda { |output, page|
   extend RSpec::Matchers
   page.author.should == 'Stuart Rackham'
+  page.email.should == 'srackham@example.com'
+  page.authors.should_not be_nil
+  page.authors.size.should == 2
+  page.authors.first.name.should == 'Stuart Rackham'
+  page.authors.first.email.should == 'srackham@example.com'
+  page.authors.last.name.should == 'Dan Allen'
+  page.authors.last.email.should be_nil
   page.title.should == 'AsciiDoc'
   page.doctitle.should == 'AsciiDoc'
   page.name.should == 'Awestruct'
