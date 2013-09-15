@@ -33,7 +33,28 @@ module Tilt
 
       filtered['title'] = filtered['doctitle'] = doc.doctitle
       filtered['date'] ||= doc.attributes['revdate'] unless doc.attributes['revdate'].nil?
-      filtered['author'] = doc.attributes['author'] unless doc.attributes['author'].nil?
+      if (cnt = doc.attributes['authorcount'].to_i) > 1
+        authors = []
+        (1..cnt).each do |idx|
+          author = {}
+          author[:name] = doc.attributes["author_#{idx}"]
+          if doc.attributes.has_key? "email_#{idx}"
+            author[:email] = doc.attributes["email_#{idx}"]
+          end
+          authors << author
+        end
+        filtered['author'] = authors.first[:name]
+        filtered['email'] = authors.first[:email] if authors.first.has_key? :email
+        filtered['authors'] = authors.to_yaml
+      elsif !doc.attributes['author'].nil?
+        author = {}
+        author[:name] = doc.attributes['author']
+        if doc.attributes.has_key? 'email'
+          author[:email] = doc.attributes['email']
+        end
+        filtered['author'] = author[:name]
+        filtered['authors'] = [author].to_yaml
+      end
 
       filtered
     end
