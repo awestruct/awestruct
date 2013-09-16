@@ -84,7 +84,7 @@ module Awestruct
         end
 
         begin
-          @front_matter = yaml_content.empty? ? {} : (YAML.load yaml_content)
+          @front_matter = yaml_content.empty? ? {} : (YAML.load(yaml_content) || {})
         rescue => e
           $LOG.error "could not parse #{relative_source_path}" if $LOG.error?
           raise e
