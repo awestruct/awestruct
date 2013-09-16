@@ -28,6 +28,12 @@ describe Awestruct::Handlers::FrontMatterHandler do
     handler.raw_content.strip.should == 'This is some content'
   end
 
+  it 'should be able to split empty front-matter from content' do
+    handler = Awestruct::Handlers::FrontMatterHandler.new( @site, file_input('front-matter-empty.txt') )
+    handler.front_matter.should == {} 
+    handler.raw_content.strip.should == 'This is some content'
+  end
+
   it 'should be able to split front-matter from content for files without actual front-matter' do
     handler = Awestruct::Handlers::FrontMatterHandler.new( @site, file_input('front-matter-file-no-front.txt') )
     handler.front_matter.should_not be_nil
