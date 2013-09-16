@@ -118,19 +118,33 @@ module Awestruct
       end
 
       def rendered_content(context, with_layouts=true)
-        $LOG.debug "invoking tilt for #{delegate.path.to_s} with_layouts = #{with_layouts}" if $LOG.debug?
+        $LOG.debug "invoking tilt for #{delegate.path} with_layouts = #{with_layouts}" if $LOG.debug?
         begin
           template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options) { |engine|
             delegate.rendered_content(context, with_layouts)
           }
           return template.render(context)
         rescue LoadError => e
-          $LOG.error "Could not load template library required for rendering #{delegate.path.to_s}, please see rendered output for more information" if $LOG.error?
-          return "<h1>#{e.message}</h1><h2>Rendering file #{delegate.path.to_s} resulted in a failure.</h2><p>Backtrace: #{e.backtrace.join '<br>'}</p>"
+          if $LOG.error?
+            $LOG.error "Could not load template library required for rendering #{File.join site.dir, relative_source_path}."
+            $LOG.error "Please see #{File.join site.dir, output_path} for more information"
+          end
+          return error_report e
         rescue Exception => e
-          $LOG.error "An error during rendering #{delegate.path.to_s} occurred, please see rendered output for more information"  if $LOG.error?
-          return "<h1>#{e.message}</h1><h2>Rendering file #{delegate.path.to_s} resulted in a failure.</h2><h3>Line: #{e.line if e.respond_to?(:line)}</h3><p>Backtrace: #{e.backtrace.join '<br>'}</p>"
+          if $LOG.error?
+            $LOG.error "An error during rendering #{File.join site.dir, relative_source_path} occurred."
+            $LOG.error "Please see #{File.join site.dir, output_path} for more information"
+          end
+          return error_report e
         end
+      end
+
+      def error_report e
+"<h1>#{e.message}</h1>
+<h2>Rendering file #{relative_source_path} resulted in a failure.</h2>
+<p>Line: #{(e.respond_to? :line) ? e.line : 'unknown'}</p>
+<p>Backtrace:</p>
+<pre>#{e.backtrace.join "\n"}</pre>"
       end
 
     end
