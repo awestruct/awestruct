@@ -78,8 +78,8 @@ module Awestruct
           begin
             step.perform(dir)
           rescue => e
-            $LOG.error e if $LOG.error?
-            $LOG.error e.backtrace.join("\n") if $LOG.error?
+            ExceptionHelper.log_error e
+            ExceptionHelper.log_backtrace e
           end
         end
       end
@@ -89,8 +89,8 @@ module Awestruct
           begin
             step.unperform(dir)
           rescue => e
-            $LOG.error e if $LOG.error?
-            $LOG.error e.backtrace.join("\n") if $LOG.error?
+            ExceptionHelper.log_error e
+            ExceptionHelper.log_backtrace e
           end
         end
       end

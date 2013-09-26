@@ -3,6 +3,7 @@
 # Add a sitemap.yml file to add files that for one reason or
 # another won't be hanging off of site (e.g. they're in .htaccess)
 require 'ostruct'
+require 'awestruct/util/exception_helper'
 
 module Awestruct
   module Extensions
@@ -74,7 +75,7 @@ module Awestruct
               page.lastmod = date.strftime( "%Y-%m-%d" )
             end
           rescue Exception => e
-             $LOG.error "Cannot parse date #{date.to_s}: #{e}" if $LOG.error?
+            ExceptionHelper.log_building_error e, page.relative_source_path
           end
         else
           page.lastmod = Time.now.strftime( "%Y-%m-%d" )

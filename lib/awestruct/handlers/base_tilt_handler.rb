@@ -1,3 +1,4 @@
+require 'awestruct/util/exception_helper'
 require 'awestruct/handlers/base_handler'
 
 require 'tilt'
@@ -125,28 +126,15 @@ module Awestruct
           }
           return template.render(context)
         rescue LoadError => e
-          if $LOG.error?
-            $LOG.error "Could not load template library required for rendering #{File.join site.dir, relative_source_path}."
-            $LOG.error "Please see #{File.join site.dir, output_path} for more information"
-          end
-          return error_report e
+          ExceptionHelper.log_message "Could not load template library required for rendering #{File.join site.dir, relative_source_path}."
+          ExceptionHelper.log_message "Please see #{File.join site.dir, output_path} for more information"
+          return ExceptionHelper.html_error_report e, relative_source_path
         rescue Exception => e
-          if $LOG.error?
-            $LOG.error "An error during rendering #{File.join site.dir, relative_source_path} occurred."
-            $LOG.error "Please see #{File.join site.dir, output_path} for more information"
-          end
-          return error_report e
+          ExceptionHelper.log_message "An error during rendering #{File.join site.dir, relative_source_path} occurred."
+          ExceptionHelper.log_message "Please see #{File.join site.dir, output_path} for more information"
+          return ExceptionHelper.html_error_report e, relative_source_path
         end
       end
-
-      def error_report e
-"<h1>#{e.message}</h1>
-<h2>Rendering file #{relative_source_path} resulted in a failure.</h2>
-<p>Line: #{(e.respond_to? :line) ? e.line : 'unknown'}</p>
-<p>Backtrace:</p>
-<pre>#{e.backtrace.join "\n"}</pre>"
-      end
-
     end
   end
 end

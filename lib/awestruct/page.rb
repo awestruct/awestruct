@@ -42,8 +42,9 @@ module Awestruct
     end
 
     def inherit_front_matter_from(hash)
+      $LOG.debug "inherit_front_matter_from for #{self.inspect}"  if $LOG.debug?
       hash.each do |k,v|
-        $LOG.debug "#{self.output_path} overwrite key: #{k}:#{self[k]} -> #{v}" if ( key?( k ) and !self[k].nil? and !self[k].eql? v) if $LOG.debug?
+        $LOG.debug "#{output_path} overwrite key: #{k}:#{self[k]} -> #{v}" if ( key?( k ) and !self[k].nil? and !self[k].eql? v) if $LOG.debug?
         unless ( key?( k ) )
           self[k.to_sym] = v
         end

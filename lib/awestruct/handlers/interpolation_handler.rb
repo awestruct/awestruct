@@ -1,4 +1,4 @@
-
+require 'awestruct/util/exception_helper'
 require 'awestruct/handlers/base_handler'
 
 module Awestruct
@@ -23,8 +23,7 @@ module Awestruct
         begin
           c = context.instance_eval( content )
         rescue Exception => e # Don't barf all over ourselves if an exception is thrown
-          $LOG.error "Exception thrown interpolating content. #{e.to_s}" if $LOG.error?
-          $LOG.error e.backtrace.join("\n") if $LOG.error?
+          ExceptionHelper.log_building_error e, relative_source_path
           c = delegate.raw_content
         end
         c

@@ -1,5 +1,7 @@
 require 'awestruct/deployers'
 require 'awestruct/compatibility'
+require 'awestruct/util/exception_helper'
+
 Dir[ File.join( File.dirname(__FILE__), '..', 'scm', '*.rb' ) ].each do |f|
   begin
     require f
@@ -95,7 +97,7 @@ module Awestruct
           clazz = Object.const_get('Awestruct').const_get('Scm').const_get(type.capitalize)
           @scm = clazz.new
         rescue
-          $LOG.error( "Could not resolve class for scm type: #{type}" ) if $LOG.error?
+          ExceptionHelper.log_message( "Could not resolve class for scm type: #{type}" )
         end
       end
     end

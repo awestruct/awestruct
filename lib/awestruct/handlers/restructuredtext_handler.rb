@@ -1,4 +1,4 @@
-
+require 'awestruct/util/exception_helper'
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
 require 'awestruct/handlers/file_handler'
@@ -47,7 +47,6 @@ module Awestruct
         if front_matter['initial_header_level'].to_s =~ /^[1-6]$/
           hl = front_matter['initial_header_level']
         end
-        rendered = ''
         begin
           doc = execute_shell( [ "rst2html",
                                  "--strip-comments",
@@ -55,12 +54,11 @@ module Awestruct
                                  " --initial-header-level=#{hl}" ].join(' '), 
                                  content )
           content = Nokogiri::HTML( doc ).at( '/html/body/div[@class="document"]' ).inner_html.strip
-          content = content.gsub( "\r", '' )
+          content.gsub( "\r", '' )
         rescue => e
-          $LOG.error e if $LOG.error?
-          $LOG.error e.backtrace.join( "\n" ) if $LOG.error?
+          ExceptionHelper.log_building_error e, relative_source_path
+          ExceptionHelper.html_error_report e, relative_source_path
         end
-        content
       end
     end
   end

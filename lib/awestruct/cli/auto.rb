@@ -1,4 +1,5 @@
 #require 'guard/awestruct'
+require 'awestruct/util/exception_helper'
 
 require 'listen'
 
@@ -39,13 +40,11 @@ module Awestruct
                     engine.generate_page_by_output_path( path )
                     $LOG.info "Generating.... done!" if $LOG.info?
                   rescue => e
-                    $LOG.error e if $LOG.error?
-                    $LOG.error e.backtrace.join("\n") if $LOG.error?
+                    ExceptionHelper.log_building_error e, path
                   end
                 }
               rescue => e
-                $LOG.error e if $LOG.error?
-                $LOG.error e.backtrace.join("\n") if $LOG.error?
+                ExceptionHelper.log_building_error e, path
               end
             end
           end

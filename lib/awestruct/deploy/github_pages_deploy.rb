@@ -1,4 +1,5 @@
 require 'awestruct/deploy/base_deploy'
+require 'awestruct/util/exception_helper'
 require 'git'
 
 module Awestruct
@@ -43,7 +44,7 @@ module Awestruct
           begin
             git.commit("Published #{@branch} to GitHub pages.")
           rescue ::Git::GitExecuteError => e
-            $LOG.error "Can't commit. #{e}." if $LOG.error?
+            ExceptionHelper.log_message "Can't commit. #{e}."
           end
         end
         git.reset_hard

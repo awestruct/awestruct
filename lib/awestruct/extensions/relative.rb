@@ -1,3 +1,4 @@
+require 'awestruct/util/exception_helper'
 require 'pathname'
 
 module Awestruct
@@ -14,8 +15,7 @@ module Awestruct
           end
           result
         rescue Exception => e
-          $LOG.error "#{e}" if $LOG.error?
-          $LOG.error "#{e.backtrace.join("\n")}" if $LOG.error?
+          ExceptionHelper.log_building_error e, p.relative_source_path
         end
       end
 

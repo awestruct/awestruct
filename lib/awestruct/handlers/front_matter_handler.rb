@@ -1,3 +1,4 @@
+require 'awestruct/util/exception_helper'
 require 'awestruct/handlers/base_handler'
 
 require 'yaml'
@@ -86,7 +87,7 @@ module Awestruct
         begin
           @front_matter = yaml_content.empty? ? {} : (YAML.load(yaml_content) || {})
         rescue => e
-          $LOG.error "could not parse #{relative_source_path}" if $LOG.error?
+          ExceptionHelper.log_message "could not parse #{relative_source_path}"
           raise e
         end
 

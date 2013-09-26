@@ -1,4 +1,5 @@
 require 'awestruct/engine'
+require 'awestruct/util/exception_helper'
 require 'compass'
 
 module Awestruct
@@ -19,8 +20,7 @@ module Awestruct
           $LOG.info "Generating site: #{base_url}" if $LOG.info?
           @engine.run( @profile, @base_url, @default_base_url, @force )
         rescue =>e
-          $LOG.error e if $LOG.error?
-          $LOG.error e.backtrace.join("\n") if $LOG.error?
+          ExceptionHelper.log_building_error e, ''
           return false
         end
       end
