@@ -42,6 +42,6 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_dependency 'rest-client', '>= 1.6.7'
   s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
 
-  s.add_dependency 'listen', '>= 0.7.3'
+  s.add_dependency 'listen', '>= 2.0.0'
   s.add_dependency 'rack', '~> 1.5.2'
 end
