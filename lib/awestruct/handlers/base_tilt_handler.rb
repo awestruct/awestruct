@@ -120,9 +120,12 @@ module Awestruct
 
       def rendered_content(context, with_layouts=true)
         $LOG.debug "invoking tilt for #{delegate.path} with_layouts = #{with_layouts}" if $LOG.debug?
+
         begin
+          c = delegate.rendered_content(context, with_layouts)
+          return "" if c.nil? or c.empty?
           template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options) { |engine|
-            delegate.rendered_content(context, with_layouts)
+            c
           }
           return template.render(context)
         rescue LoadError => e
