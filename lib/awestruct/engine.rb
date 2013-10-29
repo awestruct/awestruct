@@ -327,6 +327,12 @@ module Awestruct
       full_path = File.join( '', path )
       page = site.pages.find{ |p| p.relative_source_path.to_s == full_path } ||
              site.layouts.find{ |p| p.relative_source_path.to_s == full_path }
+      #return if page.nil?
+
+      if ( page.nil? ) 
+        page = (site.partials||[]).find{ |p| p.relative_source_path.to_s == full_path }
+      end
+
       return if page.nil?
 
       if !page.output_path.nil?
