@@ -18,10 +18,6 @@ module Awestruct
           page.send( "#{k}=", v )
         end if params
 
-        Awestruct::Dependencies.top_page.site.partials ||= []
-        Awestruct::Dependencies.top_page.site.partials << page
-        Awestruct::Dependencies.track_dependency( page )
-
         page.content
       end
 
