@@ -39,10 +39,10 @@ describe Awestruct::CLI::Deploy do
   end
 
   it "should gzip if deploy['gzip'] is true" do
-    site_config = mock
+    site_config = double
     site_config.stub(:output_dir).and_return '_site'
 
-    deploy_config = mock
+    deploy_config = double
     deploy_config.stub(:[]).with('gzip').and_return true
     deploy_config.stub(:[]).with('gzip_level')
     deploy_config.stub(:[]).with('source_dir').and_return '.'
@@ -60,10 +60,10 @@ describe Awestruct::CLI::Deploy do
     FileUtils.cp_r(site_src_dir, site_tmp_dir)
     site_dir = "#{site_tmp_dir}/gzip"
 
-    site_config = mock
+    site_config = double
     site_config.stub(:output_dir).and_return "#{site_dir}"
 
-    deploy_config = mock
+    deploy_config = double
     deploy_config.stub(:[]).with('gzip').and_return true
     deploy_config.stub(:[]).with('gzip_level')
     deploy_config.stub(:[]).with('source_dir').and_return '.'
@@ -85,10 +85,10 @@ describe Awestruct::CLI::Deploy do
     FileUtils.cp_r(site_src_dir, site_tmp_dir)
     site_dir = "#{site_tmp_dir}/gzip"
 
-    site_config = mock
+    site_config = double
     site_config.stub(:output_dir).and_return "#{site_dir}"
 
-    deploy_config = mock
+    deploy_config = double
     deploy_config.stub(:[]).with('gzip').and_return true
     deploy_config.stub(:[]).with('gzip_level')
     deploy_config.stub(:[]).with('source_dir').and_return '.'
@@ -112,10 +112,10 @@ describe Awestruct::CLI::Deploy do
     FileUtils.cp_r(site_src_dir, site_tmp_dir)
     site_dir = "#{site_tmp_dir}/gzip"
 
-    site_config = mock
+    site_config = double
     site_config.stub(:output_dir).and_return "#{site_dir}"
 
-    deploy_config = mock
+    deploy_config = double
     deploy_config.stub(:[]).with('gzip').and_return true
     deploy_config.stub(:[]).with('gzip_level').and_return 6
     deploy_config.stub(:[]).with('source_dir').and_return '.'
