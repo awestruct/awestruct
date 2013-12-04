@@ -10,7 +10,7 @@ end
 group :test do
   gem 'rb-inotify', '>= 0.9.0'
   gem 'rack-test'
-  gem 'tilt', '>= 1.3.5'
+  gem 'tilt', '>= 1.3.5', '< 2.0'
   gem 'coffee-script', '>= 2.2.0'
   gem 'asciidoctor', '>= 0.1.3' # >= 0.1.1 is required for front matter integration
   gem 'slim', '>= 1.3.6'
