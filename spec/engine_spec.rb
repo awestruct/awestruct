@@ -145,7 +145,7 @@ describe Awestruct::Engine do
 end
 
 def compass_config
-  config = mock
+  config = double
   config.stub(:project_type=)
   config.stub(:project_path=)
   config.stub(:sass_dir=)

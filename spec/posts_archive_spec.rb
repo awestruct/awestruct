@@ -54,12 +54,12 @@ describe Awestruct::Extensions::Posts do
   it "should assign default layout if specified to post without layout" do
     extension = Awestruct::Extensions::Posts.new( '/posts', :news, nil, nil, :default_layout => 'blog' )
     site = Hashery::OpenCascade[ { :encoding=>false } ]
-    page = __create_page( 2012, 8, 9, '/posts/mock-post.md' )
+    page = __create_page( 2012, 8, 9, '/posts/double-post.md' )
     page.stub(:layout).and_return(nil)
     page.should_receive(:layout=).with('blog')
-    page.stub(:slug).and_return(nil, 'mock-post')
-    page.should_receive(:slug=).with('mock-post')
-    page.should_receive(:output_path=).with('/posts/2012/08/09/mock-post.html')
+    page.stub(:slug).and_return(nil, 'double-post')
+    page.should_receive(:slug=).with('double-post')
+    page.should_receive(:output_path=).with('/posts/2012/08/09/double-post.html')
 
     site.pages = [page]
     extension.execute(site)
@@ -81,8 +81,8 @@ describe Awestruct::Extensions::Posts do
     end
 
     it "should use the provided template when generating the archive" do
-      engine = mock("Engine")
-      template = mock("Template")
+      engine = double("Engine")
+      template = double("Template")
       template.should_receive( :archive= ).with( @archive.posts[2012][8][9] )
       template.should_receive( :output_path= ).with( '/archive/2012/8/9/index.html' )
       engine.should_receive( :find_and_load_site_page ).with( '/archive/index' ).and_return( template )
@@ -92,7 +92,7 @@ describe Awestruct::Extensions::Posts do
   end
 
   def __create_page(year, month, day, path = nil)
-    page = mock( "Page for #{year}-#{month}-#{day}" )
+    page = double( "Page for #{year}-#{month}-#{day}" )
     page.stub(:date?).and_return( true )
     page.stub(:date=).with(anything())
     page.stub_chain(:date, :year).and_return( year )

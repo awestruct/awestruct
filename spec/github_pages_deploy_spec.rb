@@ -4,10 +4,10 @@ require 'awestruct/deploy/github_pages_deploy'
 describe Awestruct::Deploy::GitHubPagesDeploy do
 
   before :each do
-    site_config = mock
+    site_config = double
     site_config.stub(:output_dir).and_return '_site'
 
-    @deploy_config = mock
+    @deploy_config = double
     @deploy_config.stub(:[]).with('branch').and_return('the-branch')
     @deploy_config.stub(:[]).with('repository').and_return('the-repo')
     @deploy_config.stub(:[]).with('gzip').and_return('false')
@@ -17,7 +17,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     @deploy_config.stub(:[]).with('uncommitted').and_return('false')
     @deployer = Awestruct::Deploy::GitHubPagesDeploy.new( site_config, @deploy_config )
 
-    @git = mock
+    @git = double
     @git.stub_chain(:status, :changed, :empty?).and_return true
     ::Git.stub(:open).with('.').and_return @git
   end
@@ -27,7 +27,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
   end
 
   it "should warn and noop if no changes have been committed" do
-    git_scm = mock()
+    git_scm = double()
     git_scm.stub(:uncommitted_changes?).with('.').and_return true
     @deployer.instance_variable_set('@scm', git_scm)
     $LOG.should_receive(:error).with(Awestruct::Deploy::Base::UNCOMMITTED_CHANGES)
@@ -35,7 +35,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
   end
 
   it "should save and restore the current branch when publishing" do
-    git_scm = mock()
+    git_scm = double()
     git_scm.stub(:uncommitted_changes?).with('.').and_return false
     @deployer.instance_variable_set('@scm', git_scm)
     @git.should_receive(:current_branch).and_return( 'bacon' )
@@ -48,7 +48,7 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
   end
 
   it "should save and restore the current detached branch when publishing" do
-    git_scm = mock()
+    git_scm = double()
     git_scm.stub(:uncommitted_changes?).with('.').and_return false
     @deployer.instance_variable_set('@scm', git_scm)
     @git.should_receive(:current_branch).and_return( '(no branch)' )

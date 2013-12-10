@@ -4,8 +4,8 @@ require 'awestruct/extensions/minify'
 describe Awestruct::Extensions::Minify do
 
   it "should ignore files with no extension" do
-    site = mock
-    page = mock
+    site = double
+    page = double
 
     site.should_receive(:minify).and_return true
     page.should_receive(:output_path).and_return "CNAME"
@@ -16,12 +16,12 @@ describe Awestruct::Extensions::Minify do
   end
 
   it "should compress html files" do
-    site = mock
-    page = mock
+    site = double
+    page = double
 
     site.should_receive(:minify).and_return true
     site.should_receive(:minify_html_opts).and_return( {:remove_comments => false} )
-    page.should_receive(:output_path).any_number_of_times.and_return "test.html"
+    page.should_receive(:output_path).at_least(1).and_return "test.html"
 
     input = "<html><a   href='' />  \n</html><!--test-->"
     expected_output = "<html><a href=''/> </html><!--test-->"
@@ -32,8 +32,8 @@ describe Awestruct::Extensions::Minify do
 
   # Doing this if it's production now
   #it "should compress css files" do
-    #site = mock
-    #page = mock
+    #site = double
+    #page = double
 
     #site.should_receive(:minify).and_return true
     #page.should_receive(:output_path).any_number_of_times.and_return "test.css"
@@ -46,11 +46,11 @@ describe Awestruct::Extensions::Minify do
   #end
 
   it "should compress js files" do
-    site = mock
-    page = mock
+    site = double
+    page = double
 
     site.should_receive(:minify).and_return true
-    page.should_receive(:output_path).any_number_of_times.and_return "test.js"
+    page.should_receive(:output_path).at_least(1).and_return "test.js"
 
     input = "function    a (a,     c) { \n a = \"a\";\n }"
     # we're minifying so we're going to strip dead or unreferenced code
