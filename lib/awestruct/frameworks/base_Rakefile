@@ -39,6 +39,9 @@
 #  rake -T
 #
 # Now you're Awestruct with rake!
+require 'rbconfig'
+
+WIN_PATTERNS = [/bccwin/i, /cygwin/i, /djgpp/i, /mingw/i, /mswin/i, /wince/i,]
 
 $use_bundle_exec = true
 $install_gems = ['awestruct -v "~> 0.5.4.rc"', 'rb-inotify -v "~> 0.9.0"']
@@ -163,7 +166,8 @@ end
 # Execute Awestruct
 def run_awestruct(args, opts = {})
   cmd = "#{$use_bundle_exec ? 'bundle exec ' : ''}awestruct #{args}"
-  if RUBY_VERSION < '1.9'
+  # I think if we're on windows we're pretty much hosed with Process.wait, so just don't do it.
+  if RUBY_VERSION < '1.9' || (!!WIN_PATTERNS.find { |r| RbConfig::CONFIG['host_os'] =~ r })
     opts[:spawn] = false
   else
     opts[:spawn] ||= true
