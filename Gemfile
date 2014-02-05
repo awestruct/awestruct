@@ -17,7 +17,7 @@ group :test do
   gem 'kramdown', '>= 0.14.2'
   gem 'therubyracer', '0.10.0', :platforms => :ruby
   gem 'therubyrhino', '~> 2.0.2', :platforms => :jruby
-  gem 'less', '>= 2.2.2' 
+  gem 'less', '~> 2.2.2' 
   gem 'org-ruby', '>= 0.7'
   gem 'RedCloth', '>= 4.2.9'
   gem 'mustache', '>= 0.99.4'
