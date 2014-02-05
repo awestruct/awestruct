@@ -97,10 +97,12 @@ module Awestruct
           pages = []
           posts.keys.sort.each do |year|
             posts[year].keys.sort.each do |month| 
+              month_s = sprintf( "%02d", month )
               posts[year][month].keys.sort.each do |day|
+                day_s = sprintf( "%02d", day )
                 archive_page = engine.find_and_load_site_page( template )
                 archive_page.send( "archive=", posts[year][month][day] )
-                archive_page.output_path = File.join( output_path, year.to_s, month.to_s, day.to_s, File.basename( template ) + ".html" )
+                archive_page.output_path = File.join( output_path, year.to_s, month_s, day_s, File.basename( template ) + ".html" )
                 pages << archive_page
               end
             end
