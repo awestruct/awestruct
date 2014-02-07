@@ -83,7 +83,11 @@ module Awestruct
       end
 
       def valid_sitemap_entry( page )
-        !@excluded_files.member?(page.output_path) && !@excluded_extensions.member?(page.output_extension)
+        if @excluded_files.member?(page.output_path) || @excluded_extensions.member?(page.output_extension) || page.sitemap_exclude
+          false
+        else
+          true
+        end
       end
 
     end
