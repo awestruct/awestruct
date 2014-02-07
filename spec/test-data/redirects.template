@@ -1,0 +1,11 @@
+<!DOCTYPE HTML>
+
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="5; url=%{url}">
+
+<script>
+window.location.href = "%{url}"
+</script>
+
+<title>Page Redirection</title>
+Looks like you used an old link. We will teleport you to the <a href='%{url}'>right place</a> in a second. }
