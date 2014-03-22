@@ -27,6 +27,7 @@ group :test do
   gem 'uglifier', '~> 2.5.0'
   gem 'htmlcompressor', '~> 0.0.7'
   gem 'haml-contrib', '~> 1.0.0'
+  gem "win32-open3-19", :platforms => :mingw # htmlcompressor depends on old yui compressor, that needs this on win32
 end
 
 gemspec
