@@ -57,6 +57,18 @@ describe Awestruct::Engine do
     engine.site.show_drafts.should == true
   end
 
+  it "should be able to handle UTF-8 in site.yml" do
+    opts = Awestruct::CLI::Options.new
+    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    config = Awestruct::Config.new( opts )
+
+    engine = Awestruct::Engine.new(config)
+    engine.load_default_site_yaml
+    engine.load_user_site_yaml( 'development' )
+    engine.site.intl_name.should == "Intern\u00e9\u0161nl"
+  end
+
+
   it "should be able to load arbitrary _config/*.yml files" do
     opts = Awestruct::CLI::Options.new
     opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'

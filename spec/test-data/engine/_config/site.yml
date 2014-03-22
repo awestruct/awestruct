@@ -16,6 +16,7 @@ profiles:
     base_url: http://stage.example.com
 
 title: Awestruction!
+intl_name: Internéšnl
 
 asciidoctor:
   :safe: 0
