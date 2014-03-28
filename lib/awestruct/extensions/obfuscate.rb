@@ -3,10 +3,20 @@ module Awestruct
     module Obfuscate
 
       def mail_to(email, options={})
-        index = email.index('@') or raise "email needs to contain @"
+        index = email.index('@') or raise "email needs to contain one @"
         index += 3
-        parts = [ email[0...index], email[index..-1] ]
-        "<a\nclass='#{options[:class]}\nhref=\"mailto:x@y\"\n'\nhref\n =  '#{hex('mailto:' + percent(email))}\n'>#{hex(parts[0])}<!--\nmailto:abuse@hotmail.com\n</a>\n-->#{hex(parts[1])}</a>"
+
+        headers = [ :subject, :body, :bcc, :cc ] & options.keys
+        parameters = "?" + headers.map { |k| "#{k}=#{percent(options[k])}" }.join('&') if headers.length > 0
+
+        if options[:title]
+          content = options[:title]
+        else
+          account, domain = [ email[0...index], email[index..-1] ]
+          content = "#{hex(account)}<!--\nmailto:abuse@hotmail.com\n</a>\n-->#{hex(domain)}"
+        end
+
+        "<a target='_blank' class='#{options[:class]}\nhref=\"mailto:x@y\"\n'\nhref\n =  '#{hex('mailto:' + email)}#{parameters}\n'>#{content}</a>"
       end
 
       private
