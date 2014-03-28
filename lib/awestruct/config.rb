@@ -22,17 +22,17 @@ module Awestruct
     attr_accessor :options
 
     def initialize(opts = Awestruct::CLI::Options.new)
-      @dir            = Pathname.new( opts.source_dir )
-      @layouts_dir    = Pathname.new( File.join(@dir, '_layouts') )
-      @config_dir     = Pathname.new( File.join(@dir, '_config') )
-      @input_dir      = Pathname.new( File.join(@dir, '') )
-      @output_dir     = Pathname.new( opts.output_dir )
-      @extension_dir  = Pathname.new( File.join(@dir, '_ext') )
-      @skin_dir       = Pathname.new( File.join(@dir, '_skin') )
-      @tmp_dir        = Pathname.new( File.join(@dir, '_tmp') )
-
+      @dir             = Pathname.new( opts.source_dir )
+      @layouts_dir     = Pathname.new( File.join(@dir, '_layouts') )
+      @config_dir      = Pathname.new( File.join(@dir, '_config') )
+      @input_dir       = Pathname.new( File.join(@dir, '') )
+      @output_dir      = Pathname.new( opts.output_dir )
+      @extension_dir   = Pathname.new( File.join(@dir, '_ext') )
+      @skin_dir        = Pathname.new( File.join(@dir, '_skin') )
+      @tmp_dir         = Pathname.new( File.join(@dir, '_tmp') )
       @images_dir      = Pathname.new( File.join(@dir, 'images') )
       @stylesheets_dir = Pathname.new( File.join(@dir, 'stylesheets') )
+
       @options = opts
 
       # Dir[] doesn't like empty list
@@ -41,7 +41,7 @@ module Awestruct
         ignore_stmts = IO.read(ignore_file).each_line.map(&:strip)
       end
 
-      @ignore         = (!ignore_stmts.nil? and ignore_stmts.size > 0) ? Dir[*ignore_stmts] : []
+      @ignore = (!ignore_stmts.nil? and ignore_stmts.size > 0) ? Dir[*ignore_stmts] : []
 
       @track_dependencies = false
     end

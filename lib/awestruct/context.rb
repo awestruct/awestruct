@@ -1,4 +1,3 @@
-
 require 'awestruct/astruct'
 
 module Awestruct

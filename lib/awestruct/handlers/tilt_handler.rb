@@ -1,4 +1,3 @@
-
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_tilt_handler'
 require 'awestruct/handlers/file_handler'

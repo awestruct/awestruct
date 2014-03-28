@@ -1,4 +1,3 @@
-
 require 'awestruct/handler_chain'
 require 'awestruct/handlers/base_handler'
 require 'awestruct/handlers/file_handler'
@@ -22,7 +21,7 @@ module Awestruct
       end
 
       def simple_name
-        File.basename( relative_source_path, '.js' ) 
+        File.basename( relative_source_path, '.js' )
       end
 
       def output_filename

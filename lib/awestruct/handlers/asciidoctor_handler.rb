@@ -22,7 +22,9 @@ module Awestruct
           # shave pattern down to next extension
           pattern = pattern.sub(/^[^.]*\.?/, '')
         end
-        if registered && (Tilt.mappings[pattern] || []).include?(Tilt::AsciidoctorTemplate)
+        # removed conditional: (Tilt.mappings[pattern] || []).include?(Tilt::AsciidoctorTemplate)
+        # because I don't what that is supposed to do - and because it's no longer exposed
+        if registered &&
           begin
             Tilt[File.basename(path)]
           rescue LoadError

@@ -1,20 +1,20 @@
 # This file is a Bundler dependency descriptor file. Its purpose is to list all of
-# the dependencies you are using to build your site. It is highly recommended you use 
+# the dependencies you are using to build your site. It is highly recommended you use
 # this to keep your dependencies up to date and not cause conflicts with other gems
-# already on your system. 
+# already on your system.
 #
 # If you do not already have Bundler installed on your computer, run:
 #
 #  gem install bundler
 #
 # To use this dependecy file simply run:
-# 
+#
 #  bundle install
 #
 # We do recommend that you install the gems into another directory however, to ensure
 # your awestruct site is pristine and isn't using versions of gems from other programs.
 # To do this execute:
-# 
+#
 #  bundle install --path .bundle
 #
 # More information about Bundler and its other commands can be found at http://gembundler.com/.
@@ -24,8 +24,10 @@
 
 source 'https://rubygems.org'                             # This tells Bundler where to look for gems
 
-gem 'awestruct', '>= 0.5.3'                               # Goes without saying
-gem 'rake', '>= 0.9.2'                                    # Needed for the Rakefile to work
+gem 'awestruct', '~> 0.5.3'                               # Goes without saying
+
+# FIXME
+# gem 'rake', '>= 0.9.2'                                  # Needed for the Rakefile to work
 # gem 'coffee-script', '>= 2.2.0'                         # If using coffee-script or to remove the warning
 # gem 'rb-fsevent', '~> 0.9', :require => false           # to remove warning about pulling, Mac OSX
 # gem 'rb-inotify', '>= 0.9.0', :require => false         # to remove warning about pulling, Linux
@@ -33,7 +35,7 @@ gem 'rake', '>= 0.9.2'                                    # Needed for the Rakef
 # gem 'rb-fchange', '~> 0.0.6', :require => false         # to remove warning about pulling, Windows (ruby 1.8.7)
 # gem 'therubyracer', '0.10.0', :platforms => :ruby       # Javascript runtime on mri (needed for LESS and coffee-script)
 # gem 'therubyrhino', '~> 2.0.2', :platforms => :jruby    # Javascript runtime on jruby (needed for LESS and coffee-script)
-# gem 'less', '>= 2.2.2'                                  # If using LESS instead of sass 
+# gem 'less', '>= 2.2.2'                                  # If using LESS instead of sass
 # gem 'org-ruby', '>= 0.8'                                # If using Org-Mode
 # gem 'RedCloth', '>= 4.2.9'                              # If using Textile
 # gem 'asciidoctor', '>= 0.1.1'                           # If using AsciiDoc syntax, need 0.1.1 for Header support

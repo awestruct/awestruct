@@ -1,4 +1,3 @@
-
 module Awestruct
   class Dependencies
 
@@ -48,7 +47,7 @@ module Awestruct
 
 
     def self.track_dependency(dep)
-      return if top_page.nil? 
+      return if top_page.nil?
       return if top_page == dep
       $LOG.debug "dep #{top_page.relative_source_path} - #{dep.relative_source_path}" if $LOG.debug?
       top_page.dependencies.add_dependency(dep)
@@ -139,12 +138,12 @@ module Awestruct
 
     def clear
       @dependencies.clear
-      @dependents.each do |d| 
-        if (d.instance_of? Awestruct::Dependencies) 
-          d.remove_dependent( page ) 
-        else 
-          d.dependencies.remove_dependent( page ) 
-        end 
+      @dependents.each do |d|
+        if (d.instance_of? Awestruct::Dependencies)
+          d.remove_dependent( page )
+        else
+          d.dependencies.remove_dependent( page )
+        end
       end
     end
 
@@ -195,7 +194,6 @@ module Awestruct
     def find_page_by_path(path)
       page.site.pages_by_relative_source_path[ path ]
     end
-
 
   end
 end

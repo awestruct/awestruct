@@ -1,4 +1,3 @@
-
 require 'awestruct/handlers/base_handler'
 require 'yaml'
 

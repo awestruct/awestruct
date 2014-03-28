@@ -1,4 +1,3 @@
-
 require 'awestruct/handler_chains'
 require 'awestruct/context_helper'
 
@@ -17,6 +16,7 @@ module Awestruct
 
     def extension(e)
       @extensions << e
+      # TC: why? transformer and extension?
       e.transform(@transformers) if e.respond_to?('transform')
     end
 

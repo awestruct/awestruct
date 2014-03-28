@@ -32,17 +32,16 @@ Any markup languages you are using and its dependencies.
 Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if you're running on MRI. JRuby should be using haml 4.0.0+ with Kramdown.'
   EOS
 
-  s.add_dependency 'haml', '~> 4.0.1'
-  s.add_dependency 'nokogiri', '1.5.10'
-  s.add_dependency 'tilt', '>= 1.3.5', '< 2.0'
-  s.add_dependency 'compass', '>= 0.12.1'
+  s.add_dependency 'haml', '~> 4.0.5'
+  s.add_dependency 'nokogiri', '~> 1.5.10'
+  s.add_dependency 'tilt', '~> 2.0.1'
+  s.add_dependency 'compass', '~> 0.12.4'
   s.add_dependency 'compass-960-plugin', '~> 0.10.4'
-  s.add_dependency 'bootstrap-sass', '>= 2.3.1.0'
-  s.add_dependency 'zurb-foundation', '>= 4.0.9', '< 5.0'
-  s.add_dependency 'mime-types', '1.25'
-  s.add_dependency 'rest-client', '>= 1.6.7'
+  s.add_dependency 'bootstrap-sass', '~> 3.1.1.0'
+  s.add_dependency 'zurb-foundation', '~> 4.3.2'
+  s.add_dependency 'mime-types', '~> 2.1'
+  s.add_dependency 'rest-client', '~> 1.6.7'
   s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
-
-  s.add_dependency 'listen', '~> 1.0'
+  s.add_dependency 'listen', '~> 2.7.1'
   s.add_dependency 'rack', '~> 1.5.2'
 end

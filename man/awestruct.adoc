@@ -131,5 +131,5 @@ Mailinglist / forum: <**http://talk.awestruct.org**>
 
 COPYING
 -------
-Copyright \(C) Bob McWhirter 2013.
+Copyright \(C) Bob McWhirter 2014.
 Free use of this software is granted under the terms of the MIT License.

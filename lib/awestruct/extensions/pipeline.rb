@@ -20,14 +20,19 @@ module Awestruct
       attr_reader :transformers
 
       def initialize(&block)
-        @extensions = []
-        @helpers    = []
-        @transformers  = []
-        instance_eval &block if block
+        @extensions   = []
+        @helpers      = []
+        @transformers = []
+        begin
+          instance_eval &block if block
+        rescue Exception => e
+          abort("Failed to initialize pipeline: #{e}")
+        end
       end
 
       def extension(ext)
         @extensions << ext
+        # TC: why? transformer and extension?
         ext.transform(@transformers) if ext.respond_to?('transform')
       end
 

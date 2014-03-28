@@ -1,4 +1,3 @@
-
 require 'awestruct/dependencies'
 
 module Awestruct

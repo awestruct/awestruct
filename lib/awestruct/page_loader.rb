@@ -1,5 +1,3 @@
-
-
 module Awestruct
 
   class PageLoader

@@ -1,4 +1,3 @@
-
 module Awestruct
 
   class Deployers < Hash

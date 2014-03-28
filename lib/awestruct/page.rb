@@ -1,4 +1,3 @@
-
 require 'awestruct/context'
 
 require 'awestruct/handlers/no_op_handler'
