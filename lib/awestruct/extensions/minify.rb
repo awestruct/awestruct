@@ -9,7 +9,6 @@ require 'uglifier'
 #
 # Minification is performed by the following libraries:
 #
-#   htmlcompressor (minifies HTML): http://code.google.com/p/htmlcompressor/
 #   uglifier (minifies javascript): http://github.com/lautis/uglifier
 #   pngcrush (minifies PNG): http://pmt.sourceforge.net/pngcrush/
 #
@@ -27,13 +26,13 @@ require 'uglifier'
 #   :png - PNG files with extension .png
 #
 # If no types are specified, the default value [:js] is used.
-# 
+#
 # In addition to registering the transformer in the pipeline, it must be enabled
 # by setting the following site property in _ext/config.yml:
 #
 #   minify: true
 #
-# You can limit activation to one or more profiles: 
+# You can limit activation to one or more profiles:
 #
 #   profiles:
 #     production:
@@ -45,7 +44,7 @@ require 'uglifier'
 #   minify_html_opts:
 #     remove_intertag_spaces: true
 #     compress_js: true
-# 
+#
 # Note that any hypen (-) must be represented as an underscore (_) in the configuration.
 
 module Awestruct
@@ -135,7 +134,7 @@ module Awestruct
           input
         end
       end
-    end 
+    end
   end
 end
 
