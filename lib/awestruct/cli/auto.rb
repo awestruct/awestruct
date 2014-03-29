@@ -1,7 +1,7 @@
-#require 'guard/awestruct'
 require 'awestruct/util/exception_helper'
 
 require 'listen'
+require 'guard/livereload'
 
 module Awestruct
   module CLI
@@ -15,10 +15,19 @@ module Awestruct
         generate_thread = nil
         current_path = nil
 
+        guard = if ( @config.options.livereload )
+          guard = Guard::LiveReload.new
+          guard.start
+          guard
+        else
+          nil
+        end
+
         force_polling = ( RUBY_PLATFORM =~ /mingw/ ? true : false )
-        listener = Listen.to( @config.dir, :relative_paths=>true, :latency=>0.5, :force_polling=>force_polling ) do |modified, added, removed|
-          modified.each do |path|
+        listener = Listen.to( @config.dir, :latency=>0.5, :force_polling=>force_polling ) do |modified, added, removed|
+          modified.each do |path| # path is absolute path
             engine = ::Awestruct::Engine.instance
+
             unless ( path =~ %r(#{File.basename( engine.config.output_dir) }) || path =~ /.awestruct/ )
               begin
                 if path.eql? current_path
@@ -33,8 +42,22 @@ module Awestruct
 
                 generate_thread = Thread.new {
                   begin
-                    engine.generate_page_by_output_path( path )
-                    $LOG.info "Generating.... done!" if $LOG.info?
+
+                    page = engine.page_by_output_path(path)
+                    if ( page )
+
+                      engine.generate_page_and_dependencies( page )
+
+                      $LOG.info "Regeneration finished." if $LOG.info?
+
+                      if ( guard )
+                        guard.run_on_modifications([ page.url ])
+                      end
+
+                    else
+                      $LOG.error "Failed to find page from path #{path}"
+                    end
+
                   rescue => e
                     ExceptionHelper.log_building_error e, path
                   end

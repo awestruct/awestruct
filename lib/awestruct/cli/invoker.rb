@@ -55,31 +55,39 @@ module Awestruct
 
       def load_profile()
         site_yaml_file = File.join( Dir.pwd, '_config', 'site.yml' )
-        if ( File.exist?( site_yaml_file ) )
-          site_yaml      = YAML.load( File.read( site_yaml_file ) )
-          if site_yaml
-            profiles_data  = site_yaml['profiles'] || {}
-            @profile = if profiles_data.nil?
-              nil
-            else
-              if options.profile
-                profiles_data[options.profile] || {}
-              else
-                # if no profile given, pick the first with deploy config
-                options.profile, profile_data = profiles_data.select { |k,v| v && v['deploy'] }.first
-                profile_data
-              end
-            end
-          end
+
+        if ( !File.exist?( site_yaml_file ) )
+          abort( "No config file at #{site_yaml_file}" )
         end
- 
-        unless @profile
-          $LOG.error "Unable to locate profile: #{options.profile}" if options.profile && $LOG.error?
-          options.profile = 'NONE'
-          @profile = {}
-        end 
-        $LOG.info "Using profile: #{options.profile}" if $LOG.info?
-      end
+
+        site_yaml = YAML.load( File.read( site_yaml_file ) )
+
+        if ( !site_yaml )
+          abort( "Failed to parse #{site_yaml_file}" )
+        end
+
+        profiles = site_yaml['profiles'] || {}
+
+        profile_name = options.profile
+
+        # use the one specified
+        profile = profiles[profile_name]
+        if ( !profile )
+          profile_name, profile = if ( options.deploy )
+            # or the first one having a deploy section
+            profiles.select { |k,v| v && v['deploy'] }
+          else
+            # or the first one having no deploy section
+            profiles.select { |k,v| v && !v['deploy'] }
+          end.first
+        end
+
+        if profile
+          $LOG.info "Using profile: #{profile_name}" if $LOG.info?
+        end
+
+        @profile = profile || {}
+       end
 
       def setup_config()
         @config = Awestruct::Config.new( @options )

@@ -27,25 +27,29 @@ module Awestruct
           threads << Thread.new(stdout) do |i|
             while ( ! i.eof? )
               line = i.readline
-              case line[0,9]
+              head = line[0,9]
+              file = line[10..-1].chomp
+              case head
               when '<f.sT....'
-                $LOG.info " updating #{line[10..-1]}" if $LOG.info?
+                $LOG.info " updating #{file}" if $LOG.info?
               when 'cd+++++++'
-                $LOG.info " creating #{line[10..-1]}" if $LOG.info?
+                $LOG.info " creating #{file}" if $LOG.info?
               when '<f+++++++'
-                $LOG.info " adding #{line[10..-1]}" if $LOG.info?
+                $LOG.info " adding #{file}" if $LOG.info?
               when '<f..T....'
                 # ignoring unchanged files
-                $LOG.debug " no change to #{line[10..-1]}" if $LOG.debug?
+                $LOG.debug " no change to #{file}" if $LOG.debug?
+              when '*deleting'
+                $LOG.info " deleting #{file}" if $LOG.info?
               else
-                $LOG.info line if $LOG.info
+                $LOG.debug line if $LOG.debug
               end
             end
           end
           threads << Thread.new(stderr) do |i|
             while ( ! i.eof? )
               line = i.readline
-              $LOG.info line if $LOG.info?
+              $LOG.error line if $LOG.error?
             end
           end
           threads.each{|t|t.join}

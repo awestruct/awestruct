@@ -240,7 +240,7 @@ module Awestruct
       Compass.configuration.project_path    = site.config.dir
       Compass.configuration.sass_dir        = 'stylesheets'
       Compass.configuration.http_path       = site.base_url
-      
+
       site.images_dir      = File.join( site.config.output_dir, 'images' )
       site.fonts_dir       = File.join( site.config.output_dir, 'fonts' )
       site.stylesheets_dir = File.join( site.config.output_dir, 'stylesheets' )
@@ -323,11 +323,20 @@ module Awestruct
       end
     end
 
-    def generate_page_by_output_path(path)
-      full_path = File.join( '', path )
-      page = site.pages.find{ |p| p.relative_source_path.to_s == full_path } ||
-             site.layouts.find{ |p| p.relative_source_path.to_s == full_path }
-      return if page.nil?
+    # path - relative to output dir
+    def page_by_output_path(path)
+      site.pages.find { |p|
+          p.source_path.to_s == path
+        } || site.layouts.find { |p|
+          p.source_path.to_s == path
+        }
+    end
+
+    def generate_page_and_dependencies(page)
+
+      if page.nil?
+        return
+      end
 
       if !page.output_path.nil?
         generate_page_internal(page)
@@ -382,9 +391,7 @@ module Awestruct
     end
 
     ####
-    ##
     ## compat with awestruct 0.2.x
-    ##
     ####
 
     def load_page(path, options={})

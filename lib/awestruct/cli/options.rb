@@ -33,22 +33,24 @@ module Awestruct
       attr_accessor :verbose
       attr_accessor :source_dir
       attr_accessor :output_dir
+      attr_accessor :livereload
 
       def initialize()
-        @generate  = nil
-        @server    = false
-        @port      = DEFAULT_PORT
-        @bind_addr = DEFAULT_BIND_ADDR
-        @auto      = false
-        @force     = false
-        @init      = false
-        @framework = 'compass'
-        @scaffold  = true
-        @base_url  = nil
-        @profile   = nil
-        @deploy    = false
-        @script    = nil
-        @verbose   = false
+        @generate   = nil
+        @server     = false
+        @port       = DEFAULT_PORT
+        @bind_addr  = DEFAULT_BIND_ADDR
+        @auto       = false
+        @force      = false
+        @init       = false
+        @framework  = 'compass'
+        @scaffold   = true
+        @base_url   = nil
+        @profile    = nil
+        @deploy     = false
+        @script     = nil
+        @verbose    = false
+        @livereload = false
         @source_dir = Dir.pwd
         @output_dir = File.expand_path '_site'
       end
@@ -87,19 +89,22 @@ module Awestruct
             self.port     = DEFAULT_PORT
             self.profile  = 'development'
           end
+          opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
+            self.auto = a
+          end
+          opts.on( '--livereload', 'Support for browser livereload' ) do |livereload|
+            self.livereload = livereload
+          end
 
           opts.on( '-P', '--profile PROFILE', 'Activate a configuration profile' ) do |profile|
             self.profile = profile
           end
-      
+
           opts.on( '--deploy', 'Deploy site' ) do |deploy|
             self.deploy = deploy
             self.generate = false if self.generate.nil?
           end
-      
-          opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
-            self.auto = a
-          end
+
           opts.on( '-p', '--port PORT', Integer, "Server port (default: #{DEFAULT_PORT})" ) do |port|
             self.port = port
           end
@@ -119,15 +124,15 @@ module Awestruct
           opts.on( '--output-dir DIR', 'Location to output generated site (default: _site' ) do |output_dir|
             self.output_dir = File.expand_path output_dir
           end
-      
+
           opts.separator ''
           opts.separator "Common options:"
-      
+
           opts.on_tail("-h", "--help", "Show this message") do
             puts opts
             exit
           end
-  
+
           opts.on_tail("-v", "--version", "Display the version") do
             puts "Awestruct: #{Awestruct::VERSION}"
             puts "http://awestruct.org/"

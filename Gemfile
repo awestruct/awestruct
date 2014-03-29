@@ -23,7 +23,6 @@ group :test do
   gem 'mustache', '~> 0.99.5'
   gem 'uglifier', '~> 2.5.0'
   gem 'htmlcompressor', '~> 0.0.7'
-  gem 'git', '~> 1.2.6'
 end
 
 gemspec
