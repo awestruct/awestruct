@@ -126,7 +126,8 @@ module Awestruct
       end
 
       def invoke_auto()
-        Awestruct::CLI::Auto.new( config ).run
+        base_url = profile['base_url'] || options.base_url
+        Awestruct::CLI::Auto.new( config, base_url ).run
       end
 
       def invoke_server()

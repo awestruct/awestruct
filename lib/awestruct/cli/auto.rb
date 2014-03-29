@@ -7,8 +7,9 @@ module Awestruct
   module CLI
     class Auto
 
-      def initialize(config)
+      def initialize(config, base_url)
         @config = config
+        @base_url = base_url
       end
 
       def run()
@@ -46,13 +47,17 @@ module Awestruct
                     page = engine.page_by_output_path(path)
                     if ( page )
 
-                      engine.generate_page_and_dependencies( page )
-
-                      $LOG.info "Regeneration finished." if $LOG.info?
+                      pages = engine.generate_page_and_dependencies( page )
 
                       if ( guard )
-                        guard.run_on_modifications([ page.url ])
+                        urls = pages.map do |p|
+                          @base_url + p.url.to_s
+                        end
+
+                        guard.run_on_modifications(urls)
                       end
+
+                      $LOG.info "Regeneration finished." if $LOG.info?
 
                     else
                       $LOG.error "Failed to find page from path #{path}"

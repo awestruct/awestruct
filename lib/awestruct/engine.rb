@@ -304,7 +304,7 @@ module Awestruct
 
     def generate_page(page, generated_path, produce_output=true)
       if ( produce_output )
-        $LOG.debug "Generating: #{generated_path}" if $LOG.debug?
+        $LOG.info "Generating: #{generated_path}" if $LOG.info?
         FileUtils.mkdir_p( File.dirname( generated_path ) )
 
         c = page.rendered_content
@@ -342,9 +342,9 @@ module Awestruct
         generate_page_internal(page)
       end
 
-      pages = [] << page
+      pages = [ page ]
 
-      pages.each{|page|
+      pages.each do |page|
         $LOG.debug "--------------------" if $LOG.debug?
         $LOG.debug "Page: #{page.output_path} #{page.relative_source_path} #{page.__is_layout ? 'Layout':''}" if $LOG.debug?
         $LOG.debug "Detected change in content (#{page.dependencies.content_hash})" if page.dependencies.has_changed_content if $LOG.debug?
@@ -358,12 +358,14 @@ module Awestruct
         $LOG.debug "\t\t Content <- #{page.dependencies.dependents.size}" if $LOG.debug?
         $LOG.debug "\t\t Key     <- #{page.dependencies.key_dependents.size}" if $LOG.debug?
         $LOG.debug "--------------------" if $LOG.debug?
-      }
+      end
 
       regen_pages = Set.new
+
       if page.dependencies.has_changed_content or page.__is_layout
         regen_pages += page.dependencies.dependents
       end
+
       regen_pages = regen_pages.sort do |x, y|
         xf = "#{@site.dir}#{x.relative_source_path}"
         yf = "#{@site.dir}#{y.relative_source_path}"
@@ -376,11 +378,13 @@ module Awestruct
       end
 
       $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
-      regen_pages.each{|x| $LOG.info x.output_path if $LOG.info?}
 
       regen_pages.each do |p|
         generate_page_internal(p)
+        pages << p
       end
+
+      pages
     end
 
     def generate_page_internal(p)
