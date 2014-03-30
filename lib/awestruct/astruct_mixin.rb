@@ -1,4 +1,5 @@
 require 'awestruct/dependencies'
+require 'awestruct/page'
 
 module Awestruct
 
