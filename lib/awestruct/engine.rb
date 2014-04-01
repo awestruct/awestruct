@@ -125,7 +125,8 @@ module Awestruct
       if ( File.exist?( yaml_path ) )
         data = YAML.load( File.read( yaml_path ) )
         if ( profile )
-          site.interpolate = true
+          # JP: Interpolation now turned off by default, turn it per page if needed
+          site.interpolate = false
           profile_data = {}
           data.each do |k,v|
             if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
@@ -304,7 +305,7 @@ module Awestruct
 
     def generate_page(page, generated_path, produce_output=true)
       if ( produce_output )
-        $LOG.info "Generating: #{generated_path}" if $LOG.info?
+        #$LOG.info "Generating: #{generated_path}" if $LOG.info?
         FileUtils.mkdir_p( File.dirname( generated_path ) )
 
         c = page.rendered_content

@@ -7,16 +7,22 @@ require 'awestruct/handlers/layout_handler'
 
 require 'tilt'
 
+require 'pry'
+
 module Awestruct
   module Handlers
 
     class NonInterpolatingTiltMatcher
-      EXT_REGEX = /\.(haml|slim|erb|mustache)$/
+      EXT_REGEX = /\.(haml|slim|erb|mustache|ms)$/
 
       def match(path)
         if match = EXT_REGEX.match(path)
-          if match[0] == '.slim' && !Tilt.registered?('slim')
+          if match[0] == '.slim' && !::Tilt.registered?('slim')
             require 'slim'
+          end
+          if ((match[0] == '.mustache' || match[0] == '.ms') && !::Tilt.registered?('mustache'))
+            require 'awestruct/handlers/template/mustache'
+            ::Tilt::register ::Tilt::MustacheTemplate, 'mustache', 'ms'
           end
           true
         else
@@ -44,15 +50,19 @@ module Awestruct
 
       def initialize(site, delegate)
         super( site, delegate )
+
+        # JP: Not sure if this is the best place, but I can't find a better place
+        # We want to use our template for now as we have some special integrations
+        if (defined? ::Asciidoctor::Document && ::Tilt.default_mapping['adoc'] == ::Awestruct::Tilt::AsciidoctorTemplate)
+          require 'awestruct/handlers/template/asciidoc'
+          ::Tilt.register ::Awestruct::Tilt::AsciidoctorTemplate, 'adoc', 'asciidoc', 'ad'
+        end
       end
 
     end
 
   end
 end
-
-require 'awestruct/handlers/template/mustache'
-Tilt::register Tilt::MustacheTemplate, '.mustache'
 
 # As of Haml 4.0.0, Textile is no longer registered by default
 # Monkeypatch the Tilt templates to force Textile to be registered

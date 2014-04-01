@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'mustache'
 
 verify = lambda { |output|
   output.should =~ %r(<h1>This is a Mustache page</h1>)

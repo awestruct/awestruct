@@ -7,6 +7,7 @@ require 'awestruct/handlers/tilt_handler'
 require 'hashery'
 require 'tilt/template'
 
+require 'pry' 
 
 module Tilt
   class BogusTemplate < Template
@@ -115,7 +116,7 @@ describe Awestruct::Handlers::TiltHandler do
       @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
       path = handler_file( "hello.bogus" )
       expect(Awestruct::Handlers::TiltMatcher.new().match(path)).to be_false
-      expect(log.string).to include('missing required gem')
+      expect(log.string).to include('could not load engine for type')
 
       # we don't even want to process a file if we cannot load its Tilt template
       #file_handler = Awestruct::Handlers::FileHandler.new( @site, path )

@@ -1,4 +1,5 @@
 encoding: UTF-8
+interpolate: false
 
 content_syntax:
   coffee: coffeescript

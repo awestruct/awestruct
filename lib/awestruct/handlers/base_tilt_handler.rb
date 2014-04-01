@@ -12,12 +12,12 @@ module Awestruct
       # if no portions of the path are registered to a Tilt template or the
       # Tilt template cannot be loaded.
       def match(path)
-        begin
-          Tilt[File.basename(path)]
-        rescue LoadError => e
-          $LOG.warn(%(Copying #{path} to generated site without processing; missing required gem -- #{e.message.split(/ *-- */).last} (or equivalent)))
-          false
+        matcher = ::Tilt[File.basename(path)]
+        if matcher.nil?
+          $LOG.warn(%(Copying #{path} to generated site without processing; could not load engine for type))
+          return false
         end
+        matcher
       end
     end
 
@@ -55,7 +55,7 @@ module Awestruct
       def output_extension
         return File.extname(File.basename(source_file_name, File.extname(source_file_name))) if double_extension?
 
-        template = Tilt[path]
+        template = ::Tilt[path]
         if !template.nil?
           mime = template.default_mime_type
           if !mime.nil?
@@ -86,7 +86,7 @@ module Awestruct
         in_ext = input_extension[1..-1].to_sym
         out_ext = output_extension[1..-1].to_sym
 
-        engine_name = Tilt[path].name.gsub(/(Tilt|:|Template)/i, '').downcase.to_sym
+        engine_name = ::Tilt[path].name.gsub(/(Awestruct)?(Tilt|:|Template)/i, '').downcase.to_sym
 
         # example: slim
         engine_opts = site[engine_name]
@@ -124,7 +124,7 @@ module Awestruct
         begin
           c = delegate.rendered_content(context, with_layouts)
           return "" if c.nil? or c.empty?
-          template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options) { |engine|
+          template = ::Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options) { |engine|
             c
           }
           return template.render(context)

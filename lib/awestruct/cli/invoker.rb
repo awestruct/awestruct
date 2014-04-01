@@ -54,7 +54,7 @@ module Awestruct
       end
 
       def load_profile()
-        site_yaml_file = File.join( Dir.pwd, '_config', 'site.yml' )
+        site_yaml_file = File.join( @options.source_dir, '_config', 'site.yml' )
 
         if ( !File.exist?( site_yaml_file ) )
           abort( "No config file at #{site_yaml_file}" )
@@ -96,7 +96,7 @@ module Awestruct
       end
 
       def invoke_init()
-        Awestruct::CLI::Init.new( Dir.pwd, @options.framework, @options.scaffold ).run
+        Awestruct::CLI::Init.new( @options.source_dir, @options.framework, @options.scaffold ).run
       end
 
       def invoke_script()

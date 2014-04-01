@@ -7,6 +7,8 @@ require 'yaml'
 
 require 'tilt'
 
+require 'pry'
+
 module Awestruct
   module Handlers
 
@@ -15,25 +17,13 @@ module Awestruct
       # non-matching paths. Once we are sure this is a match, then
       # attempt to load the Tilt template for AsciiDoc files.
       def match(path)
-        # formal lookup as implemented in Tilt
-        pattern = File.basename(path.downcase)
-        registered = false
-        until pattern.empty? || (registered = Tilt.registered?(pattern))
-          # shave pattern down to next extension
-          pattern = pattern.sub(/^[^.]*\.?/, '')
-        end
-        # removed conditional: (Tilt.mappings[pattern] || []).include?(Tilt::AsciidoctorTemplate)
-        # because I don't what that is supposed to do - and because it's no longer exposed
-        if registered &&
-          begin
-            Tilt[File.basename(path)]
-          rescue LoadError
-            # swallowing error as it will be picked up again by primary TiltHandler
-            false
+        extensions = ['ad', 'adoc', 'asciidoc']
+        if (extensions.include? File.extname(path)[1..-1]) 
+          if defined? ::Asciidoctor::Document
+            true
           end
-        else
-          false
         end
+        false
       end
     end
 
@@ -51,7 +41,7 @@ module Awestruct
         super( site, delegate )
 
         @site = site
-        @front_matter = {}
+        @front_matter = front_matter
       end
 
 
@@ -145,9 +135,8 @@ module Awestruct
       end
 
       def parse_document_attributes(content)
-        warned = false
         template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options)
-        template.parse_headers(content, /^(?:page|awestruct)\-(?=.)/).inject({'interpolate' => false}) do |hash, (k,v)|
+        headers = template.parse_headers(content, /^(?:page|awestruct)\-(?=.)/).inject({'interpolate' => false}) do |hash, (k,v)|
           unless v.nil?
             hash[k] = v.empty? ? v : YAML.load(v)
             if hash[k].kind_of? Time
@@ -157,6 +146,8 @@ module Awestruct
           end
           hash
         end
+        binding.pry
+        headers
       end
 
     end
@@ -164,5 +155,3 @@ module Awestruct
   end
 end
 
-require 'awestruct/handlers/template/asciidoc'
-Tilt::register Tilt::AsciidoctorTemplate, '.ad', '.adoc', '.asciidoc'

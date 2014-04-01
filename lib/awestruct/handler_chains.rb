@@ -6,7 +6,8 @@ require 'awestruct/handlers/javascript_handler'
 require 'awestruct/handlers/redirect_handler'
 require 'awestruct/handlers/tilt_handler'
 # TC: shouldn't the asciidoctor be covered by the tilt handler?
-# TC: require 'awestruct/handlers/asciidoctor_handler'
+# JP: We have some additional asciidoctor integration that the tilt handler doesn't handle (yet, working on it)
+require 'awestruct/handlers/asciidoctor_handler'
 
 module Awestruct
 
@@ -20,7 +21,8 @@ module Awestruct
       Awestruct::Handlers::TiltHandler::NON_INTERPOLATION_CHAIN,
       Awestruct::Handlers::TiltHandler::INTERPOLATION_CHAIN,
       # TC: shouldn't the asciidoctor be covered by the tilt handler?
-      # TC: Awestruct::Handlers::AsciidoctorHandler::CHAIN,
+      # JP: We have some additional asciidoctor integration that the tilt handler doesn't handle (yet, working on it)
+      Awestruct::Handlers::AsciidoctorHandler::CHAIN,
       HandlerChain.new( /.*/, Awestruct::Handlers::VerbatimFileHandler )
     ]
 

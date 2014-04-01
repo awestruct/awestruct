@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'haml/filters/textile'
 
 verify_without_span = lambda { |output|
    output.should == "<h3>Test</h3>\n<p>the WHO</p>"

@@ -5,7 +5,7 @@ require 'awestruct/handlers/interpolation_handler'
 describe Awestruct::Handlers::InterpolationHandler do
 
   before :all do
-    @site = Hashery::OpenCascade[ { :encoding=>false } ]
+    @site = Hashery::OpenCascade[ { encoding: false, interpolate: true } ]
   end
 
   it "should interpolate content when rendered" do 

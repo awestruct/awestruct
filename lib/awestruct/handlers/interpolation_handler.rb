@@ -13,7 +13,7 @@ module Awestruct
         content = delegate.raw_content
 
         return nil if content.nil?
-        return content unless front_matter.fetch('interpolate', site.interpolate)
+        return content unless front_matter.fetch('interpolate', site.interpolate) == true
 
         content = content.gsub( /\\/, '\\\\\\\\' )
         content = content.gsub( /\\\\#/, '\\#' )
