@@ -43,14 +43,14 @@ verify_attributes = lambda { |output, page|
 
 verify_interpolation = lambda { |output, page|
   extend RSpec::Matchers
+  page.site.interpolate.should == true
   output.should =~ %r(UTF-8)
-  page.site.interpolate.should == false
 }
 
 verify_no_interpolation = lambda { |output, page|
   extend RSpec::Matchers
-  output.should =~ %r(\#\{site\.encoding\})
   page.site.interpolate.should == false
+  output.should =~ %r(\#\{site\.encoding\})
 }
 
 theories =
@@ -111,12 +111,11 @@ theories =
             :syntax => :asciidoc,
             :extension => '.html',
             :matcher => verify_no_interpolation,
-            :site_overrides => { :interpolate => true }
         }
     ]
 
 
-describe 'Asciidoctor integration' do
+describe Awestruct::Handlers::AsciidoctorHandler do
   def additional_config_page
     { :name => 'Awestruct', :test => 10, :layout => 'empty-layout' }
   end

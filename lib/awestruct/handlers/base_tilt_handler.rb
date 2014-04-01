@@ -17,6 +17,11 @@ module Awestruct
           $LOG.warn(%(Copying #{path} to generated site without processing; could not load engine for type))
           return false
         end
+        
+        # We have our own extra integration with Asciidoctor
+        if matcher.name.include? 'Asciidoctor'
+          return false
+        end
         matcher
       end
     end

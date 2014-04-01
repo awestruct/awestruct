@@ -7,8 +7,6 @@ require 'awestruct/handlers/layout_handler'
 
 require 'tilt'
 
-require 'pry'
-
 module Awestruct
   module Handlers
 

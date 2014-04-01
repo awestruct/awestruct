@@ -1,13 +1,10 @@
 require 'logger'
 require 'awestruct/config'
-#require 'awestruct/engine'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/tilt_handler'
 
 require 'hashery'
 require 'tilt/template'
-
-require 'pry' 
 
 module Tilt
   class BogusTemplate < Template

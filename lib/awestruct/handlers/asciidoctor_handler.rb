@@ -7,8 +7,6 @@ require 'yaml'
 
 require 'tilt'
 
-require 'pry'
-
 module Awestruct
   module Handlers
 
@@ -19,9 +17,7 @@ module Awestruct
       def match(path)
         extensions = ['ad', 'adoc', 'asciidoc']
         if (extensions.include? File.extname(path)[1..-1]) 
-          if defined? ::Asciidoctor::Document
-            true
-          end
+          return true
         end
         false
       end
@@ -46,6 +42,7 @@ module Awestruct
 
 
       def front_matter
+        @front_matter ||= {}
         parse_header()
         if @delegate
           @front_matter.update @delegate.front_matter
@@ -135,7 +132,7 @@ module Awestruct
       end
 
       def parse_document_attributes(content)
-        template = Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options)
+        template = ::Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options)
         headers = template.parse_headers(content, /^(?:page|awestruct)\-(?=.)/).inject({'interpolate' => false}) do |hash, (k,v)|
           unless v.nil?
             hash[k] = v.empty? ? v : YAML.load(v)
@@ -146,7 +143,6 @@ module Awestruct
           end
           hash
         end
-        binding.pry
         headers
       end
 

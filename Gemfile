@@ -5,6 +5,9 @@ group :development do
   gem 'hashery', '~> 2.1.1'
   gem 'rspec', '~> 2.14.1'
   gem 'rake', '~> 10.2.2'
+  gem 'guard-rspec', '~> 4.2.0', :require => false
+  gem 'pry', '~> 0.9.12', :require => false
+  gem 'pry-nav', '~> 0.2', :require => false
 end
 
 group :test do
@@ -23,6 +26,7 @@ group :test do
   gem 'mustache', '~> 0.99.5'
   gem 'uglifier', '~> 2.5.0'
   gem 'htmlcompressor', '~> 0.0.7'
+  gem 'haml-contrib', '~> 1.0.0'
 end
 
 gemspec

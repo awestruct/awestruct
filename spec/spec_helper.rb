@@ -19,7 +19,7 @@ RSpec.configure do |config|
   config.include NokogiriMatchers
   config.include EmmetMatchers
   config.after :all do
-    FileUtils.rm_rf '.awestruct' if File.exists? '.awestruct'
-    FileUtils.rm_rf '_test_tmp' unless File.exists? '_test_tmp'
+    FileUtils.rm_rf '.awestruct' if !File.exists? '.awestruct'
+    FileUtils.rm_rf '_test_tmp' unless !File.exists? '_test_tmp'
   end
 end
