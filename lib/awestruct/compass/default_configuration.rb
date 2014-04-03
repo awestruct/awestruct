@@ -24,11 +24,11 @@ module Awestruct
       end
 
       def project_path
-        site.config.source_path
+        site.config.dir
       end
 
       def sass_dir
-        File.join site.config.source_path, 'stylesheets'
+        File.join site.config.dir, 'stylesheets'
       end
 
       def http_path
@@ -40,7 +40,7 @@ module Awestruct
       end
 
       def javascripts_dir
-        File.join site.config.source_path, 'javascripts'
+        File.join site.config.dir, 'javascripts'
       end
 
       def http_javascripts_dir
@@ -52,7 +52,7 @@ module Awestruct
       end
 
       def images_dir
-        File.join site.config.source_path, 'images'
+        File.join site.config.dir, 'images'
       end
 
       def generated_images_dir
@@ -61,6 +61,10 @@ module Awestruct
 
       def http_generated_images_dir
         File.join http_path, 'images'
+      end
+
+      def sprite_load_path
+        [images_path]
       end
 
       def images_path
@@ -72,7 +76,7 @@ module Awestruct
       end
 
       def fonts_dir
-        File.join site.config.source_path, 'fonts'
+        File.join site.config.dir, 'fonts'
       end
 
       def http_fonts_dir
@@ -92,7 +96,7 @@ module Awestruct
       end
 
       def cache_dir
-        File.join site.config.source_path, '.sass-cache'
+        File.join site.config.dir, '.sass-cache'
       end
 
       def inherit_from! data

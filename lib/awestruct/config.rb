@@ -26,7 +26,7 @@ module Awestruct
       @dir             = Pathname.new( opts.source_dir )
       @layouts_dir     = Pathname.new( File.join(@dir, '_layouts') )
       @config_dir      = Pathname.new( File.join(@dir, '_config') )
-      @input_dir       = Pathname.new( File.join(@dir, '') )
+      @input_dir       = @dir
       @output_dir      = Pathname.new( opts.output_dir )
       @extension_dir   = Pathname.new( File.join(@dir, '_ext') )
       @skin_dir        = Pathname.new( File.join(@dir, '_skin') )

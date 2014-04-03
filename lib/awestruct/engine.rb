@@ -245,23 +245,15 @@ module Awestruct
       site.stylesheets_dir = File.join( site.config.output_dir, 'stylesheets' )
       site.javascripts_dir = File.join( site.config.output_dir, 'javascripts' )
 
-      compass_configuration = ::Compass::Configuration::FileData.new_from_file(File.join(site.config.config_dir, 'compass.rb')) 
-      compass_configuration.inherit_from! ::Awestruct::Compass::DefaultConfiguration.new(site) 
+      compass_config_file = File.join(site.config.config_dir, 'compass.rb')
+      if (File.exists? compass_config_file)
+        compass_configuration = ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
+        compass_configuration.inherit_from! ::Awestruct::Compass::DefaultConfiguration.new(site) 
+        ::Compass.add_configuration compass_configuration
+      else
+        ::Compass.configuration.inherit_from! ::Awestruct::Compass::DefaultConfiguration.new(site)
+      end 
 
-      ::Compass.add_configuration compass_configuration
-
-      #Compass.configuration.project_type    = :standalone
-      #Compass.configuration.project_path    = site.config.dir
-      #Compass.configuration.sass_dir        = 'stylesheets'
-      #Compass.configuration.http_path       = site.base_url
-
-      #Compass.configuration.css_dir         = site.css_dir
-      #Compass.configuration.javascripts_dir = 'javascripts'
-      #Compass.configuration.images_dir      = 'images'
-      #Compass.configuration.fonts_dir       = 'fonts'
-      #Compass.configuration.line_comments   = include_line_comments?
-      #Compass.configuration.output_style    = compress_css?
-      #Compass.configuration.relative_assets = false
       # TODO: Should we add an on_stylesheet_error block?
 
       # port old style configuration to new Tilt-based configuration
