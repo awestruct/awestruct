@@ -45,6 +45,7 @@ module Awestruct
             git.commit("Published #{@branch} to GitHub pages.")
           rescue ::Git::GitExecuteError => e
             ExceptionHelper.log_message "Can't commit. #{e}."
+            ExceptionHelper.mark_failed
           end
         end
         git.reset_hard

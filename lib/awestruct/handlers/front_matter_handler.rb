@@ -88,6 +88,7 @@ module Awestruct
           @front_matter = yaml_content.empty? ? {} : (YAML.load(yaml_content) || {})
         rescue => e
           ExceptionHelper.log_message "could not parse #{relative_source_path}"
+          ExceptionHelper.mark_failed
           raise e
         end
 

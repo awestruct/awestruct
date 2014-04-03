@@ -2,6 +2,7 @@ require 'pathname'
 require 'logger'
 require 'awestruct/logger'
 require 'awestruct/cli/options'
+require 'awestruct/util/exception_helper'
 
 module Awestruct
   module CLI
@@ -37,20 +38,25 @@ module Awestruct
       end
 
       def invoke!
-        load_profile() unless ( options.init )
+        begin
+          load_profile() unless ( options.init )
 
-        setup_config()
+          setup_config()
 
-        invoke_init()      if ( options.init )
-        invoke_script()    if ( options.script )
-        invoke_force()     if ( options.force )
-        invoke_generate()  if ( options.generate )
-        invoke_deploy()    if ( options.deploy )
-        invoke_server()    if ( options.server )
-        invoke_auto()      if ( options.auto )
+          invoke_init()      if ( options.init )
+          invoke_script()    if ( options.script )
+          invoke_force()     if ( options.force )
+          invoke_generate()  if ( options.generate )
+          invoke_deploy()    if ( options.deploy )
+          invoke_server()    if ( options.server )
+          invoke_auto()      if ( options.auto )
 
-        wait_for_completion()
-        success
+          wait_for_completion()
+          @success = false if ExceptionHelper.build_failed?
+        rescue
+          @success = false
+          false
+        end
       end
 
       def load_profile()

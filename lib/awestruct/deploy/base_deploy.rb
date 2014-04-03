@@ -98,6 +98,7 @@ module Awestruct
           @scm = clazz.new
         rescue
           ExceptionHelper.log_message( "Could not resolve class for scm type: #{type}" )
+          ExceptionHelper.mark_failed
         end
       end
     end
