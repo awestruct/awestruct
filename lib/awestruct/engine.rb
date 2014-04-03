@@ -126,7 +126,7 @@ module Awestruct
 
     def load_site_yaml(yaml_path, profile = nil)
       if ( File.exist?( yaml_path ) )
-        data = YAML.load( File.read( yaml_path ) )
+        data = YAML.load( File.read( yaml_path, :encoding => 'bom|utf-8' ) )
         if ( profile )
           # JP: Interpolation now turned off by default, turn it per page if needed
           site.interpolate = false
