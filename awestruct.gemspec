@@ -33,6 +33,7 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   EOS
 
   s.add_dependency 'haml', '~> 4.0.5'
+  s.add_dependency 'asciidoctor' # we're pretty good about backwards compat
   s.add_dependency 'nokogiri', '~> 1.5.10'
   s.add_dependency 'tilt', '~> 2.0.1'
   s.add_dependency 'compass', '~> 0.12.4'
