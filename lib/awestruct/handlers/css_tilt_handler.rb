@@ -26,7 +26,7 @@ module Awestruct
 
         # Sass / Scss
         opts[:load_paths] ||= []
-        Compass::Frameworks::ALL.each do |framework|
+        ::Compass::Frameworks::ALL.each do |framework|
           opts[:load_paths] << framework.stylesheets_directory
         end
         opts[:load_paths] << File.join(site.config.dir.to_s, File.dirname(relative_source_path) ) unless relative_source_path.nil?

@@ -2,6 +2,7 @@ profiles:
   development:
     show_drafts: false
     cook: microwave
+    base_url: http://localhost:4242
   production:
     show_drafts: true
     cook: oven
@@ -12,6 +13,7 @@ profiles:
   staging:
     compass_line_comments: off
     compass_output_style: :compact
+    base_url: http://stage.example.com
 
 title: Awestruction!
 

@@ -2,6 +2,7 @@ require 'awestruct/util/inflector'
 require 'awestruct/util/default_inflections'
 
 require 'awestruct/config'
+require 'awestruct/compass/default_configuration'
 require 'awestruct/site'
 require 'awestruct/pipeline'
 require 'awestruct/page'
@@ -11,6 +12,8 @@ require 'awestruct/extensions/pipeline'
 
 require 'fileutils'
 require 'set'
+
+require 'compass'
 
 class OpenStruct
   def inspect
@@ -236,24 +239,29 @@ module Awestruct
       pipeline.execute( site )
     end
 
-    def configure_compass
-      Compass.configuration.project_type    = :standalone
-      Compass.configuration.project_path    = site.config.dir
-      Compass.configuration.sass_dir        = 'stylesheets'
-      Compass.configuration.http_path       = site.base_url
-
+    def configure_compass 
       site.images_dir      = File.join( site.config.output_dir, 'images' )
       site.fonts_dir       = File.join( site.config.output_dir, 'fonts' )
       site.stylesheets_dir = File.join( site.config.output_dir, 'stylesheets' )
       site.javascripts_dir = File.join( site.config.output_dir, 'javascripts' )
 
-      Compass.configuration.css_dir         = site.css_dir
-      Compass.configuration.javascripts_dir = 'javascripts'
-      Compass.configuration.images_dir      = 'images'
-      Compass.configuration.fonts_dir       = 'fonts'
-      Compass.configuration.line_comments   = include_line_comments?
-      Compass.configuration.output_style    = compress_css?
-      Compass.configuration.relative_assets = false
+      compass_configuration = ::Compass::Configuration::FileData.new_from_file(File.join(site.config.config_dir, 'compass.rb')) 
+      compass_configuration.inherit_from! ::Awestruct::Compass::DefaultConfiguration.new(site) 
+
+      ::Compass.add_configuration compass_configuration
+
+      #Compass.configuration.project_type    = :standalone
+      #Compass.configuration.project_path    = site.config.dir
+      #Compass.configuration.sass_dir        = 'stylesheets'
+      #Compass.configuration.http_path       = site.base_url
+
+      #Compass.configuration.css_dir         = site.css_dir
+      #Compass.configuration.javascripts_dir = 'javascripts'
+      #Compass.configuration.images_dir      = 'images'
+      #Compass.configuration.fonts_dir       = 'fonts'
+      #Compass.configuration.line_comments   = include_line_comments?
+      #Compass.configuration.output_style    = compress_css?
+      #Compass.configuration.relative_assets = false
       # TODO: Should we add an on_stylesheet_error block?
 
       # port old style configuration to new Tilt-based configuration
@@ -267,21 +275,13 @@ module Awestruct
         end
 
         if !sass_config.has_key?(:line_numbers) || site.profile.eql?('production')
-          sass_config[:line_numbers] = Compass.configuration.line_comments
+          sass_config[:line_numbers] = ::Compass.configuration.line_comments
         end
 
         if !sass_config.has_key?(:style) || site.profile.eql?('production')
-          sass_config[:style] = Compass.configuration.output_style
+          sass_config[:style] = ::Compass.configuration.output_style
         end
       end
-    end
-
-    def include_line_comments?
-      site.key?(:compass_line_comments) ? !!site.compass_line_comments : !site.profile.eql?('production')
-    end
-
-    def compress_css?
-      site.key?(:compass_output_style) ? site.compass_output_style.to_sym : site.profile.eql?('production') ? :compressed : :expanded
     end
 
     def load_pages

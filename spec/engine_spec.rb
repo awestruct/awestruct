@@ -80,20 +80,19 @@ describe Awestruct::Engine do
   end
 
   it "should exclude line comments and minify in compass by default in production mode" do
-    compass = compass_config
     opts = Awestruct::CLI::Options.new
     opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
     config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_user_site_yaml( 'production' )
-    Compass.stub(:configuration).and_return(compass)
-    compass.should_receive(:line_comments=).with(false)
-    compass.stub(:line_comments).and_return(false)
-    compass.should_receive(:output_style=).with(:compressed)
-    compass.stub(:output_style).and_return(:compressed)
-    compass.stub(:http_path=).with(nil)
-    compass.stub(:relative_assets=).with(false)
+
     engine.configure_compass
+
+    expect( Compass.configuration.line_comments ).to eq false
+    expect( Compass.configuration.output_style ).to eq :compressed
+    expect( Compass.configuration.http_path ).to be nil
+    expect( Compass.configuration.relative_assets ).to eq false
+
     engine.site.sass.line_numbers.should == false
     engine.site.sass.style.should == :compressed
     engine.site.scss.line_numbers.should == false
@@ -101,20 +100,13 @@ describe Awestruct::Engine do
   end
 
   it "should include line comments in compass by default in development mode" do
-    compass = compass_config
     opts = Awestruct::CLI::Options.new
     opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
     config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_user_site_yaml( 'development' )
-    Compass.stub(:configuration).and_return(compass)
-    compass.should_receive(:line_comments=).with(true)
-    compass.stub(:line_comments).and_return(true)
-    compass.should_receive(:output_style=).with(:expanded)
-    compass.stub(:output_style).and_return(:expanded)
-    compass.stub(:http_path=).with(nil)
-    compass.stub(:relative_assets=).with(false)
     engine.configure_compass
+
     engine.site.sass.line_numbers.should == true
     engine.site.sass.style.should == :expanded
     engine.site.scss.line_numbers.should == true
@@ -122,20 +114,13 @@ describe Awestruct::Engine do
   end
 
   it "wip should accept site.compass_line_comments and site.compass_output_style to configure behavior" do
-    compass = compass_config
     opts = Awestruct::CLI::Options.new
     opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
     config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_user_site_yaml( 'staging' )
-    Compass.stub(:configuration).and_return(compass)
-    compass.should_receive(:line_comments=).with(false)
-    compass.stub(:line_comments).and_return(false)
-    compass.should_receive(:output_style=).with(:compact)
-    compass.stub(:output_style).and_return(:compact)
-    compass.stub(:http_path=).with(nil)
-    compass.stub(:relative_assets=).with(false)
     engine.configure_compass
+
     engine.site.sass.line_numbers.should == false
     engine.site.sass.style.should == :compact
     engine.site.scss.line_numbers.should == false
@@ -144,14 +129,3 @@ describe Awestruct::Engine do
 
 end
 
-def compass_config
-  config = double
-  config.stub(:project_type=)
-  config.stub(:project_path=)
-  config.stub(:sass_dir=)
-  config.stub(:css_dir=)
-  config.stub(:javascripts_dir=)
-  config.stub(:images_dir=)
-  config.stub(:fonts_dir=)
-  config
-end
