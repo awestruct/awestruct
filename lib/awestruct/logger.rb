@@ -1,4 +1,5 @@
 require 'logger'
+require 'colorize'
 
 module Awestruct
   class AwestructLoggerMultiIO
@@ -12,7 +13,7 @@ module Awestruct
         if target.instance_of?(File) && @log_to_debug
           target.write(*args)
         end
-        if args[0] !~/\[/ && target.instance_of?(IO)
+        if args[0][0] != '[' && target.instance_of?(IO)
           target.write(*args)
         end
       end
@@ -49,10 +50,16 @@ module Awestruct
         who = "#{file}:#{line}##{method}"
       end
 
-      if severity =~ /DEBUG/
+      if severity[0] == 'D'
         "[%s] %5s -- %s [%s]\n" % [timestamp.strftime('%Y-%m-%d %H:%M:%S'), severity, object, who]
       else
-        "%s\n" % [object]
+        if severity[0] == 'W'
+          ("%s" % [object]).colorize(:yellow) + "\n"
+        elsif severity[0] == 'E'
+          ("%s" % [object]).colorize(:red) + "\n"
+        else
+          "%s\n" % [object]
+        end
       end
     end
   end

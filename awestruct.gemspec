@@ -47,4 +47,5 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_dependency 'rack', '~> 1.5.2'
   s.add_dependency 'git', '~> 1.2.6'
   s.add_dependency 'guard-livereload', '~> 2.1.2'
+  s.add_dependency 'colorize', '~> 0.7.1'
 end

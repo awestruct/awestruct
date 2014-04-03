@@ -13,7 +13,7 @@ module Awestruct
 
       def google_analytics_async()
         # deprecated
-        puts "WARNING: google_analytics_async is deprecated. Please use google_analytics or google_analytics_universal."
+        $LOG.warn "google_analytics_async is deprecated. Please use google_analytics or google_analytics_universal." if $LOG.warn?
         google_analytics()
       end
 
@@ -62,12 +62,12 @@ module Awestruct
 
         if site.google_analytics_anonymize
           # deprecated
-          puts "WARNING: Syntax has changed to site.google_analytics = { :anonymizeIp => true }"
+          $LOG.warn "Syntax has changed to site.google_analytics = { :anonymizeIp => true }" if $LOG.warn?
           options[:anonymizeIp] = true
         end
         if site.google_analytics.is_a?(String)
           # deprecated
-          puts "WARNING: Syntax has changed to site.google_analytics = { :account => '#{site.google_analytics}' }"
+          $LOG.warn "Syntax has changed to site.google_analytics = { :account => '#{site.google_analytics}' }" if $LOG.warn?
           options[:account] = site.google_analytics
         end
 

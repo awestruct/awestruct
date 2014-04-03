@@ -31,11 +31,11 @@ module Awestruct
 
     def self.html_error_report exception, relative_source_path
       @@failed = true
-"<h1>#{exception.message}</h1>
+      "<h1>#{exception.message}</h1>
 <h2>Rendering file #{relative_source_path} resulted in a failure.</h2>
 <p>Line: #{(exception.respond_to? :line) ? exception.line : 'unknown'}</p>
 <p>Backtrace:</p>
 <pre>#{exception.backtrace.join "\n"}</pre>"
-   end
+    end 
   end
 end
