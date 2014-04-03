@@ -19,6 +19,7 @@ module Awestruct
     attr_accessor :stylesheets_dir
 
     attr_accessor :verbose
+    attr_accessor :quiet
     attr_accessor :options
 
     def initialize(opts = Awestruct::CLI::Options.new)

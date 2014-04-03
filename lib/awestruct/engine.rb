@@ -305,7 +305,7 @@ module Awestruct
 
     def generate_page(page, generated_path, produce_output=true)
       if ( produce_output )
-        #$LOG.info "Generating: #{generated_path}" if $LOG.info?
+        $LOG.info "Generating: #{generated_path}" if $LOG.info? && !config.quiet
         FileUtils.mkdir_p( File.dirname( generated_path ) )
 
         c = page.rendered_content

@@ -87,12 +87,13 @@ module Awestruct
         end
 
         @profile = profile || {}
-       end
+      end
 
       def setup_config()
         @config = Awestruct::Config.new( @options )
         @config.track_dependencies = true if ( @options.auto )
         @config.verbose = true if ( @options.verbose )
+        @config.quiet = true if ( @options.quiet )
       end
 
       def invoke_init()

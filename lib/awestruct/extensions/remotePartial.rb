@@ -17,7 +17,7 @@ module Awestruct
       def get_or_cache(tmp_file, url)
         response_body = ""
         if !File.exist?tmp_file
-           $LOG.info url if $LOG.info?
+          $LOG.info url if $LOG.info? && !config.quiet
           response_body = RestClient.get(url, :cache => false) { |response, request, result, &block|
             case response.code
             when 404

@@ -31,6 +31,7 @@ module Awestruct
       attr_accessor :deploy
       attr_accessor :script
       attr_accessor :verbose
+      attr_accessor :quiet
       attr_accessor :source_dir
       attr_accessor :output_dir
       attr_accessor :livereload
@@ -50,6 +51,7 @@ module Awestruct
         @deploy     = false
         @script     = nil
         @verbose    = false
+        @quiet      = false
         @livereload = false
         @source_dir = Dir.pwd
         @output_dir = File.expand_path '_site'
@@ -63,6 +65,9 @@ module Awestruct
         opts = OptionParser.new do |opts|
           opts.on('-w', '--verbose', 'Enable verbose mode') do |verbose|
             self.verbose = true
+          end
+          opts.on('-q', '--quiet', 'Only display warnings and errors') do |quiet|
+            self.quiet = true
           end
           opts.on( '-i', '--init', 'Initialize a new project in the current directory' ) do |init|
             self.init     = init
