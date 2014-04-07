@@ -18,7 +18,12 @@ module Awestruct
           page.send( "#{k}=", v )
         end if params
 
-        page.content
+        begin
+          page.content
+        rescue Exception => e
+          ExceptionHelper.log_error "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
+          ExceptionHelper.backtrace e 
+        end
       end
 
     end
