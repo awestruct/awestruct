@@ -27,6 +27,11 @@ module Awestruct
       end
 
       def run
+        if ExceptionHelper.build_failed?
+          ExceptionHelper.log_error 'Not running deploy due to build failure'
+          return
+        end
+
         if @ignore_uncommitted == true
           compress_site
           publish_site
