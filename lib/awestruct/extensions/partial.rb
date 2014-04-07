@@ -18,6 +18,8 @@ module Awestruct
           page.send( "#{k}=", v )
         end if params
 
+        page.send("output_page=", self[:page])
+
         begin
           page.content
         rescue Exception => e
