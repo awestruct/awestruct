@@ -44,9 +44,10 @@ module Awestruct
                 generate_thread = Thread.new {
                   begin
 
+                    # TODO: Have to figure something out for extensions and other files without an output path
+                    #       Probably add another method in engin to to do the regen w/o mucking with site.pages and run through things again
                     page = engine.page_by_output_path(path)
                     if ( page )
-
                       pages = engine.generate_page_and_dependencies( page )
 
                       if ( guard )

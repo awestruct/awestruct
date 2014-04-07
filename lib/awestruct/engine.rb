@@ -318,11 +318,13 @@ module Awestruct
 
     # path - relative to output dir
     def page_by_output_path(path)
-      site.pages.find { |p|
-          p.source_path.to_s == path
-        } || site.layouts.find { |p|
-          p.source_path.to_s == path
-        }
+      if (path.include? '_layout')
+        site.layouts.find { |p| p.source_path.to_s == path }
+      elsif (path.include? '_partial')
+        site.partials.find { |p| p.source_path.to_s == path }
+      else
+        site.pages.find { |p| p.source_path.to_s == path }
+      end
     end
 
     def generate_page_and_dependencies(page)
@@ -331,31 +333,33 @@ module Awestruct
         return
       end
 
-      if !page.output_path.nil?
+      if !page.output_path.nil? && !page.is_partial? && !page.__is_layout
         generate_page_internal(page)
       end
 
       pages = [ page ]
 
-      pages.each do |page|
-        $LOG.debug "--------------------" if $LOG.debug?
-        $LOG.debug "Page: #{page.output_path} #{page.relative_source_path} #{page.__is_layout ? 'Layout':''}" if $LOG.debug?
-        $LOG.debug "Detected change in content (#{page.dependencies.content_hash})" if page.dependencies.has_changed_content if $LOG.debug?
-        $LOG.debug "!! Detected change in front matter. To fully reflect the change you'll need to restart Awestruct (#{page.dependencies.key_hash})" if page.dependencies.has_changed_keys if $LOG.debug?
-        $LOG.debug "No changes detected" unless page.dependencies.has_changed_content or page.dependencies.has_changed_keys if $LOG.debug?
-        $LOG.debug "Dependencies Matrix: (non unique source path)" if $LOG.debug?
-        $LOG.debug "\t Outgoing dependencies:" if $LOG.debug?
-        $LOG.debug "\t\t Content -> #{page.dependencies.dependencies.size}" if $LOG.debug?
-        $LOG.debug "\t\t Key     -> #{page.dependencies.key_dependencies.size}" if $LOG.debug?
-        $LOG.debug "\t Incoming dependencies:" if $LOG.debug?
-        $LOG.debug "\t\t Content <- #{page.dependencies.dependents.size}" if $LOG.debug?
-        $LOG.debug "\t\t Key     <- #{page.dependencies.key_dependents.size}" if $LOG.debug?
-        $LOG.debug "--------------------" if $LOG.debug?
+      pages.each do |p|
+        if $LOG.debug?
+          $LOG.debug "--------------------"
+          $LOG.debug "Page: #{p.output_path} #{p.relative_source_path} #{p.__is_layout ? 'Layout':''}"
+          $LOG.debug "Detected change in content (#{p.dependencies.content_hash})" if p.dependencies.has_changed_content
+          $LOG.debug "!! Detected change in front matter. To fully reflect the change you'll need to restart Awestruct (#{p.dependencies.key_hash})" if p.dependencies.has_changed_keys
+          $LOG.debug "No changes detected" unless p.dependencies.has_changed_content or p.dependencies.has_changed_keys
+          $LOG.debug "Dependencies Matrix: (non unique source path)"
+          $LOG.debug "\t Outgoing dependencies:"
+          $LOG.debug "\t\t Content -> #{p.dependencies.dependencies.size}"
+          $LOG.debug "\t\t Key     -> #{p.dependencies.key_dependencies.size}"
+          $LOG.debug "\t Incoming dependencies:"
+          $LOG.debug "\t\t Content <- #{p.dependencies.dependents.size}"
+          $LOG.debug "\t\t Key     <- #{p.dependencies.key_dependents.size}"
+          $LOG.debug "--------------------"
+        end
       end
 
       regen_pages = Set.new
 
-      if page.dependencies.has_changed_content or page.__is_layout
+      if page.dependencies.has_changed_content || page.__is_layout || page.is_partial?
         regen_pages += page.dependencies.dependents
       end
 
@@ -372,7 +376,17 @@ module Awestruct
 
       $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
 
+      old_site_pages = site.pages
+      site.pages = regen_pages
+
+      @pipeline = Pipeline.new
+      load_yamls
+      load_pipeline
+      execute_pipeline
+      @site.pages = old_site_pages
+
       regen_pages.each do |p|
+        puts "Regenerating page #{p.output_path}"
         generate_page_internal(p)
         pages << p
       end

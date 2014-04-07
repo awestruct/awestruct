@@ -12,6 +12,7 @@ module Awestruct
     attr_accessor :site
     attr_accessor :handler
     attr_reader   :dependencies
+    attr_writer   :partial
 
     def initialize(site, handler=nil)
       @site          = site
@@ -92,6 +93,8 @@ module Awestruct
     def stale_output?(output_path)
       return true if ! File.exist?( output_path )
       return true if input_mtime > File.mtime( output_path )
+      return true if stale?
+      # TODO: Add stale callback and execute it
       false
     end
 
@@ -175,6 +178,10 @@ module Awestruct
 
     def ==(other_page)
       self.object_id == other_page.object_id
+    end
+
+    def is_partial?
+      @partial
     end
 
   end

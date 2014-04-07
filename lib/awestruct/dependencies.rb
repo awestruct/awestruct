@@ -40,9 +40,6 @@ module Awestruct
     def self.pop_page
       page = @pages.pop
       $LOG.debug "pop #{page.output_path} #{@pages.empty?}" if $LOG.debug?
-      if ( @pages.empty? && ! page.nil? )
-        page.dependencies.persist!
-      end
     end
 
 

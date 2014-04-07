@@ -11,7 +11,6 @@ module Awestruct
         end
 
         page = site.engine.load_site_page( filename )
-
         return nil if !page
 
         params.each do |k,v|
@@ -19,15 +18,31 @@ module Awestruct
         end if params
 
         page.send("output_page=", self[:page])
+        page.partial = true
 
-        begin
-          page.content
-        rescue Exception => e
-          ExceptionHelper.log_error "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
-          ExceptionHelper.backtrace e 
+        from_site = site.partials.find {|p| p.source_path == page.source_path}
+
+        # Setup dependency tracking
+        if from_site
+          from_site.dependencies.add_dependent self[:page]
+          self[:page].dependencies.add_dependency from_site
+          Awestruct::Dependencies.track_dependency(from_site)
+        else
+          page.dependencies.add_dependent self[:page]
+          self[:page].dependencies.add_dependency page
+          Awestruct::Dependencies.track_dependency(page)
+          site.partials << page
+
+          begin
+            page.content
+          rescue Exception => e
+            ExceptionHelper.log_error "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
+            ExceptionHelper.backtrace e 
+          end
         end
-      end
 
+      end
     end
   end
 end
+

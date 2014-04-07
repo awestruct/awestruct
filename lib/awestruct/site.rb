@@ -10,8 +10,9 @@ module Awestruct
     attr_reader :tmp_dir
     attr_reader :timestamp
 
-    attr_reader :pages
+    attr_accessor :pages
     attr_reader :layouts
+    attr_reader :partials
 
     attr_reader :config
     attr_reader :engine
@@ -20,6 +21,7 @@ module Awestruct
       @engine = engine
       @pages = []
       @layouts = Layouts.new
+      @partials = []
       @config = config
       self.encoding = false
       @timestamp = Time.now.to_i
