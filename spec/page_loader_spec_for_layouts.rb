@@ -7,7 +7,7 @@ describe Awestruct::PageLoader do
 
   before :each do
     @opts = Awestruct::CLI::Options.new
-    @opts.source_dir = File.dirname(__FILE__) + '/test-data/page-loader'
+    @opts.source_dir = test_data_dir 'page-loader' 
     @config = Awestruct::Config.new( @opts )
     @engine = Awestruct::Engine.new
     @engine.pipeline.handler_chains << :defaults

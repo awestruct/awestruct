@@ -7,7 +7,7 @@ describe Awestruct::Engine do
 
   it "should be able to load default-site.yml" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
@@ -21,7 +21,7 @@ describe Awestruct::Engine do
 
   it "should be able to override default with site" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
@@ -37,7 +37,7 @@ describe Awestruct::Engine do
 
   it "should be able to load site.yml with the correct profile" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
@@ -59,7 +59,7 @@ describe Awestruct::Engine do
 
   it "should be able to handle UTF-8 in site.yml" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
@@ -71,7 +71,7 @@ describe Awestruct::Engine do
 
   it "should be able to load arbitrary _config/*.yml files" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
@@ -81,7 +81,7 @@ describe Awestruct::Engine do
 
   it "should be able to load all arbitary yamls" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
 
     engine = Awestruct::Engine.new(config)
@@ -93,7 +93,8 @@ describe Awestruct::Engine do
 
   it "should exclude line comments and minify in compass by default in production mode" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine'
+
     config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_user_site_yaml( 'production' )
@@ -113,7 +114,7 @@ describe Awestruct::Engine do
 
   it "should include line comments in compass by default in development mode" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_user_site_yaml( 'development' )
@@ -127,7 +128,7 @@ describe Awestruct::Engine do
 
   it "wip should accept site.compass_line_comments and site.compass_output_style to configure behavior" do
     opts = Awestruct::CLI::Options.new
-    opts.source_dir = File.dirname(__FILE__) + '/test-data/engine'
+    opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
     engine = Awestruct::Engine.new(config)
     engine.load_user_site_yaml( 'staging' )

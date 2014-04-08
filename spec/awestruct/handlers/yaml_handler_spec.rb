@@ -10,7 +10,7 @@ describe Awestruct::Handlers::YamlHandler do
   end
 
   it "should provide access to the yaml as front-matter" do 
-    filename = Pathname.new( File.dirname(__FILE__) + "/test-data/simple-data.yaml" )
+    filename = Pathname.new( test_data_dir 'simple-data.yaml' )
     file_handler = Awestruct::Handlers::FileHandler.new( @site, filename )
     handler = Awestruct::Handlers::YamlHandler.new( @site, file_handler )
     handler.raw_content.should be_nil

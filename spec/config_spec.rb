@@ -6,7 +6,7 @@ require 'awestruct/cli/options'
 describe Awestruct::Config do
 
   it "should accept a list of files in .awestruct_ignore to ignore on site generation" do
-    site_dir = File.join(File.dirname(__FILE__), 'test-data')
+    site_dir = test_data_dir '' 
     opts = Awestruct::CLI::Options.new
     opts.source_dir = site_dir
 
@@ -15,7 +15,7 @@ describe Awestruct::Config do
   end
 
   it "should handle an empty .awestruct_ignore file without barfing" do
-    site_dir = File.join(File.dirname(__FILE__), 'test-data')
+    site_dir = test_data_dir ''
     config_file = File.join(site_dir, ".awestruct_ignore")
     opts = Awestruct::CLI::Options.new
     opts.source_dir = site_dir

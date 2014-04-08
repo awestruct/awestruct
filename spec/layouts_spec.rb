@@ -9,7 +9,7 @@ require 'hashery'
 describe Awestruct::Layouts do
 
   it "should be able to index layouts by simple name and output extension" do
-    dir = Pathname.new( File.dirname( __FILE__ ) + '/test-data/handlers' )
+    dir = Pathname.new( test_data_dir 'handlers' )
     site = Hashery::OpenCascade[ { :dir=>dir } ]
     file_handler = Awestruct::Handlers::FileHandler.new( site, File.join( dir, 'haml-layout.html.haml' ) )
     haml_handler = Awestruct::Handlers::TiltHandler.new( site, file_handler )

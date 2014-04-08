@@ -14,7 +14,7 @@ describe Awestruct::Handlers::LayoutHandler do
 
 
   before :all do
-    @config = Hashery::OpenCascade[ { :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) } ]
+    @config = Hashery::OpenCascade[ { :dir=>Pathname.new( test_data_dir 'handlers' ) } ]
     @engine = Awestruct::Engine.new
     @site = Awestruct::Site.new( @engine, @config )
     layout_loader = Awestruct::PageLoader.new( @site, :layouts )

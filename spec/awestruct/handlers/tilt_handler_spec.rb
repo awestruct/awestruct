@@ -32,7 +32,7 @@ end
 describe Awestruct::Handlers::TiltHandler do
 
   before do
-    dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' )
+    dir = Pathname.new( test_data_dir 'handlers' )
     opts = Awestruct::CLI::Options.new
     opts.source_dir = dir
 
@@ -77,7 +77,7 @@ describe Awestruct::Handlers::TiltHandler do
 
   it "should handle pages with no relative_source_path" do
     ## force relative_source_path.nil
-    @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/outside_relative' )  
+    @site.dir = Pathname.new( test_data_dir 'handlers/outside_relative' )
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "asciidoc-page.asciidoc" ) )
     handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
 
@@ -90,7 +90,7 @@ describe Awestruct::Handlers::TiltHandler do
   end
 
   it "should handle non extension dots in source name" do
-    @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/outside_relative' )  
+    @site.dir = Pathname.new( test_data_dir 'handlers/outside_relative' )
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "warp-1.0.0.Alpha2.textile" ) )
     handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
 
@@ -110,7 +110,7 @@ describe Awestruct::Handlers::TiltHandler do
       log = StringIO.new
       $LOG = Logger.new(log)
       $LOG.level = Logger::DEBUG
-      @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
+      @site.dir = Pathname.new( test_data_dir 'handlers' ) 
       path = handler_file( "hello.bogus" )
       expect(Awestruct::Handlers::TiltMatcher.new().match(path)).to be_false
       expect(log.string).to include('could not load engine for type')
@@ -131,7 +131,7 @@ describe Awestruct::Handlers::TiltHandler do
       log = StringIO.new
       $LOG = Logger.new(log)
       $LOG.level = Logger::DEBUG
-      @site.dir = Pathname.new( File.dirname(__FILE__) + '/test-data/handlers/' )
+      @site.dir = Pathname.new( test_data_dir 'handlers' )
       file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "haml-error.html.haml" ) )
       handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
       content = handler.rendered_content(create_context)

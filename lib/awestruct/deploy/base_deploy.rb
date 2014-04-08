@@ -28,7 +28,7 @@ module Awestruct
 
       def run
         if ExceptionHelper.build_failed?
-          ExceptionHelper.log_error 'Not running deploy due to build failure'
+          ExceptionHelper.log_message 'Not running deploy due to build failure'
           return
         end
 

@@ -2,6 +2,9 @@ require 'spec_helper'
 require 'awestruct/cli/deploy'
 
 describe Awestruct::CLI::Deploy do
+  before :each do
+    Awestruct::ExceptionHelper.class_variable_set :@@failed, false
+  end
 
   it "should use a given deploy[:type]" do
     deployer = Awestruct::CLI::Deploy.new({}, {'type' => :foo})
@@ -56,7 +59,7 @@ describe Awestruct::CLI::Deploy do
 
   it "should only gzip html, css and js files" do
     site_tmp_dir = Dir.mktmpdir("site_dir")
-    site_src_dir = File.join(File.dirname(__FILE__), 'test-data/gzip')
+    site_src_dir = test_data_dir 'gzip' 
     FileUtils.cp_r(site_src_dir, site_tmp_dir)
     site_dir = "#{site_tmp_dir}/gzip"
 
@@ -81,7 +84,7 @@ describe Awestruct::CLI::Deploy do
 
   it "should gzip only once" do
     site_tmp_dir = Dir.mktmpdir("site_dir")
-    site_src_dir = File.join(File.dirname(__FILE__), 'test-data/gzip')
+    site_src_dir = test_data_dir 'gzip' 
     FileUtils.cp_r(site_src_dir, site_tmp_dir)
     site_dir = "#{site_tmp_dir}/gzip"
 
@@ -108,7 +111,7 @@ describe Awestruct::CLI::Deploy do
 
   it "should gzip with the compression level" do
     site_tmp_dir = Dir.mktmpdir("site_dir")
-    site_src_dir = File.join(File.dirname(__FILE__), 'test-data/gzip')
+    site_src_dir = test_data_dir 'gzip' 
     FileUtils.cp_r(site_src_dir, site_tmp_dir)
     site_dir = "#{site_tmp_dir}/gzip"
 

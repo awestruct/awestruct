@@ -49,3 +49,7 @@ module EmmetMatchers
     EmmetStructureMatcher.new(expect)
   end
 end
+
+RSpec.configure do |c|
+  c.include EmmetMatchers
+end

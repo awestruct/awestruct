@@ -26,7 +26,7 @@ shared_examples 'a handler' do |theories|
 
     def init
       opts = Awestruct::CLI::Options.new
-      opts.source_dir = File.dirname(__FILE__) + '/../test-data/handlers'
+      opts.source_dir = test_data_dir 'handlers' 
       config = Awestruct::Config.new( opts )
 
       engine = Awestruct::Engine.new( config )

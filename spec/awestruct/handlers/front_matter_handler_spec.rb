@@ -17,7 +17,7 @@ describe Awestruct::Handlers::FrontMatterHandler do
   end
 
   def file_input(filename)
-    filename = Pathname.new( File.dirname(__FILE__) + "/test-data/#{filename}" )
+    filename = Pathname.new( test_data_dir filename )
     Awestruct::Handlers::FileHandler.new( @site, filename )
   end
 

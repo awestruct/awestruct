@@ -19,3 +19,7 @@ module NokogiriMatchers
     HtmlMatchers.new(expect)
   end
 end
+
+RSpec.configure do |c|
+  c.include NokogiriMatchers
+end

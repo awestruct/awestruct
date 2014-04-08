@@ -20,7 +20,7 @@ describe Awestruct::Handlers::FileHandler do
   end
 
   before :each do
-    @filename = Pathname.new( File.dirname(__FILE__) + "/test-data/simple-file.txt" )
+    @filename = Pathname.new( test_data_dir 'simple-file.txt' )
     @handler = Awestruct::Handlers::FileHandler.new( @site, @filename )
     @page = Awestruct::Page.new( @site, @handler )
     @site.engine.pipeline = Awestruct::Pipeline.new

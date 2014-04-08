@@ -4,7 +4,7 @@ require 'awestruct/cli/invoker'
 describe Awestruct::CLI::Invoker do
 
   it "should invoke generation by default" do
-    invoker = Awestruct::CLI::Invoker.new(%w(--source-dir _test_tmp))
+    invoker = Awestruct::CLI::Invoker.new(%w(--source-dir spec/support/test-config/))
     invoker.should_not_receive( :invoke_init )
     invoker.should_not_receive( :invoke_script )
     invoker.should_not_receive( :invoke_force )
@@ -16,7 +16,7 @@ describe Awestruct::CLI::Invoker do
   end
 
   it "should only invoke initialization things when initializing" do
-    invoker = Awestruct::CLI::Invoker.new(%w(--init --source-dir _test_tmp))
+    invoker = Awestruct::CLI::Invoker.new(%w(--init --source-dir spec/support/test-config/))
     invoker.should_receive( :invoke_init )
     invoker.should_not_receive( :invoke_script )
     invoker.should_not_receive( :invoke_force )
@@ -28,7 +28,7 @@ describe Awestruct::CLI::Invoker do
   end
 
   it "should invoke generation and server when servered" do
-    invoker = Awestruct::CLI::Invoker.new(%w(--server --source-dir _test_tmp))
+    invoker = Awestruct::CLI::Invoker.new(%w(--server --source-dir spec/support/test-config/))
     invoker.should_not_receive( :invoke_init )
     invoker.should_not_receive( :invoke_script )
     invoker.should_not_receive( :invoke_force )
@@ -40,7 +40,7 @@ describe Awestruct::CLI::Invoker do
   end
 
  it "should invoke generation and server and auto when dev-mode" do
-    invoker = Awestruct::CLI::Invoker.new(%w(-d --source-dir _test_tmp))
+    invoker = Awestruct::CLI::Invoker.new(%w(-d --source-dir spec/support/test-config/))
     invoker.should_not_receive( :invoke_init )
     invoker.should_not_receive( :invoke_script )
     invoker.should_not_receive( :invoke_force )
@@ -68,7 +68,7 @@ describe Awestruct::CLI::Invoker do
     generator = double
     Awestruct::CLI::Generate.should_receive( :new ).and_return( generator )
     generator.should_receive( :run ).and_return( false )
-    Awestruct::CLI::Invoker.new( %w(--source-dir _test_tmp --generate) ).invoke!.should be_false
+    Awestruct::CLI::Invoker.new( %w(--source-dir spec/support/test-config --generate) ).invoke!.should be_false
   end
 
 

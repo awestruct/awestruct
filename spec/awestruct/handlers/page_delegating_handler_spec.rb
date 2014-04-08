@@ -8,7 +8,7 @@ require 'hashery'
 describe Awestruct::Handlers::PageDelegatingHandler do
 
   before :all do
-    @config = Hashery::OpenCascade[ { :dir=>Pathname.new( File.dirname(__FILE__) + '/test-data/handlers' ) } ] 
+    @config = Hashery::OpenCascade[ { :dir=>Pathname.new( test_data_dir 'handlers' ) } ]
     @engine = Awestruct::Engine.new( @config )
     @site = @engine.site
     layout_loader = Awestruct::PageLoader.new( @site, :layouts )

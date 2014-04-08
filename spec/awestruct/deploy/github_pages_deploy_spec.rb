@@ -20,8 +20,9 @@ describe Awestruct::Deploy::GitHubPagesDeploy do
     @git = double
     @git.stub_chain(:status, :changed, :empty?).and_return true
     ::Git.stub(:open).with('.').and_return @git
+    Awestruct::ExceptionHelper.class_variable_set :@@failed, false
   end
-
+  
   it "should be auto-registered" do
     Awestruct::Deployers.instance[ :github_pages ].should == Awestruct::Deploy::GitHubPagesDeploy
   end

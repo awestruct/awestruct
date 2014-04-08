@@ -5,7 +5,7 @@ describe Awestruct::Rack::App do
   include Rack::Test::Methods
 
   def app
-    Awestruct::Rack::App.new(Pathname.new( File.dirname(__FILE__) + '/test-data'))
+    Awestruct::Rack::App.new(Pathname.new( test_data_dir '')) 
   end
 
   describe "HTML media type" do
