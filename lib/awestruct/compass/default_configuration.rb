@@ -1,4 +1,4 @@
-require 'compass/configuration/defaults'
+require 'compass'
 
 module Awestruct
   module Compass
@@ -10,92 +10,120 @@ module Awestruct
         @site = site
       end
 
-      def project_type
+      def default_project_type
         :stand_alone
       end
 
-      def environment
+      def default_environment
         site.profile
       end
 
-      def project_path
+      def default_project_path
         site.config.dir
       end
 
-      def sass_dir
+      def default_sass_dir
         File.join site.config.dir, 'stylesheets'
       end
 
-      def http_path
+      def default_http_path
         site.base_url
       end
 
-      def css_dir
+      def default_css_dir
         site.css_dir
       end
 
-      def javascripts_dir
+      def default_javascripts_dir
         File.join site.config.dir, 'javascripts'
       end
 
-      def http_javascripts_dir
+      def default_http_javascripts_dir
         File.join http_path, 'javascripts' 
       end
 
-      def http_stylesheets_dir
+      def default_http_stylesheets_dir
         File.join http_path, 'stylesheets'
       end
 
-      def images_dir
+      def default_images_dir
         File.join site.config.dir, 'images'
       end
 
-      def generated_images_dir
+      def default_generated_images_dir
         File.join site.output_path, 'images'
       end
 
-      def http_generated_images_dir
+      def default_http_generated_images_dir
         File.join http_path, 'images'
       end
 
-      def sprite_load_path
+      def default_sprite_load_path
         [images_path]
       end
 
-      def images_path
+      def default_images_path
         File.join project_path, 'images'
       end
 
-      def http_images_dir
+      def default_http_images_dir
         File.join http_path, 'images'
       end
 
-      def fonts_dir
+      def default_fonts_dir
         File.join site.config.dir, 'fonts'
       end
 
-      def http_fonts_dir
+      def default_http_fonts_dir
         File.join http_path, 'fonts'
       end
 
       def line_comments
-        site.key?(:compass_line_comments) ? !!site.compass_line_comments : !site.profile.eql?('production') 
+        if self.inherited_data && self.inherited_data.is_a?(::Compass::Configuration::FileData)
+          return self.inherited_data.line_comments
+        end
+        if site.profile.eql? 'production'
+          return false
+        else
+          if site.key? :compass_line_comments
+            return site.compass_line_comments 
+          end
+          if site.key?(:scss) && site.scss.key?(:line_comments)
+            return site.scss.line_comments
+          end
+          if site.key?(:sass) && site.sass.key?(:line_comments)
+            return site.sass.line_comments
+          end
+          true
+        end
       end
 
       def output_style
-        site.key?(:compass_output_style) ? site.compass_output_style.to_sym : site.profile.eql?('production') ? :compressed : :expanded 
+        if self.inherited_data && self.inherited_data.is_a?(::Compass::Configuration::FileData)
+          return self.inherited_data.output_style
+        end
+        if site.profile.eql? 'production'
+          return :compressed
+        else
+          if site.key? :compass_output_style
+            return site.compass_output_style
+          end
+          if (site.key? :scss) && (site.scss.key? :style)
+            return site.scss.style
+          end
+          if (site.key? :sass) && (site.sass.key? :style)
+            return site.sass.style
+          end
+        end
+        :expanded
       end
 
-      def relative_assets
+      def default_relative_assets
         false
       end
 
-      def cache_dir
+      def default_cache_dir
         File.join site.config.dir, '.sass-cache'
-      end
-
-      def inherit_from! data
-        return
       end
     end 
   end

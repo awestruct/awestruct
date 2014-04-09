@@ -44,7 +44,7 @@ describe Awestruct::Handlers::TiltHandler do
   end
 
   def create_context
-    Hashery::OpenCascade[ { :site=>@site } ]
+    Hashery::OpenCascade[ { :site=>@site, page: {:source_path => '', :output_path => ''} } ]
   end
 
   it "should provide default configuration options from site based on output_extension" do

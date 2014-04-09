@@ -240,40 +240,20 @@ module Awestruct
     end
 
     def configure_compass 
-      site.images_dir      = File.join( site.config.output_dir, 'images' )
-      site.fonts_dir       = File.join( site.config.output_dir, 'fonts' )
-      site.stylesheets_dir = File.join( site.config.output_dir, 'stylesheets' )
-      site.javascripts_dir = File.join( site.config.output_dir, 'javascripts' )
+      site.images_dir      = File.join( site.config.dir, 'images' )
+      site.fonts_dir       = File.join( site.config.dir, 'fonts' )
+      site.stylesheets_dir = File.join( site.config.dir, 'stylesheets' )
+      site.javascripts_dir = File.join( site.config.dir, 'javascripts' )
 
+      default_config = Awestruct::Compass::DefaultConfiguration.new(site)
       compass_config_file = File.join(site.config.config_dir, 'compass.rb')
       if (File.exists? compass_config_file)
-        compass_configuration = ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
-        compass_configuration.inherit_from! ::Awestruct::Compass::DefaultConfiguration.new(site) 
-        ::Compass.add_configuration compass_configuration
-      else
-        ::Compass.configuration.inherit_from! ::Awestruct::Compass::DefaultConfiguration.new(site)
+        default_config.inherit_from! ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
       end 
 
-      # TODO: Should we add an on_stylesheet_error block?
+      ::Compass.add_configuration default_config
 
-      # port old style configuration to new Tilt-based configuration
-      # TODO consider deprecating the old config mechanism and move to default-site.yml
-      [:scss, :sass].each do |sass_ext|
-        if !site.key? sass_ext
-          sass_config = {}
-          site[sass_ext] = sass_config
-        else
-          sass_config = site[sass_ext]
-        end
-
-        if !sass_config.has_key?(:line_numbers) || site.profile.eql?('production')
-          sass_config[:line_numbers] = ::Compass.configuration.line_comments
-        end
-
-        if !sass_config.has_key?(:style) || site.profile.eql?('production')
-          sass_config[:style] = ::Compass.configuration.output_style
-        end
-      end
+      # TODO: Should we add an on_stylesheet_error block?  
     end
 
     def load_pages

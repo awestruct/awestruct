@@ -1,6 +1,13 @@
 encoding: UTF-8
 interpolate: false
 
+scss:
+  :line_numbers: true
+  :style: expanded
+sass:
+  :line_numbers: true
+  :style: expanded
+
 content_syntax:
   coffee: coffeescript
   md: markdown
