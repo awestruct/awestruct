@@ -2,18 +2,13 @@ require 'compass/configuration/defaults'
 
 module Awestruct
   module Compass
-    class DefaultConfiguration
-      #include ::Compass::Configuration::Defaults
+    class DefaultConfiguration < ::Compass::Configuration::Data
 
       attr_reader :site
 
       def initialize site
         @site = site
       end
-
-      #def top_level
-        #self
-      #end
 
       def project_type
         :stand_alone
