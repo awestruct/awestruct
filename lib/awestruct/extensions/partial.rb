@@ -31,16 +31,15 @@ module Awestruct
           page.dependencies.add_dependent self[:page]
           self[:page].dependencies.add_dependency page
           Awestruct::Dependencies.track_dependency(page)
-          site.partials << page
-
-          begin
-            page.content
-          rescue Exception => e
-            ExceptionHelper.log_error "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
-            ExceptionHelper.backtrace e 
-          end
+          site.partials << page 
         end
 
+        begin
+          page.content
+        rescue Exception => e
+          ExceptionHelper.log_error "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
+          ExceptionHelper.backtrace e 
+        end 
       end
     end
   end
