@@ -138,8 +138,13 @@ module Awestruct
           ExceptionHelper.log_message "Please see #{File.join site.dir, output_path} for more information"
           return ExceptionHelper.html_error_report e, relative_source_path
         rescue Exception => e
-          ExceptionHelper.log_message "An error during rendering #{File.join site.dir, relative_source_path} occurred."
-          ExceptionHelper.log_message "Please see #{File.join site.dir, output_path} for more information"
+          error_page = context[:page]
+          if error_page[:__is_layout]
+            ExceptionHelper.log_message "An error during rendering layout file #{File.join site.dir, error_page.source_path} occurred." 
+          else
+            ExceptionHelper.log_message "An error during rendering #{File.join site.dir, error_page.source_path} occurred." 
+          end
+          ExceptionHelper.log_message "Please see #{File.join site.dir, error_page.output_path} for more information"
           return ExceptionHelper.html_error_report e, relative_source_path
         end
       end
