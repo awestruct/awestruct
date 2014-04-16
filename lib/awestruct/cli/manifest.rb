@@ -8,10 +8,10 @@ require 'compass/commands/registry'
 require 'compass/commands/create_project'
 require 'compass/installers/bare_installer'
 
-module Compass::AppIntegration::StandAlone
+module ::Compass::AppIntegration::StandAlone
 end
 
-class Compass::AppIntegration::StandAlone::Installer
+class ::Compass::AppIntegration::StandAlone::Installer
   def write_configuration_files(config_file = nil)
     # no!
   end
@@ -74,13 +74,15 @@ module Awestruct
 
       def perform(dir)
         parent.perform(dir) if parent
-        steps.each do |step|
-          begin
+        begin
+          steps.each do |step|
             step.perform(dir)
-          rescue => e
-            ExceptionHelper.log_error e
-            ExceptionHelper.log_backtrace e
           end
+          true
+        rescue => e
+          ExceptionHelper.log_error e
+          ExceptionHelper.log_backtrace e
+          false
         end
       end
 
@@ -88,6 +90,7 @@ module Awestruct
         steps.each do |step|
           begin
             step.unperform(dir)
+            true
           rescue => e
             ExceptionHelper.log_error e
             ExceptionHelper.log_backtrace e
@@ -235,11 +238,11 @@ module Awestruct
         end
 
         def perform(dir)
-          Compass.configuration.sass_dir = 'stylesheets'
-          Compass.configuration.css_dir = '_site/stylesheets'
-          Compass.configuration.images_dir = 'images'
+          ::Compass.configuration.sass_dir = 'stylesheets'
+          ::Compass.configuration.css_dir = '_site/stylesheets'
+          ::Compass.configuration.images_dir = 'images'
 
-          cmd = Compass::Commands::CreateProject.new(dir, {
+          cmd = ::Compass::Commands::CreateProject.new(dir, {
               :framework => @framework,
               :project_type => :stand_alone,
               :css_dir => '_site/stylesheets',

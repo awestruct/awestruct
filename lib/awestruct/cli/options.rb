@@ -124,6 +124,7 @@ module Awestruct
           #end
           opts.on( '--source-dir DIR', 'Location of sources (default: .' ) do |source_dir|
             self.source_dir = File.expand_path source_dir
+            self.output_dir = File.expand_path File.join(self.source_dir, '_site')
           end
 
           opts.on( '--output-dir DIR', 'Location to output generated site (default: _site' ) do |output_dir|

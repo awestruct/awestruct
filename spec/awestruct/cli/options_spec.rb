@@ -101,6 +101,12 @@ describe Awestruct::CLI::Options do
       result.source_dir.should eql '/tmp'
       result.output_dir.should eql '/tmp/new-site'
     end
+
+    it 'by default, output_dir should be "_site" under source_dir' do
+      result = Awestruct::CLI::Options.parse!(%w(--source-dir /tmp))
+      result.source_dir.should eql '/tmp'
+      result.output_dir.should eql '/tmp/_site' 
+    end
   end
 
 end

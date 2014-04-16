@@ -52,7 +52,13 @@ module Awestruct
           invoke_auto()      if ( options.auto )
 
           wait_for_completion()
-          @success = false if ExceptionHelper.build_failed?
+
+          if ExceptionHelper.build_failed? || @success == false
+            @success = false
+            false
+          else
+            true
+          end
         rescue
           @success = false
           false

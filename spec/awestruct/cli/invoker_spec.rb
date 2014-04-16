@@ -1,7 +1,15 @@
-
+require 'spec_helper'
+require 'fileutils'
 require 'awestruct/cli/invoker'
 
 describe Awestruct::CLI::Invoker do
+  before(:each) do
+    FileUtils.mkdir_p 'spec/support/clean_init'
+  end
+
+  after(:each) do
+    FileUtils.rm_rf 'spec/support/clean_init'
+  end
 
   it "should invoke generation by default" do
     invoker = Awestruct::CLI::Invoker.new(%w(--source-dir spec/support/test-config/))
@@ -61,7 +69,7 @@ describe Awestruct::CLI::Invoker do
     invoker.should_not_receive( :invoke_auto )
     invoker.should_not_receive( :invoke_server )
     invoker.invoke!
-  end
+  end 
 
   it "should return false on failure" do
     require 'awestruct/cli/generate'
