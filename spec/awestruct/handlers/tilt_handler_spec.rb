@@ -113,7 +113,7 @@ describe Awestruct::Handlers::TiltHandler do
       @site.dir = Pathname.new( test_data_dir 'handlers' ) 
       path = handler_file( "hello.bogus" )
       expect(Awestruct::Handlers::TiltMatcher.new().match(path)).to be_false
-      expect(log.string).to include('could not load engine for type')
+      expect(log.string).to include('Copying')
 
       # we don't even want to process a file if we cannot load its Tilt template
       #file_handler = Awestruct::Handlers::FileHandler.new( @site, path )
