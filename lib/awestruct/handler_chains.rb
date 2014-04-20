@@ -18,8 +18,6 @@ module Awestruct
       Awestruct::Handlers::RedirectHandler::CHAIN,
       Awestruct::Handlers::RestructuredtextHandler::CHAIN,
       Awestruct::Handlers::JavascriptHandler::CHAIN,
-      # TC: shouldn't the asciidoctor be covered by the tilt handler?
-      # JP: We have some additional asciidoctor integration that the tilt handler doesn't handle (yet, working on it)
       Awestruct::Handlers::AsciidoctorHandler::CHAIN,
       Awestruct::Handlers::TiltHandler::NON_INTERPOLATION_CHAIN,
       Awestruct::Handlers::TiltHandler::INTERPOLATION_CHAIN,
