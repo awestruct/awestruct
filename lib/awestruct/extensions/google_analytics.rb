@@ -4,6 +4,8 @@
 #  account: UA-something
 #  anonymizeIp: true
 #  bounceTime: 15
+#  demographics: true
+#  linkAttribution: true
 #
 # of course only "account" is required
 
@@ -27,9 +29,18 @@ module Awestruct
         html += %Q(_gaq.push(['_gat._anonymizeIp']);\n) if options[:anonymizeIp]
         html += %Q(_gaq.push(['_trackPageview']);\n)
         html += %Q(setTimeout("_gaq.push(['_trackEvent','#{options[:bounceTime]}_seconds','read'])", #{options[:bounceTime]}000);\n) if options[:bounceTime]
+        html += %Q(_gaq.push(['_require', 'inpage_linkid', '//www.google-analytics.com/plugins/ga/inpage_linkid.js']);\n) if options[:linkAttribution]
         html += %Q[(function() {\n]
         html += %Q( var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n)
-        html += %Q( ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n)
+
+
+        if options[:demographics]
+          html += %Q( ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';\n)
+        else
+          html += %Q( ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';\n)
+        end
+
+
         html += %Q( var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n)
         html += %Q[})();\n</script>\n]
         html
@@ -48,6 +59,8 @@ module Awestruct
         html += %Q(ga('create', '#{options[:account]}', 'auto');\n)
         html += %Q(ga('send', 'pageview');\n)
         html += %Q(ga('set', 'anonymizeIp', true);\n) if options[:anonymizeIp]
+        html += %Q(ga('require', 'displayfeatures');\n) if options[:demographics]
+        html += %Q(ga('require', 'linkid', 'linkid.js');\n) if options[:linkAttribution]
         html += %Q(setTimeout("ga('send', 'event', 'read', '#{options[:bounceTime]} seconds')", #{options[:bounceTime]}000);\n) if options[:bounceTime]
         html += %Q(\n)
         html += %Q(</script>\n)
