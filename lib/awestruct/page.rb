@@ -94,8 +94,14 @@ module Awestruct
       return true if ! File.exist?( output_path )
       return true if input_mtime > File.mtime( output_path )
       return true if stale?
-      # TODO: Add stale callback and execute it
+      return true if @stale_output_callback && @stale_output_callback.call(self)
       false
+    end
+
+    # Define a stale check specific for this page. The parameter is expected
+    # to be a lambda or proc and is called with self as the argument.
+    def stale_output_callback= code
+      @stale_output_callback = block
     end
 
     def input_mtime

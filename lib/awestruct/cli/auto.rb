@@ -29,7 +29,7 @@ module Awestruct
           modified.each do |path| # path is absolute path
             engine = ::Awestruct::Engine.instance
 
-            unless ( path =~ %r(#{File.basename( engine.config.output_dir) }) || path =~ /.awestruct/ )
+            unless ( path =~ %r(#{File.basename( engine.config.output_dir) }) || path =~ /.awestruct/ || path =~ /sass-cache/ )
               begin
                 if path.eql? current_path
                   unless generate_thread.nil?
@@ -46,22 +46,24 @@ module Awestruct
 
                     # TODO: Have to figure something out for extensions and other files without an output path
                     #       Probably add another method in engin to to do the regen w/o mucking with site.pages and run through things again
+
                     page = engine.page_by_output_path(path)
+                    pages = []
                     if ( page )
                       pages = engine.generate_page_and_dependencies( page )
+                      $LOG.info "Regeneration finished." if $LOG.info?
+                    else
+                      # chances are this is an extension or yaml file
+                      pages = engine.run_auto_for_non_page(path)
+                      $LOG.info "Regeneration finished." if $LOG.info?
+                    end
 
-                      if ( guard )
-                        urls = pages.map do |p|
-                          @base_url + p.url.to_s
-                        end
-
-                        guard.run_on_modifications(urls)
+                    if ( guard )
+                      urls = pages.map do |p|
+                        @base_url + p.url.to_s
                       end
 
-                      $LOG.info "Regeneration finished." if $LOG.info?
-
-                    else
-                      $LOG.error "Failed to find page from path #{path}"
+                      guard.run_on_modifications(urls)
                     end
 
                   rescue => e

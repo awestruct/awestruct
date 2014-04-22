@@ -15,6 +15,8 @@ require 'set'
 
 require 'compass'
 
+require 'pry'
+
 class OpenStruct
   def inspect
     "OpenStruct{...}"
@@ -356,17 +358,13 @@ module Awestruct
 
       $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
 
-      old_site_pages = site.pages
-      site.pages = regen_pages
-
       @pipeline = Pipeline.new
       load_yamls
       load_pipeline
       execute_pipeline
-      @site.pages = old_site_pages
 
       regen_pages.each do |p|
-        puts "Regenerating page #{p.output_path}"
+        puts "Regenerating page #{p.output_path}" unless config.quiet
         generate_page_internal(p)
         pages << p
       end
@@ -374,11 +372,25 @@ module Awestruct
       pages
     end
 
+    def run_auto_for_non_page(file)
+      if File.extname(file) == '.rb'
+        load file
+      end
+      @pipeline = Pipeline.new
+      load_yamls
+      load_pipeline
+      execute_pipeline
+      site.pages.each do |p|
+        generate_page_internal(p)
+      end
+      site.pages
+    end
+
     def generate_page_internal(p)
-        unless ( p.output_path.nil? || p.__is_layout )
-          generated_path = File.join( site.config.output_dir, p.output_path )
-          generate_page( p, generated_path )
-        end
+      unless ( p.output_path.nil? || p.__is_layout || !p.stale_output?(p.output_path) )
+        generated_path = File.join( site.config.output_dir, p.output_path )
+        generate_page( p, generated_path )
+      end
     end
 
     ####
