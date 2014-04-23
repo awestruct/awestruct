@@ -2,6 +2,7 @@ require 'awestruct/util/exception_helper'
 
 require 'listen'
 require 'guard/livereload'
+require 'compass'
 
 module Awestruct
   module CLI
@@ -31,6 +32,7 @@ module Awestruct
 
             unless ( path =~ %r(#{File.basename( engine.config.output_dir) }) || path =~ /.awestruct/ || path =~ /sass-cache/ )
               begin
+                $LOG.info "Change detected for file #{path}" if $LOG.info?
                 if path.eql? current_path
                   unless generate_thread.nil?
                     $LOG.info "Same path triggered, stopping previous generation" if generate_thread.alive? && $LOG.info?
@@ -43,20 +45,22 @@ module Awestruct
 
                 generate_thread = Thread.new {
                   begin
-
-                    # TODO: Have to figure something out for extensions and other files without an output path
-                    #       Probably add another method in engin to to do the regen w/o mucking with site.pages and run through things again
-
-                    page = engine.page_by_output_path(path)
-                    pages = []
-                    if ( page )
-                      pages = engine.generate_page_and_dependencies( page )
-                      $LOG.info "Regeneration finished." if $LOG.info?
+                    if ( File.extname(path) == '.sass' || File.extname(path) == '.scss' )
+                      ::Compass::Commands::UpdateProject.new(engine.site.dir, {}).perform
                     else
-                      # chances are this is an extension or yaml file
-                      pages = engine.run_auto_for_non_page(path)
-                      $LOG.info "Regeneration finished." if $LOG.info?
+                      page = engine.page_by_output_path(path)
+                      pages = []
+                      if ( page )
+                        pages = engine.generate_page_and_dependencies( page )
+                      else
+                        if File.exist? path
+                        # chances are this is an extension or yaml file
+                          pages = engine.run_auto_for_non_page(path)
+                        end
+                      end
                     end
+
+                    $LOG.info "Regeneration finished." if $LOG.info?
 
                     if ( guard )
                       urls = pages.map do |p|
