@@ -83,6 +83,11 @@ module Awestruct
         listener.ignore( %r(\.awestruct) )
         listener.ignore( %r(^#{File.basename( @config.tmp_dir )}) )
         listener.ignore( %r(^#{File.basename( @config.output_dir )}) )
+
+        @config.ignore.each do |i|
+          listener.ignore( %r(^#{i}) )
+        end
+
         listener.start
       end
 

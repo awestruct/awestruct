@@ -18,7 +18,7 @@ group :test do
   gem 'asciidoctor', '~> 0.1.4'
   gem 'slim', '~> 2.0.2'
   gem 'kramdown', '~> 1.3.3'
-  gem 'therubyracer', '~> 0.10.0', :platforms => :ruby
+  gem 'therubyracer', '~> 0.12.1', :platforms => :ruby
   gem 'therubyrhino', '~> 2.0.3', :platforms => :jruby
   gem 'less', '~> 2.5.0'
   gem 'org-ruby', '~> 0.9.3'
