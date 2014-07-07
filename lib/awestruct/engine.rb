@@ -57,41 +57,54 @@ module Awestruct
     def run(profile, base_url, default_base_url, force=false)
       start_time = DateTime.now
       $LOG.debug 'adjust_load_path' if $LOG.debug?
+      start_time = DateTime.now
       adjust_load_path
       puts "Total time in adjust_load_path: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'load_default_site_yaml' if $LOG.debug?
+      start_time = DateTime.now
       load_default_site_yaml( profile )
       puts "Total time in load_default_site_yaml: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'load_user_site_yaml -- profile' if $LOG.debug?
+      start_time = DateTime.now
       load_user_site_yaml( profile )
       puts "Total time in load_user_site_yaml: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'set_base_url' if $LOG.debug?
+      start_time = DateTime.now
       set_base_url( base_url, default_base_url )
       puts "Total time in set_base_url: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'load_yamls' if $LOG.debug?
+      start_time = DateTime.now
       load_yamls
       puts "Total time in load_yamls: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'load_pipeline' if $LOG.debug?
+      start_time = DateTime.now
       load_pipeline
       puts "Total time in load_pipeline: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'load_pages' if $LOG.debug?
+      start_time = DateTime.now
       load_pages
       puts "Total time in load_pages: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'execute_pipeline' if $LOG.debug?
+      start_time = DateTime.now
       execute_pipeline
       puts "Total time in execute_pipeline: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'configure_compass' if $LOG.debug?
+      start_time = DateTime.now
       configure_compass
       puts "Total time in configure_compass: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'set_urls' if $LOG.debug?
+      start_time = DateTime.now
       set_urls( site.pages )
       puts "Total time in set_urls: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'build_page_index' if $LOG.debug?
+      start_time = DateTime.now
       build_page_index
       puts "Total time in build_page_index: #{DateTime.now.to_time - start_time.to_time} seconds"
       $LOG.debug 'generate_output' if $LOG.debug?
+      start_time = DateTime.now
       generate_output
       puts "Total time in generate_output: #{DateTime.now.to_time - start_time.to_time} seconds"
+      return 0
     end
 
     def build_page_index
@@ -282,7 +295,7 @@ module Awestruct
 
     def generate_output
       FileUtils.mkdir_p( site.config.output_dir )
-      Parallel.each(@site.pages, in_processes: Parallel.processor_count) do |page|
+      @site.pages.each do |page|
         generated_path = File.join( site.config.output_dir, page.output_path )
         if ( page.stale_output?( generated_path ) )
           generate_page( page, generated_path )
