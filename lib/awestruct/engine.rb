@@ -343,7 +343,8 @@ module Awestruct
 
     def generate_output
       FileUtils.mkdir_p( site.config.output_dir )
-      Parallel.each(@site.pages, :in_processes => Parallel.processor_count) do |page|
+      Parallel.each(@site.pages, in_processes: Parallel.processor_count) do |page|
+        start_time = DateTime.now
         generated_path = File.join( site.config.output_dir, page.output_path )
         if ( page.stale_output?( generated_path ) )
           generate_page( page, generated_path )
