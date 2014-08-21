@@ -12,13 +12,15 @@
     /[if lt IE 9]
       %script{ :type=>'text/javascript', :src=>'//html5shim.googlecode.com/svn/trunk/html5.js' }
   %body
-    .navbar.navbar-fixed-top
-      .navbar-inner
-        .container
-          %a.brand{ :href=>"#{site.base_url}" } #{site.name}
-          %ul.nav
-            %li
-              %a{ :href=>"#{site.base_url}" } Home
+    %nav.navbar.navbar-default.navbar-fixed-top{:role=>'navigation'}
+      .container-fluid
+        .navbar-header
+          %a.navbar-brand{ :href=>"#{site.base_url}" } #{site.name}
+
+        %ul.nav.navbar-nav.navbar-right
+          %li
+            %a{ :href=>"#{site.base_url}" } Home
+
     .container
       ~ content
       %hr
