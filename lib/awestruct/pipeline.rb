@@ -34,7 +34,9 @@ module Awestruct
 
     def execute_extensions(site)
       @extensions.each do |e|
+        start_time = DateTime.now
         e.execute(site)
+        puts "Time in #{e} extension: #{DateTime.now.to_time - start_time.to_time} seconds"
       end
     end
 
