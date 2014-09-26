@@ -7,10 +7,11 @@ module Awestruct
         @output_path = output_path
         @layout = opts[:layout].to_s
         @title  = opts[:title] || 'Tags'
+        @template = opts[:template] || File.join( File.dirname( __FILE__ ), 'tag_cloud.html.haml' )
       end
 
       def execute(site)
-        page = site.engine.load_page( File.join( File.dirname( __FILE__ ), 'tag_cloud.html.haml' ) )
+        page = site.engine.load_page( @template )
         page.output_path = File.join( @output_path )
         page.layout = @layout
         page.title  = @title
