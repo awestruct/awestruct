@@ -14,7 +14,7 @@ module Awestruct
       def match(path)
         matcher = ::Tilt[File.basename(path)]
         if matcher.nil?
-	  $LOG.warn(%(Copying #{path}))
+          $LOG.warn(%(Copying #{path})) if $LOG.warn? && Engine.instance.config.verbose
           return false
         end
 

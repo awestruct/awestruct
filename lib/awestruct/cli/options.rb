@@ -35,6 +35,7 @@ module Awestruct
       attr_accessor :source_dir
       attr_accessor :output_dir
       attr_accessor :livereload
+      attr_accessor :debug
 
       def initialize()
         @generate   = nil
@@ -63,6 +64,9 @@ module Awestruct
 
       def parse!(args)
         opts = OptionParser.new do |opts|
+          opts.on('-D', '--debug', 'Enable debug logging') do |verbose|
+            self.debug = true
+          end
           opts.on('-w', '--verbose', 'Enable verbose mode') do |verbose|
             self.verbose = true
           end
