@@ -1,4 +1,5 @@
 require 'awestruct/util/inflector'
+require 'awestruct/util/exception_helper'
 require 'awestruct/util/default_inflections'
 
 require 'awestruct/config'
@@ -131,32 +132,42 @@ module Awestruct
 
     def load_site_yaml(yaml_path, profile = nil)
       if ( File.exist?( yaml_path ) )
-        data = YAML.load( File.read( yaml_path, :encoding => 'bom|utf-8' ) )
-        if ( profile )
-          # JP: Interpolation now turned off by default, turn it per page if needed
-          site.interpolate = false
-          profile_data = {}
-          data.each do |k,v|
-            if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
-              profile_data = ( v[profile] || {} )
-            else
+        begin
+          data = YAML.load( File.read( yaml_path, :encoding => 'bom|utf-8' ) )
+          if ( profile )
+            # JP: Interpolation now turned off by default, turn it per page if needed
+            site.interpolate = false
+            profile_data = {}
+            data.each do |k,v|
+              if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
+                profile_data = ( v[profile] || {} )
+              else
+                site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
+              end
+            end if data
+            site.profile = profile
+            profile_data.each do |k,v|
               site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
             end
-          end if data
-          site.profile = profile
-          profile_data.each do |k,v|
-            site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
+          else
+            data.each do |k,v|
+              site.send( "#{k}=", v )
+            end if data
           end
-        else
-          data.each do |k,v|
-            site.send( "#{k}=", v )
-          end if data
+        rescue Exception => e
+          ExceptionHelper.log_building_error e, yaml_path
+          ExceptionHelper.mark_failed
         end
       end
     end
 
     def load_yaml(yaml_path)
-      data = YAML.load( File.read( yaml_path ) )
+      begin
+        data = YAML.load( File.read( yaml_path ) )
+      rescue Exception => e
+        ExceptionHelper.log_building_error e, yaml_path
+        ExceptionHelper.mark_failed
+      end
       name = File.basename( yaml_path, '.yml' )
       site.send( "#{name}=", massage_yaml( data ) )
     end
