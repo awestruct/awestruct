@@ -89,7 +89,8 @@ module Awestruct
           collector["site-#{key}"] = "#{val}@" if types.detect {|t| val.kind_of? t }
           collector
         })
-        opts[:attributes]['awestruct'] = true
+        opts[:attributes]['env'] = @site
+        opts[:attributes]['env-site'] = true
         opts[:attributes]['awestruct-version'] = Awestruct::VERSION
         if @front_matter['header_footer']
           opts[:header_footer] = true
