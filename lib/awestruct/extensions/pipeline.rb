@@ -56,6 +56,11 @@ module Awestruct
         end
       end
 
+      private
+      def site
+        Awestruct::Engine.instance.site
+      end
+
     end
   end
 end
