@@ -15,8 +15,6 @@ require 'set'
 require 'date'
 
 require 'compass'
-
-require 'pry'
 require 'parallel'
 
 class OpenStruct
@@ -295,7 +293,7 @@ module Awestruct
 
     def generate_output
       FileUtils.mkdir_p( site.config.output_dir )
-      @site.pages.each do |page|
+      Parallel.each(@site.pages, :in_processes => Parallel.processor_count) do |page|
         generated_path = File.join( site.config.output_dir, page.output_path )
         if ( page.stale_output?( generated_path ) )
           generate_page( page, generated_path )

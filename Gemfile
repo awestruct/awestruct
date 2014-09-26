@@ -1,13 +1,12 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'spectator', '~> 1.2.6'
   gem 'hashery', '~> 2.1.1'
   gem 'rspec', '~> 2.14.1'
   gem 'rake', '~> 10.2.2'
   gem 'guard-rspec', '~> 4.2.0', :require => false
-  gem 'pry', '~> 0.9.12', :require => false
-  gem 'pry-nav', '~> 0.2', :require => false
+  gem 'pry', :require => false
+  gem 'pry-byebug', :require => false
 end
 
 group :test do

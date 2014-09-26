@@ -94,7 +94,3 @@ task :release => [ :build, :tag ] do
   sh "gem push pkg/#{gem_file}"
 end
 
-desc 'Run `spectator` to monitor changes and execute specs in TDD fashion'
-task :tdd do
-  sh 'spectator'
-end
