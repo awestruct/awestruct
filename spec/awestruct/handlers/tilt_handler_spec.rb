@@ -2,6 +2,7 @@ require 'logger'
 require 'awestruct/config'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/tilt_handler'
+require 'awestruct/engine'
 
 require 'hashery'
 require 'tilt/template'
@@ -106,7 +107,8 @@ describe Awestruct::Handlers::TiltHandler do
   context 'when loading an engine not installed' do
     specify 'should not throw exceptions; instead have the error in the rendered output' do
       # setup
-      Awestruct::Engine.instance.config.verbose = true
+      @site.config.verbose = true
+      Awestruct::Engine.new(@site.config)
       Tilt::register Tilt::BogusTemplate, '.bogus',
       log = StringIO.new
       $LOG = Logger.new(log)
