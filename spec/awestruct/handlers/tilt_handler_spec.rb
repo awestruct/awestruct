@@ -106,6 +106,7 @@ describe Awestruct::Handlers::TiltHandler do
   context 'when loading an engine not installed' do
     specify 'should not throw exceptions; instead have the error in the rendered output' do
       # setup
+      Awestruct::Engine.instance.config.verbose = true
       Tilt::register Tilt::BogusTemplate, '.bogus',
       log = StringIO.new
       $LOG = Logger.new(log)

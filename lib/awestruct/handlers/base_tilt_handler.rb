@@ -14,14 +14,13 @@ module Awestruct
       def match(path)
         matcher = ::Tilt[File.basename(path)]
         if matcher.nil?
-          $LOG.warn(%(Copying #{path})) if $LOG.warn? && Engine.instance.config.verbose
+          $LOG.warn(%(Copying #{path})) if $LOG.warn? && Awestruct::Engine.instance.config.verbose
           return false
         end
 
         # We have our own extra integration with Asciidoctor
-        if matcher.name.include? 'Asciidoctor'
-          return false
-        end
+        return false if matcher.name.include? 'Asciidoctor'
+
         matcher
       end
     end
