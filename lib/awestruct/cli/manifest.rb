@@ -1,11 +1,6 @@
 require 'sass/callbacks'
-require 'compass/app_integration'
-require 'compass/configuration'
-require 'compass/logger'
-require 'compass/actions'
-require 'compass/commands/base'
-require 'compass/commands/registry'
-require 'compass/commands/create_project'
+require 'compass'
+require 'compass/commands'
 require 'compass/installers/bare_installer'
 
 module ::Compass::AppIntegration::StandAlone
