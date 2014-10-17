@@ -333,9 +333,9 @@ module Awestruct
         generate_page_internal(page)
       end
 
-      pages = [ page ]
+      regen_pages = Set.new [ page ]
 
-      pages.each do |p|
+      regen_pages.each do |p|
         if $LOG.debug?
           $LOG.debug "--------------------"
           $LOG.debug "Page: #{p.output_path} #{p.relative_source_path} #{p.__is_layout ? 'Layout':''}"
@@ -353,8 +353,7 @@ module Awestruct
         end
       end
 
-      regen_pages = Set.new
-
+      binding.pry
       if page.dependencies.has_changed_content || page.__is_layout || page.is_partial?
         regen_pages += page.dependencies.dependents
       end
@@ -380,10 +379,9 @@ module Awestruct
       regen_pages.each do |p|
         puts "Regenerating page #{p.output_path}" unless config.quiet
         generate_page_internal(p)
-        pages << p
       end
 
-      pages
+      regen_pages
     end
 
     def run_auto_for_non_page(file)

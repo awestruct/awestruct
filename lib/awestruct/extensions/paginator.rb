@@ -59,10 +59,10 @@ module Awestruct
 
       def execute(site)
         removal_path = nil
-        all = @collection || site.send( @prop_name )
+        _all = @collection || site.send( @prop_name )
         i = 1
         paginated_pages = []
-        all.each_slice( @per_page ) do |slice|
+        _all.each_slice( @per_page ) do |slice|
           page = site.engine.find_and_load_site_page( @input_path )
           removal_path ||= page.output_path
           slice.extend( Paginated )
