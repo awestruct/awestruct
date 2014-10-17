@@ -1,6 +1,7 @@
 ## Change Log
 
-### upcoming (2014/09/29 17:07 +00:00)
+### upcoming (2014/10/17 20:00 +00:00)
+- [5942b82](https://github.com/awestruct/awestruct/commit/5942b82ba3c49a2fcb3d810fea44c9b21ee120db) Fixing compass integration with compass 1.0.1 (@LightGuard)
 - [6d7cb13](https://github.com/awestruct/awestruct/commit/6d7cb138a6520fa93f3e9e90176563c8344a517a) Fixing travis (@LightGuard)
 - [#436](https://github.com/awestruct/awestruct/pull/436) Merge pull request #436 from LightGuard/master (@LightGuard)
 
