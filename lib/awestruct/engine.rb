@@ -353,7 +353,6 @@ module Awestruct
         end
       end
 
-      binding.pry
       if page.dependencies.has_changed_content || page.__is_layout || page.is_partial?
         regen_pages += page.dependencies.dependents
       end
