@@ -81,14 +81,12 @@ describe Awestruct::ContextHelper do
 
     it "should fix link tags" do
       str = "<link href='/foo' />"
-      #nokogiri html doesn't close optional ending tags
-      @tester.fully_qualify_urls('http://foobar.com', str).should == "<link href=\"http://foobar.com/foo\">"
+      @tester.fully_qualify_urls('http://foobar.com', str).should == "<link href=\"http://foobar.com/foo\"/>"
     end
 
     it "should fix image tags" do
       str = "<img src='/foo' />"
-      #nokogiri html doesn't close optional ending tags
-      @tester.fully_qualify_urls('http://foobar.com', str).should == "<img src=\"http://foobar.com/foo\">"
+      @tester.fully_qualify_urls('http://foobar.com', str).should == "<img src=\"http://foobar.com/foo\"/>"
     end
 
     it "should leave anchor tags with no href attribute (for page anchors) unchanged" do

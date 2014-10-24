@@ -1,7 +1,8 @@
-require 'nokogiri'
+require 'rexml/document'
 
 module Awestruct
   module ContextHelper
+    include REXML
 
     def html_to_text(str)
       str.gsub( /<[^>]+>/, '' ).gsub( /&nbsp;/, ' ' )
@@ -38,16 +39,19 @@ module Awestruct
     end
 
     def fully_qualify_urls(base_url, text)
-      doc = Nokogiri::HTML.fragment( text )
+      doc = Document.new text
+      doc.context[:attribute_quote] = :quote  # Set double-quote as the attribute value delimiter
 
-      doc.css( "a" ).each do |a|
-        a['href'] = fix_url( base_url, a['href'] ) if a['href']
+      XPath.each(doc, "//a") do |a|
+        a.attributes['href'] = fix_url( base_url, a.attributes['href'] ) if a.attributes['href']
       end
-      doc.css( "link" ).each do |link|
-        link['href'] = fix_url( base_url, link['href'] )
+
+      XPath.each(doc, "//link") do |link|
+        link.attributes['href'] = fix_url( base_url, link.attributes['href'] )
       end
-      doc.css( "img" ).each do |img|
-        img['src'] = fix_url( base_url, img['src'] )
+
+      XPath.each(doc, "//img") do |img|
+        img.attributes['src'] = fix_url( base_url, img.attributes['src'] )
       end
 
       if RUBY_VERSION.start_with? '1.8'
