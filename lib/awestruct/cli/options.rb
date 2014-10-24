@@ -97,9 +97,11 @@ module Awestruct
             self.auto     = true
             self.port     = DEFAULT_PORT
             self.profile  = 'development'
+            self.livereload = livereload
           end
           opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
             self.auto = a
+            self.livereload = livereload
           end
           opts.on( '--livereload', 'Support for browser livereload' ) do |livereload|
             self.livereload = livereload
