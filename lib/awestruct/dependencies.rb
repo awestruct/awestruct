@@ -105,6 +105,7 @@ module Awestruct
     end
 
     def add_dependency(dep)
+      return if dep.nil?
       return if @page.do_not_track_dependencies
       return if @page.output_path.nil?
       return if dep == @page
@@ -114,6 +115,7 @@ module Awestruct
     end
 
     def add_key_dependency(dep)
+      return if dep.nil?
       return if @page.do_not_track_dependencies
       return if @page.output_path.nil?
       return if dep == @page
@@ -122,14 +124,17 @@ module Awestruct
     end
 
     def add_dependent(dep)
+      return if dep.nil?
       @dependents << dep
     end
 
     def add_key_dependent(dep)
+      return if dep.nil?
       @key_dependents << dep
     end
 
     def remove_dependent(dep)
+      return if dep.nil?
       @dependents.delete( dep )
     end
 

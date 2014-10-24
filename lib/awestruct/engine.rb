@@ -86,11 +86,16 @@ module Awestruct
     def build_page_index
       site.pages_by_relative_source_path = {}
       site.pages.each do |p|
+        # Add the layout to the set of dependencies
+        p.dependencies.add_dependency(site.layouts.find_matching(p.layout, p.output_extension))
         if ( p.relative_source_path )
           site.pages_by_relative_source_path[ p.relative_source_path ] = p
         end
       end
       site.layouts.each do |p|
+        # Add the layout to the set of dependencies
+        p.dependencies.add_dependency(site.layouts.find_matching(p.layout, p.output_extension))
+
         if ( p.relative_source_path )
           site.pages_by_relative_source_path[ p.relative_source_path ] = p
         end
@@ -313,7 +318,7 @@ module Awestruct
     end
 
     # path - relative to output dir
-    def page_by_output_path(path)
+    def page_by_source_path(path)
       if (path.include? '_layout')
         site.layouts.find { |p| p.source_path.to_s == path }
       elsif (path.include? '_partial')
@@ -333,50 +338,27 @@ module Awestruct
         generate_page_internal(page)
       end
 
-      regen_pages = Set.new [ page ]
+      regen_pages = Set.new [ page ] 
+      regen_pages.merge page.dependencies.dependents
 
+      # doing this in case someone has used key dependencies
+      page.dependencies.key_dependents.each do |kd|
+        if kd.is_a? Page
+          regen_pages << kd
+        end    
+      end
+
+      temp_set = Set.new
       regen_pages.each do |p|
-        if $LOG.debug?
-          $LOG.debug "--------------------"
-          $LOG.debug "Page: #{p.output_path} #{p.relative_source_path} #{p.__is_layout ? 'Layout':''}"
-          $LOG.debug "Detected change in content (#{p.dependencies.content_hash})" if p.dependencies.has_changed_content
-          $LOG.debug "!! Detected change in front matter. To fully reflect the change you'll need to restart Awestruct (#{p.dependencies.key_hash})" if p.dependencies.has_changed_keys
-          $LOG.debug "No changes detected" unless p.dependencies.has_changed_content or p.dependencies.has_changed_keys
-          $LOG.debug "Dependencies Matrix: (non unique source path)"
-          $LOG.debug "\t Outgoing dependencies:"
-          $LOG.debug "\t\t Content -> #{p.dependencies.dependencies.size}"
-          $LOG.debug "\t\t Key     -> #{p.dependencies.key_dependencies.size}"
-          $LOG.debug "\t Incoming dependencies:"
-          $LOG.debug "\t\t Content <- #{p.dependencies.dependents.size}"
-          $LOG.debug "\t\t Key     <- #{p.dependencies.key_dependents.size}"
-          $LOG.debug "--------------------"
-        end
+        temp_set.merge find_transitive_dependents(page) 
       end
 
-      if page.dependencies.has_changed_content || page.__is_layout || page.is_partial?
-        regen_pages += page.dependencies.dependents
-      end
-
-      regen_pages = regen_pages.sort do |x, y|
-        xf = "#{@site.dir}#{x.relative_source_path}"
-        yf = "#{@site.dir}#{y.relative_source_path}"
-        xt = 0
-        yt = 0
-        xt = File.mtime(xf).to_i if File.exist? xf
-        yt = File.mtime(yf).to_i if File.exist? yf
-
-        yt <=> xt
-      end
+      regen_pages.merge temp_set
 
       $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
 
-      @pipeline = Pipeline.new
-      load_yamls
-      load_pipeline
-      execute_pipeline
-
       regen_pages.each do |p|
-        puts "Regenerating page #{p.output_path}" unless config.quiet
+        $LOG.info "Regenerating page #{p.output_path}" if $LOG.info?
         generate_page_internal(p)
       end
 
@@ -428,12 +410,24 @@ module Awestruct
       throw Exception.new( "too many choices for #{simple_path}" ) if candidates.size != 1
       dir_pathname = Pathname.new( site.config.dir )
       path_name = Pathname.new( candidates[0] )
-      relative_path = path_name.relative_path_from( dir_pathname ).to_s
+      path_name.relative_path_from( dir_pathname ).to_s
       load_page( candidates[0] )
     end
 
     def create_context(page, content='')
       page.create_context( content )
+    end
+
+    def find_transitive_dependents(page)
+      deps = Set.new 
+      deps << page
+      if page.dependencies.dependents.size > 0
+        page.dependencies.dependents.to_a.inject(deps) do |set, p| 
+          set.merge find_transitive_dependents(p)
+          set
+        end
+      end
+      deps
     end
 
   end
