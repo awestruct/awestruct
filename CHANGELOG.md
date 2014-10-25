@@ -1,6 +1,6 @@
 ## Change Log
 
-### upcoming (2014/10/25 05:16 +00:00)
+### 0.5.6.beta4 (2014/10/25 05:21 +00:00)
 - [ee8ed31](https://github.com/awestruct/awestruct/commit/ee8ed31c03b48a4744ec78ae9ddeb5482c7b73d6) Regen work, should be better now, tagger enhanced dep tracking (@LightGuard)
 - [15ad47c](https://github.com/awestruct/awestruct/commit/15ad47c5e6f695a26fb69e6aa7bf78a62fa7f9c5) Removing CoffeeScriptTransformer and RestructuredtextHandler (@LightGuard)
 - [0d24bc1](https://github.com/awestruct/awestruct/commit/0d24bc1acfd41b89fa76dd20d5443b8f5506b523) Further removing rst handler (@LightGuard)
