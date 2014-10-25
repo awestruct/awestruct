@@ -89,7 +89,7 @@ module Awestruct
           paginator = Awestruct::Extensions::Paginator.new( @tagged_items_property, @input_path, options )
           primary_page = paginator.execute( site )
           tag.primary_page = primary_page
-          tag.pages.each {|p| primary_page.dependencies.add_key_dependency(p)}
+          tag.pages.each {|p| primary_page.dependencies.add_dependency(p)}
         end
 
         site.send( "#{@tagged_items_property}_tags=", ordered_tags )

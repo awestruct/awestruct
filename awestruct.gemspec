@@ -34,7 +34,6 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
 
   s.add_dependency 'haml', '~> 4.0.5'
   s.add_dependency 'asciidoctor' # we're pretty good about backwards compat
-  s.add_dependency 'nokogiri', '~> 1.5.10'
   s.add_dependency 'tilt', '~> 2.0.1'
   s.add_dependency 'compass', '~> 1.0.1'
   s.add_dependency 'compass-960-plugin', '~> 0.10.4'
@@ -49,4 +48,6 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_dependency 'guard-livereload', '~> 2.1.2'
   s.add_dependency 'colorize', '~> 0.7.1'
   s.add_dependency 'parallel', '> 1.1.1'
+
+  s.add_development_dependency 'nokogiri', '~> 1.5.10'
 end
