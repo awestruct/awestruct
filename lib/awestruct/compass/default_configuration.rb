@@ -31,7 +31,7 @@ module Awestruct
       end
 
       def default_css_dir
-        site.css_dir
+        File.join site.output_dir, 'stylesheets'
       end
 
       def default_javascripts_dir
@@ -51,7 +51,7 @@ module Awestruct
       end
 
       def default_generated_images_dir
-        File.join site.output_path, 'images'
+        File.join site.output_dir, 'images'
       end
 
       def default_http_generated_images_dir

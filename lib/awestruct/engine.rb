@@ -263,7 +263,8 @@ module Awestruct
     def configure_compass 
       site.images_dir      = File.join( site.config.dir, 'images' )
       site.fonts_dir       = File.join( site.config.dir, 'fonts' )
-      site.stylesheets_dir = File.join( site.config.dir, 'stylesheets' )
+      site.sass_dir        = File.join( site.config.dir, 'stylesheets' )
+      site.css_dir         = File.join( site.config.output_dir, 'stylesheets' )
       site.javascripts_dir = File.join( site.config.dir, 'javascripts' )
 
       default_config = Awestruct::Compass::DefaultConfiguration.new(site)
@@ -272,7 +273,9 @@ module Awestruct
         default_config.inherit_from! ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
       end 
 
+      ::Compass.reset_configuration!
       ::Compass.add_configuration default_config
+      ::Compass.configuration # return for use elsewhere
 
       # TODO: Should we add an on_stylesheet_error block?  
     end
@@ -320,11 +323,11 @@ module Awestruct
     # path - relative to output dir
     def page_by_source_path(path)
       if (path.include? '_layout')
-        site.layouts.find { |p| p.source_path.to_s == path }
+        site.layouts.find { |p| p.source_path.to_s.include? path }
       elsif (path.include? '_partial')
-        site.partials.find { |p| p.source_path.to_s == path }
+        site.partials.find { |p| p.source_path.to_s.include? path }
       else
-        site.pages.find { |p| p.source_path.to_s == path }
+        site.pages.find { |p| p.source_path.to_s.include? path }
       end
     end
 

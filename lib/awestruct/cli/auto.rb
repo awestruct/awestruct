@@ -46,8 +46,11 @@ module Awestruct
               generate_thread = Thread.new {
                 begin
                   if ( File.extname(path) == '.sass' || File.extname(path) == '.scss' )
-                    # TODO use sass here, eventually
+                    # TODO use sass here, eventually, as soon as I can figure out how to get it and sprites to work
                     ::Compass::Commands::UpdateProject.new(engine.site.dir, {}).perform
+                    # fixes the nil later on, there's an outstanding bug that css 
+                    # pages aren't output in the correct directory
+                    pages = [] 
                   else
                     page = engine.page_by_source_path(path)
                     pages = []

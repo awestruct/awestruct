@@ -97,11 +97,11 @@ module Awestruct
             self.auto     = true
             self.port     = DEFAULT_PORT
             self.profile  = 'development'
-            self.livereload = livereload
+            self.livereload = true
           end
           opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
             self.auto = a
-            self.livereload = livereload
+            self.livereload = true
           end
           opts.on( '--livereload', 'Support for browser livereload' ) do |livereload|
             self.livereload = livereload
@@ -153,6 +153,10 @@ module Awestruct
         end
 
         opts.parse!(args)
+        self.base_url ||= DEFAULT_BASE_URL
+        self.port ||= DEFAULT_PORT
+        self.bind_addr ||= DEFAULT_BIND_ADDR
+
         self.generate = true if self.generate.nil?
         self
       end # parse()
