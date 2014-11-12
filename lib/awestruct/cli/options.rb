@@ -47,7 +47,7 @@ module Awestruct
         @init       = false
         @framework  = 'compass'
         @scaffold   = true
-        @base_url   = nil
+        @base_url   = DEFAULT_BASE_URL
         @profile    = nil
         @deploy     = false
         @script     = nil

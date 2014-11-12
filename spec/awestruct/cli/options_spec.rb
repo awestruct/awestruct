@@ -19,7 +19,7 @@ describe Awestruct::CLI::Options do
     options.framework.should == 'compass'
     options.scaffold.should == true
 
-    options.base_url.should == nil
+    options.base_url.should == 'http://localhost:4242'
     options.profile.should  == nil
     options.script.should   == nil
     options.verbose.should  == false

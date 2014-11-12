@@ -103,7 +103,7 @@ describe Awestruct::Engine do
 
     expect( Compass.configuration.line_comments ).to eq false
     expect( Compass.configuration.output_style ).to eq :compressed
-    expect( Compass.configuration.http_path ).to be nil
+    expect( Compass.configuration.http_path ).to eq "http://localhost:4242"
     expect( Compass.configuration.relative_assets ).to eq false 
   end
 

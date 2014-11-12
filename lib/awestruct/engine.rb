@@ -3,7 +3,6 @@ require 'awestruct/util/exception_helper'
 require 'awestruct/util/default_inflections'
 
 require 'awestruct/config'
-require 'awestruct/compass/default_configuration'
 require 'awestruct/site'
 require 'awestruct/pipeline'
 require 'awestruct/page'
@@ -267,14 +266,66 @@ module Awestruct
       site.css_dir         = File.join( site.config.output_dir, 'stylesheets' )
       site.javascripts_dir = File.join( site.config.dir, 'javascripts' )
 
-      default_config = Awestruct::Compass::DefaultConfiguration.new(site)
+      ::Compass.configuration do |config|
+        config.project_type = :stand_alone
+        config.environment = site.profile
+        config.project_path = site.config.dir
+        config.sass_path = File.join(config.project_path, 'stylesheets')
+        config.http_path = site.base_url || site.config.options.base_url || '/'
+        config.css_path = File.join(site.output_dir, 'stylesheets')
+        config.javascripts_path = File.join(site.output_dir, 'javascripts')
+        config.http_javascripts_dir = File.join(config.http_path, 'javascripts')
+        config.http_stylesheets_dir = File.join(config.http_path, 'stylesheets')
+        config.generated_images_dir = File.join(site.output_dir, 'images')
+        config.http_generated_images_dir = File.join(config.http_path, 'images')
+        config.sprite_load_path = [config.images_path]
+        config.http_images_dir = File.join(config.http_path, 'images')
+        config.images_path = File.join(config.project_path, 'images')
+        config.fonts_dir = 'fonts'
+        config.fonts_path = File.join(config.project_path, 'fonts')
+        config.http_fonts_dir = File.join(config.http_path, 'fonts')
+
+        config.line_comments = lambda do
+          if site.profile.eql? 'production'
+            return false
+          else
+            if site.key? :compass_line_comments
+              return site.compass_line_comments 
+            end
+            if site.key?(:scss) && site.scss.key?(:line_comments)
+              return site.scss.line_comments
+            end
+            if site.key?(:sass) && site.sass.key?(:line_comments)
+              return site.sass.line_comments
+            end
+            true
+          end
+        end.call
+
+        config.output_style = lambda do
+          if site.profile.eql? 'production'
+            return :compressed
+          else
+            if site.key? :compass_output_style
+              return site.compass_output_style
+            end
+            if (site.key? :scss) && (site.scss.key? :style)
+              return site.scss.style
+            end
+            if (site.key? :sass) && (site.sass.key? :style)
+              return site.sass.style
+            end
+          end
+          :expanded
+        end.call
+
+        config.relative_assets = false
+      end
+
       compass_config_file = File.join(site.config.config_dir, 'compass.rb')
       if (File.exists? compass_config_file)
-        default_config.inherit_from! ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
+        ::Compass.add_configuration ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
       end 
-
-      ::Compass.reset_configuration!
-      ::Compass.add_configuration default_config
       ::Compass.configuration # return for use elsewhere
 
       # TODO: Should we add an on_stylesheet_error block?  

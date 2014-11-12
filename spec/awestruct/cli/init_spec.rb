@@ -13,6 +13,6 @@ describe Awestruct::CLI::Init do
 
   it "should not fail during init" do 
     init = Awestruct::CLI::Init.new('spec/support/clean_init', 'compass', true)
-    expect(init.run).to eql true
+    expect(init.run).to eql true # There may be some sort of race condition here
   end
 end
