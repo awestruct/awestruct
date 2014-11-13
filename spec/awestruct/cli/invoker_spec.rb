@@ -4,11 +4,11 @@ require 'awestruct/cli/invoker'
 
 describe Awestruct::CLI::Invoker do
   before(:each) do
-    FileUtils.mkdir_p 'spec/support/clean_init'
+    FileUtils.mkdir_p 'spec/support/clean_invoker'
   end
 
   after(:each) do
-    FileUtils.rm_rf 'spec/support/clean_init'
+    FileUtils.rm_rf 'spec/support/clean_invoker'
   end
 
   it "should invoke generation by default" do

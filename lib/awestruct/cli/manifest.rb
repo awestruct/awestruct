@@ -1,33 +1,8 @@
 require 'sass/callbacks'
 require 'compass'
 require 'compass/commands'
-require 'compass/installers/bare_installer'
 
-module ::Compass::AppIntegration::StandAlone
-end
-
-class ::Compass::AppIntegration::StandAlone::Installer
-  def write_configuration_files(config_file = nil)
-    # no!
-  end
-
-  def finalize(opts={})
-    $LOG.info <<-END.gsub(/^ {6}/, '')
-
-      Now you're awestruct!
-
-      To generate and run your site in development mode, execute:
-
-        awestruct -d
-
-      or, simply:
-
-        rake
-
-      then visit your site at: #{::Awestruct::CLI::Options::DEFAULT_BASE_URL}
-    END
-  end
-end
+# TODO: We could create our own installer and use that
 
 module Awestruct
   module CLI
@@ -245,6 +220,7 @@ module Awestruct
               :images_dir => 'images',
               :fonts_dir => 'fonts',
               :javascripts_dir => 'javascripts',
+              :bare => true
           })
           cmd.perform
         end
