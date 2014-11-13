@@ -6,7 +6,7 @@ group :development do
   gem 'rake', '~> 10.2.2'
   gem 'guard-rspec', '~> 4.2.0', :require => false
   gem 'pry', :require => false
-  gem 'pry-byebug', :require => false
+  #gem 'pry-byebug', :require => false
 end
 
 group :test do

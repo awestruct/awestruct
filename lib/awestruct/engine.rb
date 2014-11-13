@@ -276,14 +276,17 @@ module Awestruct
         config.javascripts_path = File.join(site.output_dir, 'javascripts')
         config.http_javascripts_dir = File.join(config.http_path, 'javascripts')
         config.http_stylesheets_dir = File.join(config.http_path, 'stylesheets')
-        config.generated_images_dir = File.join(site.output_dir, 'images')
-        config.http_generated_images_dir = File.join(config.http_path, 'images')
         config.sprite_load_path = [config.images_path]
         config.http_images_dir = File.join(config.http_path, 'images')
         config.images_path = File.join(config.project_path, 'images')
         config.fonts_dir = 'fonts'
         config.fonts_path = File.join(config.project_path, 'fonts')
         config.http_fonts_dir = File.join(config.http_path, 'fonts')
+
+        if config.generated_images_dir == config.default_for('generated_images_dir')
+          config.generated_images_dir = File.join(site.output_dir, 'images')
+          config.http_generated_images_dir = File.join(config.http_path, 'images')
+        end
 
         config.line_comments = lambda do
           if site.profile.eql? 'production'
