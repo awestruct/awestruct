@@ -103,7 +103,7 @@ module Awestruct
             self.auto = a
             self.livereload = true
           end
-          opts.on( '--livereload', 'Support for browser livereload' ) do |livereload|
+          opts.on( '--[no-]livereload', 'Support for browser livereload' ) do |livereload|
             self.livereload = livereload
           end
 
