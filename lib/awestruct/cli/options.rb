@@ -16,6 +16,7 @@ module Awestruct
       DEFAULT_BIND_ADDR = '0.0.0.0'
       DEFAULT_PORT = 4242
       DEFAULT_BASE_URL = %(http://#{LOCAL_HOSTS[DEFAULT_BIND_ADDR] || DEFAULT_BIND_ADDR}:#{DEFAULT_PORT})
+      DEFAULT_GENERATE_ON_ACCESS = false
 
       attr_accessor :generate
       attr_accessor :server
@@ -36,6 +37,7 @@ module Awestruct
       attr_accessor :output_dir
       attr_accessor :livereload
       attr_accessor :debug
+      attr_accessor :generate_on_access
 
       def initialize()
         @generate   = nil
@@ -56,6 +58,7 @@ module Awestruct
         @livereload = false
         @source_dir = Dir.pwd
         @output_dir = File.expand_path '_site'
+        @generate_on_access = DEFAULT_GENERATE_ON_ACCESS
       end
 
       def self.parse!(args)
@@ -92,12 +95,13 @@ module Awestruct
           opts.on( '-u', '--url URL', 'Set site.base_url' ) do |url|
             self.base_url = url
           end
-          opts.on( '-d', '--dev',     "Run site in development mode (--auto, --server, --port #{DEFAULT_PORT} and --profile development)" ) do |url|
+          opts.on( '-d', '--dev',     "Run site in development mode (--auto, --server, --port #{DEFAULT_PORT}, --profile development, --livereload and --generate_on_access)" ) do |url|
             self.server   = true
             self.auto     = true
             self.port     = DEFAULT_PORT
             self.profile  = 'development'
             self.livereload = true
+            self.generate_on_access = true
           end
           opts.on( '-a', '--auto', 'Auto-generate when changes are noticed' ) do |a|
             self.auto = a
@@ -105,6 +109,11 @@ module Awestruct
           end
           opts.on( '--[no-]livereload', 'Support for browser livereload' ) do |livereload|
             self.livereload = livereload
+            self.generate_on_access = true  if self.livereload
+          end
+
+          opts.on( '--[no-]generate-on-access', 'Support for calling generate on HTTP access' ) do |generate_on_access|
+            self.generate_on_access = generate_on_access
           end
 
           opts.on( '-P', '--profile PROFILE', 'Activate a configuration profile' ) do |profile|
