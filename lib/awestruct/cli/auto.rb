@@ -18,12 +18,18 @@ module Awestruct
         generate_thread = nil
         current_path = nil
 
-        guard = if ( @config.options.livereload )
-          guard = Guard::LiveReload.new
-          guard.start
-          guard
-        else
-          nil
+        begin
+          guard = if ( @config.options.livereload )
+            Guard.init({})
+            guard = Guard::LiveReload.new
+            guard.start
+            guard
+          else
+            nil
+          end
+        rescue => e
+          puts e
+          puts e.backtrace
         end
 
         force_polling = ( RUBY_PLATFORM =~ /mingw/ ? true : false )
@@ -45,26 +51,24 @@ module Awestruct
 
               generate_thread = Thread.new {
                 begin
-                  if ( File.extname(path) == '.sass' || File.extname(path) == '.scss' )
-                    # TODO use sass here, eventually, as soon as I can figure out how to get it and sprites to work
-                    ::Compass::Commands::UpdateProject.new(engine.site.dir, {}).perform
-                    # fixes the nil later on, there's an outstanding bug that css 
-                    # pages aren't output in the correct directory
-                    pages = [] 
-                  else
-                    page = engine.page_by_source_path(path)
-                    pages = []
-                    if ( page )
+                  page = engine.page_by_source_path(path)
+                  pages = []
+                  if ( page )
+                    unless ( guard )
                       pages = engine.generate_page_and_dependencies( page )
                     else
-                      if File.exist? path
-                      # chances are this is an extension or yaml file
-                        pages = engine.run_auto_for_non_page(path)
-                      end
+                      pages = engine.page_dependencies( page )
+                    end
+                  else
+                    if File.exist? path
+                    # chances are this is an extension or yaml file
+                      pages = engine.run_auto_for_non_page(path, !@config.options.generate_on_access)
                     end
                   end
 
-                  $LOG.info "Regeneration finished." if $LOG.info?
+                  unless ( guard )
+                    $LOG.info "Regeneration finished." if $LOG.info?
+                  end
 
                   if ( guard )
                     urls = pages.map do |p|
