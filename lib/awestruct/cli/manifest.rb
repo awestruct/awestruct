@@ -1,6 +1,9 @@
 require 'sass/callbacks'
 require 'compass'
 require 'compass/commands'
+require 'erb'
+require 'rubygems/specification'
+require 'ostruct'
 
 # TODO: We could create our own installer and use that
 
@@ -20,6 +23,10 @@ module Awestruct
 
       def mkdir(path)
         steps << MkDir.new(path)
+      end
+
+      def template_file(path, input_path, state = {})
+        steps << TemplateFile.new(path, input_path, state.merge(load_gem))
       end
 
       def copy_file(path, input_path, opts = {})
@@ -66,6 +73,18 @@ module Awestruct
             ExceptionHelper.log_backtrace e
           end
         end
+      end
+
+      private
+
+      def load_gem
+        spec = {:dependencies => {}}
+        gem_spec = Gem::Specification::load(
+          File.join(File.dirname(__FILE__), "../../../", "awestruct.gemspec"))
+
+        gem_spec.dependencies.each { |d| spec[:dependencies][d.name] = d}
+        spec[:awestruct_version] = gem_spec.version
+        spec
       end
 
       ##
@@ -200,6 +219,28 @@ module Awestruct
           FileUtils.rm(p)
         end
 
+      end
+
+      class TemplateFile
+        def initialize(path, input_path, state = {})
+          @path = path
+          @input_path = input_path
+          @state = state
+        end
+
+        def perform(dir)
+
+          rendered = ERB.new(File.read(@input_path), nil, '<>').result(
+            OpenStruct.new(@state).instance_eval { binding })
+
+          p = File.join(dir, @path)
+          $LOG.info "Create file: #{p}" if $LOG.info?
+          File.open(p, 'w') { |f| f.write(rendered) }
+        end
+
+        def unperform(dir)
+          # nothing
+        end
       end
 
       class InstallCompass
