@@ -69,7 +69,7 @@ module Awestruct
       load_pages
       $LOG.debug 'execute_pipeline' if $LOG.debug?
       $LOG.info 'Excecuting pipeline...' if $LOG.info?
-      execute_pipeline
+      execute_pipeline(false)
       $LOG.debug 'configure_compass' if $LOG.debug?
       configure_compass
       $LOG.debug 'set_urls' if $LOG.debug?
@@ -246,8 +246,14 @@ module Awestruct
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( File.exists?( pipeline_file ) )
         p = eval(File.read( pipeline_file ), nil, pipeline_file, 1)
+        p.before_pipeline_extensions.each do |e|
+          pipeline.before_pipeline_extension( e )
+        end
         p.extensions.each do |e|
           pipeline.extension( e )
+        end
+        p.after_pipeline_extensions.each do |e|
+          pipeline.after_pipeline_extension( e )
         end
         p.helpers.each do |h|
           pipeline.helper( h )
@@ -255,13 +261,16 @@ module Awestruct
         p.transformers.each do |t|
           pipeline.transformer( t )
         end
+        p.after_generation_extensions.each do |e|
+          pipeline.after_generation_extension( e )
+        end
       end
     end
 
-    def execute_pipeline
+    def execute_pipeline(on_reload = false)
       FileUtils.mkdir_p( site.config.output_dir )
       FileUtils.mkdir_p( site.config.tmp_dir )
-      pipeline.execute( site )
+      pipeline.execute( site, on_reload )
     end
 
     def configure_compass 
@@ -356,6 +365,7 @@ module Awestruct
           generate_page( page, generated_path, false )
         end
       end
+      site.engine.pipeline.execute_after_generation(site)
     end
 
     def generate_page(page, generated_path, produce_output=true)
@@ -438,7 +448,7 @@ module Awestruct
       @pipeline = Pipeline.new
       load_yamls
       load_pipeline
-      execute_pipeline
+      execute_pipeline(true)
 
       if ( generate )
         site.pages.each do |p|
