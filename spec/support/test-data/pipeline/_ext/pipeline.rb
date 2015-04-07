@@ -1,4 +1,5 @@
 require 'support/test-data/pipeline/_ext/extensions'
+require 'awestruct/extensions/pipeline'
 
 Awestruct::Extensions::Pipeline.new do
   before_extensions Awestruct::Test::Extensions::TestBeforeExtension.new
