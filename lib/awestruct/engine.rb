@@ -13,6 +13,7 @@ require 'awestruct/extensions/pipeline'
 require 'fileutils'
 require 'set'
 require 'date'
+require 'erb'
 
 require 'compass'
 require 'parallel'
@@ -137,7 +138,7 @@ module Awestruct
     def load_site_yaml(yaml_path, profile = nil)
       if ( File.exist?( yaml_path ) )
         begin
-          data = YAML.load( File.read( yaml_path, :encoding => 'bom|utf-8' ) )
+          data = YAML.load( ERB.new(File.read( yaml_path, :encoding => 'bom|utf-8' )).result )
           if ( profile )
             # JP: Interpolation now turned off by default, turn it per page if needed
             site.interpolate = false
@@ -167,7 +168,7 @@ module Awestruct
 
     def load_yaml(yaml_path)
       begin
-        data = YAML.load( File.read( yaml_path ) )
+        data = YAML.load( ERB.new(File.read( yaml_path )).result )
       rescue Exception => e
         ExceptionHelper.log_building_error e, yaml_path
         ExceptionHelper.mark_failed

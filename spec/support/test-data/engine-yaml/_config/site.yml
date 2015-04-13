@@ -1,0 +1,9 @@
+<% require "date" %>
+profiles:
+  development:
+    show_drafts: false
+    cook: microwave
+    base_url: http://localhost:4242
+
+date: <%= Date.parse('2015-04-13').iso8601 %>
+
