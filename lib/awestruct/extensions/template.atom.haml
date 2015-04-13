@@ -36,7 +36,7 @@
           - for tag in entry.tags
             %category{:term=>"#{tag}"}
         %summary
-          #{summarize( html_to_text( entry.content ), 100 )}
+          #{summarize( html_to_text( entry.content ).strip, 100 )}
         %content{:type=>'html'}
           = clean_html( html_escape( fully_qualify_urls( site.base_url, find_and_preserve( entry.content ) ) ) )
   

@@ -18,7 +18,6 @@ module Awestruct
         copy_file('_ext/pipeline.rb', Init.framework_path('base_pipeline.rb'))
         copy_file('.awestruct_ignore', Init.framework_path('base_awestruct_ignore'))
         copy_file('Rakefile', Init.framework_path('base_Rakefile'))
-        copy_file('Gemfile', Init.framework_path('base_Gemfile'))
         mkdir('stylesheets')
       }
 
@@ -31,6 +30,8 @@ module Awestruct
       def run()
         manifest = Manifest.new(BASE_MANIFEST)
         scaffold_name = @framework
+        manifest.template_file('Gemfile', Init.framework_path('base_Gemfile'), {:framework => @framework})
+
         lib = nil
         case @framework
           when 'compass'

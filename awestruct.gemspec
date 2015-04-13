@@ -35,10 +35,6 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_dependency 'haml', '~> 4.0.5'
   s.add_dependency 'asciidoctor' # we're pretty good about backwards compat
   s.add_dependency 'tilt', '~> 2.0.1'
-  s.add_dependency 'compass', '~> 1.0.1'
-  s.add_dependency 'compass-960-plugin', '~> 0.10.4'
-  s.add_dependency 'bootstrap-sass', '~> 3.2.0.2'
-  s.add_dependency 'zurb-foundation', '~> 4.3.2'
   s.add_dependency 'mime-types', '~> 2.1'
   s.add_dependency 'rest-client', '~> 1.7.2'
   s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
@@ -47,7 +43,13 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_dependency 'git', '~> 1.2.6'
   s.add_dependency 'guard-livereload', '~> 2.1.2'
   s.add_dependency 'colorize', '~> 0.7.1'
+  s.add_dependency 'oga', '~> 0.3'
+
   s.add_dependency 'parallel', '> 1.1.1'
 
   s.add_development_dependency 'nokogiri', '~> 1.5.10'
+  s.add_development_dependency 'compass', '~> 1.0.1'
+  s.add_development_dependency 'compass-960-plugin', '~> 0.10.4'
+  s.add_development_dependency 'bootstrap-sass', '~> 3.2.0.2'
+  s.add_development_dependency 'zurb-foundation', '~> 4.3.2'
 end

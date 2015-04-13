@@ -122,7 +122,7 @@ module Awestruct
 
       def invoke_generate()
         base_url = profile['base_url'] || options.base_url
-        @success = Awestruct::CLI::Generate.new( config, options.profile, base_url, Options::DEFAULT_BASE_URL, options.force ).run
+        @success = Awestruct::CLI::Generate.new( config, options.profile, base_url, Options::DEFAULT_BASE_URL, options.force, !options.generate_on_access ).run
       end
 
       def invoke_deploy()
@@ -144,7 +144,7 @@ module Awestruct
       end
 
       def invoke_server()
-        run_in_thread( Awestruct::CLI::Server.new( options.output_dir, options.bind_addr, options.port ) )
+        run_in_thread( Awestruct::CLI::Server.new( options.output_dir, options.bind_addr, options.port, options.generate_on_access ) )
       end
 
 

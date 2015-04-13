@@ -53,7 +53,7 @@ module Awestruct
       site.config
     end
 
-    def run(profile, base_url, default_base_url, force=false)
+    def run(profile, base_url, default_base_url, force=false, generate=true)
       $LOG.debug 'adjust_load_path' if $LOG.debug?
       adjust_load_path
       $LOG.debug 'load_default_site_yaml' if $LOG.debug?
@@ -77,20 +77,25 @@ module Awestruct
       set_urls( site.pages )
       $LOG.debug 'build_page_index' if $LOG.debug?
       build_page_index
-      $LOG.debug 'generate_output' if $LOG.debug?
-      $LOG.info 'Generating pages...' if $LOG.info?
-      generate_output
+
+      if ( generate )
+        $LOG.debug 'generate_output' if $LOG.debug?
+        $LOG.info 'Generating pages...' if $LOG.info?
+        generate_output
+      end
       return 0
     end
 
     def build_page_index
       site.pages_by_relative_source_path = {}
+      site.pages_by_output_path = {}
       site.pages.each do |p|
         # Add the layout to the set of dependencies
         p.dependencies.add_dependency(site.layouts.find_matching(p.layout, p.output_extension))
         if ( p.relative_source_path )
           site.pages_by_relative_source_path[ p.relative_source_path ] = p
         end
+        site.pages_by_output_path[ p.output_path ] = p
       end
       site.layouts.each do |p|
         # Add the layout to the set of dependencies
@@ -396,6 +401,19 @@ module Awestruct
         generate_page_internal(page)
       end
 
+      regen_pages = page_dependencies( page )
+
+      $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
+
+      regen_pages.each do |p|
+        $LOG.info "Regenerating page #{p.output_path}" if $LOG.info?
+        generate_page_internal(p)
+      end
+
+      regen_pages
+    end
+
+    def page_dependencies(page)
       regen_pages = Set.new [ page ] 
       regen_pages.merge page.dependencies.dependents
 
@@ -412,18 +430,9 @@ module Awestruct
       end
 
       regen_pages.merge temp_set
-
-      $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
-
-      regen_pages.each do |p|
-        $LOG.info "Regenerating page #{p.output_path}" if $LOG.info?
-        generate_page_internal(p)
-      end
-
-      regen_pages
     end
 
-    def run_auto_for_non_page(file)
+    def run_auto_for_non_page(file, generate = true)
       if File.extname(file) == '.rb'
         load file
       end
@@ -431,8 +440,11 @@ module Awestruct
       load_yamls
       load_pipeline
       execute_pipeline
-      site.pages.each do |p|
-        generate_page_internal(p)
+
+      if ( generate )
+        site.pages.each do |p|
+          generate_page_internal(p)
+        end
       end
       site.pages
     end
