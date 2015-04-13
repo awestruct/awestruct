@@ -83,7 +83,7 @@ module Awestruct
         $LOG.info 'Generating pages...' if $LOG.info?
         generate_output
       end
-      return 0
+      return Awestruct::ExceptionHelper::EXITCODES[:success]
     end
 
     def build_page_index
@@ -349,13 +349,18 @@ module Awestruct
 
     def generate_output
       FileUtils.mkdir_p( site.config.output_dir )
-      Parallel.each(@site.pages, :in_threads => Parallel.processor_count * 10) do |page|
-        generated_path = File.join( site.config.output_dir, page.output_path )
-        if ( page.stale_output?( generated_path ) )
-          generate_page( page, generated_path )
-        else
-          generate_page( page, generated_path, false )
+      begin
+        Parallel.each(@site.pages, site.generation) do |page|
+          generated_path = File.join( site.config.output_dir, page.output_path )
+          if ( page.stale_output?( generated_path ) )
+            generate_page( page, generated_path )
+          else
+            generate_page( page, generated_path, false )
+          end
         end
+      rescue Exception => e
+        $LOG.error 'An error occurred during output generation, all pages may not have completed during generation'
+        exit Awestruct::ExceptionHelper::EXITCODES[:generation_error]
       end
     end
 
@@ -370,6 +375,7 @@ module Awestruct
         File.open( generated_path, 'wb' ) do |file|
           file << c
         end
+        exit Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
       elsif ( site.config.track_dependencies )
         if page.dependencies.load!
           $LOG.debug "Cached:     #{generated_path}" if $LOG.debug?

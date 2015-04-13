@@ -1,5 +1,6 @@
 require 'awestruct/cli/options'
 require 'awestruct/engine'
+require 'logger'
 
 require 'hashery/open_cascade'
 
@@ -131,7 +132,103 @@ describe Awestruct::Engine do
     expect( Compass.configuration.output_style ).to eq :expanded
   end
 
-  it "wip should accept site.compass_line_comments and site.compass_output_style to configure behavior" do
+  it "should cleanly generate page output, using threads" do
+    output_dir = Dir.mktmpdir 'engine-generate-no-errors'
+
+    begin
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+
+      opts = Awestruct::CLI::Options.new
+      opts.source_dir = test_data_dir 'engine-generate-no-errors'
+      opts.output_dir = output_dir
+      config = Awestruct::Config.new( opts )
+      engine = Awestruct::Engine.new(config)
+      begin
+        engine.run('development', 'http://localhost:4242', 'http://localhost:4242')
+      rescue SystemExit => e
+        e.status.should eql 0
+      end
+    ensure
+      FileUtils.remove_entry_secure output_dir
+    end
+  end
+
+  it "should cleanly generate page output, using processes" do
+    output_dir = Dir.mktmpdir 'engine-generate-no-errors'
+
+    begin
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+
+      opts = Awestruct::CLI::Options.new
+      opts.source_dir = test_data_dir 'engine-generate-no-errors'
+      opts.output_dir = output_dir
+      config = Awestruct::Config.new( opts )
+      engine = Awestruct::Engine.new(config)
+      engine.site.generation = [:in_processes => 2]
+      begin
+        engine.run('development', 'http://localhost:4242', 'http://localhost:4242')
+      rescue SystemExit => e
+        e.status.should eql 0
+      end
+    ensure
+      FileUtils.remove_entry_secure output_dir
+    end
+  end
+
+  it "should exit unsuccessfully if generate page output fails, using threads" do
+    output_dir = Dir.mktmpdir 'engine-generate-with-errors'
+
+    begin
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+
+      opts = Awestruct::CLI::Options.new
+      opts.source_dir = test_data_dir 'engine-generate-with-errors'
+      opts.output_dir = output_dir
+      config = Awestruct::Config.new( opts )
+      engine = Awestruct::Engine.new(config)
+      begin
+        engine.run('development', 'http://localhost:4242', 'http://localhost:4242')
+        fail('Expected generation error')
+      rescue SystemExit => e
+        e.status.should eql Awestruct::ExceptionHelper::EXITCODES[:generation_error]
+      end
+    ensure
+      FileUtils.remove_entry_secure output_dir
+    end
+  end
+
+  it "should exit unsuccessfully if generate page output fails, using processes" do
+    output_dir = Dir.mktmpdir 'engine-generate-with-errors'
+
+    begin
+      log = StringIO.new
+      $LOG = Logger.new(log)
+      $LOG.level = Logger::DEBUG
+
+      opts = Awestruct::CLI::Options.new
+      opts.source_dir = test_data_dir 'engine-generate-with-errors'
+      opts.output_dir = output_dir
+      config = Awestruct::Config.new( opts )
+      engine = Awestruct::Engine.new(config)
+      engine.site.generation = [:in_processes => 2]
+      begin
+        engine.run('development', 'http://localhost:4242', 'http://localhost:4242')
+        fail('Expected generation error')
+      rescue SystemExit => e
+        e.status.should eql Awestruct::ExceptionHelper::EXITCODES[:generation_error]
+      end
+    ensure
+      FileUtils.remove_entry_secure output_dir
+    end
+  end
+
+  it "should accept site.compass_line_comments and site.compass_output_style to configure behavior" do
     opts = Awestruct::CLI::Options.new
     opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )

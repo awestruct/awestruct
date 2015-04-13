@@ -1,5 +1,8 @@
 module Awestruct
   class ExceptionHelper
+
+    EXITCODES = {:generation_error => 125, :success => 0}
+
     @@failed = false
 
     def self.log_message message
