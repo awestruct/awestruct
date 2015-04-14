@@ -1,4 +1,5 @@
 require 'oga'
+require 'awestruct/util/exception_helper'
 
 module Awestruct
   module ContextHelper
@@ -38,23 +39,31 @@ module Awestruct
     end
 
     def fully_qualify_urls(base_url, text)
-      doc = Oga.parse_html text
+      begin
+        doc = Oga.parse_html text
 
-      doc.each_node do |elem|
-        if (elem.is_a?(Oga::XML::Element) && elem.html?)
-          case elem.name
-          when 'a'
-            elem.set 'href', fix_url(base_url, elem.get('href')) if elem.get('href')
-          when 'link'
-            elem.set 'href', fix_url(base_url, elem.get('href')) if elem.get('href')
-          when 'img'
-            elem.set 'src', fix_url(base_url, elem.get('src')) if elem.get('src')
+        doc.each_node do |elem|
+          if elem.is_a?(Oga::XML::Element) && elem.html?
+            case elem.name
+            when 'a'
+              elem.set 'href', fix_url(base_url, elem.get('href')) if elem.get('href')
+            when 'link'
+              elem.set 'href', fix_url(base_url, elem.get('href')) if elem.get('href')
+            when 'img'
+              elem.set 'src', fix_url(base_url, elem.get('src')) if elem.get('src')
+            end
           end
         end
-      end
 
-      doc.to_xml.tap do |d|
-        d.force_encoding(text.encoding) if d.encoding != text.encoding
+        doc.to_xml.tap do |d|
+          d.force_encoding(text.encoding) if d.encoding != text.encoding
+        end
+      rescue => e
+        Awestruct::ExceptionHelper.log_error e
+        $LOG.info %Q(If the error has to do with 'end of input' ensure none of the following tags have a closing tag:
+#{Oga::XML::HTML_VOID_ELEMENTS.to_a.collect {|a| a.downcase}.uniq.join(', ')}) if $LOG.info?
+        $LOG.warn "Text being parsed:\n#{text}" if $LOG.warn?
+        text # returning the bad text, which hopefully will help find the cause
       end
     end
 
