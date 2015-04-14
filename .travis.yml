@@ -5,4 +5,28 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.0
+  - 2.2.0
   - jruby-19mode
+  - jruby-head
+jdk:
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
+matrix:
+  exclude:
+    - rvm: 1.9.3
+      jdk: oraclejdk8
+    - rvm: 1.9.3
+      jdk: oraclejdk7
+    - rvm: 2.0.0
+      jdk: oraclejdk8
+    - rvm: 2.0.0
+      jdk: oraclejdk7
+    - rvm: 2.1.0
+      jdk: oraclejdk8
+    - rvm: 2.1.0
+      jdk: oraclejdk7
+    - rvm: 2.2.0
+      jdk: oraclejdk8
+    - rvm: 2.2.0
+      jdk: oraclejdk7

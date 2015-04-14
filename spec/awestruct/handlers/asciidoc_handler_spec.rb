@@ -4,7 +4,7 @@ require 'rspec/matchers.rb'
 verify = lambda { |output|
   include EmmetMatchers
   # clean whitespace to make comparison easier
-  output.should have_structure('div#preamble>div.sectionbody>div.paragraph>p>strong')
+  output.should have_structure('div.paragraph>p>strong')
 }
 
 verify_front_matter = lambda { |output, page|
