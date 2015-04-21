@@ -1,5 +1,8 @@
 require 'rubygems'
 require 'rspec'
+require 'simplecov'
+
+SimpleCov.start
 
 Dir["./spec/support/**/*.rb"].each {|f| require f} 
 

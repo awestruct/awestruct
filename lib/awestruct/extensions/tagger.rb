@@ -20,7 +20,11 @@ module Awestruct
       module TagLinker
         def tag_links(delimiter = ', ', style_class = nil)
           class_attr = (style_class ? ' class="' + style_class + '"' : '')
-          tags.map{|tag| %Q{<a#{class_attr} href="#{tag.primary_page.url}">#{tag}</a>}}.join(delimiter)
+          tags.map do |tag|
+            url = tag.primary_page.url
+            url << '/' unless (url.include?('.htm') || url.end_with?('/'))
+            %Q{<a#{class_attr} href="#{url}">#{tag}</a>}
+          end.join(delimiter)
         end
       end
 
@@ -45,12 +49,9 @@ module Awestruct
               @tags[tag] ||= TagStat.new( tag, [] )
               @tags[tag].pages << page
             end
+            page.tags = (page.tags || []).collect{|t| @tags[t]}
+            page.extend( TagLinker )
           end
-        end
-
-        all.each do |page|
-          page.tags = (page.tags||[]).collect{|t| @tags[t]}
-          page.extend( TagLinker )
         end
 
         ordered_tags = @tags.values

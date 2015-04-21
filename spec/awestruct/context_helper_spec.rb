@@ -76,21 +76,21 @@ describe Awestruct::ContextHelper do
   describe "fully_qualify_urls" do
     it "should fix anchor tags" do
       str = "<a href='/foo'>foobar</a>"
-      @tester.fully_qualify_urls('http://foobar.com', str).should == "<a href=\"http://foobar.com/foo\">foobar</a>"
+      @tester.fully_qualify_urls('http://foobar.com', str).should == %q(<a href="http://foobar.com/foo">foobar</a>)
     end
 
     it "should fix link tags" do
-      str = "<link href='/foo' />"
-      @tester.fully_qualify_urls('http://foobar.com', str).should == "<link href=\"http://foobar.com/foo\"/>"
+      str = "<link href='/foo'>"
+      @tester.fully_qualify_urls('http://foobar.com', str).should == %q(<link href="http://foobar.com/foo" />)
     end
 
     it "should fix image tags" do
       str = "<img src='/foo' />"
-      @tester.fully_qualify_urls('http://foobar.com', str).should == "<img src=\"http://foobar.com/foo\"/>"
+      @tester.fully_qualify_urls('http://foobar.com', str).should == %q(<img src="http://foobar.com/foo" />)
     end
 
     it "should leave anchor tags with no href attribute (for page anchors) unchanged" do
-      str = "<a target=\"#foo\">foobar</a>"
+      str = %q(<a target="#foo">foobar</a>)
       @tester.fully_qualify_urls('http://foobar.com', str).should == str
     end
   end
