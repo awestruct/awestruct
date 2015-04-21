@@ -52,4 +52,5 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_development_dependency 'compass-960-plugin', '~> 0.10','>= 0.10.4'
   s.add_development_dependency 'bootstrap-sass', '~> 3', '>= 3.2.0.2'
   s.add_development_dependency 'zurb-foundation', '~> 4.3.2', '>= 4.3.2'
+  s.add_development_dependency 'simplecov', '~> 0.9'
 end

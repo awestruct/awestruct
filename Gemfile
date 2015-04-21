@@ -10,6 +10,7 @@ group :development do
 end
 
 group :test do
+  gem 'simplecov', '~> 0.9', :require => false
   gem 'rb-inotify', '~> 0.9.3'
   gem 'rack-test', '~> 0.6.2'
   gem 'tilt', '~> 2.0.1'
