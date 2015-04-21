@@ -49,12 +49,9 @@ module Awestruct
               @tags[tag] ||= TagStat.new( tag, [] )
               @tags[tag].pages << page
             end
+            page.tags = (page.tags || []).collect{|t| @tags[t]}
+            page.extend( TagLinker )
           end
-        end
-
-        all.each do |page|
-          page.tags = (page.tags||[]).collect{|t| @tags[t]}
-          page.extend( TagLinker )
         end
 
         ordered_tags = @tags.values
