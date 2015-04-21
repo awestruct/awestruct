@@ -10,3 +10,4 @@ spec/.sass-cache/*/*.scssc
 .rvmrc
 .sass-cache
 coverage
+_site
