@@ -2,7 +2,7 @@ module Awestruct
   module Test
     module Extensions
       class TestBeforeExtension
-        def execute site
+        def before_extensions site
         end
       end
 

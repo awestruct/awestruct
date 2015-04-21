@@ -247,14 +247,14 @@ module Awestruct
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( File.exists?( pipeline_file ) )
         p = eval(File.read( pipeline_file ), nil, pipeline_file, 1)
-        p.before_pipeline_extensions.each do |e|
-          pipeline.before_pipeline_extension( e )
+        p.before_all_extensions.each do |e|
+          pipeline.add_before_extension( e )
         end
         p.extensions.each do |e|
           pipeline.extension( e )
         end
-        p.after_pipeline_extensions.each do |e|
-          pipeline.after_pipeline_extension( e )
+        p.after_all_extensions.each do |e|
+          pipeline.add_after_extension( e )
         end
         p.helpers.each do |h|
           pipeline.helper( h )
@@ -263,7 +263,7 @@ module Awestruct
           pipeline.transformer( t )
         end
         p.after_generation_extensions.each do |e|
-          pipeline.after_generation_extension( e )
+          pipeline.add_after_generation_extension( e )
         end
       end
     end

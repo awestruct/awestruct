@@ -6,35 +6,35 @@ module Awestruct
   class Pipeline
 
     attr_reader :handler_chains
-    attr_reader :before_pipeline_extensions
+    attr_reader :before_all_extensions
     attr_reader :extensions
-    attr_reader :after_pipeline_extensions
+    attr_reader :after_all_extensions
     attr_reader :helpers
     attr_reader :transformers
     attr_reader :after_generation_extensions
 
     def initialize()
       @handler_chains = HandlerChains.new
-      @before_pipeline_extensions  = []
+      @before_all_extensions       = []
       @extensions                  = []
       @helpers                     = []
       @transformers                = []
-      @after_pipeline_extensions   = []
+      @after_all_extensions        = []
       @after_generation_extensions = []
     end
 
-    def before_pipeline_extension(e)
-      @before_pipeline_extensions << e
+    def add_before_extension(e)
+      @before_all_extensions << e
     end
 
     def extension(e)
       @extensions << e
       # TC: why? transformer and extension?
-      e.transform(@transformers) if e.respond_to?('transform')
+      e.transform(@transformers) if e.respond_to?(:transform)
     end
 
-    def after_pipeline_extension(e)
-      @after_pipeline_extensions << e
+    def add_after_extension(e)
+      @after_all_extensions << e
     end
 
     def helper(h)
@@ -45,7 +45,7 @@ module Awestruct
       @transformers << t
     end
 
-    def after_generation_extension(e)
+    def add_after_generation_extension(e)
       @after_generation_extensions << e
     end
 
@@ -54,7 +54,7 @@ module Awestruct
     end
 
     def execute_extensions(site, on_reload)
-      @before_pipeline_extensions.each do |e|
+      @before_all_extensions.each do |e|
         e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
         e.execute(site)
       end
@@ -64,7 +64,7 @@ module Awestruct
         e.execute(site)
       end
 
-      @after_pipeline_extensions.each do |e|
+      @after_all_extensions.each do |e|
         e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
         e.execute(site)
       end

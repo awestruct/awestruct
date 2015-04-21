@@ -15,19 +15,19 @@ module Awestruct
     # declare their extensions, helpers, transformers, etc.
     class Pipeline
 
-      attr_reader :before_pipeline_extensions
+      attr_reader :before_all_extensions
       attr_reader :extensions
-      attr_reader :after_pipeline_extensions
+      attr_reader :after_all_extensions
       attr_reader :helpers
       attr_reader :transformers
       attr_reader :after_generation_extensions
 
       def initialize(&block)
-        @before_pipeline_extensions  = []
+        @before_all_extensions       = []
         @extensions                  = []
         @helpers                     = []
         @transformers                = []
-        @after_pipeline_extensions   = []
+        @after_all_extensions        = []
         @after_generation_extensions = []
         begin
           instance_eval(&block) if block
@@ -37,17 +37,21 @@ module Awestruct
       end
 
       def before_extensions(ext)
-        @before_pipeline_extensions << ext
+        @before_all_extensions << ext
       end
 
       def extension(ext)
-        @extensions << ext
+        @extensions << ext if ext.respond_to?(:execute)
         # TC: why? transformer and extension?
-        ext.transform(@transformers) if ext.respond_to?('transform')
+        ext.transform(@transformers) if ext.respond_to?(:transform)
+
+        @before_all_extensions << ext if ext.respond_to?(:before_extensions)
+        @after_all_extensions << ext if ext.respond_to?(:after_extensions)
+        @after_generation_extensions << ext if ext.respond_to?(:after_generation)
       end
 
       def after_extensions(ext)
-        @after_pipeline_extensions << ext
+        @after_all_extensions << ext
       end
 
       def helper(helper)

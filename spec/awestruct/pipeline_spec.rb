@@ -20,9 +20,9 @@ describe Awestruct::Pipeline do
 
   context "after pipeline is loaded" do 
     specify "should have all specified extension points" do
-      expect(@pipeline.before_pipeline_extensions.size).to eql 1
+      expect(@pipeline.before_all_extensions.size).to eql 1
       expect(@pipeline.extensions.size).to eql 1
-      expect(@pipeline.after_pipeline_extensions.size).to eql 1
+      expect(@pipeline.after_all_extensions.size).to eql 1
       expect(@pipeline.helpers.size).to eql 1
       expect(@pipeline.transformers.size).to eql 1
       expect(@pipeline.after_generation_extensions.size).to eql 1
