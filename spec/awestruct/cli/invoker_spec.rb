@@ -76,7 +76,7 @@ describe Awestruct::CLI::Invoker do
     generator = double
     Awestruct::CLI::Generate.should_receive( :new ).and_return( generator )
     generator.should_receive( :run ).and_return( false )
-    Awestruct::CLI::Invoker.new( %w(--source-dir spec/support/test-config --generate) ).invoke!.should be_false
+    expect(Awestruct::CLI::Invoker.new( %w(--source-dir spec/support/test-config --generate) ).invoke!).to be_falsey
   end
 
 
