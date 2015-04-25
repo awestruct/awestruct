@@ -63,37 +63,38 @@ describe Awestruct::CLI::Options do
       parse!( '--auto' ).auto.should == true
     end
 
-    it 'should parse script-related args' do
-      pending 'Not yet implemented. See issue #248.'
-      #parse!( '--run', 'puts "hi"' ).script.should == 'puts "hi"'
-    end
+    # I'm not sure if we'll ever do this
+    # it 'should parse script-related args' do
+    #   pending 'Not yet implemented. See issue #248.'
+    #   #parse!( '--run', 'puts "hi"' ).script.should == 'puts "hi"'
+    # end
 
     it 'should turn off generate when doing a --deploy' do
       result = parse!( '--deploy' )
-      result.deploy.should be_true
-      result.generate.should be_false
+      result.deploy.should be_truthy
+      result.generate.should be_falsey
     end
 
     it 'should turn off generate when doing a --deploy unless explicitly turned back on' do
       result = parse!( '--deploy', '--generate' )
-      result.deploy.should be_true
-      result.generate.should be_true
+      result.deploy.should be_truthy
+      result.generate.should be_truthy
 
       result = parse!( '--generate', '--deploy' )
-      result.deploy.should be_true
-      result.generate.should be_true
+      result.deploy.should be_truthy
+      result.generate.should be_truthy
     end
 
     it 'should turn on verbose when -w or --verbose is explicitly turned back on' do
       result = parse!( '-w' )
-      result.verbose.should be_true
+      result.verbose.should be_truthy
 
       result = parse!( '--verbose' )
-      result.verbose.should be_true
+      result.verbose.should be_truthy
     end
 
     it 'should generate by default' do
-      parse!().generate.should be_true
+      parse!().generate.should be_truthy
     end
 
     it 'should parse directory options' do

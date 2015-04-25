@@ -37,7 +37,6 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_dependency 'tilt', '~> 2.0', '>= 2.0.1'
   s.add_dependency 'mime-types', '~> 2.1'
   s.add_dependency 'rest-client', '~> 1.7', '>= 1.7.2'
-  s.add_dependency 'ruby-s3cmd', '~> 0.1', '>= 0.1.5'
   s.add_dependency 'listen', '~> 2.7', '>= 2.7.1'
   s.add_dependency 'rack', '~> 1.5', '>= 1.5.2'
   s.add_dependency 'git', '~> 1.2', '>= 1.2.6'
@@ -53,4 +52,6 @@ Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if
   s.add_development_dependency 'bootstrap-sass', '~> 3', '>= 3.2.0.2'
   s.add_development_dependency 'zurb-foundation', '~> 4.3.2', '>= 4.3.2'
   s.add_development_dependency 'simplecov', '~> 0.9'
+  s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'guard-rspec', '~> 4.0'
 end

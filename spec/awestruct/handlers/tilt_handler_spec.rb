@@ -115,7 +115,7 @@ describe Awestruct::Handlers::TiltHandler do
       $LOG.level = Logger::DEBUG
       @site.dir = Pathname.new( test_data_dir 'handlers' ) 
       path = handler_file( "hello.bogus" )
-      expect(Awestruct::Handlers::TiltMatcher.new().match(path)).to be_false
+      expect(Awestruct::Handlers::TiltMatcher.new().match(path)).to be_falsey
       expect(log.string).to include('Copying')
 
       # we don't even want to process a file if we cannot load its Tilt template
