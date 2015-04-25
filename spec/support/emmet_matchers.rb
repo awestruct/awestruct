@@ -40,7 +40,7 @@ module EmmetMatchers
       @emmet_string == @test_string 
     end
 
-    def failure_message_for_should
+    def failure_message
       "expected to match #{@test_string} against #{@emmet_string}, but they are not equal"
     end 
   end

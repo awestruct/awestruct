@@ -10,7 +10,7 @@ module NokogiriMatchers
       !@document.search(@tag).nil?
     end
 
-    def failure_message_for_should
+    def failure_message
       "expected to find #{@tag} within #{@document.to_s} but was not found"
     end
   end

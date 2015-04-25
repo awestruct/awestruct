@@ -40,7 +40,7 @@ else
   desc 'Run all specs'
   RSpec::Core::RakeTask.new(:spec) do |t|
     t.pattern = 'spec/**/*_spec.rb'
-    t.rspec_opts = ['-cfs']
+    t.rspec_opts = ['-c']
   end
 end
 

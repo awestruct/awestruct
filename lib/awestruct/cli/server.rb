@@ -3,6 +3,7 @@ require 'rack/builder'
 require 'rack/server'
 require 'awestruct/rack/app'
 require 'awestruct/rack/generate'
+require 'awestruct/cli/options'
 
 module Awestruct
   module CLI
@@ -17,9 +18,13 @@ module Awestruct
       end
 
       def run
+        unless port_open? (Options::LOCAL_HOSTS[@bind_addr] || @bind_addr), @port
+          $LOG.error "#{Options::LOCAL_HOSTS[@bind_addr] || @bind_addr}:#{@port} not available for server" if $LOG.error?
+          abort
+        end
         url = %(http://#{Options::LOCAL_HOSTS[@bind_addr] || @bind_addr}:#{@port})
         msg = %(Starting preview server at #{url} (Press Ctrl-C to shutdown))
-        puts %(#{'*' * msg.length}\n#{msg}\n#{'*' * msg.length}\n)
+        $LOG.info %(#{'*' * msg.length}\n#{msg}\n#{'*' * msg.length}\n) if $LOG.info?
 
         path = @path
         generate_on_access = @generate_on_access
@@ -35,6 +40,18 @@ module Awestruct
                                 :Host => @bind_addr
                                )
       end 
+
+      private
+      # Private. Checks to see if the port is open.
+      def port_open?(addr, port)
+        begin
+          s = TCPServer.new(addr, port)
+          s.close
+          true
+        rescue  
+          false
+        end
+      end
     end
   end
 end
