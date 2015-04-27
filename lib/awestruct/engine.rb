@@ -360,12 +360,7 @@ module Awestruct
       FileUtils.mkdir_p( site.config.output_dir )
       begin
         Parallel.each(@site.pages, site.generation) do |page|
-          generated_path = File.join( site.config.output_dir, page.output_path )
-          if ( page.stale_output?( generated_path ) )
-            generate_page( page, generated_path )
-          else
-            generate_page( page, generated_path, false )
-          end
+          generate_page( page )
         end
       rescue Exception => e
         $LOG.error 'An error occurred during output generation, all pages may not have completed during generation'
@@ -374,13 +369,15 @@ module Awestruct
       site.engine.pipeline.execute_after_generation(site)
     end
 
-    def generate_page(page, generated_path, produce_output=true)
+    def generate_page(page, produce_output=true)
       if ( produce_output )
         $LOG.debug "Generating: #{generated_path}" if $LOG.debug? && config.verbose
-        FileUtils.mkdir_p( File.dirname( generated_path ) )
 
         c = page.rendered_content
         c = site.engine.pipeline.apply_transformers( site, page, c )
+
+        generated_path = File.join( site.config.output_dir, page.output_path )
+        FileUtils.mkdir_p( File.dirname( generated_path ) )
 
         File.open( generated_path, 'wb' ) do |file|
           file << c
@@ -468,7 +465,7 @@ module Awestruct
     def generate_page_internal(p)
       unless ( p.output_path.nil? || p.__is_layout || !p.stale_output?(p.output_path) )
         generated_path = File.join( site.config.output_dir, p.output_path )
-        generate_page( p, generated_path )
+        generate_page( p )
       end
     end
 
