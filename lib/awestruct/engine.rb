@@ -464,7 +464,6 @@ module Awestruct
 
     def generate_page_internal(p)
       unless ( p.output_path.nil? || p.__is_layout || !p.stale_output?(p.output_path) )
-        generated_path = File.join( site.config.output_dir, p.output_path )
         generate_page( p )
       end
     end

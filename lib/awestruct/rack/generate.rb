@@ -22,8 +22,6 @@ module Awestruct
           page = engine.site.pages_by_output_path[path]
         end
 
-        generate_path = nil
-
         if !page.nil?
           generate_path = File.join( engine.site.config.output_dir, page.output_path )
 
@@ -34,7 +32,7 @@ module Awestruct
         if generate
           puts "Regenerate #{page.source_path}"
 
-          engine.generate_page page, generate_path, true
+          engine.generate_page page, true
         end
 
         @app.call(env)
