@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 group :development do
   gem 'hashery', '~> 2.1.1'
-  gem 'rake', '~> 10.2.2'
   gem 'pry', :require => false
   #gem 'pry-byebug', :require => false
 end

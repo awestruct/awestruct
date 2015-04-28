@@ -4,7 +4,7 @@ require 'awestruct/version'
 spec = Gem::Specification.new do |s|
   s.name          = 'awestruct'
   s.version       = Awestruct::VERSION
-  s.date          = '2015-04-13'
+  s.date          = '2015-04-28'
 
   s.authors       = ['Bob McWhirter', 'Jason Porter', 'Lance Ball', 'Dan Allen', 'Torsten Curdt', 'other contributors']
   s.email         = ['bob@mcwhirter.org', 'lightguard.jp@gmail.com', 'lball@redhat.com', 'dan.j.allen@gmail.com', 'tcurdt@vafer.org']
