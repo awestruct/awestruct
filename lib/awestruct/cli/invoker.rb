@@ -3,6 +3,7 @@ require 'logger'
 require 'awestruct/logger'
 require 'awestruct/cli/options'
 require 'awestruct/util/exception_helper'
+require 'erb'
 
 module Awestruct
   module CLI
@@ -72,7 +73,7 @@ module Awestruct
           abort( "No config file at #{site_yaml_file}" )
         end
 
-        site_yaml = YAML.load( File.read( site_yaml_file ) )
+        site_yaml = YAML.load( ERB.new(File.read( site_yaml_file )).result )
 
         if ( !site_yaml )
           abort( "Failed to parse #{site_yaml_file}" )
