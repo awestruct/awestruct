@@ -24,6 +24,11 @@ module Awestruct
           if site.sitemap["excluded_extensions"]
             @excluded_extensions.merge(site.sitemap.excluded_extensions)
           end
+          
+          # Check for a specified stylesheet for the sitemap
+          if site.sitemap["stylesheet_url"]
+            stylesheet_url = site.sitemap["stylesheet_url"]
+          end
         end
 
         # Go through all of the site's pages and add sitemap metadata
@@ -50,6 +55,7 @@ module Awestruct
         page.output_path     = 'sitemap.xml'
         page.sitemap_entries = sitemap_pages
         page.do_not_track_dependencies = true
+        page.stylesheet_url = stylesheet_url || nil
 
         # Add the sitemap to our site
         site.pages << page
