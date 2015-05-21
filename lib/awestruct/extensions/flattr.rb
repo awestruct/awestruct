@@ -12,7 +12,7 @@ module Awestruct
           html += %Q|var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];|
           html += %Q|s.type = 'text/javascript';\n|
           html += %Q|s.async = true;\n|
-          html += %Q|s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto&uid=#{site.flattr_username}&category=text';\n|
+          html += %Q|s.src = '//api.flattr.com/js/0.6/load.js?mode=auto&uid=#{site.flattr_username}&category=text';\n|
           html += %Q|t.parentNode.insertBefore(s, t);\n|
           html += %Q|})(); /* ]]> */ </script>|
           html
