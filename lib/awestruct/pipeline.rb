@@ -56,7 +56,11 @@ module Awestruct
     def execute_extensions(site, on_reload)
       @before_all_extensions.each do |e|
         e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
-        e.execute(site)
+        if (e.respond_to? :execute)
+          e.execute(site)
+        else
+          e.before_extensions(site)
+        end
       end
 
       @extensions.each do |e|
@@ -66,7 +70,11 @@ module Awestruct
 
       @after_all_extensions.each do |e|
         e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
-        e.execute(site)
+        if e.respond_to? :execute
+          e.execute(site)
+        else
+          e.after_generation(site)
+        end
       end
     end
 
@@ -79,7 +87,11 @@ module Awestruct
 
     def execute_after_generation(site)
       @after_generation_extensions.each do |e|
-        e.execute(site)
+        if e.respond_to? :execute
+          e.execute(site)
+        else
+          e.after_generation(site)
+        end
       end
     end
 
