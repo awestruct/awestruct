@@ -23,7 +23,7 @@ module Awestruct
       end
     end
 
-    class AsciidoctorHandler < BaseTiltHandler
+    class AsciidoctorHandler < TiltHandler
 
       CHAIN = Awestruct::HandlerChain.new( Awestruct::Handlers::AsciidoctorTiltMatcher.new(),
         Awestruct::Handlers::FileHandler,
