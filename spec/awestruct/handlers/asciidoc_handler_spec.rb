@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'rspec/matchers.rb'
+require 'tilt'
 
 verify = lambda { |output|
   include EmmetMatchers
@@ -121,4 +122,9 @@ describe Awestruct::Handlers::AsciidoctorHandler do
   end
 
   it_should_behave_like 'a handler', theories
+
+  it 'should be registered as our implementation for tilt' do
+    puts ::Tilt.default_mapping['adoc']
+    ::Tilt.default_mapping['adoc'].should eql ::Awestruct::Tilt::AsciidoctorTemplate
+  end
 end
