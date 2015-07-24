@@ -199,7 +199,7 @@ describe Awestruct::Engine do
         e.status.should eql Awestruct::ExceptionHelper::EXITCODES[:generation_error]
       end
     ensure
-      FileUtils.remove_entry_secure output_dir
+      FileUtils.remove_entry_secure output_dir, true
     end
   end
 
@@ -224,7 +224,7 @@ describe Awestruct::Engine do
         e.status.should eql Awestruct::ExceptionHelper::EXITCODES[:generation_error]
       end
     ensure
-      FileUtils.remove_entry_secure output_dir
+      FileUtils.remove_entry_secure output_dir, true
     end
   end
 

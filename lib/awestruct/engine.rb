@@ -358,11 +358,16 @@ module Awestruct
 
     def generate_output
       FileUtils.mkdir_p( site.config.output_dir )
+      return_value = [Awestruct::ExceptionHelper::EXITCODES[:success]]
       begin
-        Parallel.each(@site.pages, site.generation) do |page|
+        return_value = Parallel.map(@site.pages, site.generation) do |page|
           generate_page( page )
         end
       rescue Exception => e
+        return_value = [Awestruct::ExceptionHelper::EXITCODES[:generation_error]]
+      end
+
+      if return_value.nil? || return_value.include?(Awestruct::ExceptionHelper::EXITCODES[:generation_error])
         $LOG.error 'An error occurred during output generation, all pages may not have completed during generation'
         exit Awestruct::ExceptionHelper::EXITCODES[:generation_error]
       end
@@ -382,7 +387,7 @@ module Awestruct
         File.open( generated_path, 'wb' ) do |file|
           file << c
         end
-        exit Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
+        return Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
       elsif ( site.config.track_dependencies )
         if page.dependencies.load!
           $LOG.debug "Cached:     #{generated_path}" if $LOG.debug?
@@ -390,6 +395,7 @@ module Awestruct
           $LOG.debug "Analyzing:  #{generated_path}" if $LOG.debug?
           page.rendered_content
         end
+        return Awestruct::ExceptionHelper::EXITCODES[:success]
       end
     end
 
