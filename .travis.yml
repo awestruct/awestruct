@@ -10,6 +10,8 @@ rvm:
   - 2.2.0
   - 2.2.1
   - jruby-19mode
+  - jruby-19mode
+  - jruby-9.0.0.0
   - jruby-head
 jdk:
   - openjdk7
@@ -37,3 +39,7 @@ matrix:
       jdk: oraclejdk7
     - rvm: 2.2.1
       jdk: oraclejdk8
+  allow_failures:
+    - rvm: jruby-head
+notifications:
+  irc: 'irc.freenode.org#asciidoctor'
