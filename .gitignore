@@ -9,3 +9,5 @@ spec/.sass-cache/*/*.scssc
 .awestruct
 .rvmrc
 .sass-cache
+coverage
+_site

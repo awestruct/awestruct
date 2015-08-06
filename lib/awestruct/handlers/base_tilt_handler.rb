@@ -137,12 +137,14 @@ module Awestruct
           ExceptionHelper.log_message "Could not load template library required for rendering #{File.join site.dir, error_page.source_path}."
           ExceptionHelper.log_message "Please see #{File.join site.dir, error_page.output_path} for more information"
           return ExceptionHelper.html_error_report e, error_page.source_path
-        rescue Exception => e
+        rescue => e
           error_page = context[:page]
           if error_page[:__is_layout] == true
             ExceptionHelper.log_message "An error during rendering layout file #{File.join site.dir, error_page.source_path} occurred."
+            ExceptionHelper.log_building_error e, error_page.source_path
           else
             ExceptionHelper.log_message "An error during rendering #{File.join site.dir, error_page.source_path} occurred."
+            ExceptionHelper.log_building_error e, error_page.source_path
           end
           ExceptionHelper.log_message "Please see #{File.join site.dir, error_page.output_path} for more information"
           return ExceptionHelper.html_error_report e, error_page.source_path

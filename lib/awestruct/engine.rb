@@ -13,6 +13,7 @@ require 'awestruct/extensions/pipeline'
 require 'fileutils'
 require 'set'
 require 'date'
+require 'erb'
 
 require 'compass'
 require 'parallel'
@@ -110,23 +111,26 @@ module Awestruct
       build_page_index
       puts "Total time in build_page_index: #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.debug 'generate_output' if $LOG.debug?
-      $LOG.info 'Generating pages...' if $LOG.info?
-      start_time = DateTime.now
-      generate_output
-      puts "Total time in generate_output: #{DateTime.now.to_time - start_time.to_time} seconds"
-
-      return 0
+      if ( generate )
+        $LOG.debug 'generate_output' if $LOG.debug?
+        $LOG.info 'Generating pages...' if $LOG.info?
+        start_time = DateTime.now
+        generate_output
+        puts "Total time in generate_output: #{DateTime.now.to_time - start_time.to_time} seconds"
+      end
+      return Awestruct::ExceptionHelper::EXITCODES[:success]
     end
 
     def build_page_index
       site.pages_by_relative_source_path = {}
+      site.pages_by_output_path = {}
       site.pages.each do |p|
         # Add the layout to the set of dependencies
         p.dependencies.add_dependency(site.layouts.find_matching(p.layout, p.output_extension))
         if ( p.relative_source_path )
           site.pages_by_relative_source_path[ p.relative_source_path ] = p
         end
+        site.pages_by_output_path[ p.output_path ] = p
       end
       site.layouts.each do |p|
         # Add the layout to the set of dependencies
@@ -174,7 +178,7 @@ module Awestruct
     def load_site_yaml(yaml_path, profile = nil)
       if ( File.exist?( yaml_path ) )
         begin
-          data = YAML.load( File.read( yaml_path, :encoding => 'bom|utf-8' ) )
+          data = YAML.load( ERB.new(File.read( yaml_path, :encoding => 'bom|utf-8' )).result )
           if ( profile )
             # JP: Interpolation now turned off by default, turn it per page if needed
             site.interpolate = false
@@ -204,7 +208,7 @@ module Awestruct
 
     def load_yaml(yaml_path)
       begin
-        data = YAML.load( File.read( yaml_path ) )
+        data = YAML.load( ERB.new(File.read( yaml_path )).result )
       rescue Exception => e
         ExceptionHelper.log_building_error e, yaml_path
         ExceptionHelper.mark_failed
@@ -278,8 +282,14 @@ module Awestruct
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
       if ( File.exists?( pipeline_file ) )
         p = eval(File.read( pipeline_file ), nil, pipeline_file, 1)
+        p.before_all_extensions.each do |e|
+          pipeline.add_before_extension( e )
+        end
         p.extensions.each do |e|
           pipeline.extension( e )
+        end
+        p.after_all_extensions.each do |e|
+          pipeline.add_after_extension( e )
         end
         p.helpers.each do |h|
           pipeline.helper( h )
@@ -287,13 +297,16 @@ module Awestruct
         p.transformers.each do |t|
           pipeline.transformer( t )
         end
+        p.after_generation_extensions.each do |e|
+          pipeline.add_after_generation_extension( e )
+        end
       end
     end
 
-    def execute_pipeline
+    def execute_pipeline(on_reload = false)
       FileUtils.mkdir_p( site.config.output_dir )
       FileUtils.mkdir_p( site.config.tmp_dir )
-      pipeline.execute( site )
+      pipeline.execute( site, on_reload )
     end
 
     def configure_compass 
@@ -380,29 +393,39 @@ module Awestruct
 
     def generate_output
       FileUtils.mkdir_p( site.config.output_dir )
-      Parallel.each(@site.pages, in_processes: Parallel.processor_count) do |page|
-      #@site.pages.each do |page|
-        start_time = DateTime.now
-        generated_path = File.join( site.config.output_dir, page.output_path )
-        if ( page.stale_output?( generated_path ) )
-          generate_page( page, generated_path )
-        else
-          generate_page( page, generated_path, false )
+      return_value = [Awestruct::ExceptionHelper::EXITCODES[:success]]
+      begin
+        return_value = Parallel.map(@site.pages, site.generation) do |page|
+          start_time = DateTime.now
+          returnValue = generate_page( page )
+          puts "Total time generating page #{page.output_path}: #{DateTime.now.to_time - start_time.to_time} seconds"
+          returnValue
         end
+      rescue Exception => e
+        return_value = [Awestruct::ExceptionHelper::EXITCODES[:generation_error]]
       end
+
+      if return_value.nil? || return_value.include?(Awestruct::ExceptionHelper::EXITCODES[:generation_error])
+        $LOG.error 'An error occurred during output generation, all pages may not have completed during generation'
+        exit Awestruct::ExceptionHelper::EXITCODES[:generation_error]
+      end
+      site.engine.pipeline.execute_after_generation(site)
     end
 
-    def generate_page(page, generated_path, produce_output=true)
+    def generate_page(page, produce_output=true)
       if ( produce_output )
         $LOG.debug "Generating: #{generated_path}" if $LOG.debug? && config.verbose
-        FileUtils.mkdir_p( File.dirname( generated_path ) )
 
         c = page.rendered_content
         c = site.engine.pipeline.apply_transformers( site, page, c )
 
+        generated_path = File.join( site.config.output_dir, page.output_path )
+        FileUtils.mkdir_p( File.dirname( generated_path ) )
+
         File.open( generated_path, 'wb' ) do |file|
           file << c
         end
+        return Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
       elsif ( site.config.track_dependencies )
         if page.dependencies.load!
           $LOG.debug "Cached:     #{generated_path}" if $LOG.debug?
@@ -410,6 +433,7 @@ module Awestruct
           $LOG.debug "Analyzing:  #{generated_path}" if $LOG.debug?
           page.rendered_content
         end
+        return Awestruct::ExceptionHelper::EXITCODES[:success]
       end
     end
 
@@ -434,6 +458,19 @@ module Awestruct
         generate_page_internal(page)
       end
 
+      regen_pages = page_dependencies( page )
+
+      $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
+
+      regen_pages.each do |p|
+        $LOG.info "Regenerating page #{p.output_path}" if $LOG.info?
+        generate_page_internal(p)
+      end
+
+      regen_pages
+    end
+
+    def page_dependencies(page)
       regen_pages = Set.new [ page ] 
       regen_pages.merge page.dependencies.dependents
 
@@ -450,35 +487,28 @@ module Awestruct
       end
 
       regen_pages.merge temp_set
-
-      $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
-
-      regen_pages.each do |p|
-        $LOG.info "Regenerating page #{p.output_path}" if $LOG.info?
-        generate_page_internal(p)
-      end
-
-      regen_pages
     end
 
-    def run_auto_for_non_page(file)
+    def run_auto_for_non_page(file, generate = true)
       if File.extname(file) == '.rb'
         load file
       end
       @pipeline = Pipeline.new
       load_yamls
       load_pipeline
-      execute_pipeline
-      site.pages.each do |p|
-        generate_page_internal(p)
+      execute_pipeline(true)
+
+      if ( generate )
+        site.pages.each do |p|
+          generate_page_internal(p)
+        end
       end
       site.pages
     end
 
     def generate_page_internal(p)
       unless ( p.output_path.nil? || p.__is_layout || !p.stale_output?(p.output_path) )
-        generated_path = File.join( site.config.output_dir, p.output_path )
-        generate_page( p, generated_path )
+        generate_page( p )
       end
     end
 

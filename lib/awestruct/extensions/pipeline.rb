@@ -11,29 +11,47 @@ end
 
 module Awestruct
   module Extensions
+    # Public. Extension declaration class, initialized by the end user to
+    # declare their extensions, helpers, transformers, etc.
     class Pipeline
 
-      attr_reader :before_extensions
+      attr_reader :before_all_extensions
       attr_reader :extensions
-      attr_reader :after_extensions
+      attr_reader :after_all_extensions
       attr_reader :helpers
       attr_reader :transformers
+      attr_reader :after_generation_extensions
 
       def initialize(&block)
-        @extensions   = []
-        @helpers      = []
-        @transformers = []
+        @before_all_extensions       = []
+        @extensions                  = []
+        @helpers                     = []
+        @transformers                = []
+        @after_all_extensions        = []
+        @after_generation_extensions = []
         begin
-          instance_eval &block if block
+          instance_eval(&block) if block
         rescue Exception => e
           abort("Failed to initialize pipeline: #{e}")
         end
       end
 
+      def before_extensions(ext)
+        @before_all_extensions << ext
+      end
+
       def extension(ext)
-        @extensions << ext
+        @extensions << ext if ext.respond_to?(:execute)
         # TC: why? transformer and extension?
-        ext.transform(@transformers) if ext.respond_to?('transform')
+        transformer(ext) if ext.respond_to?(:transform)
+
+        @before_all_extensions << ext if ext.respond_to?(:before_extensions)
+        @after_all_extensions << ext if ext.respond_to?(:after_extensions)
+        @after_generation_extensions << ext if ext.respond_to?(:after_generation)
+      end
+
+      def after_extensions(ext)
+        @after_all_extensions << ext
       end
 
       def helper(helper)
@@ -42,6 +60,10 @@ module Awestruct
 
       def transformer(transformer)
         @transformers << transformer
+      end
+
+      def after_generation(ext)
+        @after_generation_extensions << ext
       end
 
       def execute(site)

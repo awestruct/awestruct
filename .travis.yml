@@ -1,3 +1,5 @@
+sudo: false
+
 before_install:
   - gem install bundler
 language: ruby
@@ -5,4 +7,39 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.0
+  - 2.2.0
+  - 2.2.1
   - jruby-19mode
+  - jruby-19mode
+  - jruby-9.0.0.0
+  - jruby-head
+jdk:
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
+matrix:
+  exclude:
+    - rvm: 1.9.3
+      jdk: oraclejdk8
+    - rvm: 1.9.3
+      jdk: oraclejdk7
+    - rvm: 2.0.0
+      jdk: oraclejdk8
+    - rvm: 2.0.0
+      jdk: oraclejdk7
+    - rvm: 2.1.0
+      jdk: oraclejdk8
+    - rvm: 2.1.0
+      jdk: oraclejdk7
+    - rvm: 2.2.0
+      jdk: oraclejdk8
+    - rvm: 2.2.0
+      jdk: oraclejdk7
+    - rvm: 2.2.1
+      jdk: oraclejdk7
+    - rvm: 2.2.1
+      jdk: oraclejdk8
+  allow_failures:
+    - rvm: jruby-head
+notifications:
+  irc: 'irc.freenode.org#asciidoctor'

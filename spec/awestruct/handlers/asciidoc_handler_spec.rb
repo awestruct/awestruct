@@ -1,10 +1,11 @@
 require 'spec_helper'
 require 'rspec/matchers.rb'
+require 'tilt'
 
 verify = lambda { |output|
   include EmmetMatchers
   # clean whitespace to make comparison easier
-  output.should have_structure('div#preamble>div.sectionbody>div.paragraph>p>strong')
+  output.should have_structure('div.paragraph>p>strong')
 }
 
 verify_front_matter = lambda { |output, page|
@@ -121,4 +122,9 @@ describe Awestruct::Handlers::AsciidoctorHandler do
   end
 
   it_should_behave_like 'a handler', theories
+
+  it 'should be registered as our implementation for tilt' do
+    puts ::Tilt.default_mapping['adoc']
+    ::Tilt.default_mapping['adoc'].should eql ::Awestruct::Tilt::AsciidoctorTemplate
+  end
 end

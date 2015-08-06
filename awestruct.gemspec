@@ -4,7 +4,7 @@ require 'awestruct/version'
 spec = Gem::Specification.new do |s|
   s.name          = 'awestruct'
   s.version       = Awestruct::VERSION
-  s.date          = '2015-01-12'
+  s.date          = '2015-07-24'
 
   s.authors       = ['Bob McWhirter', 'Jason Porter', 'Lance Ball', 'Dan Allen', 'Torsten Curdt', 'other contributors']
   s.email         = ['bob@mcwhirter.org', 'lightguard.jp@gmail.com', 'lball@redhat.com', 'dan.j.allen@gmail.com', 'tcurdt@vafer.org']
@@ -32,22 +32,25 @@ Any markup languages you are using and its dependencies.
 Haml and Markdown filters are touchy things. Redcarpet or Rdiscount work well if you're running on MRI. JRuby should be using haml 4.0.0+ with Kramdown.'
   EOS
 
-  s.add_dependency 'haml', '~> 4.0.5'
-  s.add_dependency 'asciidoctor' # we're pretty good about backwards compat
-  s.add_dependency 'tilt', '~> 2.0.1'
-  s.add_dependency 'compass', '~> 1.0.1'
-  s.add_dependency 'compass-960-plugin', '~> 0.10.4'
-  s.add_dependency 'bootstrap-sass', '~> 3.2.0.2'
-  s.add_dependency 'zurb-foundation', '~> 4.3.2'
+  s.add_dependency 'haml', '~> 4.0', '>= 4.0.5'
+  s.add_dependency 'asciidoctor', '~> 1.5', '>= 1.5.2'
+  s.add_dependency 'tilt', '~> 2.0', '>= 2.0.1'
   s.add_dependency 'mime-types', '~> 2.1'
-  s.add_dependency 'rest-client', '~> 1.7.2'
-  s.add_dependency 'ruby-s3cmd', '~> 0.1.5'
-  s.add_dependency 'listen', '~> 2.7.1'
-  s.add_dependency 'rack', '~> 1.5.2'
-  s.add_dependency 'git', '~> 1.2.6'
-  s.add_dependency 'guard-livereload', '~> 2.1.2'
-  s.add_dependency 'colorize', '~> 0.7.1'
-  s.add_dependency 'parallel', '> 1.1.1'
+  s.add_dependency 'rest-client', '~> 1.7', '>= 1.7.2'
+  s.add_dependency 'listen', '~> 2.7', '>= 2.7.1'
+  s.add_dependency 'rack', '~> 1.5', '>= 1.5.2'
+  s.add_dependency 'git', '~> 1.2', '>= 1.2.6'
+  s.add_dependency 'guard-livereload', '~> 2.1', '>= 2.1.2'
+  s.add_dependency 'colorize', '~> 0.7', '>= 0.7.1'
+  s.add_dependency 'oga', '~> 0.3'
+  s.add_dependency 'sass', '~> 3.2'
+  s.add_dependency 'compass', '~> 1', '>= 1.0.1'
+  s.add_dependency 'parallel', '~> 1.1', '> 1.1.1'
 
-  s.add_development_dependency 'nokogiri', '~> 1.5.10'
+  s.add_development_dependency 'nokogiri', '~> 1.5.0','>= 1.5.10'
+  s.add_development_dependency 'compass-960-plugin', '~> 0.10','>= 0.10.4'
+  s.add_development_dependency 'bootstrap-sass', '~> 3', '>= 3.2.0.2'
+  s.add_development_dependency 'zurb-foundation', '~> 4.3.2', '>= 4.3.2'
+  s.add_development_dependency 'rspec', '~> 3.0'
+  s.add_development_dependency 'guard-rspec', '~> 4.0'
 end

@@ -11,7 +11,9 @@ module Awestruct
           if href.start_with?("http://") || href.start_with?("https://")
             result = href
           else
-            result = Pathname.new(href).relative_path_from(Pathname.new(File.dirname(p.output_path))).to_s
+            pathname = Pathname.new(href).relative_path_from(Pathname.new(File.dirname(p.output_path)))
+            result = pathname.to_s
+            result << '/' if pathname.extname.empty?
           end
           result
         rescue Exception => e

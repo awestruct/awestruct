@@ -1,7 +1,8 @@
 ---
 ---
 !!! XML
-
+- if !page.stylesheet_url.nil?
+  <?xml-stylesheet type='text/xsl' href='#{site.baseurl}#{page.stylesheet_url}'?>
 %urlset{ :xmlns=>'http://www.sitemaps.org/schemas/sitemap/0.9' }
   - unless page.sitemap_entries.empty?
     - for entry in page.sitemap_entries

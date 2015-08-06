@@ -3,6 +3,7 @@ require 'logger'
 require 'awestruct/logger'
 require 'awestruct/cli/options'
 require 'awestruct/util/exception_helper'
+require 'erb'
 
 module Awestruct
   module CLI
@@ -72,7 +73,7 @@ module Awestruct
           abort( "No config file at #{site_yaml_file}" )
         end
 
-        site_yaml = YAML.load( File.read( site_yaml_file ) )
+        site_yaml = YAML.load( ERB.new(File.read( site_yaml_file )).result )
 
         if ( !site_yaml )
           abort( "Failed to parse #{site_yaml_file}" )
@@ -122,7 +123,7 @@ module Awestruct
 
       def invoke_generate()
         base_url = profile['base_url'] || options.base_url
-        @success = Awestruct::CLI::Generate.new( config, options.profile, base_url, Options::DEFAULT_BASE_URL, options.force ).run
+        @success = Awestruct::CLI::Generate.new( config, options.profile, base_url, Options::DEFAULT_BASE_URL, options.force, !options.generate_on_access ).run
       end
 
       def invoke_deploy()
@@ -144,7 +145,7 @@ module Awestruct
       end
 
       def invoke_server()
-        run_in_thread( Awestruct::CLI::Server.new( options.output_dir, options.bind_addr, options.port ) )
+        run_in_thread( Awestruct::CLI::Server.new( options.output_dir, options.bind_addr, options.port, options.generate_on_access ) )
       end
 
 
