@@ -6,6 +6,10 @@ module Awestruct
 
     include AStructMixin
 
+    if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
+      undef org, com, java, javax, javafx # Issue #480
+    end
+
     def initialize(hash=nil)
       hash.each{|k,v| self[k]=v } if hash
     end
