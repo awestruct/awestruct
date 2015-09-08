@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 verify = lambda { |output|
-   output.should =~ /#test \{/
-   output.should =~ /background-color: #ce4dd6; \}/
+   output.should =~ /#test\s*\{\s*background-color:\s*#ce4dd6;\s*\}/
 }
 
 theories =
