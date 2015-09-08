@@ -13,7 +13,9 @@ group :test do
   gem 'tilt', '~> 2.0.1'
   gem 'coffee-script', '~> 2.2.0'
   gem 'asciidoctor', '1.5.2'
-  gem 'slim', '~> 2.0.2'
+  gem 'compass', '>= 1.0.1'
+  gem 'sassc', '~> 1.6'
+  gem 'slim', '~> 3.0'
   gem 'kramdown', '~> 1.3.3'
   gem 'therubyracer', '~> 0.12.1', :platforms => :ruby
   gem 'therubyrhino', '~> 2.0.3', :platforms => :jruby
