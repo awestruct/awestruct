@@ -27,15 +27,17 @@ source 'https://rubygems.org'                             # This tells Bundler w
 gem 'awestruct', '>= <%= awestruct_version %>'                               # Goes without saying
 gem 'webrick', '~> 1.3.1'                                 # The rack webserver to use in dev mode
 
-gem 'compass', '<%= dependencies['compass'].requirement %>'
 <% if framework.eql? 'bootstrap' %>
 gem 'bootstrap-sass', '<%= dependencies['bootstrap-sass'].requirement %>'
+gem 'compass', '<%= dependencies['compass'].requirement %>'
 <% end %>
 <% if framework.eql? 'foundation' %>
 gem 'zurb-foundation', '<%= dependencies['zurb-foundation'].requirement %>'
+gem 'compass', '<%= dependencies['compass'].requirement %>'
 <% end %>
 <% if framework.eql? '960' %>
 gem 'compass-960-plugin', '<%= dependencies['compass-960-plugin'].requirement %>'
+gem 'compass', '<%= dependencies['compass'].requirement %>'
 <% end %>
 
 # FIXME

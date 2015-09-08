@@ -1,5 +1,7 @@
 require 'awestruct/cli/manifest'
 require 'awestruct/cli/options'
+
+# TODO maybe use?
 require 'sass'
 require 'sass/plugin'
 
@@ -44,7 +46,7 @@ module Awestruct
             lib = 'ninesixty'
         end
         require lib unless lib.nil?
-        manifest.install_compass(@framework)
+        manifest.install_compass(@framework) unless lib.nil?
         if (@scaffold)
           manifest.copy_file('_config/site.yml', framework_path('base_site.yml'), :overwrite => true)
           manifest.copy_file('_layouts/base.html.haml', framework_path('base_layout.html.haml', scaffold_name))
@@ -67,7 +69,13 @@ module Awestruct
             manifest.remove_file('MIT-LICENSE.txt')
           end
         end
+        begin
         manifest.perform(@dir)
+        rescue => e
+          puts e.backtrace
+          puts e.message
+          puts manifest.steps
+        end
       end
 
       def framework_path(path, framework = nil)

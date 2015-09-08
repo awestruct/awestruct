@@ -15,7 +15,6 @@ require 'set'
 require 'date'
 require 'erb'
 
-require 'compass'
 require 'parallel'
 
 class OpenStruct
@@ -71,8 +70,14 @@ module Awestruct
       $LOG.debug 'execute_pipeline' if $LOG.debug?
       $LOG.info 'Excecuting pipeline...' if $LOG.info?
       execute_pipeline(false)
-      $LOG.debug 'configure_compass' if $LOG.debug?
-      configure_compass
+      begin
+        if require('compass') || defined?(::Compass)
+          $LOG.debug 'configure_compass' if $LOG.debug?
+          configure_compass
+        end
+      rescue LoadError
+        # doesn't matter if we can't load it
+      end
       $LOG.debug 'set_urls' if $LOG.debug?
       set_urls( site.pages )
       $LOG.debug 'build_page_index' if $LOG.debug?
