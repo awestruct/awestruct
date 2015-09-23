@@ -42,4 +42,4 @@ matrix:
   allow_failures:
     - rvm: jruby-head
 notifications:
-  irc: 'irc.freenode.org#asciidoctor'
+  irc: 'irc.freenode.org#awestruct'

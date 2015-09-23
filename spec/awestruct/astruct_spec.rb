@@ -10,6 +10,13 @@ describe Awestruct::AStruct do
     s['taco'].should == 'tasty'
   end
 
+  it "should not have org, com, java defined" do
+    s = Awestruct::AStruct.new
+    s.java.should be_nil
+    s.com.should be_nil
+    s.org.should be_nil
+  end
+
   it "should allow access to members through indifferent hash access" do
     s = Awestruct::AStruct.new( :foo=>'bar', 'taco'=>'tasty' )
     s['foo'].should == 'bar'

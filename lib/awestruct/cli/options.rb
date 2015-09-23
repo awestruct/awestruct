@@ -162,9 +162,9 @@ module Awestruct
         end
 
         opts.parse!(args)
-        self.base_url ||= DEFAULT_BASE_URL
         self.port ||= DEFAULT_PORT
-        self.bind_addr ||= DEFAULT_BIND_ADDR
+        self.bind_addr = LOCAL_HOSTS[DEFAULT_BIND_ADDR] if self.bind_addr === DEFAULT_BIND_ADDR
+        self.base_url = %(http://#{self.bind_addr}:#{self.port}) if self.base_url === DEFAULT_BASE_URL
 
         self.generate = true if self.generate.nil?
         self
