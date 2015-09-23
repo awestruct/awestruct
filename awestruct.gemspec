@@ -38,7 +38,7 @@ Compass and sass are no longer hard dependencies. You'll need too add them on yo
   s.add_dependency 'tilt', '~> 2.0', '>= 2.0.1'
   s.add_dependency 'mime-types', '~> 2.1'
   s.add_dependency 'rest-client', '~> 1.7', '>= 1.7.2'
-  s.add_dependency 'listen', '~> 2.7', '>= 2.7.1'
+  s.add_dependency 'listen', '>= 2.7.1', '<= 4.0'
   s.add_dependency 'rack', '~> 1.5', '>= 1.5.2'
   s.add_dependency 'git', '~> 1.2', '>= 1.2.6'
   s.add_dependency 'guard-livereload', '~> 2.1', '>= 2.1.2'
