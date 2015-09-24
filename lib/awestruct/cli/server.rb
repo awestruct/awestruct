@@ -2,6 +2,7 @@ require 'rack'
 require 'rack/builder'
 require 'rack/server'
 require 'awestruct/rack/app'
+require 'awestruct/rack/debug'
 require 'awestruct/rack/generate'
 require 'awestruct/cli/options'
 
@@ -30,6 +31,7 @@ module Awestruct
         generate_on_access = @generate_on_access
         app = ::Rack::Builder.new do
           use Awestruct::Rack::GenerateOnAccess if generate_on_access
+          use Awestruct::Rack::Debug
           map "/" do
             run Awestruct::Rack::App.new( path )
           end
