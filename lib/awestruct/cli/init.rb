@@ -36,14 +36,10 @@ module Awestruct
 
         lib = nil
         case @framework
-          when 'compass'
-            scaffold_name = 'blueprint'
           when 'bootstrap'
             lib = 'bootstrap-sass'
           when 'foundation'
             lib = 'zurb-foundation'
-          when '960'
-            lib = 'ninesixty'
         end
         require lib unless lib.nil?
         manifest.install_compass(@framework) unless lib.nil?
@@ -70,7 +66,7 @@ module Awestruct
           end
         end
         begin
-        manifest.perform(@dir)
+          manifest.perform(@dir)
         rescue => e
           puts e.backtrace
           puts e.message
