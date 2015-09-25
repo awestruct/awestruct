@@ -44,7 +44,7 @@ Compass and sass are no longer hard dependencies. You'll need too add them on yo
   s.add_dependency 'git', '~> 1.2', '>= 1.2.6'
   s.add_dependency 'guard-livereload', '~> 2.1', '>= 2.1.2'
   s.add_dependency 'colorize', '~> 0.7', '>= 0.7.1'
-  s.add_dependency 'oga', '~> 0.3'
+  s.add_dependency 'oga', '~> 1.3'
   s.add_dependency 'parallel', '~> 1.1', '> 1.1.1'
 
   s.add_development_dependency 'nokogiri', '~> 1.5.0','>= 1.5.10'
