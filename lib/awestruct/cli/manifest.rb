@@ -1,4 +1,3 @@
-require 'sass/callbacks'
 require 'erb'
 require 'rubygems/specification'
 require 'ostruct'
@@ -256,6 +255,7 @@ module Awestruct
         end
 
         def perform(dir)
+          require 'sass/callbacks'
           require 'compass'
           require 'compass/commands'
 

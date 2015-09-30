@@ -1,10 +1,6 @@
 require 'awestruct/cli/manifest'
 require 'awestruct/cli/options'
 
-# TODO maybe use?
-require 'sass'
-require 'sass/plugin'
-
 module Awestruct
   module CLI
     class Init
