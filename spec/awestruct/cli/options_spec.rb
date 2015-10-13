@@ -10,7 +10,7 @@ describe Awestruct::CLI::Options do
     options.deploy.should   == false
 
     options.port.should      == 4242
-    options.bind_addr.should == '0.0.0.0'
+    options.bind_addr.should == 'localhost'
 
     options.auto.should  == false
     options.force.should == false

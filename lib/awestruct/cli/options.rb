@@ -6,16 +6,9 @@ module Awestruct
   module CLI
 
     class Options
-      LOCAL_HOSTS = {
-        'localhost'  => 'localhost',
-        '0.0.0.0'    => 'localhost',
-        '127.0.0.1'  => 'localhost',
-        '::1'        => '[::1]',
-        'localhost6' => 'localhost6'
-      }
-      DEFAULT_BIND_ADDR = '0.0.0.0'
+      DEFAULT_BIND_ADDR = 'localhost'
       DEFAULT_PORT = 4242
-      DEFAULT_BASE_URL = %(http://#{LOCAL_HOSTS[DEFAULT_BIND_ADDR] || DEFAULT_BIND_ADDR}:#{DEFAULT_PORT})
+      DEFAULT_BASE_URL = %(http://#{DEFAULT_BIND_ADDR}:#{DEFAULT_PORT})
       DEFAULT_GENERATE_ON_ACCESS = false
 
       attr_accessor :generate
@@ -163,7 +156,6 @@ module Awestruct
 
         opts.parse!(args)
         self.port ||= DEFAULT_PORT
-        self.bind_addr = LOCAL_HOSTS[DEFAULT_BIND_ADDR] if self.bind_addr === DEFAULT_BIND_ADDR
         self.base_url = %(http://#{self.bind_addr}:#{self.port}) if self.base_url === DEFAULT_BASE_URL
 
         self.generate = true if self.generate.nil?

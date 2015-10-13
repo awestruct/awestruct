@@ -19,11 +19,11 @@ module Awestruct
       end
 
       def run
-        unless port_open? (Options::LOCAL_HOSTS[@bind_addr] || @bind_addr), @port
-          $LOG.error "#{Options::LOCAL_HOSTS[@bind_addr] || @bind_addr}:#{@port} not available for server" if $LOG.error?
+        unless port_open? @bind_addr, @port
+          $LOG.error "#{@bind_addr}:#{@port} not available for server" if $LOG.error?
           abort
         end
-        url = %(http://#{Options::LOCAL_HOSTS[@bind_addr] || @bind_addr}:#{@port})
+        url = %(http://#{@bind_addr}:#{@port})
         msg = %(Starting preview server at #{url} (Press Ctrl-C to shutdown))
         $LOG.info %(#{'*' * msg.length}\n#{msg}\n#{'*' * msg.length}\n) if $LOG.info?
 
@@ -37,7 +37,7 @@ module Awestruct
           end
         end
 
-          ::Rack::Server::start( :app => app,
+          ::Rack::Server::start(:app => app,
                                 :Port => @port,
                                 :Host => @bind_addr
                                )
