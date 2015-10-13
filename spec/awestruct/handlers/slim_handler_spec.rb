@@ -32,7 +32,7 @@ theories =
             :simple_name => 'slim-page',
             :syntax => :slim,
             :extension => '.html',
-            :format => :html5,
+            :format => :html,
             :matcher => verify
         },
         {

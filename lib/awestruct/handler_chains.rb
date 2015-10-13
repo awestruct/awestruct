@@ -23,6 +23,17 @@ module Awestruct
     def initialize(include_defaults=true)
       @chains = []
       self << :defaults if include_defaults
+
+      # Register our sassc templates
+      begin
+        if require('sassc') || defined?(::Sassc)
+          require 'awestruct/handlers/template/sassc'
+          ::Tilt.register ::Awestruct::Tilt::SassSasscTemplate,'sass'
+          ::Tilt.register ::Awestruct::Tilt::ScssSasscTemplate,'scss'
+        end
+      rescue LoadError
+        # doesn't matter if we can't load it
+      end
     end
 
     def[](path)

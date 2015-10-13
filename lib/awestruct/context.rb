@@ -26,6 +26,8 @@ module Awestruct
           else
             @page[k_sym] = v if @page.key?(k_sym) && (@page[k_sym].class == v.class)
           end
+        else # new key, just add it
+          @page[k_sym] = v
         end
       end
     end

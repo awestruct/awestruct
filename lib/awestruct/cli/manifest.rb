@@ -1,6 +1,3 @@
-require 'sass/callbacks'
-require 'compass'
-require 'compass/commands'
 require 'erb'
 require 'rubygems/specification'
 require 'ostruct'
@@ -26,7 +23,8 @@ module Awestruct
       end
 
       def template_file(path, input_path, state = {})
-        steps << TemplateFile.new(path, input_path, state.merge(load_gem))
+        new_state = state.merge(load_gem(true))
+        steps << TemplateFile.new(path, input_path, new_state)
       end
 
       def copy_file(path, input_path, opts = {})
@@ -77,10 +75,14 @@ module Awestruct
 
       private
 
-      def load_gem
+      def load_gem(add_compass = false)
         spec = {:dependencies => {}}
         gem_spec = Gem::Specification::load(
           File.join(File.dirname(__FILE__), "../../../", "awestruct.gemspec"))
+
+        if add_compass
+          gem_spec.add_dependency('compass', '>= 1.0.1')
+        end
 
         gem_spec.dependencies.each { |d| spec[:dependencies][d.name] = d}
         spec[:awestruct_version] = gem_spec.version
@@ -230,8 +232,12 @@ module Awestruct
 
         def perform(dir)
 
+          begin
           rendered = ERB.new(File.read(@input_path), nil, '<>').result(
             OpenStruct.new(@state).instance_eval { binding })
+          rescue => e
+            puts "::DEBUG:: #{e.message} state - #{@state}"
+          end
 
           p = File.join(dir, @path)
           $LOG.info "Create file: #{p}" if $LOG.info?
@@ -249,6 +255,10 @@ module Awestruct
         end
 
         def perform(dir)
+          require 'sass/callbacks'
+          require 'compass'
+          require 'compass/commands'
+
           ::Compass.configuration.sass_dir = 'stylesheets'
           ::Compass.configuration.css_dir = '_site/stylesheets'
           ::Compass.configuration.images_dir = 'images'

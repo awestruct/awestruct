@@ -30,7 +30,7 @@ slim:
   :format: :xhtml
 
 slim|html:
-  :format: :html5
+  :format: :html
 
 asciidoctor:
   :backend: html5
