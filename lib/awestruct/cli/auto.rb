@@ -2,8 +2,6 @@ require 'awestruct/util/exception_helper'
 
 require 'listen'
 require 'guard/livereload'
-require 'compass'
-require 'compass/commands'
 
 module Awestruct
   module CLI

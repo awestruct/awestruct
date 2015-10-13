@@ -1,6 +1,5 @@
 require 'awestruct/engine'
 require 'awestruct/util/exception_helper'
-require 'compass'
 
 module Awestruct
   module CLI

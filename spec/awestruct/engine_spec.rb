@@ -105,6 +105,7 @@ describe Awestruct::Engine do
   end
 
   it "should exclude line comments and minify in compass by default in production mode" do
+    require 'compass'
     opts = Awestruct::CLI::Options.new
     opts.source_dir = test_data_dir 'engine'
 
@@ -121,6 +122,7 @@ describe Awestruct::Engine do
   end
 
   it "should include line comments in compass by default in development mode" do
+    require 'compass'
     opts = Awestruct::CLI::Options.new
     opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
@@ -229,6 +231,7 @@ describe Awestruct::Engine do
   end
 
   it "should accept site.compass_line_comments and site.compass_output_style to configure behavior" do
+    require 'compass'
     opts = Awestruct::CLI::Options.new
     opts.source_dir = test_data_dir 'engine' 
     config = Awestruct::Config.new( opts )
@@ -241,6 +244,7 @@ describe Awestruct::Engine do
   end
 
   it "with a _config/compass.rb file, it should override defaults" do
+    require 'compass'
     opts = Awestruct::CLI::Options.new
     opts.source_dir = test_data_dir 'engine-compass' 
     config = Awestruct::Config.new( opts )

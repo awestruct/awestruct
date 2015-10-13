@@ -1,7 +1,5 @@
 require 'awestruct/cli/manifest'
 require 'awestruct/cli/options'
-require 'sass'
-require 'sass/plugin'
 
 module Awestruct
   module CLI
@@ -34,17 +32,13 @@ module Awestruct
 
         lib = nil
         case @framework
-          when 'compass'
-            scaffold_name = 'blueprint'
           when 'bootstrap'
             lib = 'bootstrap-sass'
           when 'foundation'
             lib = 'zurb-foundation'
-          when '960'
-            lib = 'ninesixty'
         end
         require lib unless lib.nil?
-        manifest.install_compass(@framework)
+        manifest.install_compass(@framework) unless lib.nil?
         if (@scaffold)
           manifest.copy_file('_config/site.yml', framework_path('base_site.yml'), :overwrite => true)
           manifest.copy_file('_layouts/base.html.haml', framework_path('base_layout.html.haml', scaffold_name))
@@ -67,7 +61,13 @@ module Awestruct
             manifest.remove_file('MIT-LICENSE.txt')
           end
         end
-        manifest.perform(@dir)
+        begin
+          manifest.perform(@dir)
+        rescue => e
+          puts e.backtrace
+          puts e.message
+          puts manifest.steps
+        end
       end
 
       def framework_path(path, framework = nil)
