@@ -541,6 +541,10 @@ var prettyPrint = (function() {
                 return typeDealer['array'](obj, depth, key, true);
             },
             object: function(obj, depth, key) {
+                if (Object.keys(obj).length === 0) {
+                    return '{}';
+                }
+
                 obj_stack.push(key);
                 console.log("object push " + key)
 

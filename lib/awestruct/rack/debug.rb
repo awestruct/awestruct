@@ -28,20 +28,24 @@ module Awestruct
 
           if debug_exp.size == 0
             html = IO.read(File.join(File.dirname(__FILE__), 'trace.html'))
-            return [200,
-              {'Content-Type'.freeze => 'text/html', 'Content-Length'.freeze => html.size.to_s},
-              [html] ]
+            return [
+                200,
+                {'Content-Type'.freeze => 'text/html', 'Content-Length'.freeze => html.size.to_s},
+                [html]
+            ]
           else
             json = ''
             begin
-              json = dump(introspect(page, {}, debug_exp))
+              json = dump(introspect(page, {}, debug_exp)).freeze
             rescue Exception => e
-              json += e.message
+              json += "#{e.message.freeze} \n#{e.backtrace.freeze}"
             end
 
-            return [200,
-            {'Content-Type'.freeze => 'application/json', 'Content-Length'.freeze => json.size.to_s},
-            [json] ]
+            return [
+                200,
+                {'Content-Type'.freeze => 'application/json', 'Content-Length'.freeze => json.size.to_s},
+                [json]
+            ]
           end
         else
           source_call = @app.call(env)
@@ -77,33 +81,44 @@ module Awestruct
             return target_arr
           else
             target_arr = []
-            source.each{ |var| target_arr << introspect(var, {}, exp, depth+1)}
+            source.each do |var|
+              if var.respond_to? :to_h
+                target_arr << introspect(var, {}, ['*'], depth+1)
+              else
+                target_arr << introspect(var, {}, exp, depth+1)
+              end
+            end
             return target_arr
           end
         end
 
-        return target if exp_curr.nil?
+        return source if source.is_a? String
+
+        if exp_curr.nil?
+          return source if target.empty?
+          return target
+        end
 
         data = nil
 
         if source.is_a? Awestruct::Page
-          data = source.original_entries
+          data = source.original_entries.freeze
         elsif source.is_a? Hash
           data = source
         elsif source.is_a? OpenStruct
-          data = source.to_h
+          data = source.to_h.freeze
         end
 
         return source.to_s if data.nil?
 
         data.each do |key, value|
           if key.to_s == exp_curr or exp_curr == '*'
-            if value.is_a? Hash or value.is_a? OpenStruct or value.is_a? Awestruct::Page
+            if value.is_a? Hash or value.is_a? OpenStruct or value.is_a? Awestruct::Page or value.is_a? Array
               target[key] = introspect(value, {}, exp_all_curr, depth+1)
-            elsif value.is_a? Array
-              target[key] = introspect(value, {}, exp_all_curr, depth+1)
+            elsif value.respond_to? :to_h
+              target[key] = introspect(value.to_h.freeze, {}, exp_all_curr, depth+1)
             else
-              target[key] = value
+              target[key] = value.to_s
             end
           elsif exp_curr[/^-?\d+$/]
             if value.is_a? Array
@@ -118,8 +133,8 @@ module Awestruct
       end
 
       def dump(value)
-        value = value.to_h if value.is_a? OpenStruct
-        JSON.pretty_generate(value)
+        value = value.to_h.freeze if value.respond_to? :to_h
+        "#{JSON.dump(value)} \n\n "
       end
     end
   end
