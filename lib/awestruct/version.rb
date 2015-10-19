@@ -1,3 +1,3 @@
 module Awestruct
-  VERSION = '0.5.7.RC1'
+  VERSION = '0.5.7.RC2'
 end

@@ -71,7 +71,7 @@ module Awestruct
       $LOG.info 'Excecuting pipeline...' if $LOG.info?
       execute_pipeline(false)
       begin
-        if require('compass') || defined?(::Compass)
+        if defined?(::Compass)
           $LOG.debug 'configure_compass' if $LOG.debug?
           configure_compass
         end

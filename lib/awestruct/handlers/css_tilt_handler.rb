@@ -25,7 +25,7 @@ module Awestruct
         # Sass / Scss
         opts[:load_paths] ||= []
 
-        if require('compass') || defined?(::Compass)
+        if defined?(::Compass)
           ::Compass::Frameworks::ALL.each do |framework|
             opts[:load_paths] << framework.stylesheets_directory
           end
