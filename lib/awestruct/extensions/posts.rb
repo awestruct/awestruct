@@ -2,7 +2,7 @@ module Awestruct
   module Extensions
     class Posts
 
-      attr_accessor :path_prefix, :assign_to, :archive_template, :archive_path, :default_layout
+      attr_accessor :path_prefix, :assign_to, :archive_template, :archive_path, :default_layout, :wp_compat
 
       def initialize(path_prefix='', assign_to=:posts, archive_template=nil, archive_path=nil, opts={})
         @archive_template = archive_template
@@ -10,6 +10,7 @@ module Awestruct
         @path_prefix      = path_prefix
         @assign_to        = assign_to
         @default_layout   = opts[:default_layout] || 'post'
+        @wp_compat        = opts.has_key?(:wp_compat) ? opts[:wp_compat] : false
       end
 
       def execute(site)
@@ -54,7 +55,11 @@ module Awestruct
               page.layout ||= @default_layout if @default_layout
               page.slug ||= slug
               context = page.create_context
-              page.output_path = "#{@path_prefix}/#{year}/#{month}/#{day}/#{page.slug}.html"
+              if (@wp_compat)
+                page.output_path = "#{@path_prefix}/#{year}/#{month}/#{page.slug}.html"
+              else
+                page.output_path = "#{@path_prefix}/#{year}/#{month}/#{day}/#{page.slug}.html"
+              end
               posts << page
             end
           end
