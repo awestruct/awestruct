@@ -130,12 +130,12 @@ module Awestruct
           #opts.on( '--run SCRIPT', 'Invoke a script after initialization' ) do |script|
           #  self.script = script
           #end
-          opts.on( '--source-dir DIR', 'Location of sources (default: .' ) do |source_dir|
+          opts.on( '--source-dir DIR', 'Location of sources (default: .)' ) do |source_dir|
             self.source_dir = File.expand_path source_dir
             self.output_dir = File.expand_path File.join(self.source_dir, '_site')
           end
 
-          opts.on( '--output-dir DIR', 'Location to output generated site (default: _site' ) do |output_dir|
+          opts.on( '--output-dir DIR', 'Location to output generated site (default: _site)' ) do |output_dir|
             self.output_dir = File.expand_path output_dir
           end
 
