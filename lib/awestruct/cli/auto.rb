@@ -1,6 +1,7 @@
 require 'awestruct/util/exception_helper'
 
 require 'listen'
+require 'guard'
 require 'guard/livereload'
 
 module Awestruct
