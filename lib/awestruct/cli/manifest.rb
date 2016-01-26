@@ -43,8 +43,8 @@ module Awestruct
         steps << AddRequires.new(path, libs)
       end
 
-      def install_compass(framework)
-        steps << InstallCompass.new(framework)
+      def install_compass(framework, lib)
+        steps << InstallCompass.new(framework, lib)
       end
 
       def perform(dir)
@@ -236,7 +236,7 @@ module Awestruct
           rendered = ERB.new(File.read(@input_path), nil, '<>').result(
             OpenStruct.new(@state).instance_eval { binding })
           rescue => e
-            puts "::DEBUG:: #{e.message} state - #{@state}"
+            $LOG.debug "::DEBUG:: #{e.message} state - #{@state}"
           end
 
           p = File.join(dir, @path)
@@ -250,15 +250,12 @@ module Awestruct
       end
 
       class InstallCompass
-        def initialize(framework='compass')
+        def initialize(framework='compass', lib)
           @framework = framework
+          @lib = lib
         end
 
         def perform(dir)
-          require 'sass/callbacks'
-          require 'compass'
-          require 'compass/commands'
-
           ::Compass.configuration.sass_dir = 'stylesheets'
           ::Compass.configuration.css_dir = '_site/stylesheets'
           ::Compass.configuration.images_dir = 'images'

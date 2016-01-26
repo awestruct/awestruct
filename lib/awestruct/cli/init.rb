@@ -37,8 +37,13 @@ module Awestruct
           when 'foundation'
             lib = 'zurb-foundation'
         end
-        require lib unless lib.nil?
-        manifest.install_compass(@framework) unless lib.nil?
+        unless lib.nil?
+          require 'sass/callbacks'
+          require 'compass'
+          require 'compass/commands'
+          require lib
+          manifest.install_compass(@framework, lib)
+        end
         if (@scaffold)
           manifest.copy_file('_config/site.yml', framework_path('base_site.yml'), :overwrite => true)
           manifest.copy_file('_layouts/base.html.haml', framework_path('base_layout.html.haml', scaffold_name))
