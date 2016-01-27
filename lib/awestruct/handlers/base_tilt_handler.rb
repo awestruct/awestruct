@@ -134,19 +134,23 @@ module Awestruct
           return template.render(context)
         rescue LoadError => e
           error_page = context[:page]
-          ExceptionHelper.log_message "Could not load template library required for rendering #{File.join site.dir, error_page.source_path}."
-          ExceptionHelper.log_message "Please see #{File.join site.dir, error_page.output_path} for more information"
+          ExceptionHelper.log_message "Could not load template library required for rendering #{error_page.source_path}."
+          ExceptionHelper.log_message "Please see #{error_page.output_path} for more information"
           return ExceptionHelper.html_error_report e, error_page.source_path
         rescue => e
           error_page = context[:page]
-          if error_page[:__is_layout] == true
-            ExceptionHelper.log_message "An error during rendering layout file #{File.join site.dir, error_page.source_path} occurred."
+          if error_page[:__is_layout] == true || context[:__is_layout] == true
+            ExceptionHelper.log_message "An error during rendering layout file #{context[:__effective_page].relative_source_path} for #{error_page.relative_source_path} occurred."
             ExceptionHelper.log_building_error e, error_page.source_path
+
+          elsif error_page.is_partial?
+            ExceptionHelper.log_message "An error during rendering partial file #{error_page.relative_source_path} for #{error_page[:real_page].relative_source_path} occurred."
+            ExceptionHelper.log_building_error e, error_page[:real_page].source_path
           else
-            ExceptionHelper.log_message "An error during rendering #{File.join site.dir, error_page.source_path} occurred."
+            ExceptionHelper.log_message "An error during rendering #{error_page.relative_source_path} occurred."
             ExceptionHelper.log_building_error e, error_page.source_path
           end
-          ExceptionHelper.log_message "Please see #{File.join site.dir, error_page.output_path} for more information"
+          ExceptionHelper.log_message "Please see .awestruct/error.log for more information"
           return ExceptionHelper.html_error_report e, error_page.source_path
         end
       end

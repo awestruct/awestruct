@@ -51,8 +51,9 @@ module Awestruct
           for_layout_chain(context.__effective_page || context.page) do |layout|
             context.content = content
             context.__effective_page = layout
+            context[:__is_layout] = true
             content = layout.rendered_content( context, false )
-           end
+          end
         end
 
         $LOG.debug "finished rendering content for #{context}" if $LOG.debug?

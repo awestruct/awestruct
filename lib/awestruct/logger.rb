@@ -12,14 +12,14 @@ module Awestruct
       @targets.each do |target|
         # DEBUG logs should go to a different location if enabled
         if target.instance_of?(File) && File.basename(target) =~ /debug\.log/ && @log_to_debug && args[0] =~ /DEBUG/
-          target.write(*args)
+          target.write(args[0].uncolorize.gsub(/DEBUG: /, ''))
         end
         # Error logs should also go to the error.log
-        if target.instance_of?(File) && File.basename(target) =~ /error\.log/ && @log_to_debug && args[0] =~ /ERROR/
-          target.write(*args)
+        if target.instance_of?(File) && File.basename(target) =~ /error\.log/ && args[0] =~ /ERROR/
+          target.write(args[0].uncolorize.gsub(/ERROR: /, ''))
         end
         if args[0][0] != '[' && target.instance_of?(IO)
-          target.write(*args)
+          target.write(*args[0].gsub(/DEBUG: /, '').gsub(/ERROR: /, ''))
         end
       end
     end
@@ -59,9 +59,9 @@ module Awestruct
         "[%s] %5s -- %s [%s]\n" % [timestamp.strftime('%Y-%m-%d %H:%M:%S'), severity, object, who]
       else
         if severity[0] == 'W'
-          ("%s" % [object]).colorize(:yellow) + "\n"
+          ("WARNING: %s" % [object]).colorize(:yellow) + "\n"
         elsif severity[0] == 'E'
-          ("%s" % [object]).colorize(:red) + "\n"
+          ("ERROR: %s" % [object]).colorize(:red) + "\n"
         else
           "%s\n" % [object]
         end
