@@ -10,7 +10,12 @@ module Awestruct
 
     def write(*args)
       @targets.each do |target|
-        if target.instance_of?(File) && @log_to_debug
+        # DEBUG logs should go to a different location if enabled
+        if target.instance_of?(File) && File.basename(target) =~ /debug\.log/ && @log_to_debug && args[0] =~ /DEBUG/
+          target.write(*args)
+        end
+        # Error logs should also go to the error.log
+        if target.instance_of?(File) && File.basename(target) =~ /error\.log/ && @log_to_debug && args[0] =~ /ERROR/
           target.write(*args)
         end
         if args[0][0] != '[' && target.instance_of?(IO)

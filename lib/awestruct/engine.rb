@@ -369,6 +369,7 @@ module Awestruct
           generate_page( page )
         end
       rescue Exception => e
+        Awestruct::ExceptionHelper.log_error e
         return_value = [Awestruct::ExceptionHelper::EXITCODES[:generation_error]]
       end
 
@@ -383,16 +384,23 @@ module Awestruct
       if ( produce_output )
         $LOG.debug "Generating: #{generated_path}" if $LOG.debug? && config.verbose
 
-        c = page.rendered_content
-        c = site.engine.pipeline.apply_transformers( site, page, c )
+        c = ''
+        begin
+          c = page.rendered_content
+          c = site.engine.pipeline.apply_transformers( site, page, c )
 
-        generated_path = File.join( site.config.output_dir, page.output_path )
-        FileUtils.mkdir_p( File.dirname( generated_path ) )
+          generated_path = File.join( site.config.output_dir, page.output_path )
+          FileUtils.mkdir_p( File.dirname( generated_path ) )
 
-        File.open( generated_path, 'wb' ) do |file|
-          file << c
+          File.open( generated_path, 'wb' ) do |file|
+            file << c
+          end
+        rescue Exception => e
+          Awestruct::ExceptionHelper.log_error(e)
+        ensure
+          return Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
         end
-        return Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
+        Awestruct::ExceptionHelper::EXITCODES[:success]
       elsif ( site.config.track_dependencies )
         if page.dependencies.load!
           $LOG.debug "Cached:     #{generated_path}" if $LOG.debug?

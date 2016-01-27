@@ -27,7 +27,9 @@ module Awestruct
         @success = true
         logging_path = Pathname.new '.awestruct'
         logging_path.mkdir unless logging_path.exist?
-        $LOG = Logger.new(Awestruct::AwestructLoggerMultiIO.new(@options.debug, STDOUT, File.open('.awestruct/debug.log', 'w')))
+        $LOG = Logger.new(Awestruct::AwestructLoggerMultiIO.new(@options.debug,
+                                                                STDOUT, File.open('.awestruct/debug.log', 'w'),
+                                                                File.open('.awestruct/error.log', 'w')))
         $LOG.level = @options.debug ? Logger::DEBUG : Logger::INFO
         $LOG.formatter = Awestruct::AwestructLogFormatter.new
 
