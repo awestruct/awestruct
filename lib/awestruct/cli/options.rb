@@ -32,30 +32,35 @@ module Awestruct
       attr_accessor :debug
       attr_accessor :generate_on_access
 
-      def initialize()
-        @generate   = nil
-        @server     = false
-        @port       = DEFAULT_PORT
-        @bind_addr  = DEFAULT_BIND_ADDR
-        @auto       = false
-        @force      = false
-        @init       = false
-        @framework  = 'compass'
-        @scaffold   = true
-        @base_url   = DEFAULT_BASE_URL
-        @profile    = nil
-        @deploy     = false
-        @script     = nil
-        @verbose    = false
-        @quiet      = false
-        @livereload = false
-        @source_dir = Dir.pwd
-        @output_dir = File.expand_path '_site'
-        @generate_on_access = DEFAULT_GENERATE_ON_ACCESS
+      def initialize(opts = {})
+        default_opts = { server: false, port: DEFAULT_PORT, bind_addr: DEFAULT_BIND_ADDR, auto: false, force: false,
+                         init: false, framework: 'compass', scaffold: true, base_url: DEFAULT_BASE_URL, deploy: false,
+                         verbose: false, quiet: false, livereload: false, source_dir: Dir.pwd,
+                         output_dir: File.expand_path('_site'), generate_on_access: DEFAULT_GENERATE_ON_ACCESS
+                       }.merge opts
+        @generate   = default_opts[:generate]
+        @server     = default_opts[:server]
+        @port       = default_opts[:port]
+        @bind_addr  = default_opts[:bind_addr]
+        @auto       = default_opts[:auto]
+        @force      = default_opts[:force]
+        @init       = default_opts[:init]
+        @framework  = default_opts[:framework]
+        @scaffold   = default_opts[:scaffold]
+        @base_url   = default_opts[:base_url]
+        @profile    = default_opts[:profile]
+        @deploy     = default_opts[:deploy]
+        @script     = default_opts[:script]
+        @verbose    = default_opts[:verbose]
+        @quiet      = default_opts[:quiet]
+        @livereload = default_opts[:livereload]
+        @source_dir = default_opts[:source_dir]
+        @output_dir = default_opts[:output_dir]
+        @generate_on_access = default_opts[:generate_on_access]
       end
 
       def self.parse!(args)
-        Options.new.parse! args
+        Options.new({output_dir: nil}).parse! args
       end
 
       def parse!(args)
@@ -132,7 +137,6 @@ module Awestruct
           #end
           opts.on( '--source-dir DIR', 'Location of sources (default: .)' ) do |source_dir|
             self.source_dir = File.expand_path source_dir
-            self.output_dir = File.expand_path File.join(self.source_dir, '_site')
           end
 
           opts.on( '--output-dir DIR', 'Location to output generated site (default: _site)' ) do |output_dir|
@@ -157,6 +161,7 @@ module Awestruct
         opts.parse!(args)
         self.port ||= DEFAULT_PORT
         self.base_url = %(http://#{self.bind_addr}:#{self.port}) if self.base_url === DEFAULT_BASE_URL
+        self.output_dir ||= File.expand_path(File.join(self.source_dir, '_site'))
 
         self.generate = true if self.generate.nil?
         self

@@ -28,7 +28,7 @@ describe Awestruct::CLI::Options do
     options.source_dir == File.join( __FILE__, '..' )
   end
 
-  describe 'parsing' do
+  context 'parsing' do
     def parse!(*args)
       Awestruct::CLI::Options.parse! args
     end
@@ -107,6 +107,18 @@ describe Awestruct::CLI::Options do
       result = Awestruct::CLI::Options.parse!(%w(--source-dir /tmp))
       result.source_dir.should eql '/tmp'
       result.output_dir.should eql '/tmp/_site' 
+    end
+
+
+    context 'source dir should not override output dir' do
+      context 'source dir first' do
+        result = Awestruct::CLI::Options.parse!(%w(--source-dir /tmp --output-dir /tmp/output))
+        it { expect(result.output_dir).to eq '/tmp/output' }
+      end
+      context 'output dir first' do
+        result = Awestruct::CLI::Options.parse!(%w(--output-dir /tmp/output --source-dir /tmp))
+        it { expect(result.output_dir).to eq '/tmp/output' }
+      end
     end
   end
 
