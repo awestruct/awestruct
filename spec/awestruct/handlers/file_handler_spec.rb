@@ -50,10 +50,10 @@ describe Awestruct::Handlers::FileHandler do
   end
 
   it "should provide reasonable paths" do
-    @handler.relative_source_path.should == '/simple-file.txt'
+    @handler.relative_source_path.to_s.should == 'simple-file.txt'
     @handler.output_filename.should == 'simple-file.txt'
     @handler.output_extension.should == '.txt'
-    @handler.output_path.should == '/simple-file.txt'
+    @handler.output_path.to_s.should == './simple-file.txt'
   end
 
   it "should be able to create an appropriate context" do

@@ -23,11 +23,11 @@ module Awestruct
     attr_accessor :options
 
     def initialize(opts = Awestruct::CLI::Options.new)
-      @dir             = Pathname.new( opts.source_dir )
+      @dir             = Pathname.new(File.expand_path(Pathname.new( opts.source_dir )))
       @layouts_dir     = Pathname.new( File.join(@dir, '_layouts') )
       @config_dir      = Pathname.new( File.join(@dir, '_config') )
       @input_dir       = @dir
-      @output_dir      = Pathname.new( opts.output_dir )
+      @output_dir      = Pathname.new(File.expand_path(Pathname.new( opts.output_dir )))
       @extension_dir   = Pathname.new( File.join(@dir, '_ext') )
       @skin_dir        = Pathname.new( File.join(@dir, '_skin') )
       @tmp_dir         = Pathname.new( File.join(@dir, '_tmp') )

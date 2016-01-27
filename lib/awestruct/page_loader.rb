@@ -11,7 +11,7 @@ module Awestruct
 
       @root_dir = site.config.dir
       if ( @target == :layouts )
-        @root_dir = Pathname.new( File.join( root_dir, '_layouts/' ) )
+        @root_dir = site.config.layouts_dir
       end
     end
 

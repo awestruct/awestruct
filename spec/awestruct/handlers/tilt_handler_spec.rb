@@ -41,7 +41,7 @@ describe Awestruct::Handlers::TiltHandler do
   end
 
   def handler_file(path)
-    "#{@site.config.dir}/#{path}"
+    @site.config.dir.join(path)
   end
 
   def create_context
@@ -82,7 +82,6 @@ describe Awestruct::Handlers::TiltHandler do
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "asciidoc-page.asciidoc" ) )
     handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
 
-    handler.relative_source_path.should be_nil 
     handler.simple_name.should eql 'asciidoc-page'
     handler.content_syntax.should eql :asciidoc
     handler.output_extension.should eql '.html'
@@ -95,13 +94,11 @@ describe Awestruct::Handlers::TiltHandler do
     file_handler = Awestruct::Handlers::FileHandler.new( @site, handler_file( "warp-1.0.0.Alpha2.textile" ) )
     handler = Awestruct::Handlers::TiltHandler.new( @site, file_handler )
 
-    handler.relative_source_path.should be_nil
     handler.simple_name.should eql 'warp-1.0.0.Alpha2'
     handler.content_syntax.should eql :textile
     handler.output_extension.should eql '.html'
     handler.input_extension.should eql '.textile'
     handler.output_filename.should eql 'warp-1.0.0.Alpha2.html'
-
   end
 
   context 'when loading an engine not installed' do
