@@ -9,12 +9,9 @@ describe Awestruct::Handlers::FileHandler do
     end
   end 
 
-  before :all do
+  before :each do
     @site = Hashery::OpenCascade[ { :encoding=>false, :dir=>Pathname.new( test_data_dir '' )}]
     @site.engine = Hashery::OpenCascade[]
-  end
-
-  before :each do
     @filename = Pathname.new( test_data_dir 'simple-file.txt' )
     @handler = Awestruct::Handlers::FileHandler.new( @site, @filename )
     @page = Awestruct::Page.new( @site, @handler )

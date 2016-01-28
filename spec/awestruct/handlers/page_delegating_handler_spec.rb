@@ -7,7 +7,7 @@ require 'hashery'
 
 describe Awestruct::Handlers::PageDelegatingHandler do
 
-  before :all do
+  before :each do
     @config = Hashery::OpenCascade[ { :dir=>Pathname.new( test_data_dir 'handlers' ) } ]
     @engine = Awestruct::Engine.new( @config )
     @site = @engine.site
@@ -45,7 +45,10 @@ describe Awestruct::Handlers::PageDelegatingHandler do
   it "should provide for laying out both inner and outer page content" do
     inner_page = @engine.load_site_page( "inner-page.html.haml" )
 
-    page = Awestruct::Page.new( @site, Awestruct::Handlers::LayoutHandler.new( @site, Awestruct::Handlers::PageDelegatingHandler.new( @site, inner_page) ) )
+    page = Awestruct::Page.new( @site,
+                                Awestruct::Handlers::LayoutHandler.new( @site,
+                                                                        Awestruct::Handlers::PageDelegatingHandler.new( @site,
+                                                                                                                        inner_page) ) )
     page.layout = 'outer-layout'
     page.output_path = '/outer-page.html'
 

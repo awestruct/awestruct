@@ -503,8 +503,8 @@ module Awestruct
     def load_site_page(relative_path)
       if Pathname.new(relative_path).absolute?
         load_page( relative_path )
-      elsif
-        load_page( File.join( site.config.dir, relative_path ) )
+      else
+        load_page( Pathname.new(File.join(site.config.dir, relative_path)) )
       end
     end
 
