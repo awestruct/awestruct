@@ -396,7 +396,7 @@ module Awestruct
             file << c
           end
         rescue Exception => e
-          Awestruct::ExceptionHelper.log_error(e)
+          Awestruct::ExceptionHelper.log_building_error e, page.relative_source_path
         ensure
           return Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
         end
