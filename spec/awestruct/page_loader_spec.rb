@@ -19,7 +19,7 @@ describe Awestruct::PageLoader do
     page = @loader.load_page( File.join( @config.dir, "page-one.md" ) )
     page.should_not be_nil
     page.handler.to_chain.collect{|e| e.class}.should be_include Awestruct::Handlers::TiltHandler
-    page.relative_source_path.to_s.should == "page-one.md"
+    page.relative_source_path.to_s.should == "/page-one.md"
   end
 
   it "should be able to load an out-of-site page" do
@@ -34,11 +34,11 @@ describe Awestruct::PageLoader do
 
     @site.pages.sort!{|l,r| l.relative_source_path <=> r.relative_source_path }
 
-    @site.pages[0].relative_source_path.to_s.should == 'page-one.md'
-    @site.pages[0].output_path.to_s.should          == './page-one.html'
+    @site.pages[0].relative_source_path.to_s.should == '/page-one.md'
+    @site.pages[0].output_path.to_s.should          == '/page-one.html'
 
-    @site.pages[1].relative_source_path.to_s.should == 'page-two.html.haml'
-    @site.pages[1].output_path.to_s.should          == './page-two.html'
+    @site.pages[1].relative_source_path.to_s.should == '/page-two.html.haml'
+    @site.pages[1].output_path.to_s.should          == '/page-two.html'
   end
 
   it "should be able to load all site pages (even drafts) if show_drafts is true" do
@@ -48,14 +48,14 @@ describe Awestruct::PageLoader do
 
     @site.pages.sort!{|l,r| l.relative_source_path <=> r.relative_source_path }
 
-    @site.pages[0].relative_source_path.to_s.should == 'page-draft.md'
-    @site.pages[0].output_path.to_s.should          == './page-draft.html'
+    @site.pages[0].relative_source_path.to_s.should == '/page-draft.md'
+    @site.pages[0].output_path.to_s.should          == '/page-draft.html'
 
-    @site.pages[1].relative_source_path.to_s.should == 'page-one.md'
-    @site.pages[1].output_path.to_s.should          == './page-one.html'
+    @site.pages[1].relative_source_path.to_s.should == '/page-one.md'
+    @site.pages[1].output_path.to_s.should          == '/page-one.html'
 
-    @site.pages[2].relative_source_path.to_s.should == 'page-two.html.haml'
-    @site.pages[2].output_path.to_s.should          == './page-two.html'
+    @site.pages[2].relative_source_path.to_s.should == '/page-two.html.haml'
+    @site.pages[2].output_path.to_s.should          == '/page-two.html'
 
   end
 
@@ -74,7 +74,7 @@ describe Awestruct::PageLoader do
       page = @loader.load_page( File.join( @config.dir, "_layouts", "layout-one.md" ) )
       page.should_not be_nil
       page.handler.to_chain.collect{|e| e.class}.should be_include Awestruct::Handlers::TiltHandler
-      page.relative_source_path.to_s.should == "_layouts/layout-one.md"
+      page.relative_source_path.to_s.should == "/_layouts/layout-one.md"
     end
 
     it "should be able to load all site layouts" do
@@ -83,11 +83,11 @@ describe Awestruct::PageLoader do
 
       @site.layouts.sort!{|l,r| l.relative_source_path <=> r.relative_source_path }
 
-      @site.layouts[0].relative_source_path.to_s.should == '_layouts/layout-one.md'
-      @site.layouts[0].output_path.to_s.should          == '_layouts/layout-one.html'
+      @site.layouts[0].relative_source_path.to_s.should == '/_layouts/layout-one.md'
+      @site.layouts[0].output_path.to_s.should          == '/_layouts/layout-one.html'
 
-      @site.layouts[1].relative_source_path.to_s.should == '_layouts/layout-two.html.haml'
-      @site.layouts[1].output_path.to_s.should          == '_layouts/layout-two.html'
+      @site.layouts[1].relative_source_path.to_s.should == '/_layouts/layout-two.html.haml'
+      @site.layouts[1].output_path.to_s.should          == '/_layouts/layout-two.html'
     end
 
   end
