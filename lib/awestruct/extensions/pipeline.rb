@@ -42,8 +42,6 @@ module Awestruct
 
       def extension(ext)
         @extensions << ext if ext.respond_to?(:execute)
-        # TC: why? transformer and extension?
-        transformer(ext) if ext.respond_to?(:transform)
 
         @before_all_extensions << ext if ext.respond_to?(:before_extensions)
         @after_all_extensions << ext if ext.respond_to?(:after_extensions)
