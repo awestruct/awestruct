@@ -66,7 +66,7 @@ module Awestruct
       chain = site.engine.pipeline.handler_chains[ path ]
       return nil if chain.nil?
       handler = chain.create(site, Pathname.new(path))
-      p = Page.new( site, handler )
+      p = ::Awestruct::Page.new( site, handler )
       if ( @target == :layouts )
         p.__is_layout = true
       else
