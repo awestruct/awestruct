@@ -24,25 +24,25 @@ module Awestruct
       pages = []
       root_dir.find do |path|
         if ( path == root_dir )
-          $LOG.debug "skip #{path}" if (site.config.verbose) if $LOG.debug?
+          $LOG.debug "skip #{path}" if (site.config.verbose && $LOG.debug?)
           next
         end
         basename = File.basename( path )
         if ( basename == '.htaccess' )
           #special case
         elsif ( basename =~ /^[_.]/ )
-          $LOG.debug "skip #{path} and prune" if (site.config.verbose) if $LOG.debug?
+          $LOG.debug "skip #{path} and prune" if (site.config.verbose && $LOG.debug?)
           Find.prune
           next
         end
         relative_path = path.relative_path_from( root_dir ).to_s
         if ignore?(relative_path)
-          $LOG.debug "skip ignored #{path} and prune" if (site.config.verbose) if $LOG.debug?
+          $LOG.debug "skip ignored #{path} and prune" if (site.config.verbose && $LOG.debug?)
           Find.prune
           next
         end
         unless path.directory?
-          $LOG.debug "loading #{relative_path}" if (site.config.verbose) if $LOG.debug?
+          $LOG.debug "loading #{relative_path}" if (site.config.verbose && $LOG.debug?)
           page = load_page( path, prepare )
           if ( page )
             next if (page.draft && !(@site.show_drafts || @site.profile == 'development'))

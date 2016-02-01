@@ -7,12 +7,10 @@ module Awestruct
         @output_path = output_path
         @layout = opts[:layout].to_s
         @title  = opts[:title] || 'Tags'
-        if opts[:template]
-          if Pathname.new(opts[:template]).relative?
-            @template = Pathname.new(::Awestruct::Engine.instance.site.config.dir).join(opts[:template])
-          else
-            @template = opts[:template] || File.join( File.dirname(__FILE__), 'tag_cloud.html.haml' )
-          end
+        if opts[:template] && Pathname.new(opts[:template]).relative?
+          @template = Pathname.new(::Awestruct::Engine.instance.site.config.dir).join(opts[:template])
+        else
+          @template = File.join( File.dirname(__FILE__), 'tag_cloud.html.haml' )
         end
       end
 

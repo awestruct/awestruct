@@ -8,12 +8,10 @@ module Awestruct
         @num_entries = opts[:num_entries] || 50
         @content_url = opts[:content_url]
         @feed_title = opts[:feed_title]
-        if opts[:template]
-          if Pathname.new(opts[:template]).relative?
-            @template = Pathname.new(::Awestruct::Engine.instance.site.config.dir).join(opts[:template])
-          else
-            @template = opts[:template] || File.join( File.dirname(__FILE__), 'template.atom.haml' )
-          end
+        if opts[:template] && Pathname.new(opts[:template]).relative?
+          @template = Pathname.new(::Awestruct::Engine.instance.site.config.dir).join(opts[:template])
+        else
+          @template = File.join( File.dirname(__FILE__), 'template.atom.haml' )
         end
       end
 
