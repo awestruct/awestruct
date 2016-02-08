@@ -53,6 +53,7 @@ module Awestruct
 
     def execute_extensions(site, on_reload)
       @before_all_extensions.each do |e|
+        $LOG.info "Executing before all extension #{e.class}" if site.config.verbose
         e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
         if (e.respond_to? :execute)
           e.execute(site)
@@ -62,11 +63,13 @@ module Awestruct
       end
 
       @extensions.each do |e|
+        $LOG.info "Executing extension #{e.class}" if site.config.verbose
         e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
         e.execute(site)
       end
 
       @after_all_extensions.each do |e|
+        $LOG.info "Executing after all extension #{e.class}" if site.config.verbose
         e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
         if e.respond_to? :execute
           e.execute(site)
@@ -78,6 +81,7 @@ module Awestruct
 
     def apply_transformers(site, page, rendered)
       @transformers.each do |t|
+        $LOG.debug "Applying transformer #{t.class} for page #{page}" if site.config.verbose && $LOG.debug?
         rendered = t.transform( site, page, rendered )
       end
       rendered
@@ -85,6 +89,7 @@ module Awestruct
 
     def execute_after_generation(site)
       @after_generation_extensions.each do |e|
+        $LOG.info "Executing after generation #{e.class}" if site.config.verbose
         if e.respond_to? :execute
           e.execute(site)
         else

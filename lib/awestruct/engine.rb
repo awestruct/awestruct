@@ -53,34 +53,34 @@ module Awestruct
     end
 
     def run(profile, base_url, default_base_url, force=false, generate=true)
-      $LOG.debug 'adjust_load_path' if $LOG.debug?
+      $LOG.info 'adjust_load_path' if $LOG.debug? || config.verbose
       adjust_load_path
-      $LOG.debug 'load_default_site_yaml' if $LOG.debug?
+      $LOG.info 'load_default_site_yaml' if $LOG.debug? || config.verbose
       load_default_site_yaml( profile )
-      $LOG.debug 'load_user_site_yaml -- profile' if $LOG.debug?
+      $LOG.info 'load_user_site_yaml -- profile' if $LOG.debug? || config.verbose
       load_user_site_yaml( profile )
-      $LOG.debug 'set_base_url' if $LOG.debug?
+      $LOG.info 'set_base_url' if $LOG.debug? || config.verbose
       set_base_url( base_url, default_base_url )
-      $LOG.debug 'load_yamls' if $LOG.debug?
+      $LOG.info 'load_yamls' if $LOG.debug? || config.verbose
       load_yamls
-      $LOG.debug 'load_pipeline' if $LOG.debug?
+      $LOG.info 'load_pipeline' if $LOG.debug? || config.verbose
       load_pipeline
-      $LOG.debug 'load_pages' if $LOG.debug?
+      $LOG.info 'load_pages' if $LOG.debug? || config.verbose
       load_pages
-      $LOG.debug 'execute_pipeline' if $LOG.debug?
+      $LOG.info 'execute_pipeline' if $LOG.debug? || config.verbose
       $LOG.info 'Excecuting pipeline...' if $LOG.info?
       execute_pipeline(false)
       begin
         if defined?(::Compass)
-          $LOG.debug 'configure_compass' if $LOG.debug?
+          $LOG.debug 'configure_compass' if $LOG.debug? || config.verbose
           configure_compass
         end
       rescue LoadError
         # doesn't matter if we can't load it
       end
-      $LOG.debug 'set_urls' if $LOG.debug?
+      $LOG.info 'set_urls' if $LOG.debug? || config.verbose
       set_urls( site.pages )
-      $LOG.debug 'build_page_index' if $LOG.debug?
+      $LOG.info 'build_page_index' if $LOG.debug? || config.verbose
       build_page_index
 
       if ( generate )
