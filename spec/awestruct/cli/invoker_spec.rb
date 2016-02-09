@@ -79,5 +79,9 @@ describe Awestruct::CLI::Invoker do
     expect(Awestruct::CLI::Invoker.new( %w(--source-dir spec/support/test-config --generate) ).invoke!).to be_falsey
   end
 
+  it 'should create the .awestruct/perf.log file' do
+    Awestruct::CLI::Invoker.new( %w(-d --source-dir spec/support/test-config/ --perf) )
+    expect(File.exists? 'spec/support/test-config/.awestruct/perf.log' ).to eql true
+  end
 
 end

@@ -43,7 +43,7 @@ module Awestruct
       end
 
       def rendered_content(context, with_layouts=true)
-        $LOG.debug "rendering content with layout #{with_layouts} for #{context}" if $LOG.debug?
+        $LOG.debug "rendering content with layout #{with_layouts} for #{context.page.output_path}" if $LOG.debug?
         content = delegate.rendered_content( context, with_layouts )
 
         if ( with_layouts )
@@ -56,7 +56,7 @@ module Awestruct
           end
         end
 
-        $LOG.debug "finished rendering content for #{context}" if $LOG.debug?
+        $LOG.debug "finished rendering content for #{context.page.output_path}" if $LOG.debug?
         content
       end
 

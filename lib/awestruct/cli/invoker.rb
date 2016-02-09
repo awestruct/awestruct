@@ -1,6 +1,5 @@
 require 'pathname'
-require 'logger'
-require 'awestruct/logger'
+require 'logging'
 require 'awestruct/cli/options'
 require 'awestruct/util/exception_helper'
 require 'erb'
@@ -17,7 +16,7 @@ module Awestruct
 
       def initialize(*options)
         options = options.flatten
-        if ( ( ! options.empty? ) && ( options.first === Awestruct::CLI::Options ) )
+        if (!options.empty?) && (options.first === Awestruct::CLI::Options)
           @options = options.first
         else
           @options = Awestruct::CLI::Options.parse! options
@@ -25,13 +24,36 @@ module Awestruct
         @threads = []
         @profile = nil
         @success = true
-        logging_path = Pathname.new '.awestruct'
-        logging_path.mkdir unless logging_path.exist?
-        $LOG = Logger.new(Awestruct::AwestructLoggerMultiIO.new(@options.debug,
-                                                                STDOUT, File.open('.awestruct/debug.log', 'w'),
-                                                                File.open('.awestruct/error.log', 'w')))
-        $LOG.level = @options.debug ? Logger::DEBUG : Logger::INFO
-        $LOG.formatter = Awestruct::AwestructLogFormatter.new
+        logging_path = Pathname.new File.join(@options.source_dir, '.awestruct')
+        logging_path.mkpath unless logging_path.exist?
+
+        Logging.init :trace, :debug, :verbose, :info, :warn, :error, :fatal
+        $LOG = Logging.logger.new 'awestruct'
+        $LOG.add_appenders(
+                Logging.appenders.stdout({level: (@options.verbose ? :verbose : :info),
+                                          layout: Logging.layouts.pattern(pattern: "%m\n", format_as: :string),
+                                          color_scheme: :default}),
+                Logging.appenders.file('error', {filename: File.join(logging_path, 'error.log'),
+                                                 layout: Logging.layouts.parseable.json(format_as: :string),
+                                                 truncate: true, level: :error})
+        )
+
+        if @options.debug
+          $LOG.add_appenders(
+              Logging.appenders.file('debug', {filename: File.join(logging_path, 'debug.log'),
+                                               layout: Logging.layouts.parseable.json(format_as: :string),
+                                               truncate: true, level: :debug})
+          )
+        end
+
+        if @options.perf_log
+          $LOG.add_appenders(
+              Logging.appenders.file('perf', {filename: File.join(logging_path, 'perf.log'),
+                                              truncate: true, level: :trace,
+                                              layout: Logging.layouts.parseable.json(format_as: :string),
+                                              filters: Logging::Filters::Level.new(:trace)})
+          )
+        end
 
         # these requires are deferred until after $LOG is set
         require 'awestruct/cli/init'

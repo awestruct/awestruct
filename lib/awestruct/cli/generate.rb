@@ -18,7 +18,9 @@ module Awestruct
         begin
           base_url = @base_url || @default_base_url
           $LOG.info "Generating site: #{base_url}" if $LOG.info?
+          start_time = DateTime.now
           @engine.run( @profile, @base_url, @default_base_url, @force, @generate )
+          $LOG.trace "Total time in engine.run #{DateTime.now.to_time - start_time.to_time} seconds"
         rescue =>e
           ExceptionHelper.log_building_error e, ''
           return false

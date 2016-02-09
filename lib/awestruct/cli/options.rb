@@ -31,12 +31,14 @@ module Awestruct
       attr_accessor :livereload
       attr_accessor :debug
       attr_accessor :generate_on_access
+      attr_accessor :perf_log
 
       def initialize(opts = {})
         default_opts = { server: false, port: DEFAULT_PORT, bind_addr: DEFAULT_BIND_ADDR, auto: false, force: false,
                          init: false, framework: 'compass', scaffold: true, base_url: DEFAULT_BASE_URL, deploy: false,
                          verbose: false, quiet: false, livereload: false, source_dir: Dir.pwd,
-                         output_dir: File.expand_path('_site'), generate_on_access: DEFAULT_GENERATE_ON_ACCESS
+                         output_dir: File.expand_path('_site'), generate_on_access: DEFAULT_GENERATE_ON_ACCESS,
+                         perf_log: false
                        }.merge opts
         @generate   = default_opts[:generate]
         @server     = default_opts[:server]
@@ -57,6 +59,7 @@ module Awestruct
         @source_dir = default_opts[:source_dir]
         @output_dir = default_opts[:output_dir]
         @generate_on_access = default_opts[:generate_on_access]
+        @perf_log = default_opts[:perf_log]
       end
 
       def self.parse!(args)
@@ -141,6 +144,10 @@ module Awestruct
 
           opts.on( '--output-dir DIR', 'Location to output generated site (default: _site)' ) do |output_dir|
             self.output_dir = File.expand_path output_dir
+          end
+
+          opts.on('--perf', 'Enable performance logging to .awestruct/perf.log') do
+            self.perf_log = true
           end
 
           opts.separator ''

@@ -53,42 +53,75 @@ module Awestruct
     end
 
     def run(profile, base_url, default_base_url, force=false, generate=true)
-      $LOG.info 'adjust_load_path' if $LOG.debug? || config.verbose
+      start_time = DateTime.now
+      $LOG.verbose 'adjust_load_path'
       adjust_load_path
-      $LOG.info 'load_default_site_yaml' if $LOG.debug? || config.verbose
+      $LOG.trace "Total time in adjust_load_path: #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      $LOG.verbose 'load_default_site_yaml'
+      start_time = DateTime.now
       load_default_site_yaml( profile )
-      $LOG.info 'load_user_site_yaml -- profile' if $LOG.debug? || config.verbose
+      $LOG.trace "Total time in load_default_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      $LOG.verbose 'load_user_site_yaml -- profile'
+      start_time = DateTime.now
       load_user_site_yaml( profile )
-      $LOG.info 'set_base_url' if $LOG.debug? || config.verbose
+      $LOG.trace "Total time in load_user_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      $LOG.verbose 'set_base_url'
+      start_time = DateTime.now
       set_base_url( base_url, default_base_url )
-      $LOG.info 'load_yamls' if $LOG.debug? || config.verbose
+      $LOG.trace "Total time in set_base_url #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      $LOG.verbose 'load_yamls'
+      start_time = DateTime.now
       load_yamls
-      $LOG.info 'load_pipeline' if $LOG.debug? || config.verbose
+      $LOG.trace "Total time in load_yamls #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      $LOG.verbose 'load_pipeline'
+      start_time = DateTime.now
       load_pipeline
-      $LOG.info 'load_pages' if $LOG.debug? || config.verbose
+      $LOG.trace "Total time in load_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      $LOG.verbose 'load_pages'
+      start_time = DateTime.now
       load_pages
-      $LOG.info 'execute_pipeline' if $LOG.debug? || config.verbose
-      $LOG.info 'Excecuting pipeline...' if $LOG.info?
+      $LOG.trace "Total time in load_pages #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      $LOG.verbose 'execute_pipeline'
+      $LOG.info 'Excecuting pipeline...'
+      start_time = DateTime.now
       execute_pipeline(false)
+      $LOG.trace "Total time in execute_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
+
       begin
         if defined?(::Compass)
-          $LOG.debug 'configure_compass' if $LOG.debug? || config.verbose
+          $LOG.verbose 'configure_compass'
+          start_time = DateTime.now
           configure_compass
+          $LOG.trace "Total time in configure_compass #{DateTime.now.to_time - start_time.to_time} seconds"
         end
       rescue LoadError
         # doesn't matter if we can't load it
       end
-      $LOG.info 'set_urls' if $LOG.debug? || config.verbose
+      $LOG.verbose 'set_urls'
+      start_time = DateTime.now
       set_urls( site.pages )
-      $LOG.info 'build_page_index' if $LOG.debug? || config.verbose
-      build_page_index
+      $LOG.trace "Total time in set_urls #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      if ( generate )
-        $LOG.debug 'generate_output' if $LOG.debug?
-        $LOG.info 'Generating pages...' if $LOG.info?
+      $LOG.verbose 'build_page_index'
+      start_time = DateTime.now
+      build_page_index
+      $LOG.trace "Total time in build_page_index #{DateTime.now.to_time - start_time.to_time} seconds"
+
+      if generate
+        $LOG.debug 'generate_output'
+        $LOG.info 'Generating pages...'
+        start_time = DateTime.now
         generate_output
+        $LOG.trace "Total time in generate_output #{DateTime.now.to_time - start_time.to_time} seconds"
       end
-      return Awestruct::ExceptionHelper::EXITCODES[:success]
+      Awestruct::ExceptionHelper::EXITCODES[:success]
     end
 
     def build_page_index
@@ -97,7 +130,7 @@ module Awestruct
       site.pages.each do |p|
         # Add the layout to the set of dependencies
         p.dependencies.add_dependency(site.layouts.find_matching(p.layout, p.output_extension))
-        if ( p.relative_source_path )
+        if p.relative_source_path
           site.pages_by_relative_source_path[ p.relative_source_path ] = p
         end
         site.pages_by_output_path[ p.output_path ] = p
@@ -106,23 +139,23 @@ module Awestruct
         # Add the layout to the set of dependencies
         p.dependencies.add_dependency(site.layouts.find_matching(p.layout, p.output_extension))
 
-        if ( p.relative_source_path )
+        if p.relative_source_path
           site.pages_by_relative_source_path[ p.relative_source_path ] = p
         end
       end
     end
 
     def set_base_url(base_url, default_base_url)
-      if ( base_url )
+      if base_url
         site.base_url = base_url
       end
 
-      if ( site.base_url.nil? )
+      if site.base_url.nil?
         site.base_url = default_base_url
       end
 
-      if ( site.base_url )
-        if ( site.base_url =~ /^(.*)\/$/ )
+      if site.base_url
+        if site.base_url =~ /^(.*)\/$/
           site.base_url = $1
         end
       end
@@ -146,15 +179,15 @@ module Awestruct
     end
 
     def load_site_yaml(yaml_path, profile = nil)
-      if ( File.exist?( yaml_path ) )
+      if File.exist?(yaml_path)
         begin
           data = YAML.load( ERB.new(File.read( yaml_path, :encoding => 'bom|utf-8' )).result )
-          if ( profile )
+          if profile
             # JP: Interpolation now turned off by default, turn it per page if needed
             site.interpolate = false
             profile_data = {}
             data.each do |k,v|
-              if ( ( k == 'profiles' ) && ( ! profile.nil? ) )
+              if (k == 'profiles') && (!profile.nil?)
                 profile_data = ( v[profile] || {} )
               else
                 site.send( "#{k}=", merge_data( site.send( "#{k}" ), v ) )
@@ -227,21 +260,21 @@ module Awestruct
 
     def adjust_load_path
       ext_dir = File.join( site.config.extension_dir )
-      if ( $LOAD_PATH.index( ext_dir ).nil? )
+      if $LOAD_PATH.index(ext_dir).nil?
         $LOAD_PATH << ext_dir
       end
     end
 
     def set_urls(pages)
       pages.each do |page|
-        $LOG.debug "relative_source_path #{page.relative_source_path}" if $LOG.debug?
+        $LOG.debug "relative_source_path #{page.relative_source_path}"
         page_path = page.output_path
-        if ( page_path =~ /^\// )
+        if page_path =~ /^\//
           page.url = page_path
         else
           page.url = "/#{page_path}"
         end
-        if ( page.url =~ /^(.*\/)index.html$/ )
+        if page.url =~ /^(.*\/)index.html$/
           page.url = $1
         end
       end
@@ -250,7 +283,7 @@ module Awestruct
     def load_pipeline
       ext_dir = File.join( site.config.extension_dir )
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
-      if ( File.exists?( pipeline_file ) )
+      if File.exists?(pipeline_file)
         p = eval(File.read( pipeline_file ), nil, pipeline_file, 1)
         p.before_all_extensions.each do |e|
           pipeline.add_before_extension( e )
@@ -346,7 +379,7 @@ module Awestruct
       end
 
       compass_config_file = File.join(site.config.config_dir, 'compass.rb')
-      if (File.exists? compass_config_file)
+      if File.exists? compass_config_file
         ::Compass.add_configuration ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
       end 
       ::Compass.configuration # return for use elsewhere
@@ -355,9 +388,9 @@ module Awestruct
     end
 
     def load_pages
-      $LOG.debug "layout_page_loader.load_all :post" if $LOG.debug?
+      $LOG.debug "layout_page_loader.load_all :post"
       @layout_page_loader.load_all( :post )
-      $LOG.debug "site_page_loader.load_all :inline" if $LOG.debug?
+      $LOG.debug "site_page_loader.load_all :inline"
       @site_page_loader.load_all( :inline )
     end
 
@@ -366,7 +399,11 @@ module Awestruct
       return_value = [Awestruct::ExceptionHelper::EXITCODES[:success]]
       begin
         return_value = Parallel.map(@site.pages, site.generation) do |page|
-          generate_page( page )
+          start_time = DateTime.now
+          return_value = generate_page( page )
+          $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if site.config.verbose
+
+          return_value
         end
       rescue Exception => e
         Awestruct::ExceptionHelper.log_error e
@@ -381,15 +418,15 @@ module Awestruct
     end
 
     def generate_page(page, produce_output=true)
-      if ( produce_output )
-        $LOG.debug "Generating: #{generated_path}" if $LOG.debug? && config.verbose
+      if produce_output
+        generated_path = File.join( site.config.output_dir, page.output_path )
+        $LOG.debug "Generating: #{generated_path}" if config.verbose
 
         c = ''
         begin
           c = page.rendered_content
           c = site.engine.pipeline.apply_transformers( site, page, c )
 
-          generated_path = File.join( site.config.output_dir, page.output_path )
           FileUtils.mkdir_p( File.dirname( generated_path ) )
 
           File.open( generated_path, 'wb' ) do |file|
@@ -401,11 +438,11 @@ module Awestruct
           return Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
         end
         Awestruct::ExceptionHelper::EXITCODES[:success]
-      elsif ( site.config.track_dependencies )
+      elsif site.config.track_dependencies
         if page.dependencies.load!
-          $LOG.debug "Cached:     #{generated_path}" if $LOG.debug?
+          $LOG.debug "Cached:     #{generated_path}"
         else
-          $LOG.debug "Analyzing:  #{generated_path}" if $LOG.debug?
+          $LOG.debug "Analyzing:  #{generated_path}"
           page.rendered_content
         end
         return Awestruct::ExceptionHelper::EXITCODES[:success]
@@ -414,9 +451,9 @@ module Awestruct
 
     # path - relative to output dir
     def page_by_source_path(path)
-      if (path.include? '_layout')
+      if path.include? '_layout'
         site.layouts.find { |p| p.source_path.to_s.include? path }
-      elsif (path.include? '_partial')
+      elsif path.include? '_partial'
         site.partials.find { |p| p.source_path.to_s.include? path }
       else
         site.pages.find { |p| p.source_path.to_s.include? path }
@@ -435,10 +472,10 @@ module Awestruct
 
       regen_pages = page_dependencies( page )
 
-      $LOG.debug "Starting regeneration of content dependent pages:" if regen_pages.size > 0 && $LOG.debug?
+      $LOG.debug 'Starting regeneration of content dependent pages:' if regen_pages.size > 0
 
       regen_pages.each do |p|
-        $LOG.info "Regenerating page #{p.output_path}" if $LOG.info?
+        $LOG.info "Regenerating page #{p.output_path}"
         generate_page_internal(p)
       end
 
@@ -473,7 +510,7 @@ module Awestruct
       load_pipeline
       execute_pipeline(true)
 
-      if ( generate )
+      if generate
         site.pages.each do |p|
           generate_page_internal(p)
         end
@@ -482,7 +519,7 @@ module Awestruct
     end
 
     def generate_page_internal(p)
-      unless ( p.output_path.nil? || p.__is_layout || !p.stale_output?(p.output_path) )
+      unless p.output_path.nil? || p.__is_layout || !p.stale_output?(p.output_path)
         generate_page( p )
       end
     end
@@ -493,7 +530,7 @@ module Awestruct
 
     def load_page(path, options={})
       page = @site_page_loader.load_page( path )
-      if ( options[:relative_path] )
+      if options[:relative_path]
         fixed_relative_path = ( options[:relative_path].nil? ? nil : File.join( '', options[:relative_path] ) )
         page.relative_path = fixed_relative_path
       end

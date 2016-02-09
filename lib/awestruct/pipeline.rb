@@ -13,7 +13,7 @@ module Awestruct
     attr_reader :transformers
     attr_reader :after_generation_extensions
 
-    def initialize()
+    def initialize
       @handler_chains = HandlerChains.new
       @before_all_extensions       = []
       @extensions                  = []
@@ -53,48 +53,73 @@ module Awestruct
 
     def execute_extensions(site, on_reload)
       @before_all_extensions.each do |e|
-        $LOG.info "Executing before all extension #{e.class}" if site.config.verbose
-        e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
-        if (e.respond_to? :execute)
+        $LOG.verbose "Executing before all extension #{e.class}"
+
+        if on_reload && e.respond_to?
+          start_time = DateTime.now
+          e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
+          $LOG.trace "Total time in #{e.class}.on_reload #{DateTime.now.to_time - start_time.to_time} seconds"
+        end
+
+        start_time = DateTime.now
+        if e.respond_to? :execute
           e.execute(site)
         else
           e.before_extensions(site)
         end
+        $LOG.trace "Total time in #{e.class}.before_extensions #{DateTime.now.to_time - start_time.to_time} seconds"
       end
 
       @extensions.each do |e|
-        $LOG.info "Executing extension #{e.class}" if site.config.verbose
-        e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
+        $LOG.verbose "Executing extension #{e.class}"
+        if on_reload && e.respond_to?(:on_reload)
+          start_time = DateTime.now
+          e.on_reload(site)
+          $LOG.trace "Total time in #{e.class}.on_reload #{DateTime.now.to_time - start_time.to_time} seconds"
+        end
+        start_time = DateTime.now
         e.execute(site)
+        $LOG.trace "Total time in #{e.class}.execute #{DateTime.now.to_time - start_time.to_time} seconds"
       end
 
       @after_all_extensions.each do |e|
-        $LOG.info "Executing after all extension #{e.class}" if site.config.verbose
-        e.on_reload(site) if (on_reload && e.respond_to?(:on_reload))
+        $LOG.verbose "Executing after all extension #{e.class}"
+        if on_reload && e.respond_to?(:on_reload)
+          start_time = DateTime.now
+          e.on_reload(site)
+          $LOG.trace "Total time in #{e.class}.on_reload #{DateTime.now.to_time - start_time.to_time} seconds"
+        end
+
+        start_time = DateTime.now
         if e.respond_to? :execute
           e.execute(site)
         else
           e.after_generation(site)
         end
+        $LOG.trace "Total time in #{e.class}.after_generation #{DateTime.now.to_time - start_time.to_time} seconds"
       end
     end
 
     def apply_transformers(site, page, rendered)
       @transformers.each do |t|
-        $LOG.debug "Applying transformer #{t.class} for page #{page}" if site.config.verbose && $LOG.debug?
+        $LOG.debug "Applying transformer #{t.class} for page #{page}" if site.config.verbose
+        start_time = DateTime.now
         rendered = t.transform( site, page, rendered )
+        $LOG.trace "Total time in #{t.class}.transform #{DateTime.now.to_time - start_time.to_time} seconds" if site.config.verbose
       end
       rendered
     end
 
     def execute_after_generation(site)
       @after_generation_extensions.each do |e|
-        $LOG.info "Executing after generation #{e.class}" if site.config.verbose
+        $LOG.verbose "Executing after generation #{e.class}"
+        start_time = DateTime.now
         if e.respond_to? :execute
           e.execute(site)
         else
           e.after_generation(site)
         end
+        $LOG.trace "Total time in #{e.class}.after_generation #{DateTime.now.to_time - start_time.to_time} seconds"
       end
     end
 

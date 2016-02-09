@@ -46,11 +46,11 @@ module Awestruct
       end
 
       def publish_site
-        $LOG.error( "#{self.class.name}#publish_site not implemented." ) if $LOG.error?
+        $LOG.error( "#{self.class.name}#publish_site not implemented." )
       end
 
       def existing_changes
-        $LOG.error UNCOMMITTED_CHANGES if $LOG.error?
+        $LOG.error UNCOMMITTED_CHANGES
       end
 
       def compress_site

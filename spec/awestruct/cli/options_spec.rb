@@ -109,6 +109,15 @@ describe Awestruct::CLI::Options do
       result.output_dir.should eql '/tmp/_site' 
     end
 
+    it 'by default, perf logging should be disabled' do
+      result = Awestruct::CLI::Options.parse!(%w(--source-dir /tmp))
+      result.perf_log.should eql false
+      end
+
+    it '--perf should enable perf logging' do
+      result = Awestruct::CLI::Options.parse!(%w(--source-dir /tmp --perf))
+      result.perf_log.should eql true
+    end
 
     context 'source dir should not override output dir' do
       context 'source dir first' do

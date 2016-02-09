@@ -6,20 +6,20 @@ module Awestruct
     @@failed = false
 
     def self.log_message message
-      $LOG.error message if $LOG.error?
+      $LOG.error message
     end
 
     def self.log_error exception
       mark_failed
-      $LOG.error "An error occurred: #{exception.message}" if $LOG.error?
+      $LOG.error "An error occurred: #{exception.message}"
     end
 
     def self.log_backtrace exception
-      $LOG.error "#{exception.backtrace.join("\n")}" if $LOG.error?
+      $LOG.error "#{exception.backtrace.join("\n")}"
     end
     
     def self.log_building_error exception, relative_source_path
-      $LOG.error "While processing file #{relative_source_path}" if $LOG.error?
+      $LOG.error "While processing file #{relative_source_path}"
       self.log_error exception
       self.log_backtrace exception
     end

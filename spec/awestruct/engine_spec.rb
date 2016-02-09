@@ -138,9 +138,13 @@ describe Awestruct::Engine do
     output_dir = Dir.mktmpdir 'engine-generate-no-errors'
 
     begin
-      log = StringIO.new
-      $LOG = Logger.new(log)
-      $LOG.level = Logger::DEBUG
+      Logging.init :trace, :debug, :verbose, :info, :warn, :error, :fatal
+      $LOG = Logging.logger.new 'awestruct'
+      $LOG.add_appenders(
+          Logging.appenders.string_io({level: :info, layout: Logging.layouts.pattern(pattern: "%m\n"),
+                                       color_scheme: :default})
+      )
+      $LOG.level = :debug
 
       opts = Awestruct::CLI::Options.new
       opts.source_dir = test_data_dir 'engine-generate-no-errors'
@@ -161,9 +165,13 @@ describe Awestruct::Engine do
     output_dir = Dir.mktmpdir 'engine-generate-no-errors'
 
     begin
-      log = StringIO.new
-      $LOG = Logger.new(log)
-      $LOG.level = Logger::DEBUG
+      Logging.init :trace, :debug, :verbose, :info, :warn, :error, :fatal
+      $LOG = Logging.logger.new 'awestruct'
+      $LOG.add_appenders(
+          Logging.appenders.string_io({level: :info, layout: Logging.layouts.pattern(pattern: "%m\n"),
+                                    color_scheme: :default})
+      )
+      $LOG.level = :debug
 
       opts = Awestruct::CLI::Options.new
       opts.source_dir = test_data_dir 'engine-generate-no-errors'
@@ -185,9 +193,13 @@ describe Awestruct::Engine do
     output_dir = Dir.mktmpdir 'engine-generate-with-errors'
 
     begin
-      log = StringIO.new
-      $LOG = Logger.new(log)
-      $LOG.level = Logger::DEBUG
+      Logging.init :trace, :debug, :verbose, :info, :warn, :error, :fatal
+      $LOG = Logging.logger.new 'awestruct'
+      $LOG.add_appenders(
+          Logging.appenders.string_io({level: :info, layout: Logging.layouts.pattern(pattern: "%m\n"),
+                                       color_scheme: :default})
+      )
+      $LOG.level = :debug
 
       opts = Awestruct::CLI::Options.new
       opts.source_dir = test_data_dir 'engine-generate-with-errors'
@@ -209,9 +221,13 @@ describe Awestruct::Engine do
     output_dir = Dir.mktmpdir 'engine-generate-with-errors'
 
     begin
-      log = StringIO.new
-      $LOG = Logger.new(log)
-      $LOG.level = Logger::DEBUG
+      Logging.init :trace, :debug, :verbose, :info, :warn, :error, :fatal
+      $LOG = Logging.logger.new 'awestruct'
+      $LOG.add_appenders(
+          Logging.appenders.string_io({level: :info, layout: Logging.layouts.pattern(pattern: "%m\n"),
+                                       color_scheme: :default})
+      )
+      $LOG.level = :debug
 
       opts = Awestruct::CLI::Options.new
       opts.source_dir = test_data_dir 'engine-generate-with-errors'

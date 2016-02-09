@@ -20,12 +20,12 @@ module Awestruct
 
       def run
         unless port_open? @bind_addr, @port
-          $LOG.error "#{@bind_addr}:#{@port} not available for server" if $LOG.error?
+          $LOG.error "#{@bind_addr}:#{@port} not available for server"
           abort
         end
         url = %(http://#{@bind_addr}:#{@port})
         msg = %(Starting preview server at #{url} (Press Ctrl-C to shutdown))
-        $LOG.info %(#{'*' * msg.length}\n#{msg}\n#{'*' * msg.length}\n) if $LOG.info?
+        $LOG.info %(#{'*' * msg.length}\n#{msg}\n#{'*' * msg.length}\n)
 
         path = @path
         generate_on_access = @generate_on_access
