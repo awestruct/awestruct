@@ -14,6 +14,7 @@ module Awestruct
           else
             @path = Pathname.new( path.to_s )
         end
+        @relative_source_path = nil
       end
 
       def output_filename
@@ -21,11 +22,13 @@ module Awestruct
       end
 
       def relative_source_path
+        return @relative_source_path unless @relative_source_path.nil?
         begin
-          "/#{Pathname.new path.relative_path_from( site.dir )}"
+          @relative_source_path = "/#{Pathname.new path.relative_path_from( site.dir )}"
         rescue Exception=>e
           nil
         end
+        @relative_source_path
       end
 
       def stale?

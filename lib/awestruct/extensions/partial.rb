@@ -14,7 +14,7 @@ module Awestruct
         return nil if !page
 
         params.each do |k,v|
-          page.send( "#{k}=", v )
+          page.send( "#{k}=", v ) unless page.has_key? k
         end if params
 
         page.send("output_page=", self[:page])
@@ -23,23 +23,24 @@ module Awestruct
         from_site = site.partials.find {|p| p.source_path == page.source_path}
 
         # Setup dependency tracking
-        if from_site
-          from_site.dependencies.add_dependent self[:page]
-          self[:page].dependencies.add_dependency from_site
-          Awestruct::Dependencies.track_dependency(from_site)
-        else
-          page.dependencies.add_dependent self[:page]
-          self[:page].dependencies.add_dependency page
-          Awestruct::Dependencies.track_dependency(page)
-          site.partials << page 
+        if Awestruct::Dependencies.should_track_dependencies
+          if from_site
+            from_site.dependencies.add_dependent self[:page]
+            self[:page].dependencies.add_dependency from_site
+            Awestruct::Dependencies.track_dependency(from_site)
+          else
+            page.dependencies.add_dependent self[:page]
+            self[:page].dependencies.add_dependency page
+            Awestruct::Dependencies.track_dependency(page)
+            site.partials << page
+          end
         end
 
         begin
           page.content
         rescue Exception => e
-          ExceptionHelper.log_error "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
-          ExceptionHelper.backtrace e 
-        end 
+          ExceptionHelper.log_building_error e, self[:page].relative_source_path
+        end
       end
     end
   end
