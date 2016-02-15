@@ -4,7 +4,6 @@ group :development do
   gem 'hashery', '~> 2.1.1'
   gem 'pry', :require => false
   gem 'rake', :require => false
-  gem 'ruby-prof'
   #gem 'pry-byebug', :require => false
 end
 

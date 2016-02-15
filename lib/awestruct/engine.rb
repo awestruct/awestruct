@@ -395,13 +395,11 @@ module Awestruct
     end
 
     def generate_output
-      require 'ruby-prof'
       FileUtils.mkdir_p( site.config.output_dir )
       return_value = [Awestruct::ExceptionHelper::EXITCODES[:success]]
       begin
         return_value = Parallel.map(@site.pages, site.generation) do |page|
           start_time = DateTime.now
-          RubyProf.start unless RubyProf.running?
           return_value = generate_page( page )
           $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if config.verbose
 
@@ -411,9 +409,6 @@ module Awestruct
         Awestruct::ExceptionHelper.log_error e
         return_value = [Awestruct::ExceptionHelper::EXITCODES[:generation_error]]
       end
-      result = RubyProf.stop
-      printer = RubyProf::MultiPrinter.new(result)
-      printer.print(path: File.join(config.dir, '.awestruct'), profile: 'profile')
 
       if return_value.nil? || return_value.include?(Awestruct::ExceptionHelper::EXITCODES[:generation_error])
         $LOG.error 'An error occurred during output generation, all pages may not have completed during generation'
