@@ -396,12 +396,12 @@ module Awestruct
 
     def generate_output
       require 'ruby-prof'
-      RubyProf.start unless RubyProf.running?
       FileUtils.mkdir_p( site.config.output_dir )
       return_value = [Awestruct::ExceptionHelper::EXITCODES[:success]]
       begin
         return_value = Parallel.map(@site.pages, site.generation) do |page|
           start_time = DateTime.now
+          RubyProf.start unless RubyProf.running?
           return_value = generate_page( page )
           $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if config.verbose
 
