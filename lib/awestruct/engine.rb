@@ -56,50 +56,50 @@ module Awestruct
       start_time = DateTime.now
       $LOG.verbose 'adjust_load_path' if config.verbose
       adjust_load_path
-      $LOG.trace "Total time in adjust_load_path: #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in adjust_load_path: #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'load_default_site_yaml' if config.verbose
       start_time = DateTime.now
       load_default_site_yaml( profile )
-      $LOG.trace "Total time in load_default_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_default_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'load_user_site_yaml -- profile' if config.verbose
       start_time = DateTime.now
       load_user_site_yaml( profile )
-      $LOG.trace "Total time in load_user_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_user_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'set_base_url' if config.verbose
       start_time = DateTime.now
       set_base_url( base_url, default_base_url )
-      $LOG.trace "Total time in set_base_url #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in set_base_url #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'load_yamls' if config.verbose
       start_time = DateTime.now
       load_yamls
-      $LOG.trace "Total time in load_yamls #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_yamls #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'load_pipeline' if config.verbose
       start_time = DateTime.now
       load_pipeline
-      $LOG.trace "Total time in load_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_pipeline #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'load_pages' if config.verbose
       start_time = DateTime.now
       load_pages
-      $LOG.trace "Total time in load_pages #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_pages #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'execute_pipeline' if config.verbose
       $LOG.info 'Excecuting pipeline...'
       start_time = DateTime.now
       execute_pipeline(false)
-      $LOG.trace "Total time in execute_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in execute_pipeline #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       begin
         if defined?(::Compass)
           $LOG.verbose 'configure_compass' if config.verbose
           start_time = DateTime.now
           configure_compass
-          $LOG.trace "Total time in configure_compass #{DateTime.now.to_time - start_time.to_time} seconds"
+          $LOG.trace "Total time in configure_compass #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
         end
       rescue LoadError
         # doesn't matter if we can't load it
@@ -107,19 +107,19 @@ module Awestruct
       $LOG.verbose 'set_urls' if config.verbose
       start_time = DateTime.now
       set_urls( site.pages )
-      $LOG.trace "Total time in set_urls #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in set_urls #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       $LOG.verbose 'build_page_index' if config.verbose
       start_time = DateTime.now
       build_page_index
-      $LOG.trace "Total time in build_page_index #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in build_page_index #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       if generate
         $LOG.debug 'generate_output' if config.debug
         $LOG.info 'Generating pages...'
         start_time = DateTime.now
         generate_output
-        $LOG.trace "Total time in generate_output #{DateTime.now.to_time - start_time.to_time} seconds"
+        $LOG.trace "Total time in generate_output #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
       end
       Awestruct::ExceptionHelper::EXITCODES[:success]
     end
@@ -398,10 +398,11 @@ module Awestruct
       FileUtils.mkdir_p( site.config.output_dir )
       return_value = [Awestruct::ExceptionHelper::EXITCODES[:success]]
       begin
+        $LOG.verbose "Using the following options from site.generation: #{site.generation}" if config.verbose
         return_value = Parallel.map(@site.pages, site.generation) do |page|
           start_time = DateTime.now
           return_value = generate_page( page )
-          $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if config.verbose
+          $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if config.verbose && config.perf
 
           return_value
         end

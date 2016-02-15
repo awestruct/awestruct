@@ -131,7 +131,8 @@ module Awestruct
         @config.track_dependencies = true if ( @options.auto )
         @config.verbose = true if ( @options.verbose )
         @config.debug = @options.debug
-        @config.quiet = true if ( @options.quiet )
+        @config.quiet = true if @options.quiet
+        @config.perf = true if @options.perf_log
       end
 
       def invoke_init()
