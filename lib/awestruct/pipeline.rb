@@ -53,7 +53,7 @@ module Awestruct
 
     def execute_extensions(site, on_reload)
       @before_all_extensions.each do |e|
-        $LOG.verbose "Executing before all extension #{e.class}"
+        $LOG.verbose "Executing before all extension #{e.class}" if site.config.verbose
 
         if on_reload && e.respond_to?
           start_time = DateTime.now
@@ -71,7 +71,7 @@ module Awestruct
       end
 
       @extensions.each do |e|
-        $LOG.verbose "Executing extension #{e.class}"
+        $LOG.verbose "Executing extension #{e.class}" if site.config.verbose
         if on_reload && e.respond_to?(:on_reload)
           start_time = DateTime.now
           e.on_reload(site)
@@ -83,7 +83,7 @@ module Awestruct
       end
 
       @after_all_extensions.each do |e|
-        $LOG.verbose "Executing after all extension #{e.class}"
+        $LOG.verbose "Executing after all extension #{e.class}" if site.config.verbose
         if on_reload && e.respond_to?(:on_reload)
           start_time = DateTime.now
           e.on_reload(site)
@@ -102,7 +102,7 @@ module Awestruct
 
     def apply_transformers(site, page, rendered)
       @transformers.each do |t|
-        $LOG.debug "Applying transformer #{t.class} for page #{page}" if site.config.verbose
+        $LOG.debug "Applying transformer #{t.class} for page #{page}" if site.config.verbose && site.config.debug
         start_time = DateTime.now
         rendered = t.transform( site, page, rendered )
         $LOG.trace "Total time in #{t.class}.transform #{DateTime.now.to_time - start_time.to_time} seconds" if site.config.verbose
@@ -112,7 +112,7 @@ module Awestruct
 
     def execute_after_generation(site)
       @after_generation_extensions.each do |e|
-        $LOG.verbose "Executing after generation #{e.class}"
+        $LOG.verbose "Executing after generation #{e.class}" if site.config.verbose
         start_time = DateTime.now
         if e.respond_to? :execute
           e.execute(site)

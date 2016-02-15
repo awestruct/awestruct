@@ -36,7 +36,7 @@ module Awestruct
       def initialize(opts = {})
         default_opts = { server: false, port: DEFAULT_PORT, bind_addr: DEFAULT_BIND_ADDR, auto: false, force: false,
                          init: false, framework: 'compass', scaffold: true, base_url: DEFAULT_BASE_URL, deploy: false,
-                         verbose: false, quiet: false, livereload: false, source_dir: Dir.pwd,
+                         verbose: false, quiet: false, livereload: false, source_dir: Dir.pwd, debug: false,
                          output_dir: File.expand_path('_site'), generate_on_access: DEFAULT_GENERATE_ON_ACCESS,
                          perf_log: false
                        }.merge opts
@@ -60,6 +60,7 @@ module Awestruct
         @output_dir = default_opts[:output_dir]
         @generate_on_access = default_opts[:generate_on_access]
         @perf_log = default_opts[:perf_log]
+        @debug = default_opts[:debug]
       end
 
       def self.parse!(args)

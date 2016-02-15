@@ -14,7 +14,7 @@ module Awestruct
       def match(path)
         matcher = ::Tilt[File.basename(path)]
         if matcher.nil?
-          $LOG.debug(%(Copying #{path})) if Awestruct::Engine.instance.config.verbose
+          $LOG.debug(%(Copying #{path})) if Awestruct::Engine.instance.config.verbose && Awestruct::Engin.instance.config.debug
           return false
         end
 

@@ -54,41 +54,41 @@ module Awestruct
 
     def run(profile, base_url, default_base_url, force=false, generate=true)
       start_time = DateTime.now
-      $LOG.verbose 'adjust_load_path'
+      $LOG.verbose 'adjust_load_path' if config.verbose
       adjust_load_path
       $LOG.trace "Total time in adjust_load_path: #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'load_default_site_yaml'
+      $LOG.verbose 'load_default_site_yaml' if config.verbose
       start_time = DateTime.now
       load_default_site_yaml( profile )
       $LOG.trace "Total time in load_default_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'load_user_site_yaml -- profile'
+      $LOG.verbose 'load_user_site_yaml -- profile' if config.verbose
       start_time = DateTime.now
       load_user_site_yaml( profile )
       $LOG.trace "Total time in load_user_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'set_base_url'
+      $LOG.verbose 'set_base_url' if config.verbose
       start_time = DateTime.now
       set_base_url( base_url, default_base_url )
       $LOG.trace "Total time in set_base_url #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'load_yamls'
+      $LOG.verbose 'load_yamls' if config.verbose
       start_time = DateTime.now
       load_yamls
       $LOG.trace "Total time in load_yamls #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'load_pipeline'
+      $LOG.verbose 'load_pipeline' if config.verbose
       start_time = DateTime.now
       load_pipeline
       $LOG.trace "Total time in load_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'load_pages'
+      $LOG.verbose 'load_pages' if config.verbose
       start_time = DateTime.now
       load_pages
       $LOG.trace "Total time in load_pages #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'execute_pipeline'
+      $LOG.verbose 'execute_pipeline' if config.verbose
       $LOG.info 'Excecuting pipeline...'
       start_time = DateTime.now
       execute_pipeline(false)
@@ -96,7 +96,7 @@ module Awestruct
 
       begin
         if defined?(::Compass)
-          $LOG.verbose 'configure_compass'
+          $LOG.verbose 'configure_compass' if config.verbose
           start_time = DateTime.now
           configure_compass
           $LOG.trace "Total time in configure_compass #{DateTime.now.to_time - start_time.to_time} seconds"
@@ -104,18 +104,18 @@ module Awestruct
       rescue LoadError
         # doesn't matter if we can't load it
       end
-      $LOG.verbose 'set_urls'
+      $LOG.verbose 'set_urls' if config.verbose
       start_time = DateTime.now
       set_urls( site.pages )
       $LOG.trace "Total time in set_urls #{DateTime.now.to_time - start_time.to_time} seconds"
 
-      $LOG.verbose 'build_page_index'
+      $LOG.verbose 'build_page_index' if config.verbose
       start_time = DateTime.now
       build_page_index
       $LOG.trace "Total time in build_page_index #{DateTime.now.to_time - start_time.to_time} seconds"
 
       if generate
-        $LOG.debug 'generate_output'
+        $LOG.debug 'generate_output' if config.debug
         $LOG.info 'Generating pages...'
         start_time = DateTime.now
         generate_output
@@ -267,7 +267,7 @@ module Awestruct
 
     def set_urls(pages)
       pages.each do |page|
-        $LOG.debug "relative_source_path #{page.relative_source_path}"
+        $LOG.debug "relative_source_path #{page.relative_source_path}" if config.debug
         page_path = page.output_path
         if page_path =~ /^\//
           page.url = page_path
@@ -388,9 +388,9 @@ module Awestruct
     end
 
     def load_pages
-      $LOG.debug "layout_page_loader.load_all :post"
+      $LOG.debug "layout_page_loader.load_all :post" if config.debug
       @layout_page_loader.load_all( :post )
-      $LOG.debug "site_page_loader.load_all :inline"
+      $LOG.debug "site_page_loader.load_all :inline" if config.debug 
       @site_page_loader.load_all( :inline )
     end
 
@@ -403,7 +403,7 @@ module Awestruct
         return_value = Parallel.map(@site.pages, site.generation) do |page|
           start_time = DateTime.now
           return_value = generate_page( page )
-          $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if site.config.verbose
+          $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if config.verbose
 
           return_value
         end
@@ -425,7 +425,7 @@ module Awestruct
     def generate_page(page, produce_output=true)
       if produce_output
         generated_path = File.join( site.config.output_dir, page.output_path )
-        $LOG.debug "Generating: #{generated_path}" if config.verbose
+        $LOG.debug "Generating: #{generated_path}" if config.verbose && config.debug
 
         c = ''
         begin
@@ -445,9 +445,9 @@ module Awestruct
         Awestruct::ExceptionHelper::EXITCODES[:success]
       elsif site.config.track_dependencies
         if page.dependencies.load!
-          $LOG.debug "Cached:     #{generated_path}"
+          $LOG.debug "Cached:     #{generated_path}" if config.debug
         else
-          $LOG.debug "Analyzing:  #{generated_path}"
+          $LOG.debug "Analyzing:  #{generated_path}" if config.debug
           page.rendered_content
         end
         return Awestruct::ExceptionHelper::EXITCODES[:success]
@@ -477,7 +477,7 @@ module Awestruct
 
       regen_pages = page_dependencies( page )
 
-      $LOG.debug 'Starting regeneration of content dependent pages:' if regen_pages.size > 0
+      $LOG.debug 'Starting regeneration of content dependent pages:' if regen_pages.size > 0 && config.debug
 
       regen_pages.each do |p|
         $LOG.info "Regenerating page #{p.output_path}"
