@@ -89,7 +89,7 @@ module Awestruct
       $LOG.trace "Total time in load_pages #{DateTime.now.to_time - start_time.to_time} seconds"
 
       $LOG.verbose 'execute_pipeline'
-      $LOG.info 'Excecuting pipeline...'
+      $LOG.info 'Executing pipeline...'
       start_time = DateTime.now
       execute_pipeline(false)
       $LOG.trace "Total time in execute_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
