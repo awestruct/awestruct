@@ -19,7 +19,7 @@ module Awestruct
       end
 
       def evaluate(scope, locals, &block)
-        @output ||= (scope.document = ::Asciidoctor.load(data, options, &block)).convert
+        @output ||= (scope.document = ::Asciidoctor.load(data, options)).convert
       end
 
       def allows_script?
