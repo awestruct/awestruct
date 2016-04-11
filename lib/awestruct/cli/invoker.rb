@@ -97,7 +97,7 @@ module Awestruct
           abort( "No config file at #{site_yaml_file}" )
         end
 
-        site_yaml = YAML.load( ERB.new(File.read( site_yaml_file )).result )
+        site_yaml = YAML.load( ERB.new(File.read( site_yaml_file ), nil, '<>').result )
 
         if ( !site_yaml )
           abort( "Failed to parse #{site_yaml_file}" )
