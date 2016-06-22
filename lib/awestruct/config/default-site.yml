@@ -17,7 +17,7 @@ content_syntax:
   ad: asciidoc
 
 haml:
-  :attr_wrapper: '"' 
+  :attr_wrapper: '"'
   :escape_attrs: :once
   :format: :xhtml
 
@@ -43,7 +43,7 @@ textile:
   :no_span_caps: true
 
 generation:
-  :in_theads: <%= Parallel.processor_count * 10 %>
+  :in_threads: <%= Parallel.processor_count * 10 %>
 
 profiles:
   development:
