@@ -142,9 +142,8 @@ module Awestruct
           if error_page[:__is_layout] == true || context[:__is_layout] == true
             ExceptionHelper.log_message "An error during rendering layout file #{context[:__effective_page].relative_source_path} for #{error_page.relative_source_path} occurred."
             ExceptionHelper.log_building_error e, error_page.source_path
-
           elsif error_page.is_partial?
-            ExceptionHelper.log_message "An error during rendering partial file #{error_page.relative_source_path} for #{error_page[:real_page].relative_source_path} occurred."
+            ExceptionHelper.log_message "An error during rendering partial file #{error_page.source_path} for #{error_page[:real_page].relative_source_path} occurred."
             ExceptionHelper.log_building_error e, error_page[:real_page].source_path
           else
             ExceptionHelper.log_message "An error during rendering #{error_page.relative_source_path} occurred."
