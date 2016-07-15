@@ -39,8 +39,9 @@ module Awestruct
         begin
           page.content
         rescue Exception => e
-          ExceptionHelper.log_building_error e, self[:page].relative_source_path
-        end
+          ExceptionHelper.log_message "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
+          ExceptionHelper.log_backtrace e 
+        end 
       end
     end
   end
