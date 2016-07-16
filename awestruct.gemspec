@@ -4,7 +4,7 @@ require 'awestruct/version'
 spec = Gem::Specification.new do |s|
   s.name          = 'awestruct'
   s.version       = Awestruct::VERSION
-  s.date          = '2016-02-09'
+  s.date          = '2016-07-16'
 
   s.authors       = ['Bob McWhirter', 'Jason Porter', 'Lance Ball', 'Dan Allen', 'Torsten Curdt', 'other contributors']
   s.email         = ['bob@mcwhirter.org', 'lightguard.jp@gmail.com', 'lball@redhat.com', 'dan.j.allen@gmail.com', 'tcurdt@vafer.org']
@@ -48,10 +48,10 @@ Compass and sass are no longer hard dependencies. You'll need too add them on yo
   s.add_dependency 'oga', '~> 2.0'
   s.add_dependency 'parallel', '~> 1.0', '> 1.1.1'
 
-  s.add_development_dependency 'nokogiri', '~> 1.5.0','>= 1.5.10'
+  s.add_development_dependency 'nokogiri', '>= 1.5.10'
   s.add_development_dependency 'compass-960-plugin', '~> 0.10','>= 0.10.4'
-  s.add_development_dependency 'bootstrap-sass', '~> 3', '>= 3.2.0.2'
-  s.add_development_dependency 'zurb-foundation', '~> 4.3.2', '>= 4.3.2'
-  s.add_development_dependency 'rspec', '~> 3.0'
-  s.add_development_dependency 'guard-rspec', '~> 4.0'
+  s.add_development_dependency 'bootstrap-sass', '>= 3.2.0.2'
+  s.add_development_dependency 'zurb-foundation', '>= 4.3.2'
+  s.add_development_dependency 'rspec', '>= 3.0'
+  s.add_development_dependency 'guard-rspec', '>= 4.0'
 end

@@ -77,7 +77,7 @@ module Awestruct
 
       def load_gem(add_compass = false)
         spec = {:dependencies => {}}
-        gem_spec = Gem::Specification.find_by_name 'awestruct'
+        gem_spec = Gem::Specification.find_all_by_name('awestruct').last # Make sure we have the latest version
 
         if add_compass
           gem_spec.add_dependency('compass', '>= 1.0.1')
