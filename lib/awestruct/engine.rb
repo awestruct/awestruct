@@ -324,21 +324,21 @@ module Awestruct
         config.environment = site.profile
         config.project_path = site.config.dir
         config.sass_path = File.join(config.project_path, 'stylesheets')
-        config.http_path = site.base_url || site.config.options.base_url || '/'
+        config.asset_host = lambda { |_| site.base_url || site.config.options.base_url || '/' }
         config.css_path = File.join(site.output_dir, 'stylesheets')
         config.javascripts_path = File.join(site.output_dir, 'javascripts')
-        config.http_javascripts_dir = File.join(config.http_path, 'javascripts')
-        config.http_stylesheets_dir = File.join(config.http_path, 'stylesheets')
+        config.http_javascripts_dir = 'javascripts'
+        config.http_stylesheets_dir = 'stylesheets'
         config.sprite_load_path = [config.images_path]
-        config.http_images_dir = File.join(config.http_path, 'images')
+        config.http_images_dir = 'images'
         config.images_path = File.join(config.project_path, 'images')
         config.fonts_dir = 'fonts'
         config.fonts_path = File.join(config.project_path, 'fonts')
-        config.http_fonts_dir = File.join(config.http_path, 'fonts')
+        config.http_fonts_dir = 'fonts'
 
         if config.generated_images_dir == config.default_for('generated_images_dir')
           config.generated_images_dir = File.join(site.output_dir, 'images')
-          config.http_generated_images_dir = File.join(config.http_path, 'images')
+          config.http_generated_images_dir = 'images'
         end
 
         config.line_comments = lambda do
