@@ -1,6 +1,7 @@
 require 'awestruct/deploy/base_deploy'
 require 'shellwords'
 require 'open3'
+require 'etc'
 
 module Awestruct
   module Deploy
@@ -9,6 +10,7 @@ module Awestruct
       def initialize(site_config, deploy_config)
         super
         @host      = deploy_config['host']
+        @username  = deploy_config['username'] || Etc.getlogin
         @path      = File.join( deploy_config['path'], '/' )
         @exclude   = deploy_config['exclude']
       end
@@ -17,9 +19,10 @@ module Awestruct
         exclude_option = (!@exclude.nil? and !@exclude.empty?) ? "--exclude=" + Shellwords.escape(@exclude) : nil
         site_path = Shellwords.escape(@site_path)
         host = Shellwords.escape(@host)
+        username = Shellwords.escape(@username)
         path = Shellwords.escape(@path)
 
-        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{exclude_option} #{site_path} #{host}:#{path}"
+        cmd = "rsync -r -l -i --no-p --no-g --chmod=Dg+sx,ug+rw --delete #{exclude_option} #{site_path} #{username}@#{host}:#{path}"
 
         Open3.popen3( cmd ) do |stdin, stdout, stderr|
           stdin.close
