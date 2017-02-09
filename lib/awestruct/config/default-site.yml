@@ -17,7 +17,7 @@ content_syntax:
   ad: asciidoc
 
 haml:
-  :attr_wrapper: '"' 
+  :attr_wrapper: '"'
   :escape_attrs: :once
   :format: :xhtml
 
