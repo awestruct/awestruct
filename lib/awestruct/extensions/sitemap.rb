@@ -66,7 +66,7 @@ module Awestruct
       def set_sitemap_data( page )
         site = page.site
         munge_date( page )
-        page.priority         ||= (site.priority or 0.1)
+        page.priority         ||= (site.priority or 0.5)
         page.change_frequency ||= (site.change_frequency or 'never')
         page
       end
