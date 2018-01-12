@@ -40,10 +40,10 @@ module Awestruct
 
     def fully_qualify_urls(base_url, text)
       begin
-        doc = Oga.parse_html text
+        doc = Oga.parse_xml text
 
         doc.each_node do |elem|
-          if elem.is_a?(Oga::XML::Element) && elem.html?
+          if elem.is_a?(Oga::XML::Element)
             case elem.name
             when 'a'
               elem.set 'href', fix_url(base_url, elem.get('href')) if elem.get('href')
