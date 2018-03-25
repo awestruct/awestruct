@@ -8,8 +8,8 @@ verify = lambda { |output|
 verify_atom = lambda { |output|
   output.should == '<?xml version="1.0" encoding="utf-8" ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <id>http://example.com</id>
-  <title>A News Feed</title>
+<id>http://example.com</id>
+<title>A News Feed</title>
 </feed>
 '
 }

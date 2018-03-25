@@ -37,8 +37,7 @@ describe Awestruct::Handlers::PageDelegatingHandler do
 
     page = Awestruct::Page.new( @site, Awestruct::Handlers::PageDelegatingHandler.new( @site, inner_page) )
     c = page.content
-    c.should =~ %r(<h1>This is a haml layout</h1>)
-    c.should =~ %r(<h2>This is the inner page</h2>)
+    c.should =~ %r(<h1>This is a haml layout</h1>\n<h2>This is the inner page\n</h2>\n)
     c.should_not =~ %r(<b>)
   end
 
@@ -53,14 +52,11 @@ describe Awestruct::Handlers::PageDelegatingHandler do
     page.output_path = '/outer-page.html'
 
     c = page.content
-    c.should =~ %r(<h1>This is a haml layout</h1>)
-    c.should =~ %r(<h2>This is the inner page</h2>)
+    c.should =~ %r(<h1>This is a haml layout</h1>\n<h2>This is the inner page\n</h2>\n)
     c.should_not =~ %r(<b>)
 
-    c.should_not =~ %r(<b>)
     c = page.rendered_content
-    c.should =~ %r(<h1>This is a haml layout</h1>)
-    c.should =~ %r(<h2>This is the inner page</h2>)
+    c.should =~ %r(<h1>This is a haml layout</h1>\n<h2>This is the inner page\n</h2>\n)
     c.should =~ %r(<b>)
   end
 
@@ -70,13 +66,11 @@ describe Awestruct::Handlers::PageDelegatingHandler do
     page.layout= 'outer-layout'
 
     c = page.content
-    c.should =~ %r(<h1>This is a haml layout</h1>)
-    c.should =~ %r(<h2>This is the inner page</h2>)
+    c.should =~ %r(<h1>This is a haml layout</h1>\n<h2>This is the inner page\n</h2>\n)
     c.should_not =~ %r(<b>)
 
     c = page.rendered_content
-    c.should =~ %r(<h1>This is a haml layout</h1>)
-    c.should =~ %r(<h2>This is the inner page</h2>)
+    c.should =~ %r(<h1>This is a haml layout</h1>\n<h2>This is the inner page\n</h2>\n)
     c.should =~ %r(<b>)
   end
 
