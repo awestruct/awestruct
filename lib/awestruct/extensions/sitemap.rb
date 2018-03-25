@@ -11,7 +11,7 @@ module Awestruct
 
       def initialize
         @excluded_files = [ '/.htaccess', '/favicon.ico' ,'/robots.txt', ].to_set
-        @excluded_extensions = ['.atom', '.scss', '.css', '.png', '.jpg', '.gif', '.js' ].to_set
+        @excluded_extensions = ['.atom', '.scss', '.css', '.less', '.png', '.jpg', '.gif', '.js', '.ico', '.svg', '' ].to_set
       end
 
       def execute( site )
