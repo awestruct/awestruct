@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '~> 2.4.0'
 
 group :development do
   gem 'hashery', '~> 2.1.1'
@@ -29,6 +30,8 @@ group :test do
   gem 'sass'
   gem 'bootstrap-sass'
   gem 'zurb-foundation'
+  gem 'rspec'
+  gem 'rspec_runner'
   gem "win32-open3-19", :platforms => :mingw # htmlcompressor depends on old yui compressor, that needs this on win32
 end
 

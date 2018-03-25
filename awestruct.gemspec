@@ -17,7 +17,7 @@ spec = Gem::Specification.new do |s|
   s.license       = 'MIT'
 
   s.platform      = Gem::Platform::RUBY
-  s.required_ruby_version = '>= 2.0'
+  s.required_ruby_version = '>= 2.4.0'
 
   s.has_rdoc      = true
   s.rdoc_options  = ['--charset=UTF-8']
