@@ -217,6 +217,34 @@ describe Awestruct::Engine do
     end
   end
 
+  it "should exit unsuccessfully if page syntax is invalid, using threads" do
+    output_dir = Dir.mktmpdir 'engine-generate-with-errors'
+
+    begin
+      Logging.init :trace, :debug, :verbose, :info, :warn, :error, :fatal
+      $LOG = Logging.logger.new 'awestruct'
+      $LOG.add_appenders(
+          Logging.appenders.string_io({level: :info, layout: Logging.layouts.pattern(pattern: "%m\n"),
+                                       color_scheme: :default})
+      )
+      $LOG.level = :debug
+
+      opts = Awestruct::CLI::Options.new
+      opts.source_dir = test_data_dir 'engine-generate-syntax-errors'
+      opts.output_dir = output_dir
+      config = Awestruct::Config.new( opts )
+      engine = Awestruct::Engine.new(config)
+      begin
+        engine.run('development', 'http://localhost:4242', 'http://localhost:4242')
+        fail('Expected generation error')
+      rescue SystemExit => e
+        e.status.should eql Awestruct::ExceptionHelper::EXITCODES[:generation_error]
+      end
+    ensure
+      FileUtils.remove_entry_secure output_dir, true
+    end
+  end
+
   it "should exit unsuccessfully if generate page output fails, using processes" do
     output_dir = Dir.mktmpdir 'engine-generate-with-errors'
 
