@@ -4,7 +4,7 @@ require 'awestruct/version'
 spec = Gem::Specification.new do |s|
   s.name          = 'awestruct'
   s.version       = Awestruct::VERSION
-  s.date          = '2019-08-13'
+  s.date          = '2019-08-19'
 
   s.authors       = ['Bob McWhirter', 'Jason Porter', 'Lance Ball', 'Dan Allen', 'Torsten Curdt', 'other contributors']
   s.email         = ['bob@mcwhirter.org', 'lightguard.jp@gmail.com', 'lball@redhat.com', 'dan.j.allen@gmail.com', 'tcurdt@vafer.org']
@@ -23,7 +23,7 @@ spec = Gem::Specification.new do |s|
   s.rdoc_options  = ['--charset=UTF-8']
   s.extra_rdoc_files = 'README.md'
 
-  s.files         = `git ls-files -z -- {lib,man,spec}/* {README,LICENSE}* *{.gemspec,file}`.split("\0")
+  s.files         = `git ls-files -z -- lib/* man/* spec/* README* LICENSE* *.gemspec *file`.split("\0")
   s.test_files    = s.files.select { |path| path =~ /^spec\/.*_spec\.rb/ }
   s.executables   = `git ls-files -z -- bin/*`.split("\0").map {|f| File.basename f }
   s.require_paths = ['lib']
