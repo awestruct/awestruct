@@ -1,7 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/awestruct/awestruct.png)](http://travis-ci.org/awestruct/awestruct)
 
-[![Build Status](https://buildhive.cloudbees.com/job/awestruct/job/awestruct/badge/icon)](https://buildhive.cloudbees.com/job/awestruct/job/awestruct/)
-
 # For more information
 
 Please see the complete site at <http://awestruct.org/>.
