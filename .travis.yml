@@ -12,27 +12,21 @@ rvm:
 jdk:
   - openjdk8
   - openjdk11
-  - oraclejdk8
+  - oraclejdk11
 matrix:
   exclude:
     - rvm: 2.4.3
       jdk: openjdk8
     - rvm: 2.4.3
       jdk: openjdk11
-    - rvm: 2.4.3
-      jdk: oraclejdk8
     - rvm: 2.5.0
       jdk: openjdk8
     - rvm: 2.5.0
       jdk: openjdk11
-    - rvm: 2.5.0
-      jdk: oraclejdk8
     - rvm: 2.6.0
       jdk: openjdk8
     - rvm: 2.6.0
       jdk: openjdk11
-    - rvm: 2.6.0
-      jdk: oraclejdk8
 
   allow_failures:
     - rvm: jruby-head
