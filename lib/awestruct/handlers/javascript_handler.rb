@@ -21,11 +21,11 @@ module Awestruct
       end
 
       def simple_name
-        File.basename( relative_source_path, '.js' )
+        File.basename( relative_source_path || path, '.js' )
       end
 
       def output_filename
-        File.basename( relative_source_path )
+        File.basename( relative_source_path || path)
       end
 
       def output_extension

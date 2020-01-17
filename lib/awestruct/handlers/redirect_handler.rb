@@ -21,7 +21,7 @@ module Awestruct
       end
 
       def simple_name
-        File.basename( relative_source_path, '.redirect' ) 
+        File.basename( relative_source_path || path, '.redirect' ) 
       end
 
       def output_filename
