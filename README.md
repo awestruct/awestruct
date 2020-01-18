@@ -1,10 +1,21 @@
-[![Build Status](https://secure.travis-ci.org/awestruct/awestruct.png)](http://travis-ci.org/awestruct/awestruct)
+# Awestruct
+[![Gem](https://img.shields.io/gem/v/awestruct)](https://rubygems.org/gems/awestruct)
+[![Gem](https://img.shields.io/gem/dt/awestruct?color=blue)](https://rubygems.org/gems/awestruct)
+[![Build Status](https://secure.travis-ci.org/awestruct/awestruct.png)](https://travis-ci.org/awestruct/awestruct)
 
-# For more information
+## Requirements
+
+Ruby 2.4 or later
+
+## Getting started
+
+Install Awestruct using `gem install awestruct`. Then you can initialize an Awestruct projet by running `awestruct --init`. To generate the static site use `awestruct generate`.
+
+## For more information
 
 Please see the complete site at <http://awestruct.org/>.
 
-# License
+## License
 
     Copyright (c) 2010-2014 Bob McWhirter and contributors (see git log)
 
