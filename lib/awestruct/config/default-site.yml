@@ -42,8 +42,7 @@ asciidoctor:
 textile:
   :no_span_caps: true
 
-generation:
-  :in_threads: <%= Parallel.processor_count * 10 %>
+generation: {}
 
 profiles:
   development:
