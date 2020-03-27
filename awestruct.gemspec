@@ -2,7 +2,7 @@ $:.push File.expand_path('../lib', __FILE__)
 require 'awestruct/version'
 
 spec = Gem::Specification.new do |s|
-  s.name          = 'base2awestruct'
+  s.name          = 'awestruct'
   s.version       = Awestruct::VERSION
 
   s.date          = '2020-03-27'
