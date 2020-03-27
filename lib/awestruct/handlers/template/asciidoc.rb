@@ -19,7 +19,10 @@ module Awestruct
       end
 
       def evaluate(scope, locals, &block)
-        @output ||= ::Asciidoctor.render(data, options, &block)
+        if scope.class == ::Awestruct::Context
+          scope[:document] = ::Asciidoctor.load(data, options) unless scope.key? :document
+          @output ||= scope[:document].convert
+        end
       end
 
       def allows_script?

@@ -105,6 +105,7 @@ describe Awestruct::Handlers::TiltHandler do
     specify 'should not throw exceptions; instead have the error in the rendered output' do
       # setup
       @site.config.verbose = true
+      @site.config.debug = true
       Awestruct::Engine.new(@site.config)
       Tilt::register Tilt::BogusTemplate, '.bogus',
       log = StringIO.new

@@ -11,7 +11,7 @@ module Awestruct
 
       def initialize
         @excluded_files = [ '/.htaccess', '/favicon.ico' ,'/robots.txt', ].to_set
-        @excluded_extensions = ['.atom', '.scss', '.css', '.png', '.jpg', '.gif', '.js' ].to_set
+        @excluded_extensions = ['.atom', '.scss', '.css', '.less', '.png', '.jpg', '.gif', '.js', '.ico', '.svg', '' ].to_set
       end
 
       def execute( site )
@@ -66,7 +66,7 @@ module Awestruct
       def set_sitemap_data( page )
         site = page.site
         munge_date( page )
-        page.priority         ||= (site.priority or 0.1)
+        page.priority         ||= (site.priority or 0.5)
         page.change_frequency ||= (site.change_frequency or 'never')
         page
       end

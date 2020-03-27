@@ -117,7 +117,7 @@ describe Awestruct::Engine do
 
     expect( Compass.configuration.line_comments ).to eq false
     expect( Compass.configuration.output_style ).to eq :compressed
-    expect( Compass.configuration.http_path ).to eq "http://localhost:4242"
+    expect( Compass.configuration.asset_host.call("ignored_by_lambda")).to eq "http://localhost:4242"
     expect( Compass.configuration.relative_assets ).to eq false 
   end
 
@@ -203,6 +203,34 @@ describe Awestruct::Engine do
 
       opts = Awestruct::CLI::Options.new
       opts.source_dir = test_data_dir 'engine-generate-with-errors'
+      opts.output_dir = output_dir
+      config = Awestruct::Config.new( opts )
+      engine = Awestruct::Engine.new(config)
+      begin
+        engine.run('development', 'http://localhost:4242', 'http://localhost:4242')
+        fail('Expected generation error')
+      rescue SystemExit => e
+        e.status.should eql Awestruct::ExceptionHelper::EXITCODES[:generation_error]
+      end
+    ensure
+      FileUtils.remove_entry_secure output_dir, true
+    end
+  end
+
+  it "should exit unsuccessfully if page syntax is invalid, using threads" do
+    output_dir = Dir.mktmpdir 'engine-generate-with-errors'
+
+    begin
+      Logging.init :trace, :debug, :verbose, :info, :warn, :error, :fatal
+      $LOG = Logging.logger.new 'awestruct'
+      $LOG.add_appenders(
+          Logging.appenders.string_io({level: :info, layout: Logging.layouts.pattern(pattern: "%m\n"),
+                                       color_scheme: :default})
+      )
+      $LOG.level = :debug
+
+      opts = Awestruct::CLI::Options.new
+      opts.source_dir = test_data_dir 'engine-generate-syntax-errors'
       opts.output_dir = output_dir
       config = Awestruct::Config.new( opts )
       engine = Awestruct::Engine.new(config)

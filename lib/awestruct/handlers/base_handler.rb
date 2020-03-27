@@ -40,10 +40,12 @@ module Awestruct
       end
 
       def output_path
+        return @output_path unless @output_path.nil?
+
         ( p = relative_source_path ) if relative_source_path
         ( of = output_filename ) if output_filename
-        return File.join( File.dirname( p ), output_filename ) if ( p && of )
-        nil
+        @output_path = File.join( File.dirname( p ), output_filename ) if ( p && of )
+        @output_path || nil
       end
 
       def output_extension

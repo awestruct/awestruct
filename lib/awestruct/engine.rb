@@ -54,72 +54,72 @@ module Awestruct
 
     def run(profile, base_url, default_base_url, force=false, generate=true)
       start_time = DateTime.now
-      $LOG.verbose 'adjust_load_path'
+      $LOG.verbose 'adjust_load_path' if config.verbose
       adjust_load_path
-      $LOG.trace "Total time in adjust_load_path: #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in adjust_load_path: #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'load_default_site_yaml'
+      $LOG.verbose 'load_default_site_yaml' if config.verbose
       start_time = DateTime.now
       load_default_site_yaml( profile )
-      $LOG.trace "Total time in load_default_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_default_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'load_user_site_yaml -- profile'
+      $LOG.verbose 'load_user_site_yaml -- profile' if config.verbose
       start_time = DateTime.now
       load_user_site_yaml( profile )
-      $LOG.trace "Total time in load_user_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_user_site_yaml #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'set_base_url'
+      $LOG.verbose 'set_base_url' if config.verbose
       start_time = DateTime.now
       set_base_url( base_url, default_base_url )
-      $LOG.trace "Total time in set_base_url #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in set_base_url #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'load_yamls'
+      $LOG.verbose 'load_yamls' if config.verbose
       start_time = DateTime.now
       load_yamls
-      $LOG.trace "Total time in load_yamls #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_yamls #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'load_pipeline'
+      $LOG.verbose 'load_pipeline' if config.verbose
       start_time = DateTime.now
       load_pipeline
-      $LOG.trace "Total time in load_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_pipeline #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'load_pages'
+      $LOG.verbose 'load_pages' if config.verbose
       start_time = DateTime.now
       load_pages
-      $LOG.trace "Total time in load_pages #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in load_pages #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'execute_pipeline'
-      $LOG.info 'Excecuting pipeline...'
+      $LOG.verbose 'execute_pipeline' if config.verbose
+      $LOG.info 'Executing pipeline...'
       start_time = DateTime.now
       execute_pipeline(false)
-      $LOG.trace "Total time in execute_pipeline #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in execute_pipeline #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       begin
         if defined?(::Compass)
-          $LOG.verbose 'configure_compass'
+          $LOG.verbose 'configure_compass' if config.verbose
           start_time = DateTime.now
           configure_compass
-          $LOG.trace "Total time in configure_compass #{DateTime.now.to_time - start_time.to_time} seconds"
+          $LOG.trace "Total time in configure_compass #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
         end
       rescue LoadError
         # doesn't matter if we can't load it
       end
-      $LOG.verbose 'set_urls'
+      $LOG.verbose 'set_urls' if config.verbose
       start_time = DateTime.now
       set_urls( site.pages )
-      $LOG.trace "Total time in set_urls #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in set_urls #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
-      $LOG.verbose 'build_page_index'
+      $LOG.verbose 'build_page_index' if config.verbose
       start_time = DateTime.now
       build_page_index
-      $LOG.trace "Total time in build_page_index #{DateTime.now.to_time - start_time.to_time} seconds"
+      $LOG.trace "Total time in build_page_index #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
 
       if generate
-        $LOG.debug 'generate_output'
+        $LOG.debug 'generate_output' if config.debug
         $LOG.info 'Generating pages...'
         start_time = DateTime.now
         generate_output
-        $LOG.trace "Total time in generate_output #{DateTime.now.to_time - start_time.to_time} seconds"
+        $LOG.trace "Total time in generate_output #{DateTime.now.to_time - start_time.to_time} seconds" if config.perf
       end
       Awestruct::ExceptionHelper::EXITCODES[:success]
     end
@@ -181,7 +181,7 @@ module Awestruct
     def load_site_yaml(yaml_path, profile = nil)
       if File.exist?(yaml_path)
         begin
-          data = YAML.load( ERB.new(File.read( yaml_path, :encoding => 'bom|utf-8' )).result )
+          data = YAML.load( ERB.new(File.read( yaml_path, :encoding => 'bom|utf-8' ), nil, '<>').result )
           if profile
             # JP: Interpolation now turned off by default, turn it per page if needed
             site.interpolate = false
@@ -211,7 +211,7 @@ module Awestruct
 
     def load_yaml(yaml_path)
       begin
-        data = YAML.load( ERB.new(File.read( yaml_path )).result )
+        data = YAML.load( ERB.new(File.read( yaml_path ), nil, '<>').result )
       rescue Exception => e
         ExceptionHelper.log_building_error e, yaml_path
         ExceptionHelper.mark_failed
@@ -267,7 +267,7 @@ module Awestruct
 
     def set_urls(pages)
       pages.each do |page|
-        $LOG.debug "relative_source_path #{page.relative_source_path}"
+        $LOG.debug "relative_source_path #{page.relative_source_path}" if config.debug
         page_path = page.output_path
         if page_path =~ /^\//
           page.url = page_path
@@ -324,21 +324,21 @@ module Awestruct
         config.environment = site.profile
         config.project_path = site.config.dir
         config.sass_path = File.join(config.project_path, 'stylesheets')
-        config.http_path = site.base_url || site.config.options.base_url || '/'
+        config.asset_host = lambda { |_| site.base_url || site.config.options.base_url || '/' }
         config.css_path = File.join(site.output_dir, 'stylesheets')
         config.javascripts_path = File.join(site.output_dir, 'javascripts')
-        config.http_javascripts_dir = File.join(config.http_path, 'javascripts')
-        config.http_stylesheets_dir = File.join(config.http_path, 'stylesheets')
+        config.http_javascripts_dir = 'javascripts'
+        config.http_stylesheets_dir = 'stylesheets'
         config.sprite_load_path = [config.images_path]
-        config.http_images_dir = File.join(config.http_path, 'images')
+        config.http_images_dir = 'images'
         config.images_path = File.join(config.project_path, 'images')
         config.fonts_dir = 'fonts'
         config.fonts_path = File.join(config.project_path, 'fonts')
-        config.http_fonts_dir = File.join(config.http_path, 'fonts')
+        config.http_fonts_dir = 'fonts'
 
         if config.generated_images_dir == config.default_for('generated_images_dir')
           config.generated_images_dir = File.join(site.output_dir, 'images')
-          config.http_generated_images_dir = File.join(config.http_path, 'images')
+          config.http_generated_images_dir = 'images'
         end
 
         config.line_comments = lambda do
@@ -388,9 +388,9 @@ module Awestruct
     end
 
     def load_pages
-      $LOG.debug "layout_page_loader.load_all :post"
+      $LOG.debug "layout_page_loader.load_all :post" if config.debug
       @layout_page_loader.load_all( :post )
-      $LOG.debug "site_page_loader.load_all :inline"
+      $LOG.debug "site_page_loader.load_all :inline" if config.debug 
       @site_page_loader.load_all( :inline )
     end
 
@@ -398,10 +398,11 @@ module Awestruct
       FileUtils.mkdir_p( site.config.output_dir )
       return_value = [Awestruct::ExceptionHelper::EXITCODES[:success]]
       begin
+        $LOG.verbose "Using the following options from site.generation: #{site.generation}" if config.verbose
         return_value = Parallel.map(@site.pages, site.generation) do |page|
           start_time = DateTime.now
           return_value = generate_page( page )
-          $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if site.config.verbose
+          $LOG.trace "Total time generating #{page.output_path} #{DateTime.now.to_time - start_time.to_time} seconds" if config.verbose && config.perf
 
           return_value
         end
@@ -420,7 +421,7 @@ module Awestruct
     def generate_page(page, produce_output=true)
       if produce_output
         generated_path = File.join( site.config.output_dir, page.output_path )
-        $LOG.debug "Generating: #{generated_path}" if config.verbose
+        $LOG.debug "Generating: #{generated_path}" if config.verbose && config.debug
 
         c = ''
         begin
@@ -434,15 +435,16 @@ module Awestruct
           end
         rescue Exception => e
           Awestruct::ExceptionHelper.log_building_error e, page.relative_source_path
+          return Awestruct::ExceptionHelper::EXITCODES[:generation_error]
         ensure
           return Awestruct::ExceptionHelper::EXITCODES[:generation_error] if c.include? 'Backtrace:'
         end
         Awestruct::ExceptionHelper::EXITCODES[:success]
       elsif site.config.track_dependencies
         if page.dependencies.load!
-          $LOG.debug "Cached:     #{generated_path}"
+          $LOG.debug "Cached:     #{generated_path}" if config.debug
         else
-          $LOG.debug "Analyzing:  #{generated_path}"
+          $LOG.debug "Analyzing:  #{generated_path}" if config.debug
           page.rendered_content
         end
         return Awestruct::ExceptionHelper::EXITCODES[:success]
@@ -472,7 +474,7 @@ module Awestruct
 
       regen_pages = page_dependencies( page )
 
-      $LOG.debug 'Starting regeneration of content dependent pages:' if regen_pages.size > 0
+      $LOG.debug 'Starting regeneration of content dependent pages:' if regen_pages.size > 0 && config.debug
 
       regen_pages.each do |p|
         $LOG.info "Regenerating page #{p.output_path}"

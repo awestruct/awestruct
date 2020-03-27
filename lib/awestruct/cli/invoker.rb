@@ -97,7 +97,7 @@ module Awestruct
           abort( "No config file at #{site_yaml_file}" )
         end
 
-        site_yaml = YAML.load( ERB.new(File.read( site_yaml_file )).result )
+        site_yaml = YAML.load( ERB.new(File.read( site_yaml_file ), nil, '<>').result )
 
         if ( !site_yaml )
           abort( "Failed to parse #{site_yaml_file}" )
@@ -130,7 +130,9 @@ module Awestruct
         @config = Awestruct::Config.new( @options )
         @config.track_dependencies = true if ( @options.auto )
         @config.verbose = true if ( @options.verbose )
-        @config.quiet = true if ( @options.quiet )
+        @config.debug = @options.debug
+        @config.quiet = true if @options.quiet
+        @config.perf = true if @options.perf_log
       end
 
       def invoke_init()

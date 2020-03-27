@@ -21,6 +21,8 @@ module Awestruct
     attr_accessor :verbose
     attr_accessor :quiet
     attr_accessor :options
+    attr_accessor :debug
+    attr_accessor :perf
 
     def initialize(opts = Awestruct::CLI::Options.new)
       @dir             = Pathname.new(File.expand_path(Pathname.new( opts.source_dir )))
@@ -35,6 +37,9 @@ module Awestruct
       @stylesheets_dir = Pathname.new( File.join(@dir, 'stylesheets') )
 
       @options = opts
+      @verbose = opts.verbose
+      @debug = opts.debug
+      @perf = opts.perf_log
 
       # Dir[] doesn't like empty list
       ignore_file = File.join(@dir, ".awestruct_ignore")
