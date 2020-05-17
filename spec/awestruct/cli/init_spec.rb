@@ -11,6 +11,10 @@ describe Awestruct::CLI::Init do
     FileUtils.rm_rf 'spec/support/clean_init'
   end
 
+  it "should not fail during init without framework" do
+    init = Awestruct::CLI::Init.new('spec/support/clean_init')
+    expect(init.run).to eql true
+  end
   it "should not fail during init with foundation" do
     init = Awestruct::CLI::Init.new('spec/support/clean_init', 'foundation', true)
     expect(init.run).to eql true

@@ -19,7 +19,7 @@ module Awestruct
         mkdir('stylesheets')
       }
 
-      def initialize(dir = Dir.pwd, framework = 'compass', scaffold = true)
+      def initialize(dir = Dir.pwd, framework = 'none', scaffold = true)
         @dir = dir
         @framework = framework
         @scaffold = scaffold
