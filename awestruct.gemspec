@@ -35,7 +35,7 @@ Compass and sass are no longer hard dependencies. You'll need too add them on yo
   EOS
 
   s.add_dependency 'haml', '>= 4.0.5', '< 6.0'
-  s.add_dependency 'asciidoctor', '~> 1.5', '>= 1.5.2'
+  s.add_dependency 'asciidoctor', '>= 1.5.2', '<3.0'
   s.add_dependency 'tilt', '~> 2.0', '>= 2.0.1'
   s.add_dependency 'mime-types', '~> 3.0'
   s.add_dependency 'rest-client', '~> 2.0'
