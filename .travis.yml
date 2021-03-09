@@ -1,5 +1,5 @@
 sudo: false
-
+cache: bundler
 before_install:
   - gem install bundler
 language: ruby
