@@ -17,7 +17,7 @@ group :test do
   gem 'compass', '>= 1.0.1'
   gem 'sassc', '~> 1.6'
   gem 'slim', '~> 3.0'
-  gem 'kramdown', '~> 1.3.3'
+  gem 'kramdown', '~> 2.4.0'
   gem 'therubyracer', '~> 0.12.1', :platforms => :ruby
   gem 'therubyrhino', '~> 2.0.3', :platforms => :jruby
   gem 'less', '~> 2.5.0'
