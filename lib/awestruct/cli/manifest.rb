@@ -232,7 +232,7 @@ module Awestruct
         def perform(dir)
 
           begin
-          rendered = ERB.new(File.read(@input_path), nil, '<>').result(
+          rendered = ERB.new(File.read(@input_path), trim_mode: '<>').result(
             OpenStruct.new(@state).instance_eval { binding })
           rescue => e
             $LOG.debug "::DEBUG:: #{e.message} state - #{@state}"

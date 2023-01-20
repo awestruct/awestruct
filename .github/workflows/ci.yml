@@ -14,12 +14,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ['2.6', '2.7']
+        ruby-version: ['2.6', '2.7', '3.0', '3.1']
 
     steps:
       - uses: actions/checkout@v3
       - name: Set up Ruby ${{ matrix.ruby-version }}
-        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+        uses: ruby/setup-ruby@v1.133.2
         with:
           ruby-version: ${{ matrix.ruby-version }}
       - name: Install dependencies

@@ -1,6 +1,7 @@
 require 'awestruct/util/inflector'
 require 'awestruct/util/exception_helper'
 require 'awestruct/util/default_inflections'
+require 'awestruct/util/yaml_load'
 
 require 'awestruct/config'
 require 'awestruct/site'
@@ -181,7 +182,7 @@ module Awestruct
     def load_site_yaml(yaml_path, profile = nil)
       if File.exist?(yaml_path)
         begin
-          data = YAML.load( ERB.new(File.read( yaml_path, :encoding => 'bom|utf-8' ), nil, '<>').result )
+          data = Awestruct.yaml_load( ERB.new(File.read( yaml_path, :encoding => 'bom|utf-8' ), trim_mode: '<>').result)
           if profile
             # JP: Interpolation now turned off by default, turn it per page if needed
             site.interpolate = false
@@ -211,7 +212,7 @@ module Awestruct
 
     def load_yaml(yaml_path)
       begin
-        data = YAML.load( ERB.new(File.read( yaml_path ), nil, '<>').result )
+        data = Awestruct.yaml_load( ERB.new(File.read( yaml_path ), trim_mode: '<>').result )
       rescue Exception => e
         ExceptionHelper.log_building_error e, yaml_path
         ExceptionHelper.mark_failed
