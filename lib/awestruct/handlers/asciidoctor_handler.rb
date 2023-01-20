@@ -1,4 +1,5 @@
 require 'awestruct/handler_chain'
+require 'awestruct/util/yaml_load'
 require 'awestruct/handlers/base_tilt_handler'
 require 'awestruct/handlers/file_handler'
 require 'awestruct/handlers/layout_handler'
@@ -136,7 +137,7 @@ module Awestruct
         template = ::Tilt::new(delegate.path.to_s, delegate.content_line_offset + 1, options)
         headers = template.parse_headers(content, /^(?:page|awestruct)\-(?=.)/).inject({'interpolate' => false}) do |hash, (k,v)|
           unless v.nil?
-            hash[k] = v.empty? ? v : YAML.load(v)
+            hash[k] = v.empty? ? v : Awestruct.yaml_load(v)
             if hash[k].kind_of? Time
               # use DateTime to preserve timezone information
               hash[k] = DateTime.parse(v)

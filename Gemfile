@@ -15,12 +15,10 @@ group :test do
   gem 'coffee-script', '~> 2.2.0'
   gem 'asciidoctor', '1.5.2'
   gem 'compass', '>= 1.0.1'
-  gem 'sassc', '~> 1.6'
+  gem 'sassc', '~> 2.0'
   gem 'slim', '~> 3.0'
   gem 'kramdown', '~> 2.4.0'
-  gem 'therubyracer', '~> 0.12.1', :platforms => :ruby
   gem 'therubyrhino', '~> 2.0.3', :platforms => :jruby
-  gem 'less', '~> 2.5.0'
   gem 'org-ruby', '~> 0.9.3'
   gem 'RedCloth', '~> 4.2.9'
   gem 'mustache', '~> 0.99.5'
@@ -28,6 +26,7 @@ group :test do
   gem 'htmlcompressor', '~> 0.0.7'
   gem 'haml-contrib', '~> 1.0.0'
   gem 'sass'
+  gem 'ffi', '~> 1.15.5'
   gem 'bootstrap-sass'
   gem 'zurb-foundation'
   gem 'rspec'
