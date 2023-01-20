@@ -5,7 +5,7 @@ module Awestruct
       def partial(path, params = {})
         filename = File.join( ::Awestruct::Engine.instance.config.dir, '_partials', path )
 
-        if !File.exists?( filename )
+        if !File.exist?( filename )
           $LOG.error "Could not find #{filename}" if $LOG.error?
           return nil
         end

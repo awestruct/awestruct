@@ -284,7 +284,7 @@ module Awestruct
     def load_pipeline
       ext_dir = File.join( site.config.extension_dir )
       pipeline_file = File.join( ext_dir, 'pipeline.rb' )
-      if File.exists?(pipeline_file)
+      if File.exist?(pipeline_file)
         p = eval(File.read( pipeline_file ), nil, pipeline_file, 1)
         p.before_all_extensions.each do |e|
           pipeline.add_before_extension( e )
@@ -380,7 +380,7 @@ module Awestruct
       end
 
       compass_config_file = File.join(site.config.config_dir, 'compass.rb')
-      if File.exists? compass_config_file
+      if File.exist? compass_config_file
         ::Compass.add_configuration ::Compass::Configuration::FileData.new_from_file(compass_config_file) 
       end 
       ::Compass.configuration # return for use elsewhere

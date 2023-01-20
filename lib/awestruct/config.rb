@@ -43,7 +43,7 @@ module Awestruct
 
       # Dir[] doesn't like empty list
       ignore_file = File.join(@dir, ".awestruct_ignore")
-      if File.exists?(ignore_file)
+      if File.exist?(ignore_file)
         ignore_stmts = IO.read(ignore_file).each_line.map(&:strip)
       end
 
