@@ -1,7 +1,6 @@
 require 'awestruct/util/exception_helper'
+require 'awestruct/util/yaml_load'
 require 'awestruct/handlers/base_handler'
-
-require 'yaml'
 
 module Awestruct
   module Handlers
@@ -85,7 +84,7 @@ module Awestruct
         end
 
         begin
-          @front_matter = yaml_content.empty? ? {} : (YAML.load(yaml_content) || {})
+          @front_matter = yaml_content.empty? ? {} : (Awestruct.yaml_load(yaml_content) || {})
         rescue => e
           ExceptionHelper.log_message "could not parse #{relative_source_path}"
           ExceptionHelper.mark_failed
