@@ -84,7 +84,9 @@ module Awestruct
           else
             true
           end
-        rescue
+        rescue => e
+          $LOG.fatal "Caught exception; exiting"
+          $LOG.fatal e
           @success = false
           false
         end
