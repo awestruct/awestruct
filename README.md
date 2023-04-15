@@ -13,7 +13,7 @@ Install Awestruct using `gem install awestruct`. Then you can initialize an Awes
 
 ## For more information
 
-Please see the complete site at <http://awestruct.org/>.
+Please see the complete site at <https://awestruct.github.io/>.
 
 ## License
 

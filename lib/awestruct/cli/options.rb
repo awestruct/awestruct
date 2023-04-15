@@ -161,7 +161,7 @@ module Awestruct
 
           opts.on_tail("-v", "--version", "Display the version") do
             puts "Awestruct: #{Awestruct::VERSION}"
-            puts "http://awestruct.org/"
+            puts "https://awestruct.github.io/"
             exit
           end
         end

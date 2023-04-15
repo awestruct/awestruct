@@ -122,11 +122,9 @@ RESOURCES
 ---------
 Git source repository on GitHub: <**https://github.com/awestruct/awestruct**>
 
-Project web site: <**http://awestruct.org**>
+Project web site: <**https://awestruct.github.io**>
 
-GitHub organization: <**http://github.com/awestruct**>
-
-Mailinglist / forum: <**http://talk.awestruct.org**>
+GitHub organization: <**https://github.com/awestruct**>
 
 
 COPYING

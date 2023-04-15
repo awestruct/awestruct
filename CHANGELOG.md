@@ -714,7 +714,7 @@
 - [b55210e](https://github.com/awestruct/awestruct/commit/b55210e89d3972b9f194e14ddaf9632d2a1e439f) Merge remote branch 'lance/master' (@bobmcwhirter)
 - [10c8f36](https://github.com/awestruct/awestruct/commit/10c8f363e97a5472163d50e16ad7cd2a243f581a) Add support for SCSS (.scss) files.  Need to refactor. (@bobmcwhirter)
 - [f665134](https://github.com/awestruct/awestruct/commit/f665134b0d4c5475279c6d311bacf91b4bfc5386) Remove gratuitous Scssable support file. (@bobmcwhirter)
-- [6bb4776](https://github.com/awestruct/awestruct/commit/6bb4776b8ee16afab901f163ee2f9d015d82d38a) Do not try to process the root directory as a template.  Useful for things like dirs named awestruct.org/ now with org-mode support. (@bobmcwhirter)
+- [6bb4776](https://github.com/awestruct/awestruct/commit/6bb4776b8ee16afab901f163ee2f9d015d82d38a) Do not try to process the root directory as a template.  Useful for things like dirs named example.org/ now with org-mode support. (@bobmcwhirter)
 - [8fb1995](https://github.com/awestruct/awestruct/commit/8fb1995267761a83bf832eb9227d284829e0c6ce) Rev for release. (@bobmcwhirter)
 - [fa7c28b](https://github.com/awestruct/awestruct/commit/fa7c28b9c7b960523113a447f8a620c48786ed49) declare org-mode dependency in gem spec (@brianm)
 - [3192dfa](https://github.com/awestruct/awestruct/commit/3192dfa3e6bc5888c8bfa3a636fac83e3ccd0117) Correct brianm's dependency on org-ruby, not org-mode. (@bobmcwhirter)
