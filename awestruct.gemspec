@@ -8,21 +8,25 @@ spec = Gem::Specification.new do |s|
 
   s.authors       = ['Bob McWhirter', 'Jason Porter', 'Lance Ball', 'Dan Allen', 'Torsten Curdt', 'other contributors']
   s.email         = ['bob@mcwhirter.org', 'lightguard.jp@gmail.com', 'lball@redhat.com', 'dan.j.allen@gmail.com', 'tcurdt@vafer.org']
-  s.homepage      = 'http://awestruct.org'
+  s.homepage      = 'https://awestruct.github.io'
   s.summary       = 'Static site baking and publishing tool'
   s.description   = 'Awestruct is a static site baking and publishing tool. It supports an extensive list of both templating and markup languages via Tilt (Haml, Slim, AsciiDoc, Markdown, Sass via Compass, etc), provides mobile-first layout and styling via Bootstrap or Foundation, offers a variety of deployment options (rsync, git, S3), handles site optimizations (minification, compression, cache busting), includes built-in extensions such as blog post management and is highly extensible.'
 
   s.license       = 'MIT'
-
+  s.metadata = {
+    'bug_tracker_uri'       => 'https://github.com/awestruct/awestruct/issues',
+    'changelog_uri'         => 'https://github.com/awestruct/awestruct/releases',
+    'source_code_uri'       => 'https://github.com/awestruct/awestruct'
+  }
   s.platform      = Gem::Platform::RUBY
   s.required_ruby_version = '>= 2.4.0'
 
   s.rdoc_options  = ['--charset=UTF-8']
   s.extra_rdoc_files = 'README.md'
 
-  s.files         = `git ls-files -z -- lib/* man/* spec/* README* LICENSE* *.gemspec *file`.split("\0")
+  s.files         = Dir.glob(["lib/**/*", "man/**/*", "spec/**/*", "spec/**/.awestruct_ignore", "README*", "LICENSE*", "*.gemspec", "*file"]).reject {|fn| File.directory?(fn) }
   s.test_files    = s.files.select { |path| path =~ /^spec\/.*_spec\.rb/ }
-  s.executables   = `git ls-files -z -- bin/*`.split("\0").map {|f| File.basename f }
+  s.executables   = Dir.glob("bin/*").map {|f| File.basename f }
   s.require_paths = ['lib']
 
   s.requirements    = <<-EOS
