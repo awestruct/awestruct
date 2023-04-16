@@ -37,7 +37,11 @@ module Awestruct
         end
 
         begin
-          page.content
+          if site.partial_debug
+            "<!-- start partial: #{path} -->\n#{page.content}\n<!-- end partial: #{path} -->"
+          else
+            page.content
+          end
         rescue Exception => e
           ExceptionHelper.log_message "Error occurred while rendering partial #{filename} contained in #{self[:page].source_path}"
           ExceptionHelper.log_backtrace e 
