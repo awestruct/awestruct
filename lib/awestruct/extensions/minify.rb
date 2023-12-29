@@ -53,6 +53,7 @@ module Awestruct
 
       def initialize(types = [ :js ])
         @types = types
+        require_packages if Awestruct::Extensions::SitePropertyExtractor.site_property(:minify)
       end
 
       def transform(site, page, input)
@@ -133,6 +134,12 @@ module Awestruct
           $LOG.debug " no gain" if $LOG.debug?
           input
         end
+      end
+      def require_packages
+        require 'shellwords'
+        require 'fileutils'
+        require 'htmlcompressor'
+        require 'uglifier'
       end
     end
   end
