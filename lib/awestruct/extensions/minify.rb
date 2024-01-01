@@ -1,8 +1,3 @@
-require 'shellwords'
-require 'fileutils'
-require 'htmlcompressor'
-require 'uglifier'
-
 ##
 # Awestruct:Extensions:Minify is a transformer that minimizes JavaScript, CSS and HTML files.
 # The transform runs on the rendered stream before it's written to the output path.
@@ -57,6 +52,11 @@ module Awestruct
 
       def transform(site, page, input)
         if site.minify
+          require 'shellwords'
+          require 'fileutils'
+          require 'htmlcompressor'
+          require 'uglifier'
+
           ext = File.extname(page.output_path)
           if !ext.empty?
             ext_sym = ext[1..-1].to_sym
