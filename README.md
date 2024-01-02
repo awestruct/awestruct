@@ -1,7 +1,6 @@
 # Awestruct
 [![Gem](https://img.shields.io/gem/v/awestruct)](https://rubygems.org/gems/awestruct)
 [![Gem](https://img.shields.io/gem/dt/awestruct?color=blue)](https://rubygems.org/gems/awestruct)
-[![Build Status](https://secure.travis-ci.org/awestruct/awestruct.png)](https://travis-ci.org/awestruct/awestruct)
 
 ## Requirements
 
@@ -17,7 +16,7 @@ Please see the complete site at <https://awestruct.github.io/>.
 
 ## License
 
-    Copyright (c) 2010-2014 Bob McWhirter and contributors (see git log)
+    Copyright (c) 2010-2024 Bob McWhirter and contributors (see git log)
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to
