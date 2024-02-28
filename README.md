@@ -8,7 +8,7 @@ Ruby 2.4 or later
 
 ## Getting started
 
-Install Awestruct using `gem install awestruct`. Then you can initialize an Awestruct projet by running `awestruct --init`. To generate the static site use `awestruct generate`.
+Install Awestruct using `gem install awestruct`. Then you can initialize an Awestruct project by running `awestruct --init`. To generate the static site use `awestruct generate`.
 
 ## For more information
 
