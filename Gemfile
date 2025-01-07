@@ -13,7 +13,7 @@ group :test do
   gem 'rack-test', '~> 0.6.2'
   gem 'tilt', '~> 2.0.1'
   gem 'coffee-script', '~> 2.2.0'
-  gem 'asciidoctor', '1.5.2'
+  gem 'asciidoctor', '2.0.23'
   gem 'compass', '>= 1.0.1'
   gem 'sassc', '~> 2.0'
   gem 'slim', '~> 3.0'
