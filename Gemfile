@@ -25,6 +25,7 @@ group :test do
   gem 'uglifier', '~> 2.5.0'
   gem 'htmlcompressor', '~> 0.0.7'
   gem 'haml-contrib', '~> 1.0.0'
+  gem 'base64'
   gem 'sass'
   gem 'ffi', '~> 1.15.5'
   gem 'bootstrap-sass'
